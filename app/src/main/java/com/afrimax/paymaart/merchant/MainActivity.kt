@@ -1,6 +1,7 @@
 package com.afrimax.paymaart.merchant
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,5 +17,9 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val appName = BuildConfig.APP_NAME
+        val initialText = findViewById<TextView>(R.id.initialScreenText)
+        initialText.text = appName
     }
 }
