@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Paymaart Merchant"
+rootProject.name = "Paymaart"
 include ':app'
