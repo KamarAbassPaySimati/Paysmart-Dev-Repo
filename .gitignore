@@ -70,3 +70,6 @@ captures
 .externalNativeBuild
 .cxx
 /app/.gitignore
+/app/qa/
+/app/preprod/
+/app/production/
