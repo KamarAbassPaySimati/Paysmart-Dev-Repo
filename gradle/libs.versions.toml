@@ -1,0 +1,39 @@
+[versions]
+aaltoXml = "1.2.2"
+agp = "8.3.0"
+cucumberAndroid = "7.14.0"
+kotlin = "1.9.0"
+coreKtx = "1.12.0"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+espressoCore = "3.5.1"
+appcompat = "1.6.1"
+material = "1.11.0"
+activity = "1.8.2"
+constraintlayout = "2.1.4"
+orgJacocoCore = "0.8.8"
+poiOoxml = "3.17"
+staxApi = "1.0"
+xmlbeans = "5.1.0"
+
+[libraries]
+aalto-xml = { module = "com.fasterxml:aalto-xml", version.ref = "aaltoXml" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumberAndroid" }
+cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberAndroid" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+org-jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "orgJacocoCore" }
+poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
+stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }
+xmlbeans = { module = "org.apache.xmlbeans:xmlbeans", version.ref = "xmlbeans" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
