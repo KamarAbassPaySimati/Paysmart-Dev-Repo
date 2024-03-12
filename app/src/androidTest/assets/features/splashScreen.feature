@@ -3,5 +3,5 @@ Feature: Splash Screen
 
   Scenario: Splash screen disappears after a few seconds
     Given The splash screen is displayed
-    And I wait for a few seconds
+    When I wait for a few seconds
     Then The main app interface should be displayed
