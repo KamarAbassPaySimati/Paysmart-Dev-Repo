@@ -1,0 +1,113 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Deploy a new version to the Google Play"
+  lane :qa do
+    gradle(task: 'clean')
+    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "com.afrimax.paymaart.qa")
+    version_code_internal = version_codes_internal.first
+    increment_version_code(
+      version_code: version_code_internal+1,
+      gradle_file_path: "./app/build.gradle",
+    )
+    gradle(
+      task: 'bundle', 
+      flavor: 'qa',
+      build_type: 'Release',
+      print_command: false,
+      properties: {
+          "android.injected.signing.store.file" => "paymaart_customer.jks",
+          "android.injected.signing.store.password" => ENV["KEYSTOR_PASSWORD"],
+          "android.injected.signing.key.alias" => ENV["KEYSTOR_ALIAS"],
+          "android.injected.signing.key.password" => ENV["KEYSTOR_PASSWORD"],
+        }
+    )
+    upload_to_lambdatest(
+        lt_username: ENV["LT_USERNAME"],
+        lt_access_key: ENV["LT_ACCESS_KEY"],
+        file_path: "#{lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]}",
+        custom_id: "Paymaart"
+    )
+    upload_to_play_store(package_name: "com.afrimax.paymaart.qa", track: "internal")
+  end
+
+  lane :develop do
+    gradle(task: 'clean')
+    gradle(
+      task: 'bundle', 
+      flavor: 'develop',
+      build_type: 'Release',
+      print_command: false,
+      properties: {
+          "android.injected.signing.store.file" => "paymaart_customer.jks",
+          "android.injected.signing.store.password" => ENV["KEYSTOR_PASSWORD"],
+          "android.injected.signing.key.alias" => ENV["KEYSTOR_ALIAS"],
+          "android.injected.signing.key.password" => ENV["KEYSTOR_PASSWORD"],
+        }
+      )
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :preprod do
+    gradle(task: 'clean')
+    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "com.afrimax.paymaart.preprod")
+    version_code_internal = version_codes_internal.first
+    increment_version_code(
+      version_code: version_code_internal+1,
+      gradle_file_path: "./app/build.gradle",
+    )
+    gradle(
+      task: 'bundle', 
+      flavor: 'preprod',
+      build_type: 'Release',
+      print_command: false,
+      properties: {
+          "android.injected.signing.store.file" => "paymaart_customer.jks",
+          "android.injected.signing.store.password" => ENV["KEYSTOR_PASSWORD"],
+          "android.injected.signing.key.alias" => ENV["KEYSTOR_ALIAS"],
+          "android.injected.signing.key.password" => ENV["KEYSTOR_PASSWORD"],
+        }
+      )
+    upload_to_play_store(package_name: "com.afrimax.paymaart.preprod", track: "internal")
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :production do
+    gradle(task: 'clean')
+    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "com.afrimax.paymaart")
+    version_code_internal = version_codes_internal.first
+    increment_version_code(
+      version_code: version_code_internal+1,
+      gradle_file_path: "./app/build.gradle",
+    )
+    gradle(
+      task: 'bundle', 
+      flavor: 'production',
+      build_type: 'Release',
+      print_command: false,
+      properties: {
+          "android.injected.signing.store.file" => "paymaart_customer.jks",
+          "android.injected.signing.store.password" => ENV["KEYSTOR_PASSWORD"],
+          "android.injected.signing.key.alias" => ENV["KEYSTOR_ALIAS"],
+          "android.injected.signing.key.password" => ENV["KEYSTOR_PASSWORD"],
+        }
+      )
+    upload_to_play_store(package_name: "com.afrimax.paymaart", track: "internal")
+  end
+
+end
