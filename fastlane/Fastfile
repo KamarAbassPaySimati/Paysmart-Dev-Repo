@@ -37,12 +37,7 @@ platform :android do
           "android.injected.signing.key.password" => ENV["KEYSTOR_PASSWORD"],
         }
     )
-    upload_to_lambdatest(
-        lt_username: ENV["LT_USERNAME"],
-        lt_access_key: ENV["LT_ACCESS_KEY"],
-        file_path: "#{lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]}",
-        custom_id: "Paymaart"
-    )
+    sh("bash ../scripts/lambda_test.sh #{lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]}")
     upload_to_play_store(package_name: "com.afrimax.paymaart.qa", track: "internal")
   end
 
