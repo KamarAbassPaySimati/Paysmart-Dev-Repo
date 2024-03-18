@@ -178,7 +178,6 @@ jobs:
           cp $(deployment_keystore_file.secureFilePath) $(System.DefaultWorkingDirectory)/paymaart_customer.jks
           cp $(deployment_secrity_file.secureFilePath) $(System.DefaultWorkingDirectory)/afrimaxpayplatform-8783245672f3.json
           cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
-          ls -R
           brew install fastlane
           fastlane android qa
         displayName: 'Deployment'
