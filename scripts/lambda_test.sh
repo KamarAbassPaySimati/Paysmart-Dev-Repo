@@ -10,7 +10,7 @@ response=$(curl -X POST "https://manual-api.lambdatest.com/app/upload/realDevice
  -F "name=Paymaart-Customer-$BUILD_NUMBER" \
  -F "visibility=team" \
  -F "appFile=@$APK_FILE"\
- -u "$LT_USERNAME:$LT_ACCESS_KEY"
+ -u "$LT_USERNAME:$LT_ACCESS_KEY" \
  --http1.1 )
 # Print response from LambdaTest
 echo "Response: $response"
