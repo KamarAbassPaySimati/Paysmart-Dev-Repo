@@ -135,7 +135,7 @@ jobs:
           artifact: SecretFiles
           targetPath: '$(System.DefaultWorkingDirectory)'
       - script: |
-          cp $(System.DefaultWorkingDirectory)/paymaart_agent.jks $(System.DefaultWorkingDirectory)/app/paymaart_agent.jks
+          cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
       # - script: 'sh scripts/emulator_device.sh'
       #   displayName: 'Install Emulator'
       # - task: Gradle@3
@@ -153,12 +153,12 @@ jobs:
       #       node living-documenation.js 
       #     displayName: 'BDD Living documentation'
   
-  - deployment: testing
+  - deployment: Deployment
     dependsOn: BDD
     condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
     pool:
       vmImage: "macOS-13"
-    environment: QA
+    environment: testing
     strategy:
       runOnce:
         deploy:
