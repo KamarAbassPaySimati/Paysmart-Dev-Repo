@@ -146,7 +146,7 @@ jobs:
       #       node living-documenation.js 
       #     displayName: 'BDD Living documentation'
   
-  - job: Android_Lambda_Test
+  - deployment: QA
     displayName: "Deploy"
     dependsOn: BDD
     condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
@@ -182,7 +182,7 @@ jobs:
           fastlane android qa
         displayName: 'Deployment'
 
-  - job: Production_Deployment
+  - deployment: Production
     displayName: "Deploy"
     condition: and(succeeded(), contains(variables['build.SourceBranch'], 'master'))
     pool:
@@ -218,7 +218,7 @@ jobs:
           fastlane android production
         displayName: 'Deployment'
   
-  - job: Pre_Production_Deployment
+  - deployment: Pre_Production
     displayName: "Deploy"
     condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-production'))
     pool:
