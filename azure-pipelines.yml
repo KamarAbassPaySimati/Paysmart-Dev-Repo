@@ -32,7 +32,22 @@ jobs:
         displayName: 'Copy Environment Files'
       - publish: $(System.DefaultWorkingDirectory)/.env
         artifact: Environment
-
+      - task: DownloadSecureFile@1
+        name: deployment_secrity_file
+        displayName: 'Download Environment'
+        inputs:
+          secureFile: "afrimaxpayplatform-8783245672f3.json"
+      - task: DownloadSecureFile@1
+        name: deployment_keystore_file
+        displayName: 'Download Environment'
+        inputs:
+          secureFile: "paymaart_customer.jks"
+      - script: |
+          mkdir secure_files
+          cp $(deployment_keystore_file.secureFilePath) secure_files/paymaart_customer.jks
+          cp $(deployment_secrity_file.secureFilePath) secure_files/afrimaxpayplatform-8783245672f3.json
+      - publish: $(System.DefaultWorkingDirectory)/secure_files
+        artifact: SecretFiles
     
 
   - job: "lint_sast_dast"
@@ -85,19 +100,10 @@ jobs:
         inputs:
           artifact: Environment
           targetPath: '$(System.DefaultWorkingDirectory)'
-      - task: DownloadSecureFile@1
-        name: deployment_secrity_file
-        displayName: 'Download Environment'
-        inputs:
-          secureFile: "afrimaxpayplatform-8783245672f3.json"
-      - task: DownloadSecureFile@1
-        name: deployment_keystore_file
-        displayName: 'Download Environment'
-        inputs:
-          secureFile: "paymaart_customer.jks"
+      - download: current
+        artifact: SecretFiles
       - script: |
-          cp $(deployment_keystore_file.secureFilePath) $(System.DefaultWorkingDirectory)/paymaart_customer.jks
-          cp $(deployment_secrity_file.secureFilePath) $(System.DefaultWorkingDirectory)/afrimaxpayplatform-8783245672f3.json
+          cp -r $(Pipeline.Workspace)/secure_files/. $(System.DefaultWorkingDirectory)
           cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
           brew install fastlane
           fastlane android develop
@@ -167,9 +173,10 @@ jobs:
               inputs:
                 artifact: Environment
                 targetPath: '$(System.DefaultWorkingDirectory)'
+            - download: current
+              artifact: SecretFiles
             - script: |
-                cp $(Pipeline.Workspace)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/paymaart_customer.jks
-                cp $(Pipeline.Workspace)/afrimaxpayplatform-8783245672f3.json $(System.DefaultWorkingDirectory)/afrimaxpayplatform-8783245672f3.json
+                cp -r $(Pipeline.Workspace)/secure_files/. $(System.DefaultWorkingDirectory)
                 cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
                 brew install fastlane
                 fastlane android qa
@@ -195,9 +202,10 @@ jobs:
             inputs:
               artifact: Environment
               targetPath: '$(System.DefaultWorkingDirectory)'
+          - download: current
+            artifact: SecretFiles
           - script: |
-              cp $(Pipeline.Workspace)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/paymaart_customer.jks
-                cp $(Pipeline.Workspace)/afrimaxpayplatform-8783245672f3.json $(System.DefaultWorkingDirectory)/afrimaxpayplatform-8783245672f3.json
+              cp -r $(Pipeline.Workspace)/secure_files/. $(System.DefaultWorkingDirectory)
               cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
               export BUILD_NUMBER=$(Build.BuildId)
               brew install fastlane
@@ -224,9 +232,10 @@ jobs:
               inputs:
                 artifact: Environment
                 targetPath: '$(System.DefaultWorkingDirectory)'
+            - download: current
+              artifact: SecretFiles
             - script: |
-                cp $(Pipeline.Workspace)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/paymaart_customer.jks
-                cp $(Pipeline.Workspace)/afrimaxpayplatform-8783245672f3.json $(System.DefaultWorkingDirectory)/afrimaxpayplatform-8783245672f3.json
+                cp -r $(Pipeline.Workspace)/secure_files/. $(System.DefaultWorkingDirectory)
                 cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
                 brew install fastlane
                 fastlane android production
