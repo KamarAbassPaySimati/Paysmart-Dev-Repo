@@ -103,7 +103,7 @@ jobs:
       - download: current
         artifact: SecretFiles
       - script: |
-          cp -r $(Pipeline.Workspace)/SecretFiles/secure_files/. $(System.DefaultWorkingDirectory)
+          cp -r $(Pipeline.Workspace)/SecretFiles/. $(System.DefaultWorkingDirectory)
           cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
           brew install fastlane
           fastlane android develop
@@ -176,7 +176,7 @@ jobs:
             - download: current
               artifact: SecretFiles
             - script: |
-                cp -r $(Pipeline.Workspace)/SecretFiles/secure_files/. $(System.DefaultWorkingDirectory)
+                cp -r $(Pipeline.Workspace)/SecretFiles/. $(System.DefaultWorkingDirectory)
                 cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
                 brew install fastlane
                 fastlane android qa
@@ -205,7 +205,7 @@ jobs:
           - download: current
             artifact: SecretFiles
           - script: |
-              cp -r $(Pipeline.Workspace)/SecretFiles/secure_files/. $(System.DefaultWorkingDirectory)
+              cp -r $(Pipeline.Workspace)/SecretFiles/. $(System.DefaultWorkingDirectory)
               cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
               export BUILD_NUMBER=$(Build.BuildId)
               brew install fastlane
@@ -235,7 +235,7 @@ jobs:
             - download: current
               artifact: SecretFiles
             - script: |
-                cp -r $(Pipeline.Workspace)/SecretFiles/secure_files/. $(System.DefaultWorkingDirectory)
+                cp -r $(Pipeline.Workspace)/SecretFiles/. $(System.DefaultWorkingDirectory)
                 cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
                 brew install fastlane
                 fastlane android production
