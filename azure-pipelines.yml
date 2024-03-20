@@ -173,10 +173,12 @@ jobs:
               inputs:
                 artifact: Environment
                 targetPath: '$(System.DefaultWorkingDirectory)'
-            - download: current
-              artifact: SecretFiles
+            - task: DownloadPipelineArtifact@2
+              name: SecretFiles
+              inputs:
+                artifact: SecretFiles
+                targetPath: '$(System.DefaultWorkingDirectory)'
             - script: |
-                cp -r $(Pipeline.Workspace)/SecretFiles/. $(System.DefaultWorkingDirectory)
                 ls -r  $(System.DefaultWorkingDirectory)
                 cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
                 brew install fastlane
