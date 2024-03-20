@@ -100,11 +100,14 @@ jobs:
         inputs:
           artifact: Environment
           targetPath: '$(System.DefaultWorkingDirectory)'
-      - download: current
-        artifact: SecretFiles
+      - task: DownloadPipelineArtifact@2
+        name: SecretFiles
+        inputs:
+          artifact: SecretFiles
+          targetPath: '$(System.DefaultWorkingDirectory)'
       - script: |
-          cp -r $(Pipeline.Workspace)/SecretFiles/. $(System.DefaultWorkingDirectory)
-          cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
+          cp $(System.DefaultWorkingDirectory)/paymaart_agent.jks $(System.DefaultWorkingDirectory)/app/paymaart_agent.jks
+          export BUILD_NUMBER=$(Build.BuildId)
           brew install fastlane
           fastlane android develop
         displayName: 'Build'
@@ -126,16 +129,13 @@ jobs:
         inputs:
           artifact: Environment
           targetPath: '$(System.DefaultWorkingDirectory)'
-      - task: DownloadSecureFile@1
-        name: deployment_secrity_file
-        displayName: 'Download Environment'
+      - task: DownloadPipelineArtifact@2
+        name: SecretFiles
         inputs:
-          secureFile: "afrimaxpayplatform-8783245672f3.json"
-      - task: DownloadSecureFile@1
-        name: deployment_keystore_file
-        displayName: 'Download Environment'
-        inputs:
-          secureFile: "paymaart_customer.jks"
+          artifact: SecretFiles
+          targetPath: '$(System.DefaultWorkingDirectory)'
+      - script: |
+          cp $(System.DefaultWorkingDirectory)/paymaart_agent.jks $(System.DefaultWorkingDirectory)/app/paymaart_agent.jks
       # - script: 'sh scripts/emulator_device.sh'
       #   displayName: 'Install Emulator'
       # - task: Gradle@3
@@ -182,6 +182,7 @@ jobs:
             - script: |
                 cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
                 brew install fastlane
+                export BUILD_NUMBER=$(Build.BuildId)
                 fastlane android qa
               displayName: 'Deployment'
 
