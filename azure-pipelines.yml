@@ -157,7 +157,7 @@ jobs:
     dependsOn: BDD
     condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
     pool:
-      vmImage: "macOS-13"
+      vmImage: "macos-latest"
     environment: testing
     strategy:
       runOnce:
@@ -190,7 +190,7 @@ jobs:
     dependsOn: Download_Environment
     condition: and(succeeded(), contains(variables['build.SourceBranch'], 'master'))
     pool:
-      vmImage: "macOS-13"
+      vmImage: "macos-latest"
     environment: Production
     strategy:
       runOnce:
@@ -223,7 +223,7 @@ jobs:
     dependsOn: Download_Environment
     condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-production'))
     pool:
-      vmImage: "macOS-13"
+      vmImage: "macos-latest"
     environment: Pre-Production
     strategy:
       runOnce:
