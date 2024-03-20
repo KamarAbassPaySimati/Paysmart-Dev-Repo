@@ -163,6 +163,7 @@ jobs:
       runOnce:
         deploy:
           steps:
+            - checkout: self
             - task: JavaToolInstaller@0
               inputs:
                 versionSpec: '17'
@@ -180,6 +181,7 @@ jobs:
                 targetPath: '$(System.DefaultWorkingDirectory)'
             - script: |
                 ls -r  $(System.DefaultWorkingDirectory)
+                ls -r
                 cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
                 brew install fastlane
                 fastlane android qa
