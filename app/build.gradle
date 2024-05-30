@@ -58,20 +58,24 @@ android {
         develop{
             dimension "env"
             applicationIdSuffix ".develop"
+            buildConfigField("String", "STAGE", "\"dev\"")
         }
 
         qa{
             dimension "env"
             applicationIdSuffix ".qa"
+            buildConfigField("String", "STAGE", "\"qa\"")
         }
 
         preprod{
             dimension "env"
             applicationIdSuffix ".preprod"
+            buildConfigField("String", "STAGE", "\"pre-production\"")
         }
 
         production{
             dimension "env"
+            buildConfigField("String", "STAGE", "\"prod\"")
         }
     }
 
