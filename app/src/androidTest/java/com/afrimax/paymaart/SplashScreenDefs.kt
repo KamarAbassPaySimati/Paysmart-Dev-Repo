@@ -5,6 +5,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
+import com.afrimax.paymaart.ui.splash.SplashScreenActivity
 import io.cucumber.java.After
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given

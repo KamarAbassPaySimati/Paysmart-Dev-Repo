@@ -42,7 +42,7 @@ android {
             testCoverageEnabled true
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -58,24 +58,20 @@ android {
         develop{
             dimension "env"
             applicationIdSuffix ".develop"
-            buildConfigField("String", "APP_NAME", '"Paymaart Dev"')
         }
 
         qa{
             dimension "env"
             applicationIdSuffix ".qa"
-            buildConfigField("String", "APP_NAME", '"Paymaart QA"')
         }
 
         preprod{
             dimension "env"
             applicationIdSuffix ".preprod"
-            buildConfigField("String", "APP_NAME", '"Paymaart PreProd"')
         }
 
         production{
             dimension "env"
-            buildConfigField("String", "APP_NAME", '"Paymaart"')
         }
     }
 
@@ -106,4 +102,11 @@ dependencies {
     implementation(libs.xmlbeans)
     androidTestImplementation libs.stax.api
     androidTestImplementation libs.aalto.xml
+
+    //Retrofit
+
+    //dependency injection
+
+    //Viewmodel
+    implementation libs.androidx.lifecycle.viewmodel.ktx
 }
