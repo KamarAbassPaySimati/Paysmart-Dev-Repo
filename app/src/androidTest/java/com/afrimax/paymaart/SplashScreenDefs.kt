@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import com.afrimax.paymaart.ui.splash.SplashScreenActivity
 import io.cucumber.java.After
@@ -60,6 +61,31 @@ class SplashScreenDefs(private val scenarioHolder: ActivityScenarioHolder) {
         Espresso.onView(ViewMatchers.withId(R.id.initialScreenText)).check(
             ViewAssertions.matches(
                 ViewMatchers.withText(build)
+            )
+        )
+    }
+    @Given("The main app interface should be displayed with text {string}")
+    fun theMainAppInterfaceShouldBeDisplayedWithText(expectedText: String) {
+        Espresso.onView(withId(R.id.introActivityHeaderTextView)).check(
+            ViewAssertions.matches(
+                ViewMatchers.withText(expectedText)
+            )
+        )
+    }
+    @Then("I should see option to login")
+    fun i_should_see_option_to_login() {
+        Espresso.onView(ViewMatchers.withId(R.id.introActivityLoginButton)).check(
+            ViewAssertions.matches(
+                ViewMatchers.isDisplayed()
+            )
+        )
+    }
+
+    @Then("I should see option to register")
+    fun i_should_see_option_to_register() {
+        Espresso.onView(ViewMatchers.withId(R.id.introActivityRegisterButton)).check(
+            ViewAssertions.matches(
+                ViewMatchers.isDisplayed()
             )
         )
     }
