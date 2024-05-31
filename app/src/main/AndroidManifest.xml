@@ -15,9 +15,6 @@
             android:name=".ui.intro.IntroActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.SplashScreen"
-            android:exported="false" />
-        <activity
             android:name=".ui.splash.SplashScreenActivity"
             android:exported="true">
             <intent-filter>

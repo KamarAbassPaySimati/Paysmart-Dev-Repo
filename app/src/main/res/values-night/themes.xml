@@ -2,8 +2,5 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.PaymaartMerchant" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="background">@color/background</item>
-        <item name="colorOnBackground">@color/background</item>
     </style>
 </resources>
