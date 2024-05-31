@@ -106,7 +106,7 @@ jobs:
           artifact: SecretFiles
           targetPath: '$(System.DefaultWorkingDirectory)'
       - script: |
-          cp $(System.DefaultWorkingDirectory)/paymaart_agent.jks $(System.DefaultWorkingDirectory)/app/paymaart_agent.jks
+          cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
           export BUILD_NUMBER=$(Build.BuildId)
           brew install fastlane
           fastlane android develop
