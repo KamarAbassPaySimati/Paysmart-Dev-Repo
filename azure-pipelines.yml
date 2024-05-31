@@ -18,211 +18,151 @@ variables:
   - ${{ if or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')) }}:
     - group: develop_customer
 
-stages:
-- stage: CodeQuality
-  jobs:
-    - job: "Download_Environment"
-      displayName: "Dependencies"
-      pool:
+jobs:
+  - job: "Download_Environment"
+    displayName: "Download Environment"
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - script: |
+          sudo pip3 install --upgrade pip
+          pip3 install awscli --upgrade --user
+          export PATH="/home/vsts/.local/bin:$PATH"
+          sh scripts/envs.sh
+        displayName: 'Copy Environment Files'
+      - publish: $(System.DefaultWorkingDirectory)/.env
+        artifact: Environment
+      - task: DownloadSecureFile@1
+        name: deployment_secrity_file
+        displayName: 'Download Environment'
+        inputs:
+          secureFile: "afrimaxpayplatform-8783245672f3.json"
+      - task: DownloadSecureFile@1
+        name: deployment_keystore_file
+        displayName: 'Download Environment'
+        inputs:
+          secureFile: "paymaart_customer.jks"
+      - script: |
+          mkdir secure_files
+          cp $(deployment_keystore_file.secureFilePath) secure_files/paymaart_customer.jks
+          cp $(deployment_secrity_file.secureFilePath) secure_files/afrimaxpayplatform-8783245672f3.json
+      - publish: $(System.DefaultWorkingDirectory)/secure_files
+        artifact: SecretFiles
+    
+
+  - job: "lint_sast_dast"
+    displayName: "Lint , SAST, DAST"
+    dependsOn: Download_Environment
+    condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+    pool:
         vmImage: "ubuntu-latest"
-      steps:
-        - script: |
-            sudo pip3 install --upgrade pip
-            pip3 install awscli --upgrade --user
-            export PATH="/home/vsts/.local/bin:$PATH"
-            sh scripts/envs.sh
-          displayName: 'Copy Environment Files'
-        - publish: $(System.DefaultWorkingDirectory)/.env
+    steps:
+      - task: Gradle@3
+        inputs:
+          gradleWrapperFile: 'gradlew'
+          tasks: 'lint'
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.17'
+          publishJUnitResults: true
+          options: '--build-cache'
+        displayName: 'Lint'
+      - script: |
+          wget https://github.com/insidersec/insider/releases/download/2.1.0/insider_2.1.0_linux_x86_64.tar.gz
+          tar -xf insider_2.1.0_linux_x86_64.tar.gz 
+          chmod +x insider
+          ./insider --tech android  --target app/src
+        displayName: 'Static Application Security Testing (SAST)'
+      - script: |
+          echo "test"
+          # pip install --upgrade mobsfscan
+          # mobsfscan -w app/src --config scripts/.mobsf
+        displayName: 'Dynamic Application Security Testing (DAST)'
+      - task: Cache@2
+        inputs:
+          key: '.gradle/**' # Swap build.gradle.kts for build.gradle when using Groovy
+          path: $(System.DefaultWorkingDirectory)
+        displayName: Configure gradle caching
+
+  - job: android_build
+    dependsOn: lint_sast_dast
+    condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+    displayName: "Build"
+    pool:
+      vmImage: "macOS-latest"
+    steps:
+      - task: JavaToolInstaller@0
+        inputs:
+          versionSpec: '17'
+          jdkArchitectureOption: 'x64'
+          jdkSourceOption: 'PreInstalled'
+      - task: DownloadPipelineArtifact@2
+        name: environment
+        inputs:
           artifact: Environment
-        - task: DownloadSecureFile@1
-          name: deployment_secrity_file
-          displayName: 'Download Environment'
-          inputs:
-            secureFile: "afrimaxpayplatform-8783245672f3.json"
-        - task: DownloadSecureFile@1
-          name: deployment_keystore_file
-          displayName: 'Download Environment'
-          inputs:
-            secureFile: "paymaart_customer.jks"
-        - script: |
-            mkdir secure_files
-            cp $(deployment_keystore_file.secureFilePath) secure_files/paymaart_customer.jks
-            cp $(deployment_secrity_file.secureFilePath) secure_files/afrimaxpayplatform-8783245672f3.json
-        - publish: $(System.DefaultWorkingDirectory)/secure_files
+          targetPath: '$(System.DefaultWorkingDirectory)'
+      - task: DownloadPipelineArtifact@2
+        name: SecretFiles
+        inputs:
           artifact: SecretFiles
+          targetPath: '$(System.DefaultWorkingDirectory)'
+      - script: |
+          cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
+          export BUILD_NUMBER=$(Build.BuildId)
+          brew install fastlane
+          fastlane android develop
+        displayName: 'Build'
+  - job: BDD
+    displayName: "Integration Testing"
+    dependsOn: Download_Environment
+    condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
+    pool:
+      vmImage: "macos-latest"
+    steps:
       
-
-    - job: "lint_sast_dast"
-      displayName: "Code Quality"
-      dependsOn: Download_Environment
-      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
-      pool:
-          vmImage: "ubuntu-latest"
-      steps:
-        - task: Gradle@3
-          inputs:
-            gradleWrapperFile: 'gradlew'
-            tasks: 'lint'
-            javaHomeOption: 'JDKVersion'
-            jdkVersionOption: '1.17'
-            publishJUnitResults: true
-            options: '--build-cache'
-          displayName: 'Lint'
-        - script: |
-            wget https://github.com/insidersec/insider/releases/download/2.1.0/insider_2.1.0_linux_x86_64.tar.gz
-            tar -xf insider_2.1.0_linux_x86_64.tar.gz 
-            chmod +x insider
-            ./insider --tech android  --target app/src
-          displayName: 'Static Application Security Testing (SAST)'
-        - script: |
-            echo "test"
-            # pip install --upgrade mobsfscan
-            # mobsfscan -w app/src --config scripts/.mobsf
-          displayName: 'Dynamic Application Security Testing (DAST)'
-        - task: Cache@2
-          inputs:
-            key: '.gradle/**' # Swap build.gradle.kts for build.gradle when using Groovy
-            path: $(System.DefaultWorkingDirectory)
-          displayName: Configure gradle caching
-
-- stage: Build
-  jobs:
-    - job: android_build
-      dependsOn: lint_sast_dast
-      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
-      displayName: "Build"
-      pool:
-        vmImage: "macOS-latest"
-      steps:
-        - task: JavaToolInstaller@0
-          inputs:
-            versionSpec: '17'
-            jdkArchitectureOption: 'x64'
-            jdkSourceOption: 'PreInstalled'
-        - task: DownloadPipelineArtifact@2
-          name: environment
-          inputs:
-            artifact: Environment
-            targetPath: '$(System.DefaultWorkingDirectory)'
-        - task: DownloadPipelineArtifact@2
-          name: SecretFiles
-          inputs:
-            artifact: SecretFiles
-            targetPath: '$(System.DefaultWorkingDirectory)'
-        - script: |
-            cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
-            export BUILD_NUMBER=$(Build.BuildId)
-            brew install fastlane
-            fastlane android develop
-          displayName: 'Build'
-
-    - job: BuildPlaceholder
-      displayName: "Build Placeholder"
-      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
-      pool:
-        vmImage: "ubuntu-latest"
-      steps:
-        - script: echo "Placeholder job to ensure stage entry point"
-          displayName: "Build Placeholder"
-
-- stage: Test
-  jobs:
-    - job: BDD
-      displayName: "Integration Testing"
-      dependsOn: Download_Environment
-      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-      pool:
-        vmImage: "macos-latest"
-      steps:
-        
-        - task: JavaToolInstaller@0
-          inputs:
-            versionSpec: '17'
-            jdkArchitectureOption: 'x64'
-            jdkSourceOption: 'PreInstalled'
-        - task: DownloadPipelineArtifact@2
-          name: environment
-          inputs:
-            artifact: Environment
-            targetPath: '$(System.DefaultWorkingDirectory)'
-        - task: DownloadPipelineArtifact@2
-          name: SecretFiles
-          inputs:
-            artifact: SecretFiles
-            targetPath: '$(System.DefaultWorkingDirectory)'
-        - script: |
-            cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
-        # - script: 'sh scripts/emulator_device.sh'
-        #   displayName: 'Install Emulator'
-        # - task: Gradle@3
-        #   inputs:
-        #     gradleWrapperFile: 'gradlew'
-        #     tasks: 'connectedCheck'
-        #     javaHomeOption: 'JDKVersion'
-        #     jdkVersionOption: '1.17'
-        #     publishJUnitResults: true
-        #     options: '--build-cache'
-        #   displayName: 'Integration Testing'
-        # - script: |
-        #       adb pull storage/emulated/0/Android/data/com.sevenedge.healthfit/files/reports ./test
-        #       npm i axios
-        #       node living-documenation.js 
-        #     displayName: 'BDD Living documentation'
-
-    - job: TestPlaceholder
-      displayName: "Test Placeholder"
-      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-      pool:
-        vmImage: "ubuntu-latest"
-      steps:
-        - script: echo "Placeholder job to ensure stage entry point"
-          displayName: "Test Placeholder"
-
-- stage: Deploy
-  jobs:
-    - deployment: Deployment
-      dependsOn: BDD
-      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-      pool:
-        vmImage: "macos-latest"
-      environment: testing
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - checkout: self
-              - task: JavaToolInstaller@0
-                inputs:
-                  versionSpec: '17'
-                  jdkArchitectureOption: 'x64'
-                  jdkSourceOption: 'PreInstalled'
-              - task: DownloadPipelineArtifact@2
-                name: environment
-                inputs:
-                  artifact: Environment
-                  targetPath: '$(System.DefaultWorkingDirectory)'
-              - task: DownloadPipelineArtifact@2
-                name: SecretFiles
-                inputs:
-                  artifact: SecretFiles
-                  targetPath: '$(System.DefaultWorkingDirectory)'
-              - script: |
-                  cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
-                  brew install fastlane
-                  export BUILD_NUMBER=$(Build.BuildId)
-                  fastlane android qa
-                displayName: 'Deployment'
-
-    - deployment: production
-      dependsOn: Download_Environment
-      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'master'))
-      pool:
-        vmImage: "macos-latest"
-      environment: Production
-      strategy:
-        runOnce:
-          deploy:
-            steps:
+      - task: JavaToolInstaller@0
+        inputs:
+          versionSpec: '17'
+          jdkArchitectureOption: 'x64'
+          jdkSourceOption: 'PreInstalled'
+      - task: DownloadPipelineArtifact@2
+        name: environment
+        inputs:
+          artifact: Environment
+          targetPath: '$(System.DefaultWorkingDirectory)'
+      - task: DownloadPipelineArtifact@2
+        name: SecretFiles
+        inputs:
+          artifact: SecretFiles
+          targetPath: '$(System.DefaultWorkingDirectory)'
+      - script: |
+          cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
+      # - script: 'sh scripts/emulator_device.sh'
+      #   displayName: 'Install Emulator'
+      # - task: Gradle@3
+      #   inputs:
+      #     gradleWrapperFile: 'gradlew'
+      #     tasks: 'connectedCheck'
+      #     javaHomeOption: 'JDKVersion'
+      #     jdkVersionOption: '1.17'
+      #     publishJUnitResults: true
+      #     options: '--build-cache'
+      #   displayName: 'Integration Testing'
+      # - script: |
+      #       adb pull storage/emulated/0/Android/data/com.sevenedge.healthfit/files/reports ./test
+      #       npm i axios
+      #       node living-documenation.js 
+      #     displayName: 'BDD Living documentation'
+  
+  - deployment: Deployment
+    dependsOn: BDD
+    condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
+    pool:
+      vmImage: "macos-latest"
+    environment: testing
+    strategy:
+      runOnce:
+        deploy:
+          steps:
             - checkout: self
             - task: JavaToolInstaller@0
               inputs:
@@ -241,48 +181,72 @@ stages:
                 targetPath: '$(System.DefaultWorkingDirectory)'
             - script: |
                 cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
+                brew install fastlane
                 export BUILD_NUMBER=$(Build.BuildId)
+                fastlane android qa
+              displayName: 'Deployment'
+
+  - deployment: production
+    dependsOn: Download_Environment
+    condition: and(succeeded(), contains(variables['build.SourceBranch'], 'master'))
+    pool:
+      vmImage: "macos-latest"
+    environment: Production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: JavaToolInstaller@0
+            inputs:
+              versionSpec: '17'
+              jdkArchitectureOption: 'x64'
+              jdkSourceOption: 'PreInstalled'
+          - task: DownloadPipelineArtifact@2
+            name: environment
+            inputs:
+              artifact: Environment
+              targetPath: '$(System.DefaultWorkingDirectory)'
+          - task: DownloadPipelineArtifact@2
+            name: SecretFiles
+            inputs:
+              artifact: SecretFiles
+              targetPath: '$(System.DefaultWorkingDirectory)'
+          - script: |
+              cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
+              export BUILD_NUMBER=$(Build.BuildId)
+              brew install fastlane
+              fastlane android production
+            displayName: 'Deployment'
+  
+  - deployment: staging
+    dependsOn: Download_Environment
+    condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-production'))
+    pool:
+      vmImage: "macos-latest"
+    environment: Pre-Production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+            - task: JavaToolInstaller@0
+              inputs:
+                versionSpec: '17'
+                jdkArchitectureOption: 'x64'
+                jdkSourceOption: 'PreInstalled'
+            - task: DownloadPipelineArtifact@2
+              name: environment
+              inputs:
+                artifact: Environment
+                targetPath: '$(System.DefaultWorkingDirectory)'
+            - task: DownloadPipelineArtifact@2
+              name: SecretFiles
+              inputs:
+                artifact: SecretFiles
+                targetPath: '$(System.DefaultWorkingDirectory)'
+            - script: |
+                cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
                 brew install fastlane
                 fastlane android production
               displayName: 'Deployment'
-    
-    - deployment: staging
-      dependsOn: Download_Environment
-      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-production'))
-      pool:
-        vmImage: "macos-latest"
-      environment: Pre-Production
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - checkout: self
-              - task: JavaToolInstaller@0
-                inputs:
-                  versionSpec: '17'
-                  jdkArchitectureOption: 'x64'
-                  jdkSourceOption: 'PreInstalled'
-              - task: DownloadPipelineArtifact@2
-                name: environment
-                inputs:
-                  artifact: Environment
-                  targetPath: '$(System.DefaultWorkingDirectory)'
-              - task: DownloadPipelineArtifact@2
-                name: SecretFiles
-                inputs:
-                  artifact: SecretFiles
-                  targetPath: '$(System.DefaultWorkingDirectory)'
-              - script: |
-                  cp $(System.DefaultWorkingDirectory)/paymaart_customer.jks $(System.DefaultWorkingDirectory)/app/paymaart_customer.jks
-                  brew install fastlane
-                  fastlane android production
-                displayName: 'Deployment'
-
-    - job: DeploymentPlaceholder
-      displayName: "Deployment Placeholder"
-      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-      pool:
-        vmImage: "ubuntu-latest"
-      steps:
-        - script: echo "Placeholder job to ensure stage entry point"
-          displayName: "Deployment Placeholder"
