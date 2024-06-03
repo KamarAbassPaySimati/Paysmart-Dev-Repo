@@ -1,16 +1,17 @@
 [versions]
 aaltoXml = "1.2.2"
-agp = "8.3.0"
+agp = "8.3.2"
 cucumberAndroid = "7.14.0"
 glide = "4.16.0"
 kotlin = "1.9.0"
-coreKtx = "1.12.0"
+coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
-appcompat = "1.6.1"
+appcompat = "1.7.0"
+lifecycleViewmodelKtx = "2.8.1"
 material = "1.11.0"
-activity = "1.8.2"
+activity = "1.9.0"
 constraintlayout = "2.1.4"
 orgJacocoCore = "0.8.8"
 poiOoxml = "3.17"
@@ -20,6 +21,7 @@ xmlbeans = "5.1.0"
 [libraries]
 aalto-xml = { module = "com.fasterxml:aalto-xml", version.ref = "aaltoXml" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumberAndroid" }
 cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberAndroid" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
