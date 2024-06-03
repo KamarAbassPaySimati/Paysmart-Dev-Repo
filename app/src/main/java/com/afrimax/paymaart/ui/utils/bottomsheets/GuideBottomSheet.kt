@@ -8,14 +8,14 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.GuideBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class GuideBottomSheet() : BottomSheetDialogFragment() {
+class GuideBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: GuideBottomSheetBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = GuideBottomSheetBinding.inflate(inflater, container, false)
         binding.registrationGuideSheetCloseButton.setOnClickListener {
             dismiss()

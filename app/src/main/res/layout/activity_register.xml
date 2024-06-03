@@ -206,6 +206,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:helperTextTextAppearance="@style/error_text_style"
+                    app:helperTextTextColor="@color/errorRed"
                     app:hintEnabled="false"
                     app:errorEnabled="false">
 
@@ -235,6 +236,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:helperTextTextAppearance="@style/error_text_style"
+                    app:helperTextTextColor="@color/errorRed"
                     app:hintEnabled="false">
 
                     <androidx.appcompat.widget.AppCompatEditText
@@ -263,6 +265,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:helperTextTextAppearance="@style/error_text_style"
+                    app:helperTextTextColor="@color/errorRed"
                     app:hintEnabled="false"
                     app:helperTextEnabled="false">
 

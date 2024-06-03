@@ -23,7 +23,6 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.GuideBottomSheet
 import com.afrimax.paymaart.util.getDrawableExt
 import com.afrimax.paymaart.util.getStringExt
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class RegisterActivity : AppCompatActivity() {
@@ -34,6 +33,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var guideSheet: BottomSheetDialogFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
+        guideSheet = GuideBottomSheet()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
@@ -50,7 +50,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun handleLayoutActivity(){
-        guideSheet = GuideBottomSheet()
         binding.apply {
             firstNameEditText.disableError()
             middleNameEditText.disableError()
