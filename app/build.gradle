@@ -37,12 +37,25 @@ android {
         testInstrumentationRunner 'com.afrimax.paymaart.TestJunitRunner'
     }
 
+    signingConfigs {
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+
+            // Optional, specify signing versions used
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
     buildTypes {
         debug {
             testCoverageEnabled true
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -58,24 +71,24 @@ android {
         develop{
             dimension "env"
             applicationIdSuffix ".develop"
-            buildConfigField("String", "APP_NAME", '"Paymaart Dev"')
+            buildConfigField("String", "STAGE", "\"dev\"")
         }
 
         qa{
             dimension "env"
             applicationIdSuffix ".qa"
-            buildConfigField("String", "APP_NAME", '"Paymaart QA"')
+            buildConfigField("String", "STAGE", "\"qa\"")
         }
 
         preprod{
             dimension "env"
             applicationIdSuffix ".preprod"
-            buildConfigField("String", "APP_NAME", '"Paymaart PreProd"')
+            buildConfigField("String", "STAGE", "\"pre-production\"")
         }
 
         production{
             dimension "env"
-            buildConfigField("String", "APP_NAME", '"Paymaart"')
+            buildConfigField("String", "STAGE", "\"prod\"")
         }
     }
 
@@ -106,4 +119,14 @@ dependencies {
     implementation(libs.xmlbeans)
     androidTestImplementation libs.stax.api
     androidTestImplementation libs.aalto.xml
+
+    //Retrofit
+
+    //dependency injection
+
+    //Viewmodel
+//    implementation libs.androidx.lifecycle.viewmodel.ktx
+
+    //Glide
+    implementation libs.glide
 }

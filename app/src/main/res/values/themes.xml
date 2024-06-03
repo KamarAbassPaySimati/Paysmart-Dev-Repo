@@ -6,4 +6,12 @@
     </style>
 
     <style name="Theme.PaymaartMerchant" parent="Base.Theme.PaymaartMerchant" />
+
+    <style name="Guide.Bottom.Sheet.Style" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <!-- This is important -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- And then this will be needed -->
+        <item name="android:navigationBarColor">@color/primaryColor</item>
+    </style>
 </resources>
