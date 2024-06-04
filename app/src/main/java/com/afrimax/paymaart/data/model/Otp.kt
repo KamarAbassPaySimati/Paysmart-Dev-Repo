@@ -34,3 +34,7 @@ data class VerifyOtpResponse(
     val recordId: String,
     val message: String
 )
+
+data class ResendCredentialsRequest(
+    val email:String
+)

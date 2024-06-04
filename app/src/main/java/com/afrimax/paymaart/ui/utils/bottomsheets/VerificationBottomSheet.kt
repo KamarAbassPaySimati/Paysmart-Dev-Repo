@@ -8,10 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.SendOtpRequestBody
+import com.afrimax.paymaart.data.model.SendOtpResponse
 import com.afrimax.paymaart.data.model.VerifyOtpRequestBody
 import com.afrimax.paymaart.data.model.VerifyOtpResponse
 import com.afrimax.paymaart.databinding.VerificationBottomSheetBinding
@@ -20,6 +23,7 @@ import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getStringExt
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -81,7 +85,7 @@ class VerificationBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding.registrationVerificationSheetResendTV.setOnClickListener {
-//            resendOtpApi(firstName, middleName, lastName, type, value, countryCode)
+            resendOtpApi(firstName, middleName, lastName, type, value, countryCode)
             startTimer()
             binding.registrationVerificationSheetResendTV.isEnabled = false
         }
@@ -144,66 +148,66 @@ class VerificationBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-//    private fun resendOtpApi(
-//        firstName: String,
-//        middleName: String,
-//        lastName: String,
-//        type: String,
-//        value: String,
-//        countryCode: String
-//    ) {
-//        val otpCall = ApiClient.apiService.sentOtp(
-//            SendOtpRequest(
-//                first_name = firstName,
-//                middle_name = middleName,
-//                last_name = lastName,
-//                type = type,
-//                value = value.replace(" ", ""),
-//                country_code = countryCode
-//            )
-//        )
-//        otpCall.enqueue(object : Callback<SendOtpResponse> {
-//            override fun onResponse(
-//                call: Call<SendOtpResponse>, response: Response<SendOtpResponse>
-//            ) {
-//                val body = response.body()
-//                if (body != null && response.isSuccessful) {
-//                    token = body.token //Update OTP token
-//                    Toast.makeText(
-//                        requireContext(),
-//                        getString(R.string.successfully_resent_otp),
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                    resendCount++
-//                    if (resendCount >= 3) {
-//                        binding.registrationVerificationSheetBottomTextTV.text =
-//                            ContextCompat.getString(requireContext(), R.string.resend_limit_is_3)
-//                        binding.registrationVerificationSheetBottomTextTV.setTextColor(
-//                            ContextCompat.getColor(
-//                                requireContext(), R.color.accentInformation
-//                            )
-//                        )
-//                        binding.registrationVerificationSheetResendTV.visibility = View.GONE
-//                        binding.registrationVerificationSheetTimerTV.visibility = View.GONE
-//                    }
-//                } else {
-//                    val errorResponse: SendOtpResponse = Gson().fromJson(
-//                        response.errorBody()!!.string(),
-//                        object : TypeToken<SendOtpResponse>() {}.type
-//                    )
-//                    Toast.makeText(
-//                        requireContext(), errorResponse.message, Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<SendOtpResponse>, t: Throwable) {
-//                Toast.makeText(
-//                    requireContext(), getString(R.string.default_error_toast), Toast.LENGTH_LONG
-//                ).show()
-//            }
-//        })
-//    }
+    private fun resendOtpApi(
+        firstName: String,
+        middleName: String,
+        lastName: String,
+        type: String,
+        value: String,
+        countryCode: String
+    ) {
+        val otpCall = ApiClient.apiService.sentOtp(
+            SendOtpRequestBody(
+                firstName = firstName,
+                middleName = middleName,
+                lastName = lastName,
+                type = type,
+                value = value.replace(" ", ""),
+                countryCode = countryCode
+            )
+        )
+        otpCall.enqueue(object : Callback<SendOtpResponse> {
+            override fun onResponse(
+                call: Call<SendOtpResponse>, response: Response<SendOtpResponse>
+            ) {
+                val body = response.body()
+                if (body != null && response.isSuccessful) {
+                    token = body.token //Update OTP token
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.successfully_resent_otp),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    resendCount++
+                    if (resendCount >= 3) {
+                        binding.registrationVerificationSheetBottomTextTV.text =
+                            ContextCompat.getString(requireContext(), R.string.resend_limit_is_3)
+                        binding.registrationVerificationSheetBottomTextTV.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(), R.color.accentInformation
+                            )
+                        )
+                        binding.registrationVerificationSheetResendTV.visibility = View.GONE
+                        binding.registrationVerificationSheetTimerTV.visibility = View.GONE
+                    }
+                } else {
+                    val errorResponse: SendOtpResponse = Gson().fromJson(
+                        response.errorBody()!!.string(),
+                        SendOtpResponse::class.java
+                    )
+                    Toast.makeText(
+                        requireContext(), errorResponse.message, Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<SendOtpResponse>, t: Throwable) {
+                Toast.makeText(
+                    requireContext(), getString(R.string.default_error_toast), Toast.LENGTH_LONG
+                ).show()
+            }
+        })
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

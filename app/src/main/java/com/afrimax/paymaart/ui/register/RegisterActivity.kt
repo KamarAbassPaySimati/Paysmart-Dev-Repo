@@ -36,7 +36,11 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.CreateUserRequestBody
+import com.afrimax.paymaart.data.model.CreateUserResponse
+import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.SecurityQuestionAnswerModel
+import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
 import com.afrimax.paymaart.data.model.SendOtpResponse
 import com.afrimax.paymaart.databinding.ActivityRegisterBinding
@@ -44,10 +48,10 @@ import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.GuideBottomSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.VerificationBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.VerificationBottomSheetInterface
+import com.afrimax.paymaart.ui.webview.WebViewActivity
 import com.afrimax.paymaart.util.Constants
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -59,7 +63,6 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.UUID
 
 class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
@@ -94,9 +97,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         initViews()
         setUpLayout()
         setupListeners()
-//        retrieveSecurityQuestionsApi()
-        b.onboardRegistrationActivityContentBox.visibility = View.VISIBLE
-        b.onboardRegistrationActivityLoaderLottie.visibility = View.GONE
+        retrieveSecurityQuestionsApi()
     }
 
     private fun setUpLayout() {
@@ -106,15 +107,15 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
         val clickableSpanTnC: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-//                val termsAndConditionsIntent =
-//                    Intent(this@RegisterActivity, WebviewActivity::class.java)
-//                termsAndConditionsIntent.putExtra(
-//                    Constants.TYPE, Constants.TERMS_AND_CONDITIONS_TYPE
-//                )
-//                val options =
-//                    ActivityOptionsCompat.makeSceneTransitionAnimation(this@RegisterActivity)
-//                        .toBundle()
-//                startActivity(termsAndConditionsIntent, options)
+                val termsAndConditionsIntent =
+                    Intent(this@RegisterActivity, WebViewActivity::class.java)
+                termsAndConditionsIntent.putExtra(
+                    Constants.TYPE, Constants.TERMS_AND_CONDITIONS_TYPE
+                )
+                val options =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(this@RegisterActivity)
+                        .toBundle()
+                startActivity(termsAndConditionsIntent, options)
             }
 
             override fun updateDrawState(ds: TextPaint) {
@@ -124,13 +125,13 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
         val clickableSpanPrivacyPolicy: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-//                val privacyPolicyIntent =
-//                    Intent(this@RegisterActivity, WebviewActivity::class.java)
-//                privacyPolicyIntent.putExtra(Constants.TYPE, Constants.PRIVACY_POLICY_TYPE)
-//                val options =
-//                    ActivityOptionsCompat.makeSceneTransitionAnimation(this@RegisterActivity)
-//                        .toBundle()
-//                startActivity(privacyPolicyIntent, options)
+                val privacyPolicyIntent =
+                    Intent(this@RegisterActivity, WebViewActivity::class.java)
+                privacyPolicyIntent.putExtra(Constants.TYPE, Constants.PRIVACY_POLICY_TYPE)
+                val options =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(this@RegisterActivity)
+                        .toBundle()
+                startActivity(privacyPolicyIntent, options)
             }
 
             override fun updateDrawState(ds: TextPaint) {
@@ -141,8 +142,8 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
         b.onboardRegistrationActivityProfileContainer.visibility = View.VISIBLE
         val ss = SpannableString(getString(R.string.terms_and_conditions))
-        ss.setSpan(clickableSpanTnC, 40, 59, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        ss.setSpan(clickableSpanPrivacyPolicy, 63, 77, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ss.setSpan(clickableSpanTnC, 36, 55, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ss.setSpan(clickableSpanPrivacyPolicy, 59, 73, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         b.onboardRegistrationActivityTnCPrivacyPolicyTV.text = ss
     }
 
@@ -191,13 +192,13 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         //Setup First letter autoCaps for editTexts
-        b.onboardRegistrationActivityFirstNameET.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
-        b.onboardRegistrationActivityMiddleNameET.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
-        b.onboardRegistrationActivityLastNameET.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS)
-        b.onboardRegistrationActivitySecurityQuestion1ET.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
-        b.onboardRegistrationActivitySecurityQuestion2ET.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
-        b.onboardRegistrationActivitySecurityQuestion3ET.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
-        b.onboardRegistrationActivitySecurityQuestion4ET.setInputType(InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
+        b.onboardRegistrationActivityFirstNameET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+        b.onboardRegistrationActivityMiddleNameET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+        b.onboardRegistrationActivityLastNameET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
+        b.onboardRegistrationActivitySecurityQuestion1ET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+        b.onboardRegistrationActivitySecurityQuestion2ET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+        b.onboardRegistrationActivitySecurityQuestion3ET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+        b.onboardRegistrationActivitySecurityQuestion4ET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
 
         fileResultLauncher =
             registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -590,7 +591,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
         if (isValid) {
             lifecycleScope.launch {
-//                registerCustomerApi()
+                registerCustomer()
             }
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
@@ -598,94 +599,91 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
     }
 
-//    private suspend fun registerCustomerApi() {
-//        showButtonLoader(
-//            b.onboardRegistrationActivitySubmitButton,
-//            b.onboardRegistrationActivitySubmitButtonLoaderLottie
-//        )
-//
-//        //If registering  a customer check for profile picture
-//        val profilePic = if ( profilePicUri != null) amplifyUpload(profilePicUri!!) else ""
-//        val makeVisible = profilePic.isNotEmpty() && b.onboardRegistrationActivityMakeVisibleCB.isChecked
-//        val firstName = b.onboardRegistrationActivityFirstNameET.text.toString()
-//        val middleName = b.onboardRegistrationActivityMiddleNameET.text.toString()
-//        val lastName = b.onboardRegistrationActivityLastNameET.text.toString()
-//        val countryCode = getCountryCode()
-//        val phoneNumber = b.onboardRegistrationActivityPhoneET.text.toString().replace(" ", "")
-//        val email = b.onboardRegistrationActivityEmailET.text.toString()
-//
-//        val securityQuestions = obtainSecurityQuestionAnswers()
-//
-//        val idToken = fetchIdToken()
-//
-//        val registerCustomerCall = ApiClient.apiService.onboardRegisterCustomer(
-//            "Bearer $idToken", CreateCustomerRequest(
-//                first_name = firstName,
-//                middle_name = middleName,
-//                last_name = lastName,
-//                country_code = countryCode,
-//                phone_number = phoneNumber,
-//                email = email,
-//                email_otp_id = emailRecordId,
-//                phone_otp_id = phoneRecordId,
-//                security_questions = securityQuestions,
-//                profile_pic = profilePic,
-//                public_profile = makeVisible
-//            )
-//        )
-//
-//        registerCustomerCall.enqueue(object : Callback<OnboardCreateUserResponse> {
-//            override fun onResponse(
-//                call: Call<OnboardCreateUserResponse>, response: Response<OnboardCreateUserResponse>
-//            ) {
-//                val body = response.body()
-//                if (body != null && response.isSuccessful) {
-//                    runOnUiThread {
-//                        hideButtonLoader(
-//                            b.onboardRegistrationActivitySubmitButton,
-//                            b.onboardRegistrationActivitySubmitButtonLoaderLottie,
-//                            getString(R.string.submit)
-//                        )
-//                        showToast(body.message)
-//                        val i = Intent(
-//                            this@RegisterActivity,
-//                            OnboardRegistrationSuccessfulActivity::class.java
-//                        )
-//                        i.putExtra(Constants.INTENT_DATA_EMAIL, email)
-//                        i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
-//                        i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, body.paymaart_id)
-//                        startActivity(i)
-//                        finish()
-//                    }
-//                } else {
-//                    runOnUiThread {
-//                        hideButtonLoader(
-//                            b.onboardRegistrationActivitySubmitButton,
-//                            b.onboardRegistrationActivitySubmitButtonLoaderLottie,
-//                            getString(R.string.submit)
-//                        )
-//                        val errorResponse: DefaultResponse = Gson().fromJson(
-//                            response.errorBody()!!.string(),
-//                            object : TypeToken<DefaultResponse>() {}.type
-//                        )
-//                        showToast(errorResponse.message)
-//                    }
-//                }
-//
-//            }
-//
-//            override fun onFailure(call: Call<OnboardCreateUserResponse>, t: Throwable) {
-//                runOnUiThread {
-//                    hideButtonLoader(
-//                        b.onboardRegistrationActivitySubmitButton,
-//                        b.onboardRegistrationActivitySubmitButtonLoaderLottie,
-//                        getString(R.string.submit)
-//                    )
-//                    showToast(getString(R.string.default_error_toast))
-//                }
-//            }
-//        })
-//    }
+    private fun registerCustomer() {
+        showButtonLoader(
+            b.onboardRegistrationActivitySubmitButton,
+            b.onboardRegistrationActivitySubmitButtonLoaderLottie
+        )
+
+        //If registering  a customer check for profile picture
+        val profilePic = ""
+        val makeVisible = profilePic.isNotEmpty() && b.onboardRegistrationActivityMakeVisibleCB.isChecked
+        val firstName = b.onboardRegistrationActivityFirstNameET.text.toString()
+        val middleName = b.onboardRegistrationActivityMiddleNameET.text.toString()
+        val lastName = b.onboardRegistrationActivityLastNameET.text.toString()
+        val countryCode = getCountryCode()
+        val phoneNumber = b.onboardRegistrationActivityPhoneET.text.toString().replace(" ", "")
+        val email = b.onboardRegistrationActivityEmailET.text.toString()
+
+        val securityQuestions = obtainSecurityQuestionAnswers()
+
+
+        val registerCustomerCall = ApiClient.apiService.registerCustomer(
+            CreateUserRequestBody(
+                first_name = firstName,
+                middle_name = middleName,
+                last_name = lastName,
+                country_code = countryCode,
+                phone_number = phoneNumber,
+                email = email,
+                email_otp_id = emailRecordId,
+                phone_otp_id = phoneRecordId,
+                security_questions = securityQuestions,
+                profile_pic = profilePic,
+                public_profile = makeVisible
+            )
+        )
+
+        registerCustomerCall.enqueue(object : Callback<CreateUserResponse> {
+            override fun onResponse(
+                call: Call<CreateUserResponse>, response: Response<CreateUserResponse>
+            ) {
+                val body = response.body()
+                if (body != null && response.isSuccessful) {
+                    runOnUiThread {
+                        hideButtonLoader(
+                            b.onboardRegistrationActivitySubmitButton,
+                            b.onboardRegistrationActivitySubmitButtonLoaderLottie,
+                            getString(R.string.submit)
+                        )
+                        showToast(body.message)
+                        val i = Intent(
+                            this@RegisterActivity,
+                            RegistrationSuccessfulActivity::class.java
+                        )
+                        i.putExtra(Constants.INTENT_DATA_EMAIL, email)
+                        startActivity(i)
+                        finish()
+                    }
+                } else {
+                    runOnUiThread {
+                        hideButtonLoader(
+                            b.onboardRegistrationActivitySubmitButton,
+                            b.onboardRegistrationActivitySubmitButtonLoaderLottie,
+                            getString(R.string.submit)
+                        )
+                        val errorResponse: DefaultResponse = Gson().fromJson(
+                            response.errorBody()!!.string(),
+                            DefaultResponse::class.java
+                        )
+                        showToast(errorResponse.message)
+                    }
+                }
+
+            }
+
+            override fun onFailure(call: Call<CreateUserResponse>, t: Throwable) {
+                runOnUiThread {
+                    hideButtonLoader(
+                        b.onboardRegistrationActivitySubmitButton,
+                        b.onboardRegistrationActivitySubmitButtonLoaderLottie,
+                        getString(R.string.submit)
+                    )
+                    showToast(getString(R.string.default_error_toast))
+                }
+            }
+        })
+    }
 
     private fun showButtonLoader(
         actionButton: AppCompatButton, loaderLottie: LottieAnimationView
@@ -890,16 +888,15 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
 
         lifecycleScope.launch {
-            val otpCall = ApiClient.apiService.sentOtp(
-                SendOtpRequestBody(
-                    firstName = firstName,
-                    middleName = middleName,
-                    lastName = lastName,
-                    type = type,
-                    value = value,
-                    countryCode = countryCode
-                )
+            val sendOtpRequestBody = SendOtpRequestBody(
+                firstName = firstName,
+                middleName = middleName,
+                lastName = lastName,
+                type = type,
+                value = value,
+                countryCode = countryCode
             )
+            val otpCall = ApiClient.apiService.sentOtp(sendOtpRequestBody)
             otpCall.enqueue(object : Callback<SendOtpResponse> {
                 override fun onResponse(
                     call: Call<SendOtpResponse>, response: Response<SendOtpResponse>
@@ -1109,72 +1106,72 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     private fun CharSequence?.isValidEmail() =
         !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-//    private fun retrieveSecurityQuestionsApi() {
-//        val securityQuestionsCall = ApiClient.apiService.getSecurityQuestions()
-//        securityQuestionsCall.enqueue(object : Callback<SecurityQuestionsResponse> {
-//            override fun onResponse(
-//                call: Call<SecurityQuestionsResponse>, response: Response<SecurityQuestionsResponse>
-//            ) {
-//                val body = response.body()
-//                if (body != null && response.isSuccessful) {
-//                    populateSecurityQuestions(body)
-//                } else {
-//                    val errorResponse: SecurityQuestionsResponse = Gson().fromJson(
-//                        response.errorBody()!!.string(),
-//                        object : TypeToken<SecurityQuestionsResponse>() {}.type
-//                    )
-//                    Toast.makeText(
-//                        this@RegisterActivity, errorResponse.message, Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<SecurityQuestionsResponse>, t: Throwable) {
-//                Toast.makeText(
-//                    this@RegisterActivity,
-//                    R.string.default_error_toast,
-//                    Toast.LENGTH_LONG
-//                ).show()
-//            }
-//
-//        })
-//    }
+    private fun retrieveSecurityQuestionsApi() {
+        val securityQuestionsCall = ApiClient.apiService.getSecurityQuestions()
+        securityQuestionsCall.enqueue(object : Callback<SecurityQuestionsResponse> {
+            override fun onResponse(
+                call: Call<SecurityQuestionsResponse>, response: Response<SecurityQuestionsResponse>
+            ) {
+                val body = response.body()
+                if (body != null && response.isSuccessful) {
+                    populateSecurityQuestions(body)
+                } else {
+                    val errorResponse: SecurityQuestionsResponse = Gson().fromJson(
+                        response.errorBody()!!.string(),
+                        object : TypeToken<SecurityQuestionsResponse>() {}.type
+                    )
+                    Toast.makeText(
+                        this@RegisterActivity, errorResponse.message, Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
 
-//    private fun populateSecurityQuestions(body: SecurityQuestionsResponse) {
-//        val questions = body.data
-//
-//        if (questions.size == 4) {
-//            b.onboardRegistrationActivitySecurityQuestion1TV.text = questions[0].question
-//            b.onboardRegistrationActivitySecurityQuestion1TV.setTag(
-//                R.string.security_question_id, questions[0].id
-//            )
-//
-//            b.onboardRegistrationActivitySecurityQuestion2TV.text = questions[1].question
-//            b.onboardRegistrationActivitySecurityQuestion2TV.setTag(
-//                R.string.security_question_id, questions[1].id
-//            )
-//
-//            b.onboardRegistrationActivitySecurityQuestion3TV.text = questions[2].question
-//            b.onboardRegistrationActivitySecurityQuestion3TV.setTag(
-//                R.string.security_question_id, questions[2].id
-//            )
-//
-//            b.onboardRegistrationActivitySecurityQuestion4TV.text = questions[3].question
-//            b.onboardRegistrationActivitySecurityQuestion4TV.setTag(
-//                R.string.security_question_id, questions[3].id
-//            )
-//
-//            b.onboardRegistrationActivityContentBox.visibility = View.VISIBLE
-//            b.onboardRegistrationActivityLoaderLottie.visibility = View.GONE
-//
-//        } else {
-//            Toast.makeText(
-//                this@RegisterActivity,
-//                "Something wrong happened! Try again later.",
-//                Toast.LENGTH_LONG
-//            ).show()
-//        }
-//    }
+            override fun onFailure(call: Call<SecurityQuestionsResponse>, t: Throwable) {
+                Toast.makeText(
+                    this@RegisterActivity,
+                    R.string.default_error_toast,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+        })
+    }
+
+    private fun populateSecurityQuestions(body: SecurityQuestionsResponse) {
+        val questions = body.data
+
+        if (questions.size == 4) {
+            b.onboardRegistrationActivitySecurityQuestion1TV.text = questions[0].question
+            b.onboardRegistrationActivitySecurityQuestion1TV.setTag(
+                R.string.security_question_id, questions[0].id
+            )
+
+            b.onboardRegistrationActivitySecurityQuestion2TV.text = questions[1].question
+            b.onboardRegistrationActivitySecurityQuestion2TV.setTag(
+                R.string.security_question_id, questions[1].id
+            )
+
+            b.onboardRegistrationActivitySecurityQuestion3TV.text = questions[2].question
+            b.onboardRegistrationActivitySecurityQuestion3TV.setTag(
+                R.string.security_question_id, questions[2].id
+            )
+
+            b.onboardRegistrationActivitySecurityQuestion4TV.text = questions[3].question
+            b.onboardRegistrationActivitySecurityQuestion4TV.setTag(
+                R.string.security_question_id, questions[3].id
+            )
+
+            b.onboardRegistrationActivityContentBox.visibility = View.VISIBLE
+            b.onboardRegistrationActivityLoaderLottie.visibility = View.GONE
+
+        } else {
+            Toast.makeText(
+                this@RegisterActivity,
+                "Something wrong happened! Try again later.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
     private fun launchFilePicker() {
         fileResultLauncher.launch(

@@ -37,7 +37,7 @@
     <string name="name_of_childhood_teacher">What was the name of your childhood teacher?</string>
     <string name="name_of_place_you_first_visited">What is the name of the place you first visited outside your home town?</string>
     <string name="answer">Answer</string>
-    <string name="terms_and_conditions"><![CDATA[I have read and agree to Paymaart’s Terms &amp; Conditions and Privacy Policy]]></string>
+    <string name="terms_and_conditions"><![CDATA[I have read and agree to Paymaart’s Terms & Conditions and Privacy Policy]]></string>
     <string name="submit">Submit</string>
     <string name="answer_any_three">Answer any 3</string>
     <string name="close_button_data">close button</string>
@@ -61,4 +61,13 @@
     <string name="default_error_toast">Something went wrong! Try again later.</string>
     <string name="invalid_email">Invalid email</string>
     <string name="invalid_phone">Invalid phone number</string>
+    <string name="successfully_resent_otp">OTP resent successfully</string>
+    <string name="resend_limit_is_3">Resend limit is 3 times</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="registration_successful">Registration Successful</string>
+    <string name="welcome_to_paymaart">Welcome to Paymaart!</string>
+    <string name="welcome_to_paymaart_sub_text">Your registration is a vital step in realising our vision of universal e-payments. Thank you for joining us on this transformative journey. Please now complete online KYC registration to start</string>
+    <string name="didn_t_receive_credentials">Didn’t receive credentials?</string>
+    <string name="login_to_complete_your_kyc">Login to complete your KYC Registration</string>
+    <string name="terms_and_conditions_wv">Terms and Conditions</string>
 </resources>

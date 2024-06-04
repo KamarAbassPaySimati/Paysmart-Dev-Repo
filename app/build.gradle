@@ -73,6 +73,11 @@ android {
             applicationIdSuffix ".develop"
             buildConfigField("String", "STAGE", "\"dev\"")
             buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
+            buildConfigField("String", "REGION", "\"eu-west-1\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
+            buildConfigField("String", "AGENT_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
 
         qa{
@@ -80,6 +85,11 @@ android {
             applicationIdSuffix ".qa"
             buildConfigField("String", "STAGE", "\"qa\"")
             buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
+            buildConfigField("String", "REGION", "\"eu-west-1\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
+            buildConfigField("String", "AGENT_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
 
         preprod{
@@ -87,12 +97,22 @@ android {
             applicationIdSuffix ".preprod"
             buildConfigField("String", "STAGE", "\"pre-production\"")
             buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
+            buildConfigField("String", "REGION", "\"eu-west-1\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
+            buildConfigField("String", "AGENT_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
 
         production{
             dimension "env"
             buildConfigField("String", "STAGE", "\"prod\"")
             buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
+            buildConfigField("String", "REGION", "\"eu-west-1\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
+            buildConfigField("String", "AGENT_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
     }
 

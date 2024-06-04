@@ -12,4 +12,9 @@ object Constants {
     const val OTP_SMS_TYPE = "sms"
     const val STAGE_DEV = "dev"
     const val STAGE_QA = "qa"
+    const val INTENT_DATA_EMAIL = "intent_data_email"
+    const val PRIVACY_POLICY_TYPE = "privacy_policy"
+    const val TERMS_AND_CONDITIONS_TYPE = "terms_and_conditions"
+    const val PRIVACY_POLICY_URL = "https://www.paymaart.net/mobile-privacy-policy"
+    const val TERMS_AND_CONDITIONS_URL = "https://www.paymaart.net/mobile-agent-terms-conditions"
 }
