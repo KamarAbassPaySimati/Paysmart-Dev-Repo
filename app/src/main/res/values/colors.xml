@@ -21,4 +21,5 @@
     <color name="errorRed">#FF4343</color>
     <color name="successGreen">#13B681</color>
     <color name="blue1">#0066F6</color>
+    <color name="accentInformation">#0066F6</color>
 </resources>

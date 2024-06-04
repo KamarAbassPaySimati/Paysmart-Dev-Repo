@@ -72,23 +72,27 @@ android {
             dimension "env"
             applicationIdSuffix ".develop"
             buildConfigField("String", "STAGE", "\"dev\"")
+            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
         }
 
         qa{
             dimension "env"
             applicationIdSuffix ".qa"
             buildConfigField("String", "STAGE", "\"qa\"")
+            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
         }
 
         preprod{
             dimension "env"
             applicationIdSuffix ".preprod"
             buildConfigField("String", "STAGE", "\"pre-production\"")
+            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
         }
 
         production{
             dimension "env"
             buildConfigField("String", "STAGE", "\"prod\"")
+            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
         }
     }
 
@@ -120,8 +124,6 @@ dependencies {
     androidTestImplementation libs.stax.api
     androidTestImplementation libs.aalto.xml
 
-    //Retrofit
-
     //dependency injection
 
     //Viewmodel
@@ -129,4 +131,11 @@ dependencies {
 
     //Glide
     implementation libs.glide
+
+    //lottie
+    implementation libs.lottie
+
+    //Retrofit & GSON
+    implementation libs.retrofit
+    implementation libs.converter.gson
 }

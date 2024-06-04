@@ -2,6 +2,11 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.PaymaartMerchant" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorAccent">@color/white</item>
     </style>
 
     <style name="Theme.PaymaartMerchant" parent="Base.Theme.PaymaartMerchant" />
@@ -10,6 +15,11 @@
         <item name="android:windowIsFloating">false</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@color/primaryColor</item>
+    </style>
+
+    <style name="profileImagePreview" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
     </style>
 
 </resources>

@@ -44,4 +44,21 @@
     <string name="bullet_char">•</string>
     <string name="please_provide_unique">Please provide unique and memorable answers that are easy to remember, even years later.</string>
     <string name="answers_should_be_clear">Answers should be clear and exact (preferably a single word), but they don\\\'t need to be truthful. Indeed, it\\\'s best to use fake answers for security questions to enhance security.</string>
+    <string name="email_verification">Email Verification</string>
+    <string name="email_verify_sub_text">Check your email for a verification OTP. The OTP will be active for 10 minutes.</string>
+    <string name="sample_email">john12@gmail.com</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="otp_place_holder">_ _ _ _ _ _</string>
+    <string name="sample_time">10:00</string>
+    <string name="invalid_otp">Invalid OTP</string>
+    <string name="didn_t_receive_otp">Didn\'t Receive OTP</string>
+    <string name="resend">Resend</string>
+    <string name="phone_verification">Phone Verification</string>
+    <string name="phone_verify_sub_text">Check your phone for a verification OTP. The OTP will be active for 10 minutes.</string>
+    <string name="security_question_id">security_question_id</string>
+    <string name="please_verify_email">Please Verify Your Email Address</string>
+    <string name="please_verify_phone">Please Verify Your Phone Number</string>
+    <string name="default_error_toast">Something went wrong! Try again later.</string>
+    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_phone">Invalid phone number</string>
 </resources>
