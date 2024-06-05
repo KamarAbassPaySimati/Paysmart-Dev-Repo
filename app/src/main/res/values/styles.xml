@@ -6,9 +6,31 @@
         <item name="android:fontFamily">@font/inter_bold</item>
         <item name="android:textSize">24sp</item>
         <item name="lineHeight">32dp</item>
-        <item name="fontWeight">400</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
+    <style name="h3_text_style">
+        <item name="fontFamily">@font/inter_bold</item>
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="lineHeight">32dp</item>
+        <item name="android:textColor">@color/neutralGrey</item>
+    </style>
+
+    <style name="caption_text_style">
+        <item name="fontFamily">@font/inter_light</item>
+        <item name="android:textSize">12sp</item>
+        <item name="lineHeight">20dp</item>
+        <item name="android:textColor">@color/neutralGrey2</item>
+    </style>
+
+    <style name="body_text_style">
+        <item name="fontFamily">@font/inter_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="lineHeight">22dp</item>
+        <item name="android:textColor">@color/neutralGrey</item>
+    </style>
+
 
     <style name="primary_solid_button" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">match_parent</item>
@@ -32,6 +54,52 @@
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:textColor">@color/primaryColor</item>
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="circular_indicator_style">
+        <item name="indicatorColor">@color/primaryColor</item>
+        <item name="indicatorSize">64dp</item>
+        <item name="trackColor">@color/primaryLighter</item>
+        <item name="trackThickness">6dp</item>
+    </style>
+
+    <style name="edit_text_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="fontFamily">@font/inter_regular</item>
+        <item name="android:maxLength">100</item>
+        <item name="android:textColor">@color/neutralGrey</item>
+        <item name="android:textColorHint">@color/grey2</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@drawable/edit_text_background</item>
+    </style>
+
+    <style name="error_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="fontFamily">@font/inter_medium</item>
+        <item name="android:text">@string/required_field</item>
+        <item name="android:textColor">@color/errorRed</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="error_text_style_two">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="fontFamily">@font/inter_medium</item>
+        <item name="android:textColor">@color/errorRed</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="title_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/inter_medium</item>
+        <item name="android:textColor">@color/neutralGrey</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>

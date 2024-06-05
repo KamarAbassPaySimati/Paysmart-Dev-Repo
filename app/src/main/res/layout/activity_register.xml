@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/onboardRegistrationActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.register.RegisterActivity">
+
+    <RelativeLayout
+        android:id="@+id/onboardRegistrationActivityTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/onboardRegistrationActivityProgressContainer">
+
+            <ImageView
+                android:id="@+id/onboardRegistrationActivityBackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/ic_arrow_back" />
+
+            <TextView
+                android:id="@+id/onboardRegistrationActivityHeaderTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_toEndOf="@+id/onboardRegistrationActivityBackButton"
+                android:fontFamily="@font/inter_medium"
+                android:includeFontPadding="false"
+                android:text="@string/registration"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/onboardRegistrationActivityHeaderTV"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_toEndOf="@+id/onboardRegistrationActivityBackButton"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_medium"
+                android:maxLines="1"
+                android:text="@string/next_kyc_registration"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/onboardRegistrationActivityProgressContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            tools:ignore="RelativeOverlap">
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/onboardRegistrationActivityPB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="false"
+                android:max="100"
+                android:progress="50"
+                app:indicatorColor="@color/primaryColor"
+                app:indicatorSize="64dp"
+                app:trackColor="@color/primaryLighter"
+                app:trackCornerRadius="16dp"
+                app:trackThickness="6dp" />
+
+            <TextView
+                android:id="@+id/onboardRegistrationActivityProgressCountTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/one_of_two"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp" />
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/onboardRegistrationActivityTopBar">
+
+        <RelativeLayout
+            android:id="@+id/onboardRegistrationActivityContentBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            tools:visibility="visible">
+
+            <ScrollView
+                android:id="@+id/onboardRegistrationActivitySV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/onboardRegistrationActivityBottomBar"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="@string/personal_details"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:id="@+id/onboardRegistrationActivityProfileContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/profile_picture"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/supported_file_types"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="12sp" />
+                        
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/onboardRegistrationActivityProfileIV"
+                                android:layout_width="96dp"
+                                app:shapeAppearanceOverlay="@style/profileImagePreview"
+                                android:layout_height="0dp"
+                                android:scaleType="centerCrop"
+                                android:background="@drawable/dashed_outline_background"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ic_no_image"
+                                app:layout_constraintDimensionRatio="1:1"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/onboardRegistrationActivityCameraIV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="-8dp"
+                                android:layout_marginBottom="-8dp"
+                                android:background="@drawable/circle_background"
+                                android:contentDescription="@string/image_description"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_camera"
+                                app:layout_constraintBottom_toBottomOf="@+id/onboardRegistrationActivityProfileIV"
+                                app:layout_constraintEnd_toEndOf="@+id/onboardRegistrationActivityProfileIV" />
+
+                            <CheckBox
+                                android:id="@+id/onboardRegistrationActivityMakeVisibleCB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:checked="false"
+                                android:fontFamily="@font/inter_regular"
+                                android:gravity="center"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                android:text="@string/make_visible"
+                                android:textColor="@color/neutralGrey"
+                                android:textSize="14sp"
+                                app:buttonIconTint="@color/white"
+                                app:buttonTint="@color/primaryColor"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/onboardRegistrationActivityProfileIV" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/onboardRegistrationActivityFirstNameContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/first_name"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/onboardRegistrationActivityFirstNameET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:autofillHints=""
+                            android:background="@drawable/edit_text_background"
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/inter_regular"
+                            android:hint="@string/enter_first_name"
+                            android:importantForAutofill="no"
+                            android:inputType="textPersonName"
+                            android:maxLength="100"
+                            android:padding="12dp"
+                            android:textColor="@color/neutralGrey"
+                            android:textColorHint="@color/grey2"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/onboardRegistrationActivityFirstNameWarningTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/required_field"
+                            android:textColor="@color/errorRed"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/onboardRegistrationActivityMiddleNameContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/middle_name"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/onboardRegistrationActivityMiddleNameET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:autofillHints=""
+                            android:background="@drawable/edit_text_background"
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/inter_regular"
+                            android:hint="@string/enter_middle_name"
+                            android:importantForAutofill="no"
+                            android:inputType="textPersonName"
+                            android:maxLength="100"
+                            android:padding="12dp"
+                            android:textColor="@color/neutralGrey"
+                            android:textColorHint="@color/grey2"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/onboardRegistrationActivityMiddleNameWarningTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/required_field"
+                            android:textColor="@color/errorRed"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/onboardRegistrationActivityLastNameContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/last_name"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/onboardRegistrationActivityLastNameET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:autofillHints=""
+                            android:background="@drawable/edit_text_background"
+                            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/inter_regular"
+                            android:hint="@string/enter_last_name"
+                            android:importantForAutofill="no"
+                            android:inputType="textPersonName"
+                            android:maxLength="100"
+                            android:padding="12dp"
+                            android:textColor="@color/neutralGrey"
+                            android:textColorHint="@color/grey2"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/onboardRegistrationActivityLastNameWarningTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/required_field"
+                            android:textColor="@color/errorRed"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="@string/enter_a_valid_email_and_phone"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:id="@+id/onboardRegistrationActivityEmailContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/email"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp" />
+
+                        <RelativeLayout
+                            android:id="@+id/onboardRegistrationActivityEmailBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/edit_text_background">
+
+                            <EditText
+                                android:id="@+id/onboardRegistrationActivityEmailET"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/onboardRegistrationActivityEmailVerifyContainer"
+                                android:autofillHints=""
+                                android:background="@android:color/transparent"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/inter_regular"
+                                android:hint="@string/enter_email"
+                                android:inputType="textEmailAddress"
+                                android:maxLength="100"
+                                android:padding="12dp"
+                                android:textColor="@color/neutralGrey"
+                                android:textColorHint="@color/grey2"
+                                android:textSize="14sp"
+                                tools:ignore="TextFields" />
+
+                            <FrameLayout
+                                android:id="@+id/onboardRegistrationActivityEmailVerifyContainer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="12dp">
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/onboardRegistrationActivityEmailVerifyButton"
+                                    style="?android:attr/borderlessButtonStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/selector_bg_verify_button"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:text="@string/verify"
+                                    android:textColor="@color/selector_text_verify_button"
+                                    android:textSize="14sp" />
+
+                                <com.google.android.material.progressindicator.CircularProgressIndicator
+                                    android:id="@+id/onboardRegistrationActivityEmailVerifyPB"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:indeterminate="true"
+                                    android:visibility="gone"
+                                    app:indicatorColor="@color/primaryColor"
+                                    app:indicatorSize="24dp"
+                                    app:trackColor="@color/primaryLighter"
+                                    app:trackCornerRadius="16dp"
+                                    app:trackThickness="3dp" />
+
+                                <TextView
+                                    android:id="@+id/onboardRegistrationActivityEmailVerifiedTV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/verified"
+                                    android:textColor="@color/successGreen"
+                                    android:textSize="14sp"
+                                    android:visibility="gone"
+                                    app:drawableStartCompat="@drawable/ico_done_green" />
+
+
+                            </FrameLayout>
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/onboardRegistrationActivityEmailWarningTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/required_field"
+                            android:textColor="@color/errorRed"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/onboardRegistrationActivityPhoneContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/phone"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp" />
+
+                        <RelativeLayout
+                            android:id="@+id/onboardRegistrationActivityPhoneBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/edit_text_background">
+
+                            <RelativeLayout
+                                android:id="@+id/onboardRegistrationActivityCountryCodeContainer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="1dp"
+                                android:layout_marginBottom="1dp">
+
+                                <TextView
+                                    android:id="@+id/onboardRegistrationActivityCountryCodeTV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="4dp"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:text="@string/country_code"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp"
+                                    android:visibility="gone" />
+
+
+                                <androidx.appcompat.widget.AppCompatSpinner
+                                    android:id="@+id/onboardRegistrationActivityCountryCodeSpinner"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/offWhite"
+                                    android:gravity="center"
+                                    android:popupBackground="@color/offWhite2"
+                                    android:spinnerMode="dropdown" />
+
+                                <ImageView
+                                    android:id="@+id/onboardRegistrationActivityCountryCodeDropDownIV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toEndOf="@+id/onboardRegistrationActivityCountryCodeSpinner"
+                                    android:contentDescription="@string/image_description"
+                                    android:src="@drawable/ic_drop_down" />
+
+
+                            </RelativeLayout>
+
+                            <com.afrimax.paymaart.util.PhoneEditText
+                                android:id="@+id/onboardRegistrationActivityPhoneET"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/onboardRegistrationActivityPhoneVerifyContainer"
+                                android:layout_toEndOf="@+id/onboardRegistrationActivityCountryCodeContainer"
+                                android:autofillHints=""
+                                android:background="@android:color/transparent"
+                                android:digits="0123456789 "
+                                android:ellipsize="end"
+                                android:fontFamily="@font/inter_regular"
+                                android:hint="@string/enter_phone_number"
+                                android:importantForAutofill="no"
+                                android:inputType="number"
+                                android:longClickable="false"
+                                android:maxLength="11"
+                                android:maxLines="1"
+                                android:padding="12dp"
+                                android:textColor="@color/neutralGrey"
+                                android:textColorHint="@color/grey2"
+                                android:textSize="14sp"/>
+
+                            <FrameLayout
+                                android:id="@+id/onboardRegistrationActivityPhoneVerifyContainer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginEnd="12dp">
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/onboardRegistrationActivityPhoneVerifyButton"
+                                    style="?android:attr/borderlessButtonStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="32dp"
+                                    android:background="@drawable/selector_bg_verify_button"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:text="@string/verify"
+                                    android:textColor="@color/selector_text_verify_button"
+                                    android:textSize="14sp" />
+
+                                <com.google.android.material.progressindicator.CircularProgressIndicator
+                                    android:id="@+id/onboardRegistrationActivityPhoneVerifyPB"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:indeterminate="true"
+                                    android:visibility="gone"
+                                    app:indicatorColor="@color/primaryColor"
+                                    app:indicatorSize="24dp"
+                                    app:trackColor="@color/primaryLighter"
+                                    app:trackCornerRadius="16dp"
+                                    app:trackThickness="3dp" />
+
+
+                                <TextView
+                                    android:id="@+id/onboardRegistrationActivityPhoneVerifiedTV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/verified"
+                                    android:textColor="@color/successGreen"
+                                    android:textSize="14sp"
+                                    android:visibility="gone"
+                                    app:drawableStartCompat="@drawable/ico_done_green" />
+
+
+                            </FrameLayout>
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/onboardRegistrationActivityPhoneWarningTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/required_field"
+                            android:textColor="@color/errorRed"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="@string/security_question_registration_header"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/onboardRegistrationActivityGuideButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="@string/guide"
+                        android:textColor="@color/blue1"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/onboardRegistrationActivitySecurityQuestionTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="@string/answer_any_three"
+                        android:textColor="@color/errorRed"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <LinearLayout
+                        android:id="@+id/onboardRegistrationActivitySecurityQuestion1Container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/onboardRegistrationActivitySecurityQuestion1TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/childhood_nickname"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/onboardRegistrationActivitySecurityQuestion1ET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:autofillHints=""
+                            android:background="@drawable/edit_text_background"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/inter_regular"
+                            android:hint="@string/answer"
+                            android:importantForAutofill="no"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="100"
+                            android:padding="12dp"
+                            android:textColor="@color/neutralGrey"
+                            android:textColorHint="@color/grey2"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/onboardRegistrationActivitySecurityQuestion2Container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/onboardRegistrationActivitySecurityQuestion2TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/make_and_model_of_car"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/onboardRegistrationActivitySecurityQuestion2ET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:autofillHints=""
+                            android:background="@drawable/edit_text_background"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/inter_regular"
+                            android:hint="@string/answer"
+                            android:importantForAutofill="no"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="100"
+                            android:padding="12dp"
+                            android:textColor="@color/neutralGrey"
+                            android:textColorHint="@color/grey2"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/onboardRegistrationActivitySecurityQuestion3Container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/onboardRegistrationActivitySecurityQuestion3TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/name_of_childhood_teacher"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/onboardRegistrationActivitySecurityQuestion3ET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:autofillHints=""
+                            android:background="@drawable/edit_text_background"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/inter_regular"
+                            android:hint="@string/answer"
+                            android:importantForAutofill="no"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="100"
+                            android:padding="12dp"
+                            android:textColor="@color/neutralGrey"
+                            android:textColorHint="@color/grey2"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/onboardRegistrationActivitySecurityQuestion4Container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/onboardRegistrationActivitySecurityQuestion4TV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/name_of_place_you_first_visited"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/onboardRegistrationActivitySecurityQuestion4ET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:autofillHints=""
+                            android:background="@drawable/edit_text_background"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/inter_regular"
+                            android:hint="@string/answer"
+                            android:importantForAutofill="no"
+                            android:inputType="textNoSuggestions"
+                            android:maxLength="100"
+                            android:padding="12dp"
+                            android:textColor="@color/neutralGrey"
+                            android:textColorHint="@color/grey2"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginBottom="24dp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <CheckBox
+                                android:id="@+id/onboardRegistrationActivityCB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:checked="false"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                app:buttonIconTint="@color/white"
+                                app:buttonTint="@color/primaryColor" />
+
+                            <TextView
+                                android:id="@+id/onboardRegistrationActivityTnCPrivacyPolicyTV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_toEndOf="@+id/onboardRegistrationActivityCB"
+                                android:fontFamily="@font/inter_medium"
+                                android:text="@string/terms_and_conditions"
+                                android:textColor="@color/neutralGrey"
+                                android:textColorLink="@color/accentInformation"
+                                android:textSize="14sp" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/onboardRegistrationActivityTnCPrivacyPolicyWarningTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/required_field"
+                            android:textColor="@color/errorRed"
+                            android:textSize="14sp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <FrameLayout
+                android:id="@+id/onboardRegistrationActivityBottomBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="16dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/onboardRegistrationActivitySubmitButton"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/primary_rounded_button_background"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="@string/submit"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/onboardRegistrationActivitySubmitButtonLoaderLottie"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:scaleX="2"
+                    android:scaleY="2"
+                    android:visibility="gone"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/lottie_button_loader" />
+
+
+            </FrameLayout>
+
+        </RelativeLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/onboardRegistrationActivityLoaderLottie"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_loader"
+            tools:ignore="TooManyViews" />
+
+    </FrameLayout>
+
+
+</RelativeLayout>

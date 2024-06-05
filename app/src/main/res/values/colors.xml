@@ -11,4 +11,15 @@
     <color name="splashProgressBarForeGround">#FCFCFC</color>
     <color name="primaryLight">#40A79EAA</color>
     <color name="onPrimaryLight">#5739A3</color>
+    <color name="neutralGrey">#4F5962</color>
+    <color name="neutralGrey2">#A4A9AE</color>
+    <color name="primaryLighter">#A79FBE</color>
+    <color name="grey1">#E5E9EB</color>
+    <color name="grey2">#8E949A</color>
+    <color name="offWhite">#F8F8F8</color>
+    <color name="offWhite2">#DDDD</color>
+    <color name="errorRed">#FF4343</color>
+    <color name="successGreen">#13B681</color>
+    <color name="blue1">#0066F6</color>
+    <color name="accentInformation">#0066F6</color>
 </resources>
