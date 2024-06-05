@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         applicationId 'com.afrimax.paymaart'
-        minSdk 21
+        minSdk 24
         targetSdk 34
         versionCode 2
         versionName "1.0"
@@ -77,7 +77,7 @@ android {
             buildConfigField("String", "REGION", "\"eu-west-1\"")
             buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
             buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
-            buildConfigField("String", "AGENT_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
+            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
 
         qa{
@@ -89,7 +89,7 @@ android {
             buildConfigField("String", "REGION", "\"eu-west-1\"")
             buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
             buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
-            buildConfigField("String", "AGENT_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
+            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
 
         preprod{
@@ -101,7 +101,7 @@ android {
             buildConfigField("String", "REGION", "\"eu-west-1\"")
             buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
             buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
-            buildConfigField("String", "AGENT_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
+            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
 
         production{
@@ -112,7 +112,7 @@ android {
             buildConfigField("String", "REGION", "\"eu-west-1\"")
             buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
             buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
-            buildConfigField("String", "AGENT_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
+            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
     }
 
@@ -158,4 +158,12 @@ dependencies {
     //Retrofit & GSON
     implementation libs.retrofit
     implementation libs.converter.gson
+
+    //Amplify
+    implementation libs.aws.auth.cognito
+    implementation libs.aws.storage.s3
+    implementation libs.core.kotlin
+
+    //Faker
+    implementation(libs.datafaker)
 }

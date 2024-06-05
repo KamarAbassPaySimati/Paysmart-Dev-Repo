@@ -50,7 +50,10 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.VerificationBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.VerificationBottomSheetInterface
 import com.afrimax.paymaart.ui.webview.WebViewActivity
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
+import com.amplifyframework.kotlin.core.Amplify
+import com.amplifyframework.storage.StorageException
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
@@ -63,6 +66,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.UUID
 
 class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
@@ -599,14 +603,15 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
     }
 
-    private fun registerCustomer() {
+    private suspend fun registerCustomer() {
         showButtonLoader(
             b.onboardRegistrationActivitySubmitButton,
             b.onboardRegistrationActivitySubmitButtonLoaderLottie
         )
 
         //If registering  a customer check for profile picture
-        val profilePic = ""
+        val profilePic = if (profilePicUri != null) amplifyUpload(profilePicUri!!) else ""
+        "ProfilePic".showLogE(profilePic)
         val makeVisible = profilePic.isNotEmpty() && b.onboardRegistrationActivityMakeVisibleCB.isChecked
         val firstName = b.onboardRegistrationActivityFirstNameET.text.toString()
         val middleName = b.onboardRegistrationActivityMiddleNameET.text.toString()
@@ -1204,26 +1209,26 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     }
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-//    private suspend fun amplifyUpload(uri: Uri): String {
-//        val stream = contentResolver.openInputStream(uri)
-//
-//        if (stream != null) {
-//            val objectKey = "customer_profile/${UUID.randomUUID()}/${
-//                getFileNameFromUri(
-//                    this, uri
-//                )
-//            }"
-//
-//            val upload = Amplify.Storage.uploadInputStream(objectKey, stream)
-//            try {
-//                val result = upload.result()
-//                return result.key
-//            } catch (error: StorageException) {
-//                //
-//            }
-//        }
-//        return ""
-//    }
+    private suspend fun amplifyUpload(uri: Uri): String {
+        val stream = contentResolver.openInputStream(uri)
+
+        if (stream != null) {
+            val objectKey = "customer_profile/${UUID.randomUUID()}/${
+                getFileNameFromUri(
+                    this, uri
+                )
+            }"
+
+            val upload = Amplify.Storage.uploadInputStream(objectKey, stream)
+            try {
+                val result = upload.result()
+                return result.key
+            } catch (error: StorageException) {
+                //
+            }
+        }
+        return ""
+    }
 
     @SuppressLint("Range")
     private fun getFileNameFromUri(context: Context, uri: Any): String {

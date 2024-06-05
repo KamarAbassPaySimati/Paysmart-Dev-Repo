@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -37,6 +38,7 @@ class RegistrationSuccessfulActivity : AppCompatActivity() {
         val wic = WindowInsetsControllerCompat(window, window.decorView)
         wic.isAppearanceLightStatusBars = true
         wic.isAppearanceLightNavigationBars = true
+        window.statusBarColor = ContextCompat.getColor(this, R.color.successGreen)
 
         val email = intent.getStringExtra(Constants.INTENT_DATA_EMAIL) ?: ""
 

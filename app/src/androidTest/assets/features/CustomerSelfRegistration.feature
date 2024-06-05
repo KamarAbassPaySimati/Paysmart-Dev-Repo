@@ -74,7 +74,7 @@ Feature:Paymaart- Customer Android- Self Registration
     When I enter a valid first name for registration
     When I enter a valid middle name for registration
     When I enter a valid last name for registration
-    When I enter the email address as "sreekuttan.j+0009@7edge.com" for registration
+    When I enter the email address as "abhishek.sreejith+test1@7edge.com" for registration
     When I click on verify email address
     Then I should see error message "Email already exists" for field with ID "email"
     When I enter a valid email address for registration
@@ -82,7 +82,7 @@ Feature:Paymaart- Customer Android- Self Registration
     When I enter the valid OTP and verify
     Then I should see the verify email address button text changed to "VERIFIED"
     Then I select Indian country code
-    When I enter the phone number as "9741292994" for registration
+    When I enter the phone number as "8192069218" for registration
     When I click on verify phone number
     Then I should see error message "Phone number already exists" for field with ID "phone"
 

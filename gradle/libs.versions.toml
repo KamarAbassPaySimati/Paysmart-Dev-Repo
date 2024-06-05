@@ -1,6 +1,7 @@
 [versions]
 aaltoXml = "1.2.2"
 agp = "8.3.2"
+awsAuthCognito = "2.14.11"
 cucumberAndroid = "7.14.0"
 glide = "4.16.0"
 kotlin = "1.9.0"
@@ -9,6 +10,7 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.7.0"
+datafaker = "1.4.0"
 lifecycleViewmodelKtx = "2.8.1"
 lottie = "6.4.0"
 material = "1.11.0"
@@ -25,9 +27,13 @@ dotenv = "4.0.0"
 aalto-xml = { module = "com.fasterxml:aalto-xml", version.ref = "aaltoXml" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "awsAuthCognito" }
+aws-storage-s3 = { module = "com.amplifyframework:aws-storage-s3", version.ref = "awsAuthCognito" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+core-kotlin = { module = "com.amplifyframework:core-kotlin", version.ref = "awsAuthCognito" }
 cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumberAndroid" }
 cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberAndroid" }
+datafaker = { module = "net.datafaker:datafaker", version.ref = "datafaker" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
