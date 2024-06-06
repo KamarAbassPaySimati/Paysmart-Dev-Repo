@@ -17,6 +17,7 @@ material = "1.11.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
 orgJacocoCore = "0.8.8"
+pinedittextfieldVersion = "1.2.6"
 poiOoxml = "3.17"
 retrofit = "2.11.0"
 staxApi = "1.0"
@@ -44,6 +45,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 org-jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "orgJacocoCore" }
+pinedittextfield = { module = "com.github.poovamraj:PinEditTextField", version.ref = "pinedittextfieldVersion" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }

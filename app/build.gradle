@@ -57,6 +57,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
@@ -166,4 +167,7 @@ dependencies {
 
     //Faker
     implementation(libs.datafaker)
+
+    //Library for PIN EditText
+    implementation libs.pinedittextfield
 }
