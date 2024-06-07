@@ -10,12 +10,21 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.GetSharedSecretRequest
+import com.afrimax.paymaart.data.model.GetSharedSecretResponse
+import com.afrimax.paymaart.util.JwtUtil
+import com.marcelkliemannel.kotlinonetimepassword.GoogleAuthenticator
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
+import net.datafaker.Faker
 import org.hamcrest.Matcher
 import org.junit.runner.RunWith
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Date
 
 @RunWith(Cucumber::class)
@@ -76,12 +85,12 @@ class CustomerLoginDefs {
     @Given("The Intro screen is displayed")
     fun theIntroScreenIsDisplayed() {
         Thread.sleep(5000)
-        Espresso.onView(withId(R.id.introActivity)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.intro_activity)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @When("I click the login customer button")
     fun clickLoginCustomerButton() {
-        Espresso.onView(withId(R.id.introActivityLoginButton)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.login_button)).perform(ViewActions.click())
     }
 
     @When("I click on login button")
@@ -98,8 +107,8 @@ class CustomerLoginDefs {
     @Given("The login screen is displayed")
     fun theLoginScreenIsDisplayed() {
         Thread.sleep(5000)
-        Espresso.onView(withId(R.id.introActivity)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Espresso.onView(withId(R.id.introActivityLoginButton)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.intro_activity)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Espresso.onView(withId(R.id.login_button)).perform(ViewActions.click())
         Espresso.onView(withId(R.id.loginActivity)).check(
             ViewAssertions.matches(
                 ViewMatchers.isDisplayed()
@@ -111,7 +120,7 @@ class CustomerLoginDefs {
     fun enterValidPhoneNumber() {
         //BDD phone numbers start with 10
         val phoneNumber = "10" + faker.phoneNumber().subscriberNumber(8)
-        Espresso.onView(withId(R.id.registrationActivityPhoneET))
+        Espresso.onView(withId(R.id.onboardRegistrationActivityPhoneET))
             .perform(
                 ViewActions.scrollTo(),
                 ViewActions.typeText(phoneNumber),
@@ -182,7 +191,7 @@ class CustomerLoginDefs {
     fun enterPaymaartId(paymaartId: String) {
         Espresso.onView(withId(R.id.loginActivityPaymaartIdET))
             .perform(ViewActions.typeText(paymaartId), ViewActions.closeSoftKeyboard())
-        username = "AGT$paymaartId"
+        username = "CMR$paymaartId"
     }
 
     @When("I enter login PIN {string}")
@@ -232,6 +241,7 @@ class CustomerLoginDefs {
         println("Generated TOTP: $otp")
 
         Espresso.onView(withId(R.id.twoFactorAuthCopyCodeTV)).perform(ViewActions.click())
+        Thread.sleep(10000)
         Espresso.onView(withId(R.id.twoFactorAuthContinueButton)).perform(ViewActions.click())
     }
 
@@ -261,6 +271,12 @@ class CustomerLoginDefs {
     @Then("I am redirected to the homepage")
     fun redirectedToHomePage() {
         Espresso.onView(withId(R.id.homeActivity)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Thread.sleep(5000)
+    }
+
+    @Then("I am redirected to the kyc journey")
+    fun redirectedToKycJourney() {
+        Espresso.onView(withId(R.id.kycProgressActivity)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Thread.sleep(5000)
     }
 }

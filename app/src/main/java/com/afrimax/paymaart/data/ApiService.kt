@@ -3,6 +3,8 @@ package com.afrimax.paymaart.data
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
+import com.afrimax.paymaart.data.model.GetSharedSecretRequest
+import com.afrimax.paymaart.data.model.GetSharedSecretResponse
 import com.afrimax.paymaart.data.model.GetUserKycDataResponse
 import com.afrimax.paymaart.data.model.ResendCredentialsRequest
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
@@ -16,6 +18,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 private const val CUSTOMER_USER = "customer-user"
+private const val BDD = "bdd"
 interface ApiService {
 
     @GET("$CUSTOMER_USER/security-questions")
@@ -35,4 +38,7 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/view-kyc")
     fun viewKyc(@Header("Authorization") header: String): Call<GetUserKycDataResponse>
+
+    @POST("$BDD/customer-fetch-mfa")
+    fun getSharedSecret(@Body body: GetSharedSecretRequest, @Header("Authorization") header: String): Call<GetSharedSecretResponse>
 }

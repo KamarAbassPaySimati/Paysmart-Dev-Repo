@@ -170,4 +170,11 @@ dependencies {
 
     //Library for PIN EditText
     implementation libs.pinedittextfield
+
+    //TOTP Generator for BDD
+    implementation libs.kotlin.onetimepassword
+    implementation libs.java.otp
+
+    //JWT Token for BDD
+    implementation libs.java.jwt
 }

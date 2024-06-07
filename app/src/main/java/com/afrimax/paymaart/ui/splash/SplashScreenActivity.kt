@@ -72,7 +72,7 @@ class SplashScreenActivity : AppCompatActivity() {
             override fun onAnimationEnd(p0: Animator) {
                 if (isLoggedIn) startActivity(
                     Intent(
-                        this@SplashScreenActivity, KycProgressActivity::class.java
+                        this@SplashScreenActivity, HomeActivity::class.java
                     )
                 )
                 else startActivity(Intent(this@SplashScreenActivity, IntroActivity::class.java))
@@ -91,21 +91,17 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun amplifyFetchUserSession() {
+        binding.horizontalProgressBar.progress = 50
+        animator1.cancel()
+        animator2 = ObjectAnimator.ofInt(
+            binding.horizontalProgressBar, PROGRESS, binding.horizontalProgressBar.progress, 100
+        )
         Amplify.Auth.fetchAuthSession({
             runOnUiThread {
-                animator1.cancel()
-                binding.horizontalProgressBar.progress = 50
-                animator2 = ObjectAnimator.ofInt(
-                    binding.horizontalProgressBar, PROGRESS, binding.horizontalProgressBar.progress, 100
-                )
                 startFinalAnim(it.isSignedIn)
             }
         }, { _ ->
             runOnUiThread {
-                animator1.cancel()
-                animator1 = ObjectAnimator.ofInt(
-                    binding.horizontalProgressBar, PROGRESS, binding.horizontalProgressBar.progress, 100
-                )
                 startFinalAnim(false)
             }
         })

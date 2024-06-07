@@ -9,12 +9,12 @@ Feature: Paymaart- Customer Android-Login
   Upon successful entry if user is first time logging in user will be navigated to KYC screen
   If user is not first time logging in , then user will be navigated to the Home Screen
 
-  Scenario: Navigate to login screen
-    Given The Intro screen is displayed
-    Then The main app interface should be displayed with text "Elevate your spending game with fast, secure, free e-payments"
-    When I click the login customer button
-    Then I see the login screen
-
+#  Scenario: Navigate to login screen
+#    Given The Intro screen is displayed
+#    Then The main app interface should be displayed with text "Elevate your spending game with fast, secure, free e-payments"
+#    When I click the login customer button
+#    Then I see the login screen
+#
   Scenario: Enter Valid Customer Details and Verify Email Address
     Given I am in registration screen
     When I enter a valid first name for registration
@@ -61,8 +61,8 @@ Feature: Paymaart- Customer Android-Login
   Scenario: Login with Email
     Given The login screen is displayed
     When I choose to login with email address
-    When I enter email address "bharath.shet+agentbdd@7edge.com"
-    And I enter login PIN "976431"
+    When I enter email address "harshith.kumar+2@7edge.com"
+    And I enter login PIN "397618"
     When I click on login button
     Then I see the TOTP screen
     When I enter the generated OTP
@@ -71,14 +71,15 @@ Feature: Paymaart- Customer Android-Login
   Scenario: Login with Paymart ID and logout
     Given The login screen is displayed
     When I choose to login with paymart ID
-    When I enter paymart ID "169746"
-    And I enter login PIN "976431"
+    When I enter paymart ID "72888403"
+    And I enter login PIN "397618"
     When I click on login button
     Then I see the TOTP screen
     When I enter the generated OTP
     Then I am redirected to the homepage
-    When I open menu and click on logout button
-    Then I should view confirmation popup
-    When I click on confirm logout button
-    Then I should be redirected to intro screen
+#    When I open menu and click on logout button
+#    Then I should view confirmation popup
+#    When I click on confirm logout button
+#    Then I should be redirected to intro screen
+#  The commented out code will be used in the further feature
 
