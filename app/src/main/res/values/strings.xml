@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Paymaart</string>
     <string name="paymaart_logo_at_the_splashscreen">Paymaart Logo at the SplashScreen</string>
+    <string name="intro_text">Elevate your spending game with fast, secure, free e-payments</string>
+    <string name="image_description">Image Description</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="app_version">version 0.1</string>
 </resources>
