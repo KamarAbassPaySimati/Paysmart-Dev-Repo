@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/kycRegistrationGuideActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primaryColor"
+    tools:context=".ui.kyc.KycRegistrationGuideActivity">
+
+    <RelativeLayout
+        android:id="@+id/kycRegistrationGuideActivityTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_toStartOf="@+id/kycRegistrationGuideActivityCloseIV"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/kyc_requirements"
+            android:textColor="@color/accentPositive"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/kycRegistrationGuideActivityCloseIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/close_button_data"
+            android:padding="16dp"
+            android:src="@drawable/ic_close" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/kycRegistrationGuideActivityTopBar"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/kycRegistrationGuideActivityMalawiSimplifiedKycContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp">
+
+                <TextView
+                    android:id="@+id/kycRegistrationGuideActivityMalawiSimplifiedKycTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/kycRegistrationGuideActivityMalawiSimplifiedKycNextArrowIV"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="@string/malawi_simplified_kyc_registration"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/kycRegistrationGuideActivityMalawiSimplifiedKycNextArrowIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/close_button_data"
+                    android:padding="8dp"
+                    android:src="@drawable/ico_next_arrow_white" />
+
+            </RelativeLayout>
+
+            <include
+                android:id="@+id/kycRegistrationGuideActivityMalawiSimplifiedKycTextContainer"
+                layout="@layout/content_kyc_registration_guide_malawi_simplified"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/kycRegistrationGuideActivityMalawiFullKycContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp">
+
+                <TextView
+                    android:id="@+id/kycRegistrationGuideActivityMalawiFullKycTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/kycRegistrationGuideActivityMalawiFullKycNextArrowIV"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="@string/malawi_full_kyc_registration"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/kycRegistrationGuideActivityMalawiFullKycNextArrowIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/close_button_data"
+                    android:padding="8dp"
+                    android:src="@drawable/ico_next_arrow_white" />
+
+            </RelativeLayout>
+
+            <include
+                android:id="@+id/kycRegistrationGuideActivityMalawiFullKycTextContainer"
+                layout="@layout/content_kyc_registration_guide_malawi_full"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/kycRegistrationGuideActivityNonMalawiKycContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp">
+
+                <TextView
+                    android:id="@+id/kycRegistrationGuideActivityNonMalawiKycTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/kycRegistrationGuideActivityNonMalawiKycNextArrowIV"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="@string/non_malawi_kyc_registration"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/kycRegistrationGuideActivityNonMalawiKycNextArrowIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/close_button_data"
+                    android:padding="8dp"
+                    android:src="@drawable/ico_next_arrow_white" />
+
+            </RelativeLayout>
+
+            <include
+                android:id="@+id/kycRegistrationGuideActivityNonMalawiKycTextContainer"
+                layout="@layout/content_kyc_registration_guide_non_malawi"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
