@@ -4,6 +4,8 @@ agp = "8.3.2"
 awsAuthCognito = "2.14.11"
 cucumberAndroid = "7.14.0"
 glide = "4.16.0"
+javaJwt = "3.18.2"
+javaOtp = "0.4.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -12,11 +14,13 @@ espressoCore = "3.5.1"
 appcompat = "1.7.0"
 datafaker = "1.4.0"
 lifecycleViewmodelKtx = "2.8.1"
+kotlinOnetimepassword = "1.0.0"
 lottie = "6.4.0"
 material = "1.11.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
 orgJacocoCore = "0.8.8"
+pinedittextfieldVersion = "1.2.6"
 poiOoxml = "3.17"
 retrofit = "2.11.0"
 staxApi = "1.0"
@@ -35,15 +39,19 @@ cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cuc
 cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberAndroid" }
 datafaker = { module = "net.datafaker:datafaker", version.ref = "datafaker" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+java-jwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }
+java-otp = { module = "com.eatthepath:java-otp", version.ref = "javaOtp" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlin-onetimepassword = { module = "com.marcelkliemannel:kotlin-onetimepassword", version.ref = "kotlinOnetimepassword" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 org-jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "orgJacocoCore" }
+pinedittextfield = { module = "com.github.poovamraj:PinEditTextField", version.ref = "pinedittextfieldVersion" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }

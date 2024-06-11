@@ -195,15 +195,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             b.onboardRegistrationActivityCountryCodeTV.visibility = View.VISIBLE
         }
 
-        //Setup First letter autoCaps for editTexts
-        b.onboardRegistrationActivityFirstNameET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-        b.onboardRegistrationActivityMiddleNameET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-        b.onboardRegistrationActivityLastNameET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS
-        b.onboardRegistrationActivitySecurityQuestion1ET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-        b.onboardRegistrationActivitySecurityQuestion2ET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-        b.onboardRegistrationActivitySecurityQuestion3ET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-        b.onboardRegistrationActivitySecurityQuestion4ET.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
-
         fileResultLauncher =
             registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                 lifecycleScope.launch {
@@ -1218,7 +1209,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                     this, uri
                 )
             }"
-
             val upload = Amplify.Storage.uploadInputStream(objectKey, stream)
             try {
                 val result = upload.result()
