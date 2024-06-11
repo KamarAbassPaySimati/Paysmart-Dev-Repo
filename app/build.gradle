@@ -28,13 +28,26 @@ android {
 
     defaultConfig {
         applicationId 'com.afrimax.paymaart'
-        minSdk 21
+        minSdk 24
         targetSdk 34
         versionCode 2
         versionName "1.0"
 
         testApplicationId 'com.afrimax.paymaart'
         testInstrumentationRunner 'com.afrimax.paymaart.TestJunitRunner'
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+
+            // Optional, specify signing versions used
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
     }
 
     buildTypes {
@@ -58,24 +71,48 @@ android {
         develop{
             dimension "env"
             applicationIdSuffix ".develop"
-            buildConfigField("String", "APP_NAME", '"Paymaart Dev"')
+            buildConfigField("String", "STAGE", "\"dev\"")
+            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
+            buildConfigField("String", "REGION", "\"eu-west-1\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
 
         qa{
             dimension "env"
             applicationIdSuffix ".qa"
-            buildConfigField("String", "APP_NAME", '"Paymaart QA"')
+            buildConfigField("String", "STAGE", "\"qa\"")
+            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
+            buildConfigField("String", "REGION", "\"eu-west-1\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
 
         preprod{
             dimension "env"
             applicationIdSuffix ".preprod"
-            buildConfigField("String", "APP_NAME", '"Paymaart PreProd"')
+            buildConfigField("String", "STAGE", "\"pre-production\"")
+            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
+            buildConfigField("String", "REGION", "\"eu-west-1\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
 
         production{
             dimension "env"
-            buildConfigField("String", "APP_NAME", '"Paymaart"')
+            buildConfigField("String", "STAGE", "\"prod\"")
+            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
+            buildConfigField("String", "REGION", "\"eu-west-1\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
+            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
         }
     }
 
@@ -106,4 +143,27 @@ dependencies {
     implementation(libs.xmlbeans)
     androidTestImplementation libs.stax.api
     androidTestImplementation libs.aalto.xml
+
+    //dependency injection
+
+    //Viewmodel
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+
+    //Glide
+    implementation libs.glide
+
+    //lottie
+    implementation libs.lottie
+
+    //Retrofit & GSON
+    implementation libs.retrofit
+    implementation libs.converter.gson
+
+    //Amplify
+    implementation libs.aws.auth.cognito
+    implementation libs.aws.storage.s3
+    implementation libs.core.kotlin
+
+    //Faker
+    implementation(libs.datafaker)
 }

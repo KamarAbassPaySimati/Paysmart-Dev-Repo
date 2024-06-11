@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background">#FFFFFFFF</color>
+
+    <!-- CUSTOM COLORS -->
+    <color name="primaryColor">#3B2A6F</color>
+    <color name="primaryColorRipple">#5A40AB</color>
+    <color name="outlinedButtonRipple">#FCFCFC</color>
+    <color name="splashProgressBarForeGround">#FCFCFC</color>
+    <color name="primaryLight">#40A79EAA</color>
+    <color name="onPrimaryLight">#5739A3</color>
+    <color name="neutralGrey">#4F5962</color>
+    <color name="neutralGrey2">#A4A9AE</color>
+    <color name="primaryLighter">#A79FBE</color>
+</resources>

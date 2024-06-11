@@ -4,7 +4,9 @@ import android.content.Intent
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
+import com.afrimax.paymaart.ui.splash.SplashScreenActivity
 import io.cucumber.java.After
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
@@ -34,7 +36,7 @@ class SplashScreenDefs(private val scenarioHolder: ActivityScenarioHolder) {
 
     @Given("The splash screen is displayed")
     fun the_splash_screen_is_displayed() {
-        Espresso.onView(ViewMatchers.withId(R.id.splashScreenActivity)).check(
+        Espresso.onView(withId(R.id.splashScreenActivity)).check(
             ViewAssertions.matches(
                 ViewMatchers.isDisplayed()
             )
@@ -43,22 +45,41 @@ class SplashScreenDefs(private val scenarioHolder: ActivityScenarioHolder) {
 
     @When("I wait for a few seconds")
     fun i_wait_for_a_few_seconds() {
-        Thread.sleep(2000)
+        Thread.sleep(5000)
     }
 
     @Then("The main app interface should be displayed")
     fun the_main_app_interface_should_be_displayed() {
-        val build = BuildConfig.APP_NAME
 
-        Espresso.onView(ViewMatchers.withId(R.id.mainActivity)).check(
+        Espresso.onView(withId(R.id.intro_activity)).check(
             ViewAssertions.matches(
                 ViewMatchers.isDisplayed()
             )
         )
 
-        Espresso.onView(ViewMatchers.withId(R.id.initialScreenText)).check(
+    }
+    @Given("The main app interface should be displayed with text {string}")
+    fun theMainAppInterfaceShouldBeDisplayedWithText(expectedText: String) {
+        Espresso.onView(withId(R.id.intro_header)).check(
             ViewAssertions.matches(
-                ViewMatchers.withText(build)
+                ViewMatchers.withText(expectedText)
+            )
+        )
+    }
+    @Then("I should see option to login")
+    fun i_should_see_option_to_login() {
+        Espresso.onView(withId(R.id.register_button)).check(
+            ViewAssertions.matches(
+                ViewMatchers.isDisplayed()
+            )
+        )
+    }
+
+    @Then("I should see option to register")
+    fun i_should_see_option_to_register() {
+        Espresso.onView(withId(R.id.login_button)).check(
+            ViewAssertions.matches(
+                ViewMatchers.isDisplayed()
             )
         )
     }
