@@ -2,6 +2,7 @@
 aaltoXml = "1.2.2"
 agp = "8.3.2"
 awsAuthCognito = "2.14.11"
+cameraCamera2 = "1.4.0-beta01"
 cucumberAndroid = "7.14.0"
 glide = "4.16.0"
 javaJwt = "3.18.2"
@@ -20,7 +21,9 @@ material = "1.11.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
 orgJacocoCore = "0.8.8"
+pdfViewer = "2.1.1"
 pinedittextfieldVersion = "1.2.6"
+places = "3.5.0"
 poiOoxml = "3.17"
 retrofit = "2.11.0"
 staxApi = "1.0"
@@ -29,6 +32,9 @@ dotenv = "4.0.0"
 
 [libraries]
 aalto-xml = { module = "com.fasterxml:aalto-xml", version.ref = "aaltoXml" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCamera2" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCamera2" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "awsAuthCognito" }
@@ -51,7 +57,9 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 org-jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "orgJacocoCore" }
+pdf-viewer = { module = "io.github.afreakyelf:Pdf-Viewer", version.ref = "pdfViewer" }
 pinedittextfield = { module = "com.github.poovamraj:PinEditTextField", version.ref = "pinedittextfieldVersion" }
+places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }
