@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/kycOccupationActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.kyc.KycOccupationActivity">
+
+    <RelativeLayout
+        android:id="@+id/kycOccupationActivityBackButtonBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/kycOccupationActivityBackButtonIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/back_button"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="16dp"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@+id/kycOccupationActivityInfoButtonIV"
+            android:layout_toEndOf="@+id/kycOccupationActivityBackButtonIV"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/back"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/kycOccupationActivityInfoButtonIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/back"
+            android:padding="16dp"
+            android:src="@drawable/ico_info_black" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/kycOccupationActivityBottomBar"
+        android:layout_below="@+id/kycOccupationActivityBackButtonBox"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_medium"
+                android:includeFontPadding="false"
+                android:text="@string/occupation_source_of_funds"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_regular"
+                android:includeFontPadding="false"
+                android:text="@string/select_any_one"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/kycOccupationActivityEmployedCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/kycOccupationActivityEmployedRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:clickable="false"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:buttonTint="@color/primaryColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/kycOccupationActivityEmployedTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_toEndOf="@+id/kycOccupationActivityEmployedRB"
+                    android:includeFontPadding="false"
+                    android:text="@string/employed"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/kycOccupationActivityEmployedRB"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivityEmployedRB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/kycOccupationActivityEmployedSubText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/kycOccupationActivityEmployedTV"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_toEndOf="@+id/kycOccupationActivityEmployedRB"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/employed_option1"
+                    android:textColor="@color/primaryColor"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@+id/kycOccupationActivityEmployedNextIV"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivityEmployedRB"
+                    app:layout_constraintTop_toBottomOf="@+id/kycOccupationActivityEmployedTV"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/kycOccupationActivityEmployedNextIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/back_button"
+                    android:src="@drawable/ico_next_arrow_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/kycOccupationActivityEmployedRB"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/kycOccupationActivityEmployedRB" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/kycOccupationActivitySelfEmployedCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/kycOccupationActivitySelfEmployedRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:clickable="false"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:buttonTint="@color/primaryColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/kycOccupationActivitySelfEmployedTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_toEndOf="@+id/kycOccupationActivitySelfEmployedRB"
+                    android:includeFontPadding="false"
+                    android:text="@string/self_employed"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/kycOccupationActivitySelfEmployedRB"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivitySelfEmployedRB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/kycOccupationActivitySelfEmployedSubText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/kycOccupationActivitySelfEmployedTV"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toEndOf="@+id/kycOccupationActivitySelfEmployedRB"
+                    android:text="@string/please_specify"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivitySelfEmployedRB"
+                    app:layout_constraintTop_toBottomOf="@+id/kycOccupationActivitySelfEmployedTV"
+                    tools:visibility="visible" />
+
+                <EditText
+                    android:id="@+id/kycOccupationActivitySelfEmployedET"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:autofillHints=""
+                    android:background="@drawable/bg_edit_text_unfocused"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="@string/enter_here"
+                    android:importantForAutofill="no"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="100"
+                    android:padding="12dp"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textColorHint="@color/editTextHint"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivitySelfEmployedRB"
+                    app:layout_constraintTop_toBottomOf="@+id/kycOccupationActivitySelfEmployedSubText"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/kycOccupationActivityEducationCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/kycOccupationActivityEducationRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:clickable="false"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:buttonTint="@color/primaryColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/kycOccupationActivityEducationTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_toEndOf="@+id/kycOccupationActivityEducationRB"
+                    android:includeFontPadding="false"
+                    android:text="@string/in_full_time_education"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/kycOccupationActivityEducationRB"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivityEducationRB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/kycOccupationActivityEducationSubText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/kycOccupationActivityEducationTV"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_toEndOf="@+id/kycOccupationActivityEducationRB"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/employed_option1"
+                    android:textColor="@color/primaryColor"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toStartOf="@+id/kycOccupationActivityEducationNextIV"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivityEducationRB"
+                    app:layout_constraintTop_toBottomOf="@+id/kycOccupationActivityEducationTV"
+                    tools:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/kycOccupationActivityEducationNextIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/back_button"
+                    android:src="@drawable/ico_next_arrow_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/kycOccupationActivityEducationRB"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/kycOccupationActivityEducationRB" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/kycOccupationActivitySeekingCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/kycOccupationActivitySeekingRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:clickable="false"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:buttonTint="@color/primaryColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/kycOccupationActivitySeekingTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_toEndOf="@+id/kycOccupationActivitySeekingRB"
+                    android:includeFontPadding="false"
+                    android:text="@string/seeking_employment"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/kycOccupationActivitySeekingRB"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivitySeekingRB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/kycOccupationActivityRetiredCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/kycOccupationActivityRetiredRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:clickable="false"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:buttonTint="@color/primaryColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/kycOccupationActivityRetiredTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_toEndOf="@+id/kycOccupationActivityRetiredRB"
+                    android:includeFontPadding="false"
+                    android:text="@string/retired_pensioner"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/kycOccupationActivityRetiredRB"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivityRetiredRB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/kycOccupationActivityOtherCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/kycOccupationActivityOtherRB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:clickable="false"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:buttonTint="@color/primaryColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/kycOccupationActivityOtherTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:layout_toEndOf="@+id/kycOccupationActivityOtherRB"
+                    android:includeFontPadding="false"
+                    android:text="@string/others"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/kycOccupationActivityOtherRB"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivityOtherRB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/kycOccupationActivityOtherSubText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/kycOccupationActivityOtherTV"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_toEndOf="@+id/kycOccupationActivityOtherRB"
+                    android:text="@string/please_specify"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivityOtherRB"
+                    app:layout_constraintTop_toBottomOf="@+id/kycOccupationActivityOtherTV"
+                    tools:visibility="visible" />
+
+                <EditText
+                    android:id="@+id/kycOccupationActivityOtherET"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:autofillHints=""
+                    android:background="@drawable/bg_edit_text_unfocused"
+                    android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="@string/enter_here"
+                    android:importantForAutofill="no"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="100"
+                    android:padding="12dp"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textColorHint="@color/editTextHint"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/kycOccupationActivityOtherRB"
+                    app:layout_constraintTop_toBottomOf="@+id/kycOccupationActivityOtherSubText"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/kycOccupationActivityBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/kycOccupationActivityNextButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/primary_rounded_button_background"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/next"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

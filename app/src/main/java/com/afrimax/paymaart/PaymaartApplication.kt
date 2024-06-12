@@ -8,7 +8,7 @@ import com.amplifyframework.core.Amplify
 import com.amplifyframework.core.AmplifyConfiguration
 import com.amplifyframework.storage.s3.AWSS3StoragePlugin
 
-class Application: Application() {
+class PaymaartApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         val configJson = AmplifyConfigCreator().createJson()

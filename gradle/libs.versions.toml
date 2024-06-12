@@ -2,8 +2,12 @@
 aaltoXml = "1.2.2"
 agp = "8.3.2"
 awsAuthCognito = "2.14.11"
+cameraCamera2 = "1.4.0-beta01"
 cucumberAndroid = "7.14.0"
+espressoContrib = "3.5.1"
 glide = "4.16.0"
+javaJwt = "3.18.2"
+javaOtp = "0.4.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -12,19 +16,29 @@ espressoCore = "3.5.1"
 appcompat = "1.7.0"
 datafaker = "1.4.0"
 lifecycleViewmodelKtx = "2.8.1"
+kotlinOnetimepassword = "1.0.0"
 lottie = "6.4.0"
 material = "1.11.0"
 activity = "1.9.0"
 constraintlayout = "2.1.4"
 orgJacocoCore = "0.8.8"
+pdfViewer = "2.1.1"
+pinedittextfieldVersion = "1.2.6"
+places = "3.5.0"
 poiOoxml = "3.17"
 retrofit = "2.11.0"
 staxApi = "1.0"
 xmlbeans = "5.1.0"
 dotenv = "4.0.0"
+zoomlayout = "1.9.0"
+lifecycleLivedataKtx = "2.8.1"
+fragmentKtx = "1.5.6"
 
 [libraries]
 aalto-xml = { module = "com.fasterxml:aalto-xml", version.ref = "aaltoXml" }
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCamera2" }
+androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "cameraCamera2" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "awsAuthCognito" }
@@ -34,20 +48,30 @@ core-kotlin = { module = "com.amplifyframework:core-kotlin", version.ref = "awsA
 cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumberAndroid" }
 cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberAndroid" }
 datafaker = { module = "net.datafaker:datafaker", version.ref = "datafaker" }
+espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espressoContrib" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+java-jwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }
+java-otp = { module = "com.eatthepath:java-otp", version.ref = "javaOtp" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlin-onetimepassword = { module = "com.marcelkliemannel:kotlin-onetimepassword", version.ref = "kotlinOnetimepassword" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 org-jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "orgJacocoCore" }
+pdf-viewer = { module = "io.github.afreakyelf:Pdf-Viewer", version.ref = "pdfViewer" }
+pinedittextfield = { module = "com.github.poovamraj:PinEditTextField", version.ref = "pinedittextfieldVersion" }
+places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }
 xmlbeans = { module = "org.apache.xmlbeans:xmlbeans", version.ref = "xmlbeans" }
+zoomlayout = { module = "com.otaliastudios:zoomlayout", version.ref = "zoomlayout" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

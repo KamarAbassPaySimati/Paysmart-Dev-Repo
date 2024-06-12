@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/kycIndustrySectorSheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    app:backgroundTint="#51000000"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/industry_sector"
+            android:textColor="@color/primaryColor"
+            android:textSize="20sp"
+            tools:ignore="RelativeOverlap" />
+
+        <ImageView
+            android:id="@+id/kycIndustrySectorSheetCloseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/close_button_data"
+            android:src="@drawable/ic_close"
+            app:tint="@color/black"/>
+
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption1TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option1"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption2TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option2"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption3TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option3"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption4TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option4"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption5TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option5"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption6TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option6"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption7TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option7"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption8TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option8"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption9TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option9"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption10TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option10"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption11TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option11"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption12TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option12"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption13TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option13"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption14TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option14"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/kycIndustrySectorSheetOption15TV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/industry_sector_option15"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

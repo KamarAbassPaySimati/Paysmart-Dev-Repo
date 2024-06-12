@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/kycCaptureUploadActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.kyc.KycCaptureUploadActivity">
+
+  <RelativeLayout
+      android:id="@+id/kycCaptureUploadActivityBackButtonBox"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/kycCaptureUploadActivityBackButtonIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/back_button"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="16dp"
+        android:src="@drawable/ic_arrow_back" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="16dp"
+        android:layout_toStartOf="@+id/kycCaptureUploadActivityInfoButtonIV"
+        android:layout_toEndOf="@+id/kycCaptureUploadActivityBackButtonIV"
+        android:fontFamily="@font/inter_medium"
+        android:text="@string/back"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/kycCaptureUploadActivityInfoButtonIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/back_button"
+        android:padding="16dp"
+        android:src="@drawable/ico_info_black" />
+
+  </RelativeLayout>
+
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_above="@+id/kycCaptureUploadActivityBottomBar"
+      android:layout_below="@+id/kycCaptureUploadActivityBackButtonBox"
+      android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+      <TextView
+          android:id="@+id/kycCaptureUploadActivityHeaderTV"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:fontFamily="@font/inter_medium"
+          android:text="@string/national_id"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+
+      <TextView
+          android:id="@+id/kycCaptureUploadActivitySubTextTV"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="4dp"
+          android:fontFamily="@font/inter_regular"
+          android:text="@string/national_id_subtext"
+          android:textColor="@color/neutralGrey"
+          android:textSize="14sp" />
+
+      <TextView
+          android:id="@+id/kycCaptureUploadActivitySupportedTypesTV"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="16dp"
+          android:fontFamily="@font/inter_regular"
+          android:text="@string/supported_file_types"
+          android:textColor="@color/neutralGrey"
+          android:textSize="12sp" />
+
+      <LinearLayout
+          android:id="@+id/kycCaptureUploadActivityActionContainer"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="32dp"
+          android:layout_marginBottom="32dp"
+          android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/kycCaptureUploadActivityFrontTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/front"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="14sp" />
+
+        <FrameLayout
+            android:id="@+id/kycCaptureUploadActivityMediaFrontContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:id="@+id/kycCaptureUploadActivityCaptureUploadFrontContainer"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_capture_upload_card"
+                android:gravity="center"
+                app:layout_constraintDimensionRatio="18:11"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <androidx.appcompat.widget.AppCompatButton
+                  android:id="@+id/kycCaptureUploadActivityFrontCaptureButton"
+                  style="?android:attr/borderlessButtonStyle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:background="@drawable/bg_outlined_button_neutral_grey_outline"
+                  android:drawablePadding="8dp"
+                  android:fontFamily="@font/inter_medium"
+                  android:padding="12dp"
+                  android:text="@string/capture"
+                  android:textAllCaps="false"
+                  android:textColor="@color/neutralGreyPrimaryText"
+                  android:textSize="16sp"
+                  app:drawableStartCompat="@drawable/ico_camera" />
+
+              <androidx.appcompat.widget.AppCompatButton
+                  android:id="@+id/kycCaptureUploadActivityFrontUploadButton"
+                  style="?android:attr/borderlessButtonStyle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginStart="16dp"
+                  android:background="@drawable/bg_outlined_button_neutral_grey_outline"
+                  android:drawablePadding="8dp"
+                  android:fontFamily="@font/inter_medium"
+                  android:gravity="center_vertical"
+                  android:padding="12dp"
+                  android:text="@string/upload"
+                  android:textAllCaps="false"
+                  android:textColor="@color/neutralGreyPrimaryText"
+                  android:textSize="16sp"
+                  app:drawableStartCompat="@drawable/ico_upload" />
+
+
+            </LinearLayout>
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
+
+          <LinearLayout
+              android:id="@+id/kycCaptureUploadActivityImagePreviewFrontContainer"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+              <com.google.android.material.imageview.ShapeableImageView
+                  android:id="@+id/kycCaptureUploadActivityFrontImageIV"
+                  android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:background="@color/neutralGreyRipple"
+                  android:contentDescription="@string/image_description"
+                  android:scaleType="centerCrop"
+                  app:layout_constraintDimensionRatio="18:11"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:shapeAppearanceOverlay="@style/kycImagePreview"
+                  app:strokeColor="@color/neutralGrey"
+                  app:strokeWidth="1.5dp"
+                  tools:src="@drawable/ico_malawi_flag" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/kycCaptureUploadActivityPreviewActionFrontContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+              <androidx.appcompat.widget.AppCompatButton
+                  android:id="@+id/kycCaptureUploadActivityFrontRemoveButton"
+                  style="?android:attr/borderlessButtonStyle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:background="@drawable/bg_outlined_button_primary_small"
+                  android:fontFamily="@font/inter_regular"
+                  android:minWidth="0dp"
+                  android:minHeight="0dp"
+                  android:paddingStart="12dp"
+                  android:paddingTop="6dp"
+                  android:paddingEnd="12dp"
+                  android:paddingBottom="6dp"
+                  android:text="@string/remove"
+                  android:textAllCaps="false"
+                  android:textColor="@color/primaryColor"
+                  android:textSize="14sp" />
+
+              <androidx.appcompat.widget.AppCompatButton
+                  android:id="@+id/kycCaptureUploadActivityFrontReUploadButton"
+                  style="?android:attr/borderlessButtonStyle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginStart="8dp"
+                  android:background="@drawable/bg_outlined_button_primary_small"
+                  android:fontFamily="@font/inter_regular"
+                  android:minWidth="0dp"
+                  android:minHeight="0dp"
+                  android:paddingStart="12dp"
+                  android:paddingTop="6dp"
+                  android:paddingEnd="12dp"
+                  android:paddingBottom="6dp"
+                  android:text="@string/re_upload"
+                  android:textAllCaps="false"
+                  android:textColor="@color/primaryColor"
+                  android:textSize="14sp" />
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <RelativeLayout
+              android:id="@+id/kycCaptureUploadActivityFilePreviewFrontContainer"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/bg_file"
+              android:padding="12dp"
+              android:visibility="gone">
+
+            <TextView
+                android:id="@+id/kycCaptureUploadActivityFrontFileNameTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:layout_toStartOf="@+id/kycCaptureUploadActivityFileFrontDeleteButton"
+                android:ellipsize="middle"
+                android:fontFamily="@font/inter_medium"
+                android:maxLines="1"
+                android:text="@string/filename_pdf"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/kycCaptureUploadActivityFileFrontDeleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:layout_toStartOf="@+id/kycCaptureUploadActivityFileFrontReUploadButton"
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/ico_delete" />
+
+            <ImageView
+                android:id="@+id/kycCaptureUploadActivityFileFrontReUploadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/ico_re_upload" />
+
+          </RelativeLayout>
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/kycCaptureUploadActivityBackTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/back"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="14sp" />
+
+        <FrameLayout
+            android:id="@+id/kycCaptureUploadActivityMediaBackContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:id="@+id/kycCaptureUploadActivityCaptureUploadBackContainer"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_capture_upload_card"
+                android:gravity="center"
+                app:layout_constraintDimensionRatio="18:11"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+              <androidx.appcompat.widget.AppCompatButton
+                  android:id="@+id/kycCaptureUploadActivityBackCaptureButton"
+                  style="?android:attr/borderlessButtonStyle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:background="@drawable/bg_outlined_button_neutral_grey_outline"
+                  android:drawablePadding="8dp"
+                  android:fontFamily="@font/inter_medium"
+                  android:padding="12dp"
+                  android:text="@string/capture"
+                  android:textAllCaps="false"
+                  android:textColor="@color/neutralGreyPrimaryText"
+                  android:textSize="16sp"
+                  app:drawableStartCompat="@drawable/ico_camera" />
+
+              <androidx.appcompat.widget.AppCompatButton
+                  android:id="@+id/kycCaptureUploadActivityBackUploadButton"
+                  style="?android:attr/borderlessButtonStyle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginStart="16dp"
+                  android:background="@drawable/bg_outlined_button_neutral_grey_outline"
+                  android:drawablePadding="8dp"
+                  android:fontFamily="@font/inter_medium"
+                  android:gravity="center_vertical"
+                  android:padding="12dp"
+                  android:text="@string/upload"
+                  android:textAllCaps="false"
+                  android:textColor="@color/neutralGreyPrimaryText"
+                  android:textSize="16sp"
+                  app:drawableStartCompat="@drawable/ico_upload" />
+
+
+            </LinearLayout>
+
+          </androidx.constraintlayout.widget.ConstraintLayout>
+
+          <LinearLayout
+              android:id="@+id/kycCaptureUploadActivityImagePreviewBackContainer"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:visibility="gone">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+              <com.google.android.material.imageview.ShapeableImageView
+                  android:id="@+id/kycCaptureUploadActivityBackImageIV"
+                  android:layout_width="match_parent"
+                  android:layout_height="0dp"
+                  android:contentDescription="@string/image_description"
+                  android:scaleType="centerCrop"
+                  app:layout_constraintDimensionRatio="18:11"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent"
+                  app:shapeAppearanceOverlay="@style/kycImagePreview"
+                  tools:src="@drawable/ico_malawi_flag" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/kycCaptureUploadActivityPreviewActionBackContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+              <androidx.appcompat.widget.AppCompatButton
+                  android:id="@+id/kycCaptureUploadActivityBackRemoveButton"
+                  style="?android:attr/borderlessButtonStyle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:background="@drawable/bg_outlined_button_primary_small"
+                  android:fontFamily="@font/inter_regular"
+                  android:minWidth="0dp"
+                  android:minHeight="0dp"
+                  android:paddingStart="12dp"
+                  android:paddingTop="6dp"
+                  android:paddingEnd="12dp"
+                  android:paddingBottom="6dp"
+                  android:text="@string/remove"
+                  android:textAllCaps="false"
+                  android:textColor="@color/primaryColor"
+                  android:textSize="14sp" />
+
+              <androidx.appcompat.widget.AppCompatButton
+                  android:id="@+id/kycCaptureUploadActivityBackReUploadButton"
+                  style="?android:attr/borderlessButtonStyle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginStart="8dp"
+                  android:background="@drawable/bg_outlined_button_primary_small"
+                  android:fontFamily="@font/inter_regular"
+                  android:minWidth="0dp"
+                  android:minHeight="0dp"
+                  android:paddingStart="12dp"
+                  android:paddingTop="6dp"
+                  android:paddingEnd="12dp"
+                  android:paddingBottom="6dp"
+                  android:text="@string/re_upload"
+                  android:textAllCaps="false"
+                  android:textColor="@color/primaryColor"
+                  android:textSize="14sp" />
+
+            </LinearLayout>
+
+          </LinearLayout>
+
+          <RelativeLayout
+              android:id="@+id/kycCaptureUploadActivityFilePreviewBackContainer"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@drawable/bg_file"
+              android:padding="12dp"
+              android:visibility="gone">
+
+            <TextView
+                android:id="@+id/kycCaptureUploadActivityBackFileNameTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:layout_toStartOf="@+id/kycCaptureUploadActivityFileBackDeleteButton"
+                android:ellipsize="middle"
+                android:fontFamily="@font/inter_medium"
+                android:maxLines="1"
+                android:text="@string/filename_pdf"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/kycCaptureUploadActivityFileBackDeleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:layout_toStartOf="@+id/kycCaptureUploadActivityFileBackReUploadButton"
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/ico_delete" />
+
+            <ImageView
+                android:id="@+id/kycCaptureUploadActivityFileBackReUploadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/image_description"
+                android:src="@drawable/ico_re_upload" />
+
+          </RelativeLayout>
+
+        </FrameLayout>
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+  </ScrollView>
+
+  <FrameLayout
+      android:id="@+id/kycCaptureUploadActivityBottomBar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/kycCaptureUploadActivitySubmitButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/primary_rounded_button_background"
+        android:ellipsize="end"
+        android:fontFamily="@font/inter_medium"
+        android:maxLines="1"
+        android:text="@string/submit"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/kycCaptureUploadActivitySubmitButtonLoaderLottie"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:scaleX="2"
+        android:scaleY="2"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/lottie_button_loader" />
+
+  </FrameLayout>
+
+</RelativeLayout>
