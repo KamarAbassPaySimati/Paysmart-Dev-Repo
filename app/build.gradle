@@ -79,6 +79,8 @@ android {
             buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
             buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
             buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
+            buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
+            buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
         }
 
         qa{
@@ -91,6 +93,8 @@ android {
             buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
             buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
             buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
+            buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
+            buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
         }
 
         preprod{
@@ -103,6 +107,8 @@ android {
             buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
             buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
             buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
+            buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
+            buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
         }
 
         production{
@@ -114,6 +120,8 @@ android {
             buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
             buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
             buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
+            buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
+            buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
         }
     }
 
@@ -133,6 +141,8 @@ dependencies {
     implementation libs.material
     implementation libs.androidx.activity
     implementation libs.androidx.constraintlayout
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.fragment.ktx
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
@@ -177,4 +187,21 @@ dependencies {
 
     //JWT Token for BDD
     implementation libs.java.jwt
+
+    //Places
+    implementation libs.places
+
+    //Camera
+    implementation libs.androidx.camera.camera2
+    implementation libs.androidx.camera.view
+    implementation libs.androidx.camera.lifecycle
+
+    //pdf viewer
+    implementation libs.pdf.viewer
+
+    //Zoom Layout
+    implementation libs.zoomlayout
+
+    //Espresso Contrib
+    androidTestImplementation libs.espresso.contrib
 }

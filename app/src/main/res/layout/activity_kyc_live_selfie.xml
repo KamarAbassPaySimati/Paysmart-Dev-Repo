@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/kycLiveSelfieActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.kyc.KycLiveSelfieActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/kycLiveSelfieActivityBackButtonBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/kycLiveSelfieActivityBackButtonIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/back"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="16dp"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@+id/kycLiveSelfieActivityInfoButtonIV"
+            android:layout_toEndOf="@+id/kycLiveSelfieActivityBackButtonIV"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/back"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/kycLiveSelfieActivityInfoButtonIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/back"
+            android:padding="16dp"
+            android:src="@drawable/ico_info_black" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/kycLiveSelfieActivityBottomBar"
+        android:layout_below="@+id/kycLiveSelfieActivityBackButtonBox"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:id="@+id/kycLiveSelfieActivityHeaderTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/biometrics_live_selfie"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/kycLiveSelfieActivitySubTextTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/live_selfie_subtext"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp" />
+
+
+            <FrameLayout
+                android:id="@+id/kycLiveSelfieActivityMainViewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/kycLiveSelfieActivityPreviewViewContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:background="@drawable/bg_capture_upload_card"
+                        app:cardCornerRadius="8dp"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.camera.view.PreviewView
+                            android:id="@+id/kycLiveSelfieActivityPreviewView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:contentDescription="@string/image_description"
+                            android:layerType="software"
+                            android:paddingStart="96dp"
+                            android:paddingTop="60dp"
+                            android:paddingEnd="96dp"
+                            android:paddingBottom="60dp"
+                            android:src="@drawable/fg_selfie_outline" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/kycLiveSelfieActivityImagePreviewContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/kycLiveSelfieActivityImageIV"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:contentDescription="@string/image_description"
+                        android:scaleType="fitCenter"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/kycImagePreview"
+                        tools:src="@drawable/ico_malawi_flag" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/kycLiveSelfieActivitySelfieRulesTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/selfie_rules"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="14sp" />
+
+
+            <RelativeLayout
+                android:id="@+id/kycLiveSelfieActivitySelfieMustBeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/kycLiveSelfieActivitySelfieMustBeTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/kycLiveSelfieActivitySelfieMustBeNextArrowIV"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center_vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/your_digital_selfie_must_be"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/kycLiveSelfieActivitySelfieMustBeNextArrowIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/close_button_data"
+                    android:src="@drawable/ico_next_arrow_black" />
+
+            </RelativeLayout>
+
+            <include
+                android:id="@+id/kycLiveSelfieActivitySelfieMustBeTextContainer"
+                layout="@layout/content_kyc_selfie_must_be"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/kycLiveSelfieActivityYouMustBeContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/kycLiveSelfieActivityYouMustBeTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/kycLiveSelfieActivityYouMustBeNextArrowIV"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center_vertical"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="@string/in_your_selfie_you_must"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/kycLiveSelfieActivityYouMustBeNextArrowIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/close_button_data"
+                    android:src="@drawable/ico_next_arrow_black" />
+
+            </RelativeLayout>
+
+
+            <include
+                android:id="@+id/kycLiveSelfieActivityYouMustBeTextContainer"
+                layout="@layout/content_kyc_you_must_be"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/kycLiveSelfieActivityBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/kycLiveSelfieActivityCaptureButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/primary_rounded_button_background"
+            android:ellipsize="end"
+            android:fontFamily="@font/inter_medium"
+            android:maxLines="1"
+            android:text="@string/capture"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/kycLiveSelfieActivityRecaptureContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/kycLiveSelfieActivityReCaptureButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/primary_outlined_button_background"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/re_capture"
+                android:textAllCaps="false"
+                android:textColor="@color/primaryColor"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/kycLiveSelfieActivitySubmitButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/primary_rounded_button_background"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_medium"
+                android:maxLines="1"
+                android:text="@string/submit"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/kycLiveSelfieActivitySubmitButtonLoaderLottie"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="16dp"
+            android:scaleX="2"
+            android:scaleY="2"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_button_loader" />
+
+    </FrameLayout>
+
+</RelativeLayout>

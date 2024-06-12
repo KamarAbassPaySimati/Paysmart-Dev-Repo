@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/kycBanksSheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="16dp"
+    app:backgroundTint="@android:color/transparent"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/kycBanksSheetHeaderTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/select_bank"
+            android:textColor="@color/primaryColor"
+            android:textSize="20sp"
+            tools:ignore="RelativeOverlap" />
+
+        <ImageView
+            android:id="@+id/kycBanksSheetCloseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/close_button_data"
+            android:src="@drawable/ic_close"
+            app:tint="@color/black"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/kycBanksSheetOption1TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/kyc_bank_option1"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/kycBanksSheetOption2TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/kyc_bank_option2"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/kycBanksSheetOption3TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/kyc_bank_option3"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/kycBanksSheetOption4TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/kyc_bank_option4"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/kycBanksSheetOption5TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/kyc_bank_option5"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+
+    <TextView
+        android:id="@+id/kycBanksSheetOption6TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/kyc_bank_option6"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+
+    <TextView
+        android:id="@+id/kycBanksSheetOption7TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/kyc_bank_option7"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+
+    <TextView
+        android:id="@+id/kycBanksSheetOption8TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/kyc_bank_option8"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+</LinearLayout>

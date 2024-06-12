@@ -38,4 +38,6 @@
     <color name="bg2FACode">#80E2DBFF</color>
     <color name="lightShade">#D9D9D9</color>
     <color name="accentInformationSecondary">#D9E8FE</color>
+    <color name="neutralGreyRipple">#C3C3C3</color>
+    <color name="defaultSelected">#D1D4D7</color>
 </resources>
