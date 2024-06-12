@@ -13,10 +13,8 @@ import android.provider.OpenableColumns
 import android.view.View
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -27,11 +25,13 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityKycCaptureUploadBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.kotlin.core.Amplify
 import com.amplifyframework.storage.StorageException
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -594,6 +594,7 @@ class KycCaptureUploadActivity : BaseActivity() {
     }
 
 
+    @OptIn(FlowPreview::class)
     private suspend fun amplifyUpload(uri: Uri): String {
         val paymaartId = retrievePaymaartId()
         val stream = contentResolver.openInputStream(uri)
@@ -720,7 +721,7 @@ class KycCaptureUploadActivity : BaseActivity() {
             val cursor = context.contentResolver.query(uri, null, null, null, null)
             cursor?.moveToFirst()
             fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                ?: "PMAGT_${System.currentTimeMillis()}.jpg"
+                ?: "PMCMR_${System.currentTimeMillis()}.jpg"
             cursor?.close()
             return fileName
         }

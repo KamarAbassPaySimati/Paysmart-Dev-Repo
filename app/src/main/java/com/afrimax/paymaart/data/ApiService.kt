@@ -10,6 +10,7 @@ import com.afrimax.paymaart.data.model.KycSaveAddressDetailsRequest
 import com.afrimax.paymaart.data.model.ResendCredentialsRequest
 import com.afrimax.paymaart.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
+import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
 import com.afrimax.paymaart.data.model.SendOtpResponse
@@ -50,6 +51,9 @@ interface ApiService {
 
     @POST("$CUSTOMER_USER/create-kyc")
     fun saveCustomerIdentityDetails(@Header("Authorization") header: String, @Body body: KycSaveIdentityDetailRequest): Call<DefaultResponse>
+
+    @POST("$CUSTOMER_USER/create-kyc")
+    fun saveCustomerPersonalDetails(@Header("Authorization") header: String, @Body body: KycSavePersonalDetailRequest): Call<DefaultResponse>
 
 
 

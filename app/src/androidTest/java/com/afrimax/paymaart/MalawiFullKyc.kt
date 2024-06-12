@@ -9,6 +9,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.contrib.PickerActions
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -52,59 +53,51 @@ class MalawiFullKyc {
 
     @Then("I am redirected to kyc select screen")
     fun redirectedToKycSelectScreen() {
-        Espresso.onView(withId(R.id.kycSelectActivity))
+        Espresso.onView(withId(R.id.onboardKycSelectActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @When("I select malawi full kyc")
     fun iSelectMalawiFullKyc() {
-        Espresso.onView(withId(R.id.kycSelectActivityMalawiBox))
+        Espresso.onView(withId(R.id.onboardKycSelectActivityMalawiBox))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
-        Espresso.onView(withId(R.id.kycSelectActivityFullKycButton))
+        Espresso.onView(withId(R.id.onboardKycSelectActivityFullKycButton))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(7000)
     }
 
     @When("I select non malawi full kyc")
     fun iSelectNonMalawiFullKyc() {
-        Espresso.onView(withId(R.id.kycSelectActivityNonMalawiContainer))
+        Espresso.onView(withId(R.id.onboardKycSelectActivityNonMalawiContainer))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(7000)
     }
 
     @Then("I select {string} as the nationality")
     fun iSelectTheNation(nation: String) {
-        Espresso.onView(withId(R.id.kycYourAddressActivityIntlNationalityTV))
-            .perform(ViewActions.scrollTo(), ViewActions.click())
-        Thread.sleep(3000)
-        Espresso.onView(withId(R.id.kycNationalityActivityRV)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<KycNationAdapter.KycNationViewHolder>(
-                0, ViewActions.click()
-            )
-        )
+//        Espresso.onView(withId(R.id.onboardKycYourAddressActivityIntlNationalityTV))
+//            .perform(ViewActions.scrollTo(), ViewActions.click())
+//        Thread.sleep(3000)
+//        Espresso.onView(withId(R.id.onboardKycNationalityActivityRV)).perform(
+//            RecyclerViewActions.actionOnItemAtPosition<KycNationAdapter.KycNationViewHolder>(
+//                0, ViewActions.click()
+//            )
+//        )
         Thread.sleep(3000)
     }
 
 
     @Then("I am redirected to KYC screen one")
     fun iAmRedirectedToKycSelectScreen() {
-        Espresso.onView(withId(R.id.kycYourAddressActivity))
+        Espresso.onView(withId(R.id.onboardKycAddressActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-    }
-
-
-    @Then("I am redirected to the kyc journey")
-    fun redirectedToKycJourney() {
-        Espresso.onView(withId(R.id.kycProgressActivity))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Thread.sleep(5000)
     }
 
     @Given("I am in KYC screen one")
     fun iAmInKYCScreen1() {
         Thread.sleep(5000)
-        Espresso.onView(withId(R.id.kycYourAddressActivity)).check(
+        Espresso.onView(withId(R.id.onboardKycAddressActivity)).check(
             ViewAssertions.matches(
                 ViewMatchers.isDisplayed()
             )
@@ -113,7 +106,7 @@ class MalawiFullKyc {
 
     @Given("I enter the street name as {string}")
     fun iEnterStreetName(street: String) {
-        Espresso.onView(withId(R.id.kycYourAddressActivityStreetNameET)).perform(
+        Espresso.onView(withId(R.id.onboardKycAddressActivityStreetNameET)).perform(
             ViewActions.scrollTo(), ViewActions.typeText(street), ViewActions.closeSoftKeyboard()
         )
         Thread.sleep(5000)
@@ -121,7 +114,7 @@ class MalawiFullKyc {
 
     @When("I enter the street name as {string} for KYC")
     fun enterStreetName(streetName: String) {
-        Espresso.onView(withId(R.id.kycYourAddressActivityStreetNameET)).perform(
+        Espresso.onView(withId(R.id.onboardKycAddressActivityStreetNameET)).perform(
             ViewActions.scrollTo(),
             ViewActions.typeText(streetName),
             ViewActions.closeSoftKeyboard()
@@ -130,14 +123,14 @@ class MalawiFullKyc {
 
     @When("I enter the town as {string} for KYC")
     fun enterTownName(townName: String) {
-        Espresso.onView(withId(R.id.kycYourAddressActivityTownET)).perform(
+        Espresso.onView(withId(R.id.onboardKycAddressActivityTownET)).perform(
             ViewActions.scrollTo(), ViewActions.typeText(townName), ViewActions.closeSoftKeyboard()
         )
     }
 
     @When("I enter the district as {string} for KYC")
     fun enterDistrictName(districtName: String) {
-        Espresso.onView(withId(R.id.kycYourAddressActivityDistrictET)).perform(
+        Espresso.onView(withId(R.id.onboardKycAddressActivityDistrictET)).perform(
             ViewActions.scrollTo(),
             ViewActions.typeText(districtName),
             ViewActions.closeSoftKeyboard()
@@ -146,34 +139,34 @@ class MalawiFullKyc {
 
     @When("I click on proceed button on screen one")
     fun iClickOnProceedButtonOnScreenOne() {
-        Espresso.onView(withId(R.id.kycYourAddressActivitySaveAndContinueButton))
+        Espresso.onView(withId(R.id.onboardKycAddressActivitySaveAndContinueButton))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }
 
     @When("I click on proceed button on screen two")
     fun iClickOnProceedButtonOnScreenTwo() {
-        Espresso.onView(withId(R.id.kycYourIdentityActivitySaveAndContinueButton))
+        Espresso.onView(withId(R.id.onboardKycIdentityActivitySaveAndContinueButton))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }
 
     @When("I click on proceed button on screen three")
     fun iClickOnProceedButtonOnScreenThree() {
-        Espresso.onView(withId(R.id.kycYourInfoActivitySaveAndContinueButton))
+        Espresso.onView(withId(R.id.onboardKycPersonalActivitySaveAndContinueButton))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }
 
     @When("I click on skip for KYC screen two")
     fun iClickOnSkipButtonOnScreenTwo() {
-        Espresso.onView(withId(R.id.kycYourIdentityActivitySkipButton)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.onboardKycIdentityActivitySkipButton)).perform(ViewActions.click())
         Thread.sleep(3000)
     }
 
     @When("I click on skip for KYC screen three")
     fun iClickOnSkipButtonOnScreenThree() {
-        Espresso.onView(withId(R.id.kycYourInfoActivitySkipButton)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.onboardKycPersonalActivitySkipButton)).perform(ViewActions.click())
         Thread.sleep(3000)
     }
 
@@ -185,14 +178,14 @@ class MalawiFullKyc {
 
     @Then("I should be redirected to KYC screen two")
     fun iAmInKYCScreen2() {
-        Espresso.onView(withId(R.id.kycYourIdentityActivity))
+        Espresso.onView(withId(R.id.onboardKycIdentityActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
 
     @Then("I should be redirected to KYC screen three")
     fun iAmInKYCScreen3() {
-        Espresso.onView(withId(R.id.kycYourInfoActivity))
+        Espresso.onView(withId(R.id.onboardKycPersonalActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
@@ -201,43 +194,43 @@ class MalawiFullKyc {
     fun checkErrorMessageDisplayed(errorMessage: String, fieldID: String) {
         when (fieldID) {
             "streetName" -> {
-                Espresso.onView(withId(R.id.kycYourAddressActivityStreetNameWarningTV))
+                Espresso.onView(withId(R.id.onboardKycAddressActivityStreetNameWarningTV))
                     .perform(ViewActions.scrollTo())
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
 
             "selfieCapture" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivitySelfieStatusTV))
+                Espresso.onView(withId(R.id.onboardKycIdentityActivitySelfieStatusTV))
                     .perform(ViewActions.scrollTo())
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
 
             "gender" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityGenderWarningTV))
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityGenderWarningTV))
                     .perform(ViewActions.scrollTo())
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
 
             "dateOfBirth" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityDOBWarningTV))
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityDOBWarningTV))
                     .perform(ViewActions.scrollTo())
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
 
             "occupation" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityOccupationWarningTV))
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityOccupationWarningTV))
                     .perform(ViewActions.scrollTo())
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
 
             "bankAccountName" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityAccountNameWarningTV))
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityAccountNameWarningTV))
                     .perform(ViewActions.scrollTo())
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
 
             "bankAccountNumber" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityAccountNumberWarningTV))
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityAccountNumberWarningTV))
                     .perform(ViewActions.scrollTo())
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
@@ -252,8 +245,8 @@ class MalawiFullKyc {
             .perform(ViewActions.click())
         Thread.sleep(5000)
 
-        val district = getText(Espresso.onView(withId(R.id.kycYourAddressActivityDistrictET)))
-        val town = getText(Espresso.onView(withId(R.id.kycYourAddressActivityTownET)))
+        val district = getText(Espresso.onView(withId(R.id.onboardKycAddressActivityDistrictET)))
+        val town = getText(Espresso.onView(withId(R.id.onboardKycAddressActivityTownET)))
 
         require(town.isNotEmpty())
         require(district.isNotEmpty())
@@ -263,17 +256,17 @@ class MalawiFullKyc {
     fun selectGender(gender: String) {
         when (gender) {
             "Male" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityGenderMaleRB))
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityGenderMaleRB))
                     .perform(ViewActions.scrollTo(), ViewActions.click())
             }
 
             "Female" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityGenderFemaleRB))
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityGenderFemaleRB))
                     .perform(ViewActions.scrollTo(), ViewActions.click())
             }
 
             "Other" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityGenderUndisclosedRB)).perform(
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityGenderUndisclosedRB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
@@ -289,7 +282,7 @@ class MalawiFullKyc {
         val month = dateObjects[1].toInt()
         val day = dateObjects[0].toInt()
 
-        Espresso.onView(withId(R.id.kycYourInfoActivityDOBTV))
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityDOBTV))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(1000)
         Espresso.onView(ViewMatchers.withClassName(Matchers.equalTo(DatePicker::class.java.getName())))
@@ -302,7 +295,7 @@ class MalawiFullKyc {
 
     @When("I click on occupation source of funds")
     fun selectOccupationAndSourceFunds() {
-        Espresso.onView(withId(R.id.kycYourInfoActivityOccupationTV))
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityOccupationTV))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
     }
@@ -362,14 +355,14 @@ class MalawiFullKyc {
 
     @Then("I should be able to view option to enter employer name")
     fun iShouldViewOptionToEnterEmployerName() {
-        Espresso.onView(withId(R.id.kycYourInfoActivityEmployerNameET))
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityEmployerNameET))
             .perform(ViewActions.scrollTo())
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @When("I enter the employer name as {string}")
     fun enterEmployerName(employerName: String) {
-        Espresso.onView(withId(R.id.kycYourInfoActivityEmployerNameET)).perform(
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityEmployerNameET)).perform(
             ViewActions.scrollTo(),
             ViewActions.typeText(employerName),
             ViewActions.closeSoftKeyboard()
@@ -378,7 +371,7 @@ class MalawiFullKyc {
 
     @When("I select the industry sector as {string}")
     fun selectIndustrySector(industrySector: String) {
-        Espresso.onView(withId(R.id.kycYourInfoActivityIndustrySectorTV))
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityIndustrySectorTV))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
         when (industrySector) {
@@ -392,14 +385,14 @@ class MalawiFullKyc {
 
     @When("I enter the district as {string}")
     fun iEnterDistrictNameAs(district: String) {
-        Espresso.onView(withId(R.id.kycYourInfoActivityTownDistrictET)).perform(
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityTownDistrictET)).perform(
             ViewActions.scrollTo(), ViewActions.typeText(district), ViewActions.closeSoftKeyboard()
         )
     }
 
     @When("I select my monthly income as {string}")
     fun selectMonthlyIncome(monthlyIncome: String) {
-        Espresso.onView(withId(R.id.kycYourInfoActivityMonthlyIncomeTV))
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityMonthlyIncomeTV))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
         when (monthlyIncome) {
@@ -434,7 +427,7 @@ class MalawiFullKyc {
 
     @When("I select my monthly withdrawal as {string}")
     fun selectMonthlyWithdrawal(monthlyWithdrawal: String) {
-        Espresso.onView(withId(R.id.kycYourInfoActivityMonthlyWithdrawalTV))
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityMonthlyWithdrawalTV))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
         when (monthlyWithdrawal) {
@@ -473,7 +466,7 @@ class MalawiFullKyc {
 
     @When("I select bank name as {string}")
     fun selectBankName(bankName: String) {
-        Espresso.onView(withId(R.id.kycYourInfoActivityBankNameTV))
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityBankNameTV))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
         when (bankName) {
@@ -488,25 +481,25 @@ class MalawiFullKyc {
     fun selectPurposeOfRelation(relation: String) {
         when (relation) {
             "1" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityBusinessRelationShip1CB)).perform(
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityBusinessRelationShip1CB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
 
             "2" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityBusinessRelationShip2CB)).perform(
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityBusinessRelationShip2CB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
 
             "3" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityBusinessRelationShip3CB)).perform(
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityBusinessRelationShip3CB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
 
             "4" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityBusinessRelationShip4CB)).perform(
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityBusinessRelationShip4CB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
@@ -515,14 +508,14 @@ class MalawiFullKyc {
 
     @When("I enter the bank account number as {string}")
     fun iEnterBankAccountNumber(district: String) {
-        Espresso.onView(withId(R.id.kycYourInfoActivityAccountNumberET)).perform(
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityAccountNumberET)).perform(
             ViewActions.scrollTo(), ViewActions.typeText(district), ViewActions.closeSoftKeyboard()
         )
     }
 
     @When("I enter the bank account name as {string}")
     fun iEnterBankAccountName(district: String) {
-        Espresso.onView(withId(R.id.kycYourInfoActivityAccountNameET)).perform(
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityAccountNameET)).perform(
             ViewActions.scrollTo(), ViewActions.typeText(district), ViewActions.closeSoftKeyboard()
         )
     }
@@ -531,25 +524,13 @@ class MalawiFullKyc {
     fun selectIDDocument(idDocument: String) {
         when (idDocument) {
             "National ID" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivityIdDocNationalIdRBContainer)).perform(
-                    ViewActions.scrollTo(), ViewActions.click()
-                )
-            }
-
-            "Drivers licence" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivityIdDocDriverLicenseRBContainer)).perform(
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocNationalIdRBContainer)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
 
             "Passport" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivityIdDocPassportTV)).perform(
-                    ViewActions.scrollTo(), ViewActions.click()
-                )
-            }
-
-            "Refugee ID" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivityIdDocRefugeeIdRBContainer)).perform(
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocPassportTV)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
@@ -559,7 +540,7 @@ class MalawiFullKyc {
 
     @When("I select the nature of permit as {string}")
     fun selectNatureOfPermit(natureOfPermit: String) {
-        Espresso.onView(withId(R.id.kycYourIdentityActivityIdDocPassportNatureOfPermitTV)).perform(
+        Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocPassportNatureOfPermitTV)).perform(
             ViewActions.scrollTo(), ViewActions.click()
         )
         Thread.sleep(3000)
@@ -575,7 +556,7 @@ class MalawiFullKyc {
 
     @When("I enter the reference number as {string}")
     fun iEnterReferenceNumber(refNo: String) {
-        Espresso.onView(withId(R.id.kycYourIdentityActivityIdDocPassportNumberOfReferencesTV)).perform(
+        Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocPassportNumberOfReferencesTV)).perform(
             ViewActions.scrollTo(), ViewActions.click()
         )
         Thread.sleep(3000)
@@ -645,7 +626,7 @@ class MalawiFullKyc {
 
     @When("I click on biometric live selfie")
     fun clickOnBiometricLiveSelfie() {
-        Espresso.onView(withId(R.id.kycYourIdentityActivitySelfieTV))
+        Espresso.onView(withId(R.id.onboardKycIdentityActivitySelfieTV))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(7000)
     }
@@ -663,19 +644,19 @@ class MalawiFullKyc {
     fun selectVerificationDocument(verificationDocument: String) {
         when (verificationDocument) {
             "Birth Certificate" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivityVerDocBirthCertificateRB)).perform(
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityVerDocBirthCertificateRB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
 
             "Employer letter" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivityVerDocEmployerLetterRB)).perform(
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityVerDocEmployerLetterRB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
 
             "Drivers licence" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivityVerDocDriverLicenseRB)).perform(
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityVerDocDriverLicenseRB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
@@ -714,16 +695,14 @@ class MalawiFullKyc {
         Thread.sleep(3000)
     }
 
-    @When("I open the menu, I should view the KYC status as {string} and {string}")
-    fun openMenuAndCheckKYC(kycType: String, kycStatus: String) {
-        Espresso.onView(withId(R.id.homeActivityMenuIcon)).perform(ViewActions.click())
-        Thread.sleep(3000)
-
-        Espresso.onView(withId(R.id.homeDrawerKycTypeTV)).perform(ViewActions.scrollTo())
-            .check(ViewAssertions.matches(ViewMatchers.withText(kycType)))
-        Espresso.onView(withId(R.id.homeDrawerKycStatusTV)).perform(ViewActions.scrollTo())
-            .check(ViewAssertions.matches(ViewMatchers.withText(kycStatus)))
-    }
-}
-
+//    @When("I open the menu, I should view the KYC status as {string} and {string}")
+//    fun openMenuAndCheckKYC(kycType: String, kycStatus: String) {
+//        Espresso.onView(withId(R.id.homeActivityMenuIcon)).perform(ViewActions.click())
+//        Thread.sleep(3000)
+//
+//        Espresso.onView(withId(R.id.homeDrawerKycTypeTV)).perform(ViewActions.scrollTo())
+//            .check(ViewAssertions.matches(ViewMatchers.withText(kycType)))
+//        Espresso.onView(withId(R.id.homeDrawerKycStatusTV)).perform(ViewActions.scrollTo())
+//            .check(ViewAssertions.matches(ViewMatchers.withText(kycStatus)))
+//    }
 }

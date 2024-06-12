@@ -4,6 +4,7 @@ agp = "8.3.2"
 awsAuthCognito = "2.14.11"
 cameraCamera2 = "1.4.0-beta01"
 cucumberAndroid = "7.14.0"
+espressoContrib = "3.5.1"
 glide = "4.16.0"
 javaJwt = "3.18.2"
 javaOtp = "0.4.0"
@@ -29,6 +30,9 @@ retrofit = "2.11.0"
 staxApi = "1.0"
 xmlbeans = "5.1.0"
 dotenv = "4.0.0"
+zoomlayout = "1.9.0"
+lifecycleLivedataKtx = "2.8.1"
+fragmentKtx = "1.5.6"
 
 [libraries]
 aalto-xml = { module = "com.fasterxml:aalto-xml", version.ref = "aaltoXml" }
@@ -44,6 +48,7 @@ core-kotlin = { module = "com.amplifyframework:core-kotlin", version.ref = "awsA
 cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumberAndroid" }
 cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberAndroid" }
 datafaker = { module = "net.datafaker:datafaker", version.ref = "datafaker" }
+espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espressoContrib" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 java-jwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }
 java-otp = { module = "com.eatthepath:java-otp", version.ref = "javaOtp" }
@@ -64,6 +69,9 @@ poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }
 xmlbeans = { module = "org.apache.xmlbeans:xmlbeans", version.ref = "xmlbeans" }
+zoomlayout = { module = "com.otaliastudios:zoomlayout", version.ref = "zoomlayout" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

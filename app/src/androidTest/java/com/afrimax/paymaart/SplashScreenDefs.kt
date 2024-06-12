@@ -7,6 +7,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import com.afrimax.paymaart.ui.splash.SplashScreenActivity
+import com.amplifyframework.core.Amplify
 import io.cucumber.java.After
 import io.cucumber.java.Before
 import io.cucumber.java.en.Given
@@ -20,6 +21,8 @@ class SplashScreenDefs(private val scenarioHolder: ActivityScenarioHolder) {
 
     @Before
     fun setup() {
+        Amplify.Auth.signOut {}
+        Thread.sleep(3000)
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         scenarioHolder.launch(
             Intent(

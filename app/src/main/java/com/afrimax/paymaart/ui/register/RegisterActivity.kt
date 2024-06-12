@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.InputFilter
-import android.text.InputType
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -167,7 +166,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             b.onboardRegistrationActivityCountryCodeSpinner.onItemSelectedListener =
                 object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
-                        p0: AdapterView<*>?, p1: View?, position: Int, p3: Long
+                        p0: AdapterView<*>?, p1: View?, position: Int, p3: Long,
                     ) {
                         when (position) {
                             0 -> b.onboardRegistrationActivityPhoneET.filters =
@@ -257,7 +256,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     private fun setUpEmailEditTextFilters(et: EditText) {
         et.filters += object : InputFilter.AllCaps() {
             override fun filter(
-                source: CharSequence?, start: Int, end: Int, dest: Spanned?, dstart: Int, dend: Int
+                source: CharSequence?, start: Int, end: Int, dest: Spanned?, dstart: Int, dend: Int,
             ): CharSequence {
                 return source!!.filterNot { char -> char.isWhitespace() }.toString().lowercase()
             }
@@ -454,7 +453,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     }
 
     private fun configureEmailEditTextFocusListener(
-        et: EditText, warningTV: TextView
+        et: EditText, warningTV: TextView,
     ) {
         val focusDrawable = ContextCompat.getDrawable(this, R.drawable.edit_text_focused_background)
         val errorDrawable = ContextCompat.getDrawable(this, R.drawable.edit_text_error_background)
@@ -469,7 +468,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     }
 
     private fun configurePhoneEditTextFocusListener(
-        et: EditText, warningTV: TextView
+        et: EditText, warningTV: TextView,
     ) {
         val focusDrawable = ContextCompat.getDrawable(this, R.drawable.edit_text_focused_background)
         val errorDrawable = ContextCompat.getDrawable(this, R.drawable.edit_text_error_background)
@@ -484,7 +483,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     }
 
     private fun configureEditTextSecurityQuestionFocusListeners(
-        nameET: EditText, warningText: TextView
+        nameET: EditText, warningText: TextView,
     ) {
         val focusDrawable = ContextCompat.getDrawable(this, R.drawable.edit_text_focused_background)
         val errorDrawable = ContextCompat.getDrawable(this, R.drawable.edit_text_error_background)
@@ -632,7 +631,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
         registerCustomerCall.enqueue(object : Callback<CreateUserResponse> {
             override fun onResponse(
-                call: Call<CreateUserResponse>, response: Response<CreateUserResponse>
+                call: Call<CreateUserResponse>, response: Response<CreateUserResponse>,
             ) {
                 val body = response.body()
                 if (body != null && response.isSuccessful) {
@@ -682,7 +681,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     }
 
     private fun showButtonLoader(
-        actionButton: AppCompatButton, loaderLottie: LottieAnimationView
+        actionButton: AppCompatButton, loaderLottie: LottieAnimationView,
     ) {
         actionButton.text = ""
         window.setFlags(
@@ -693,7 +692,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     }
 
     private fun hideButtonLoader(
-        actionButton: AppCompatButton, loaderLottie: LottieAnimationView, buttonText: String
+        actionButton: AppCompatButton, loaderLottie: LottieAnimationView, buttonText: String,
     ) {
         actionButton.text = buttonText
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -895,7 +894,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             val otpCall = ApiClient.apiService.sentOtp(sendOtpRequestBody)
             otpCall.enqueue(object : Callback<SendOtpResponse> {
                 override fun onResponse(
-                    call: Call<SendOtpResponse>, response: Response<SendOtpResponse>
+                    call: Call<SendOtpResponse>, response: Response<SendOtpResponse>,
                 ) {
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
@@ -1106,7 +1105,8 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         val securityQuestionsCall = ApiClient.apiService.getSecurityQuestions()
         securityQuestionsCall.enqueue(object : Callback<SecurityQuestionsResponse> {
             override fun onResponse(
-                call: Call<SecurityQuestionsResponse>, response: Response<SecurityQuestionsResponse>
+                call: Call<SecurityQuestionsResponse>,
+                response: Response<SecurityQuestionsResponse>,
             ) {
                 val body = response.body()
                 if (body != null && response.isSuccessful) {

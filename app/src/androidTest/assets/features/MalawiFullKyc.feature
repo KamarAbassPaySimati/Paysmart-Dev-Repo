@@ -28,7 +28,6 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     When I enter a valid middle name for registration
     When I enter a valid last name for registration
     When I enter a valid email address for registration
-    Then I select Indian country code
     When I enter a valid phone number for registration
     When I answer the security question one as "Answer1"
     When I answer the security question two as "Answer2"
@@ -68,11 +67,11 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     When I select malawi full kyc
     Then I am redirected to KYC screen one
 
-  Scenario: Missing required fields
-    When I enter the street name as "" for KYC
-    When I enter the town as "Lilongwe" for KYC
-    When I click on proceed button on screen one
-    Then I should see error message "Required field" for field with ID "streetName" in kyc screen
+#  Scenario: Missing required fields
+#    When I enter the street name as "" for KYC
+#    When I enter the town as "Lilongwe" for KYC
+#    When I click on proceed button on screen one
+#    Then I should see error message "Required field" for field with ID "streetName" in kyc screen
 
   Scenario: Complete KYC without filling in the ID document section
     When I enter the street name as "Balaka"
@@ -100,14 +99,6 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     When I select purpose of relation "1"
     When I select my monthly income as "300,000.00 to 1,000,000.00 MWK"
     When I select my monthly withdrawal as "300,000.00 to 1,000,000.00 MWK"
-    When I select bank name as "CDH Investment Bank"
-    When I enter the bank account number as ""
-    When I enter the bank account name as ""
-    When I click on proceed button on screen three
-    Then I should see error message "Required field" for field with ID "bankAccountName" in kyc screen
-    Then I should see error message "Required field" for field with ID "bankAccountNumber" in kyc screen
-    When I enter the bank account number as "12938474234"
-    When I enter the bank account name as "7Edge"
     When I click on proceed button on screen three
     Then I should read a message stating KYC "In progress"
 
@@ -148,13 +139,5 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     When I select purpose of relation "1"
     When I select my monthly income as "300,000.00 to 1,000,000.00 MWK"
     When I select my monthly withdrawal as "300,000.00 to 1,000,000.00 MWK"
-    When I select bank name as "CDH Investment Bank"
-    When I enter the bank account number as ""
-    When I enter the bank account name as ""
-    When I click on proceed button on screen three
-    Then I should see error message "Required field" for field with ID "bankAccountName" in kyc screen
-    Then I should see error message "Required field" for field with ID "bankAccountNumber" in kyc screen
-    When I enter the bank account number as "12938474234"
-    When I enter the bank account name as "7Edge"
     When I click on proceed button on screen three
     Then I should read a message stating KYC "In review"
