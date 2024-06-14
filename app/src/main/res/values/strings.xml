@@ -405,4 +405,8 @@
     <string name="update_pin_password">Update PIN/ Password</string>
     <string name="delete_account">Delete account</string>
     <string name="logout">Logout</string>
+    <string name="confirm_to_logout">Confirm to Logout?</string>
+    <string name="this_action_will_end_your_current_session">This action will end your current session.</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
 </resources>

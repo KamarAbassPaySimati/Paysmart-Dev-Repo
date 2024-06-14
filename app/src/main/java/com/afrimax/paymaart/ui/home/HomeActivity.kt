@@ -11,19 +11,21 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
+import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
 
 class HomeActivity : BaseActivity() {
     private lateinit var b: ActivityHomeBinding
     private lateinit var homeScreenIconAdapter: HomeScreenIconAdapter
     private var rejectionReasons = ArrayList<String>()
     private var dest = 0
+    private var isSettingsClicked: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -103,9 +105,9 @@ class HomeActivity : BaseActivity() {
                 b.homeActivityMerchantsTExpandButton
             )
         }
-        b.homeActivityPersonsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        b.homeActivityTransactionsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        b.homeActivityMerchantsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        b.homeActivityPersonsRecyclerView.layoutManager = GridLayoutManager(this, 4)
+        b.homeActivityTransactionsRecyclerView.layoutManager = GridLayoutManager(this, 4)
+        b.homeActivityMerchantsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         val nameList = listOf(
             "John Doe MJR",
             "Jane Smith ABC",
@@ -127,6 +129,7 @@ class HomeActivity : BaseActivity() {
         }
 
         b.homeActivityNavView.homeDrawerSettingsTV.setOnClickListener {
+            isSettingsClicked = !isSettingsClicked
             toggleSettings()
         }
 
@@ -144,8 +147,9 @@ class HomeActivity : BaseActivity() {
         b.homeActivityNavView.homeDrawerLogOutContainer.setOnClickListener {
             dest = DRAWER_LOGOUT
             b.homeActivity.closeDrawer(GravityCompat.END)
+            val logoutSheet = LogoutConfirmationSheet()
+            logoutSheet.show(supportFragmentManager, LogoutConfirmationSheet.TAG)
         }
-
         setDrawerClosedListener()
     }
 
@@ -156,20 +160,8 @@ class HomeActivity : BaseActivity() {
             override fun onDrawerOpened(drawerView: View) {}
 
             override fun onDrawerClosed(drawerView: View) {
-                when (dest) {
-                    DRAWER_UPDATE_PASSWORD -> {
-                        toggleSettings()
-
-                    }
-
-                    DRAWER_DELETE_ACCOUNT -> {
-                        toggleSettings()
-                    }
-
-                    DRAWER_LOGOUT -> {
-                        toggleSettings()
-                    }
-                }
+                isSettingsClicked = false
+                toggleSettings()
             }
 
             override fun onDrawerStateChanged(newState: Int) {}
@@ -208,15 +200,16 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun toggleSettings() {
-        if (b.homeActivityNavView.homeDrawerSettingsHiddenContainer.isVisible) {
-            b.homeActivityNavView.apply {
-                homeDrawerSettingsDiv.visibility = View.GONE
-                homeDrawerSettingsHiddenContainer.visibility = View.GONE
-            }
-        } else {
+        if (isSettingsClicked) {
             b.homeActivityNavView.apply {
                 homeDrawerSettingsDiv.visibility = View.VISIBLE
                 homeDrawerSettingsHiddenContainer.visibility = View.VISIBLE
+            }
+        } else {
+
+            b.homeActivityNavView.apply {
+                homeDrawerSettingsDiv.visibility = View.GONE
+                homeDrawerSettingsHiddenContainer.visibility = View.GONE
             }
         }
     }
