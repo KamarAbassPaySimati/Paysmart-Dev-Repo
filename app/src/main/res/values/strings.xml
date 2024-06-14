@@ -395,4 +395,14 @@
     <string name="prime_member">Prime Member</string>
     <string name="persons">Persons</string>
     <string name="merchants">Merchants</string>
+    <string name="refund_request">Refund Request</string>
+    <string name="help_centre">Help center</string>
+    <string name="privacy_policy_two">Privacy policy</string>
+    <string name="faqs">FAQs</string>
+    <string name="terms_of_service">Terms of service</string>
+    <string name="about_us">About us</string>
+    <string name="settings">Settings</string>
+    <string name="update_pin_password">Update PIN/ Password</string>
+    <string name="delete_account">Delete account</string>
+    <string name="logout">Logout</string>
 </resources>

@@ -99,6 +99,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
+                            android:layout_marginBottom="8dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/inter_regular"
                             android:maxLines="1"
@@ -109,7 +110,6 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
                             android:ellipsize="end"
                             android:fontFamily="@font/inter_regular"
                             android:maxLines="1"
@@ -180,7 +180,8 @@
                         android:layout_marginTop="16dp"
                         android:background="@drawable/bg_white_cornered"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp">
 
                         <TextView
                             android:id="@+id/homeActivityPayTV"
@@ -192,14 +193,16 @@
                             android:maxLines="1"
                             android:text="@string/pay"
                             android:textColor="@color/neutralGreyPrimaryText"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp"
+                            android:paddingStart="16dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:orientation="horizontal"
-                            android:gravity="center">
+                            android:gravity="center"
+                            android:weightSum="4">
 
                             <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/homeActivityPayAfrimaxButton"
@@ -505,7 +508,6 @@
                 android:layout_gravity="bottom|center_horizontal"
                 android:background="@android:color/transparent"
                 android:orientation="horizontal"
-                android:padding="16dp"
                 android:weightSum="2">
 
                 <LinearLayout
@@ -513,10 +515,11 @@
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_button_cash_in"
-                    android:elevation="1dp">
+                    android:elevation="2dp"
+                    android:layout_marginBottom="10dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -541,15 +544,16 @@
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginHorizontal="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_button_cash_out"
-                    android:elevation="1dp"
+                    android:elevation="2dp"
                     android:fontFamily="@font/inter_semibold"
                     android:text="@string/cash_out"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp"/>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
@@ -565,9 +569,9 @@
         android:fitsSystemWindows="true">
 
 
-<!--        <include-->
-<!--            android:id="@+id/homeActivityNavView"-->
-<!--            layout="@layout/content_home_activity_drawer" />-->
+        <include
+            android:id="@+id/homeActivityNavView"
+            layout="@layout/content_home_activity_drawer" />
 
     </com.google.android.material.navigation.NavigationView>
 
