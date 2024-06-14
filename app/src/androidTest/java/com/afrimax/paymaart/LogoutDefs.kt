@@ -1,4 +1,4 @@
-package com.afrimax.paymaart.agent
+package com.afrimax.paymaart
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
@@ -37,7 +37,7 @@ class LogoutDefs {
 
     @Then("I should be redirected to intro screen")
     fun redirectedToLoginScreen() {
-        onView(withId(R.id.introActivity)).check(matches(isDisplayed()))
+        onView(withId(R.id.intro_activity)).check(matches(isDisplayed()))
     }
 }
 
