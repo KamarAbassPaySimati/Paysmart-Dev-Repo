@@ -40,4 +40,8 @@
     <color name="accentInformationSecondary">#D9E8FE</color>
     <color name="neutralGreyRipple">#C3C3C3</color>
     <color name="defaultSelected">#D1D4D7</color>
+    <color name="secondaryNormalRipple">#CC6C30</color>
+    <color name="primeMemberStrokeColor">#FDB913</color>
+    <color name="primeXMemberStrokeColor">#CACACAB2</color>
+    <color name="goMemberStrokeColor">#D57829</color>
 </resources>
