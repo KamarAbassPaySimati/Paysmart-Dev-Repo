@@ -1,20 +1,47 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.PaymaartMerchant" parent="Theme.Material3.Light.NoActionBar">
+    <style name="Base.Theme.Paymaart" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:windowActivityTransitions">true</item>
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorAccent">@color/white</item>
     </style>
 
-    <style name="Theme.PaymaartMerchant" parent="Base.Theme.PaymaartMerchant" />
-
-    <style name="Guide.Bottom.Sheet.Style" parent="ThemeOverlay.Material3.BottomSheetDialog">
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+    <style name="Base.Theme.PaymaartAgent.Bottom.Sheet.Registration.Guide" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item> <!-- This is important -->
+        <item name="android:statusBarColor">@color/transparent
+        </item> <!-- And then this will be needed -->
         <item name="android:navigationBarColor">@color/primaryColor</item>
+    </style>
+
+    <style name="Theme.Paymaart" parent="Base.Theme.Paymaart" />
+
+    <style name="AppTheme" parent="Base.Theme.Paymaart">
+        <item name="android:spinnerDropDownItemStyle">@style/mySpinnerItemStyle</item>
+    </style>
+
+    <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">@color/primaryColor</item>
+        <item name="fontFamily">@font/inter_regular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="kycImagePreview" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="fabButtonBackground" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:backgroundDimAmount">0.2</item>
+        <item name="android:statusBarColor">@color/primaryColor</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
     </style>
 
     <style name="profileImagePreview" parent="">
@@ -22,9 +49,22 @@
         <item name="cornerSize">16dp</item>
     </style>
 
-    <style name="kycImagePreview" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">8dp</item>
+    <style name="EditKycVerificationSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item> <!-- This is important -->
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:windowSoftInputMode">stateVisible</item>
+    </style>
+
+    <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/inter_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Guide.Bottom.Sheet.Style" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/primaryColor</item>
     </style>
 
 </resources>

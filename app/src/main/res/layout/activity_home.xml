@@ -117,7 +117,7 @@
                             android:paddingVertical="5dp"
                             android:paddingHorizontal="10dp"
                             android:background="@drawable/prime_member_bg"
-                            android:textColor="@color/white"
+                            android:textColor="@color/primeMemberStrokeColor"
                             android:textSize="12sp"
                             android:textAlignment="center"/>
 
@@ -325,7 +325,8 @@
                                 android:layout_weight="5"
                                 android:id="@+id/homeActivityPersonsRecyclerView"
                                 android:layout_width="0dp"
-                                android:layout_height="wrap_content"/>
+                                android:layout_height="wrap_content"
+                                android:clipToPadding="false"/>
 
                             <TextView
                                 android:id="@+id/homeActivityPersonsSeeAllTV"
@@ -397,7 +398,8 @@
                                 android:id="@+id/homeActivityTransactionsRecyclerView"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="5"/>
+                                android:layout_weight="5"
+                                android:clipToPadding="false"/>
 
                             <TextView
                                 android:id="@+id/homeActivityTransactionsSeeAllTV"
@@ -420,7 +422,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:layout_marginBottom="300dp"
+                        android:layout_marginBottom="150dp"
                         android:background="@drawable/bg_white_cornered"
                         android:orientation="vertical">
 
@@ -470,7 +472,8 @@
                                 android:id="@+id/homeActivityMerchantsRecyclerView"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="5"/>
+                                android:layout_weight="5"
+                                android:clipToPadding="false"/>
 
                             <TextView
                                 android:layout_weight=".5"
