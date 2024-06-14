@@ -67,7 +67,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="visible"
-                tools:visibility="visible">
+                tools:visibility="visible"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -144,11 +145,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
-                                android:fontFamily="@font/inter_regular"
+                                android:fontFamily="@font/inter_medium"
                                 android:maxLines="1"
                                 android:text="@string/mwk"
                                 android:textColor="@color/white"
-                                android:textSize="12sp" />
+                                android:textSize="16sp" />
 
                             <TextView
                                 android:id="@+id/homeActivityProfileBalanceTV"
@@ -324,10 +325,10 @@
                                 android:layout_height="wrap_content"/>
 
                             <TextView
-                                android:layout_weight=".5"
                                 android:id="@+id/homeActivityPersonsSeeAllTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_weight=".5"
                                 android:fontFamily="@font/inter_regular"
                                 android:gravity="center"
                                 android:text="@string/see_all"
@@ -386,20 +387,19 @@
                             android:paddingHorizontal="8dp"
                             android:paddingBottom="16dp"
                             android:visibility="gone"
-                            tools:visibility="visible"
-                            android:weightSum="5">
+                            tools:visibility="visible">
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/homeActivityTransactionsRecyclerView"
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="5"/>
 
                             <TextView
-                                android:layout_weight=".5"
                                 android:id="@+id/homeActivityTransactionsSeeAllTV"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_weight=".5"
                                 android:fontFamily="@font/inter_regular"
                                 android:gravity="center"
                                 android:text="@string/see_all"
@@ -415,6 +415,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:layout_marginBottom="300dp"
                         android:background="@drawable/bg_white_cornered"
                         android:orientation="vertical">
 
@@ -458,12 +459,11 @@
                             android:paddingHorizontal="8dp"
                             android:paddingBottom="16dp"
                             android:visibility="gone"
-                            tools:visibility="visible"
-                            android:weightSum="5">
+                            tools:visibility="visible">
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/homeActivityMerchantsRecyclerView"
-                                android:layout_width="match_parent"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="5"/>
 

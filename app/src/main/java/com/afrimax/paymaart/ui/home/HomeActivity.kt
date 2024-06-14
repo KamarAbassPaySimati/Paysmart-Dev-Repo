@@ -1,39 +1,21 @@
 package com.afrimax.paymaart.ui.home
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.afrimax.paymaart.R
-import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
-import com.afrimax.paymaart.ui.kyc.KycProgressActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
-import com.afrimax.paymaart.util.getStringExt
-import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.util.Calendar
 
 class HomeActivity : BaseActivity() {
     private lateinit var b: ActivityHomeBinding
