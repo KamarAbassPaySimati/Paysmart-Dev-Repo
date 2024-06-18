@@ -337,7 +337,8 @@
                                 android:text="@string/see_all"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp"
-                                android:layout_gravity="center_vertical"/>
+                                android:layout_gravity="center_vertical"
+                                android:translationY="-10dp"/>
 
                         </LinearLayout>
 
@@ -408,7 +409,8 @@
                                 android:text="@string/see_all"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp"
-                                android:layout_gravity="center_vertical"/>
+                                android:layout_gravity="center_vertical"
+                                android:translationY="-10dp"/>
 
                         </LinearLayout>
 
@@ -480,7 +482,8 @@
                                 android:text="@string/see_all"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp"
-                                android:layout_gravity="center_vertical"/>
+                                android:layout_gravity="center_vertical"
+                                android:translationY="-10dp"/>
 
                         </LinearLayout>
 

@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
@@ -42,7 +43,7 @@ class HomeActivity : BaseActivity() {
 
         initViews()
         setUpListeners()
-
+        setDrawerListeners()
     }
 
     private fun initViews() {
@@ -115,8 +116,65 @@ class HomeActivity : BaseActivity() {
         b.homeActivityPersonsRecyclerView.adapter = homeScreenIconAdapter
         b.homeActivityTransactionsRecyclerView.adapter = homeScreenIconAdapter
         b.homeActivityMerchantsRecyclerView.adapter = homeScreenIconAdapter
+    }
 
-//        setUpSideDrawerListeners()
+    private fun setDrawerListeners() {
+        b.homeActivityNavView.homeDrawerKycDetailsContainer.setOnClickListener {
+            dest = 1
+            //Close side drawer
+            b.homeActivity.closeDrawer(GravityCompat.END)
+
+        }
+
+        b.homeActivityNavView.homeDrawerSettingsTV.setOnClickListener {
+            toggleSettings()
+        }
+
+        b.homeActivityNavView.homeDrawerUpdatePasswordContainer.setOnClickListener {
+            dest = DRAWER_UPDATE_PASSWORD
+            b.homeActivity.closeDrawer(GravityCompat.END)
+
+        }
+
+        b.homeActivityNavView.homeDrawerDeleteAccountContainer.setOnClickListener {
+            dest = DRAWER_DELETE_ACCOUNT
+            b.homeActivity.closeDrawer(GravityCompat.END)
+        }
+
+        b.homeActivityNavView.homeDrawerLogOutContainer.setOnClickListener {
+            dest = DRAWER_LOGOUT
+            b.homeActivity.closeDrawer(GravityCompat.END)
+        }
+
+        setDrawerClosedListener()
+    }
+
+    private fun setDrawerClosedListener(){
+        b.homeActivity.addDrawerListener(object: DrawerLayout.DrawerListener{
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+
+            override fun onDrawerOpened(drawerView: View) {}
+
+            override fun onDrawerClosed(drawerView: View) {
+                when (dest) {
+                    DRAWER_UPDATE_PASSWORD -> {
+                        toggleSettings()
+
+                    }
+
+                    DRAWER_DELETE_ACCOUNT -> {
+                        toggleSettings()
+                    }
+
+                    DRAWER_LOGOUT -> {
+                        toggleSettings()
+                    }
+                }
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {}
+
+        })
     }
 
     override fun onStop() {
@@ -147,5 +205,24 @@ class HomeActivity : BaseActivity() {
             container.visibility = View.VISIBLE
             button.animate().rotation(180f).setDuration(100)
         }
+    }
+
+    private fun toggleSettings() {
+        if (b.homeActivityNavView.homeDrawerSettingsHiddenContainer.isVisible) {
+            b.homeActivityNavView.apply {
+                homeDrawerSettingsDiv.visibility = View.GONE
+                homeDrawerSettingsHiddenContainer.visibility = View.GONE
+            }
+        } else {
+            b.homeActivityNavView.apply {
+                homeDrawerSettingsDiv.visibility = View.VISIBLE
+                homeDrawerSettingsHiddenContainer.visibility = View.VISIBLE
+            }
+        }
+    }
+    companion object {
+        const val DRAWER_UPDATE_PASSWORD = 9
+        const val DRAWER_DELETE_ACCOUNT = 10
+        const val DRAWER_LOGOUT = 11
     }
 }
