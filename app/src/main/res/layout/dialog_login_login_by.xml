@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialogLoginLoginBy"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/dialogLoginLoginByPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="72dp"
+        android:paddingBottom="16dp"
+        android:text="@string/phone"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:drawableStartCompat="@drawable/ico_phone" />
+
+    <TextView
+        android:id="@+id/dialogLoginLoginByEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="72dp"
+        android:paddingBottom="16dp"
+        android:text="@string/email"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:drawableStartCompat="@drawable/ico_mail" />
+
+    <TextView
+        android:id="@+id/dialogLoginLoginByPaymaartId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="72dp"
+        android:paddingBottom="16dp"
+        android:text="@string/paymaart_id"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:drawableStartCompat="@drawable/ico_login_by_paymaart" />
+
+</LinearLayout>

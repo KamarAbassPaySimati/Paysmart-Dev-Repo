@@ -24,6 +24,7 @@ import org.junit.runner.RunWith
 class RegisterUserDefs {
 
     val faker = Faker()
+    private var phoneNumber: String = ""
 
     @Given("I am in intro screen")
     fun iAmInIntroScreen() {
@@ -86,13 +87,14 @@ class RegisterUserDefs {
         Espresso.onView(withId(R.id.onboardRegistrationActivityPhoneET))
             .perform(scrollTo(), replaceText(phoneNumber), closeSoftKeyboard())
     }
-    @When("I enter a valid phone number for registration")
-    fun enterValidPhoneNumber() {
-        val phoneNumber = faker.phoneNumber()
-            .subscriberNumber(10) // Replace with logic to generate a valid phone number
-        Espresso.onView(withId(R.id.onboardRegistrationActivityPhoneET))
-            .perform(scrollTo(), typeText(phoneNumber), closeSoftKeyboard())
-    }
+//    @When("I enter a valid phone number for registration")
+//    fun enterValidPhoneNumber() {
+//        val phoneNumber = faker.phoneNumber()
+//            .subscriberNumber(10) // Replace with logic to generate a valid phone number
+//        Espresso.onView(withId(R.id.onboardRegistrationActivityPhoneET))
+//            .perform(scrollTo(), typeText(phoneNumber), closeSoftKeyboard())
+//        this.phoneNumber = phoneNumber
+//    }
 
     @Then("I should see error message {string} for field with ID {string}")
     fun checkErrorMessageIsDisplayed(errorMessage: String, fieldID: String) {

@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/highlightedLight"
+    android:orientation="vertical"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/homeDrawerKycDetailsIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/kyc_registration"
+                android:src="@drawable/ico_kyc_details_primary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/homeDrawerKycDetailsTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/inter_medium"
+                android:gravity="center_vertical"
+                android:text="@string/kyc_registration"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/homeDrawerKycDetailsIV"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/homeDrawerKycDetailsIV"
+                app:layout_constraintTop_toTopOf="@+id/homeDrawerKycDetailsIV" />
+
+            <LinearLayout
+                android:id="@+id/homeDrawerKycDetailsContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_home_drawer_kyc_details"
+                android:orientation="vertical"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/homeDrawerKycDetailsTV"
+                app:layout_constraintTop_toBottomOf="@+id/homeDrawerKycDetailsTV">
+
+                <TextView
+                    android:id="@+id/homeDrawerKycTypeTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="@string/malawi_full_kyc_registration"
+                    android:textColor="@color/primaryColor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/homeDrawerKycStatusTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_home_drawer_kyc_rejected"
+                    android:fontFamily="@font/inter_medium"
+                    android:gravity="center"
+                    android:paddingStart="10dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="2dp"
+                    android:text="@string/pending"
+                    android:textColor="@color/accentNegative"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/homeDrawerRefundRequestTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:drawablePadding="16dp"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center_vertical|start"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/refund_request"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ico_refund_request" />
+
+
+        <TextView
+            android:id="@+id/homeDrawerHelpCenterTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center_vertical|start"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/help_centre"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ico_help_center_primary" />
+
+        <TextView
+            android:id="@+id/homeDrawerPrivacyPolicyTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center_vertical|start"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/privacy_policy_two"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ico_privacy_policy_primary" />
+
+        <TextView
+            android:id="@+id/homeDrawerFaqTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center_vertical|start"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/faqs"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ico_faq_primary" />
+
+        <TextView
+            android:id="@+id/homeDrawerToSTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center_vertical|start"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/terms_of_service"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ico_tos_primary" />
+
+        <TextView
+            android:id="@+id/homeDrawerAboutUsTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center_vertical|start"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/about_us"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ico_info_black"
+            app:drawableTint="@color/primaryColor" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/homeDrawerSettingsIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/settings"
+                android:src="@drawable/ico_settings_primary"
+                app:layout_constraintBottom_toBottomOf="@+id/homeDrawerSettingsTV"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/homeDrawerSettingsTV" />
+
+            <TextView
+                android:id="@+id/homeDrawerSettingsTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/inter_medium"
+                android:gravity="center_vertical"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="@string/settings"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/homeDrawerSettingsIV"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/homeDrawerSettingsDiv"
+                android:layout_width="2dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@color/lightShade"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/homeDrawerSettingsTV"
+                app:layout_constraintTop_toBottomOf="@+id/homeDrawerSettingsTV"
+                tools:visibility="visible" />
+
+
+            <LinearLayout
+                android:id="@+id/homeDrawerSettingsHiddenContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="-2dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/homeDrawerSettingsDiv"
+                app:layout_constraintTop_toBottomOf="@+id/homeDrawerSettingsTV"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/homeDrawerUpdatePasswordContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp">
+
+                    <View
+                        android:id="@+id/homeDrawerUpdatePasswordDiv"
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/primaryColor"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/homeDrawerUpdatePasswordTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:gravity="center_vertical|start"
+                        android:text="@string/update_pin_password"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/homeDrawerDeleteAccountContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/homeDrawerDeleteAccountDiv"
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/primaryColor"
+                        android:visibility="invisible"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/homeDrawerDeleteAccountTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:gravity="center_vertical|start"
+                        android:text="@string/delete_account"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/homeDrawerLogOutContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:id="@+id/homeDrawerLogOutDiv"
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/primaryColor"
+                        android:visibility="invisible"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/homeDrawerLogOutTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:gravity="center_vertical|start"
+                        android:text="@string/logout"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</ScrollView>

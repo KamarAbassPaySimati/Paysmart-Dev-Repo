@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/kycCaptureActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.kyc.KycCaptureActivity">
+
+    <RelativeLayout
+        android:id="@+id/kycCaptureActivityBackButtonBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/kycCaptureActivityBackButtonIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/back_button"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="16dp"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@+id/kycCaptureActivityInfoButtonIV"
+            android:layout_toEndOf="@+id/kycCaptureActivityBackButtonIV"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/back"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/kycCaptureActivityInfoButtonIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/back_button"
+            android:padding="16dp"
+            android:src="@drawable/ico_info_black" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/kycCaptureActivityBottomBar"
+        android:layout_below="@+id/kycCaptureActivityBackButtonBox"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:id="@+id/kycCaptureActivityHeaderTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/national_id"
+                android:textColor="@color/black"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/kycCaptureActivitySubTextTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/national_id_subtext"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/kycCaptureActivitySupportedTypesTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/kyc_id_supported_types"
+                android:textColor="@color/neutralGrey"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/kycCaptureUploadActivityMaxFileSizeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/kyc_max_file_size"
+                android:textColor="@color/neutralGrey"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/kycCaptureActivityDocSideTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/back"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="14sp" />
+
+            <FrameLayout
+                android:id="@+id/kycCaptureActivityMainViewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/kycCaptureActivityPreviewViewContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:background="@drawable/bg_capture_upload_card"
+                        app:cardCornerRadius="8dp"
+                        app:layout_constraintDimensionRatio="18:11"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.camera.view.PreviewView
+                            android:id="@+id/kycCaptureActivityPreviewView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <include layout="@layout/content_id_doc_camera_frame" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/kycCaptureActivityImagePreviewContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/kycCaptureActivityImageIV"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:contentDescription="@string/image_description"
+                        android:scaleType="fitCenter"
+                        app:layout_constraintDimensionRatio="18:11"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearanceOverlay="@style/kycImagePreview"
+                        tools:src="@drawable/ico_malawi_flag" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/kycCaptureActivityBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/kycCaptureActivityCaptureButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/primary_rounded_button_background"
+            android:ellipsize="end"
+            android:fontFamily="@font/inter_medium"
+            android:maxLines="1"
+            android:text="@string/capture"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/kycCaptureActivityRecaptureContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/kycCaptureActivityReCaptureButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/primary_outlined_button_background"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/re_capture"
+                android:textAllCaps="false"
+                android:textColor="@color/primaryColor"
+                android:textSize="18sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/kycCaptureActivityLooksGoodButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/primary_rounded_button_background"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_medium"
+                android:maxLines="1"
+                android:text="@string/looks_good"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</RelativeLayout>
