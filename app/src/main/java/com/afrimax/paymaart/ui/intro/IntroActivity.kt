@@ -3,12 +3,12 @@ package com.afrimax.paymaart.ui.intro
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.afrimax.paymaart.databinding.ActivityIntroBinding
+import com.afrimax.paymaart.ui.login.LoginActivity
 import com.afrimax.paymaart.ui.register.RegisterActivity
 
 class IntroActivity : AppCompatActivity() {
@@ -28,6 +28,9 @@ class IntroActivity : AppCompatActivity() {
 
         binding.registerButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+        }
+        binding.loginButton.setOnClickListener {
+            startActivity(Intent(this, LoginActivity::class.java))
         }
     }
 }

@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature android:name="android.hardware.camera.any" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name=".Application"
+        android:name=".PaymaartApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,8 +18,53 @@
         android:theme="@style/Theme.PaymaartMerchant"
         tools:targetApi="31">
         <activity
-            android:name=".ui.login.LoginActivity"
+            android:name=".ui.kyc.KycOccupationActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.kyc.KycFullScreenPreviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.kyc.KycCaptureActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.kyc.KycCaptureUploadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.kyc.KycLiveSelfieActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.kyc.KycPersonalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.kyc.KycIdentityActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.kyc.KycAddressActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.kyc.KycRegistrationProcessActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.kyc.KycSelectActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.kyc.KycRegistrationGuideActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.kyc.KycProgressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.home.HomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.TwoFactorAuthActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.webview.WebViewActivity"
             android:exported="false" />

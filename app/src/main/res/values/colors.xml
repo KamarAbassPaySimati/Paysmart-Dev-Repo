@@ -22,4 +22,26 @@
     <color name="successGreen">#13B681</color>
     <color name="blue1">#0066F6</color>
     <color name="accentInformation">#0066F6</color>
+    <color name="highlightedLight">#F0ECFF</color>
+    <color name="neutralGreyPrimaryText">#4F5962</color>
+    <color name="neutralGreyOutline">#E5E9EB</color>
+    <color name="editTextBg">#F8F8F8</color>
+    <color name="editTextBorder">#DDDDDD</color>
+    <color name="primaryHover">#32245E</color>
+    <color name="editTextHint">#8E949A</color>
+    <color name="accentNegative">#FF4343</color>
+    <color name="accentPositive">#13B681</color>
+    <color name="accentWarning">#FD9101</color>
+    <color name="hideShowPasswordGreen">#008586</color>
+    <color name="neutralGreyTextFieldBackground">#F5F5F5</color>
+    <color name="secondaryNormal">#EA7024</color>
+    <color name="bg2FACode">#80E2DBFF</color>
+    <color name="lightShade">#D9D9D9</color>
+    <color name="accentInformationSecondary">#D9E8FE</color>
+    <color name="neutralGreyRipple">#C3C3C3</color>
+    <color name="defaultSelected">#D1D4D7</color>
+    <color name="secondaryNormalRipple">#CC6C30</color>
+    <color name="primeMemberStrokeColor">#FDB913</color>
+    <color name="primeXMemberStrokeColor">#CACACAB2</color>
+    <color name="goMemberStrokeColor">#D57829</color>
 </resources>

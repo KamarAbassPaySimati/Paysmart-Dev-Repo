@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/kycMonthlyIncomeWithdrawalSheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="16dp"
+    app:backgroundTint="@android:color/transparent"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/kycMonthlyIncomeWithdrawalSheetHeaderTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/monthly_income"
+            android:textColor="@color/primaryColor"
+            android:textSize="20sp"
+            tools:ignore="RelativeOverlap" />
+
+        <ImageView
+            android:id="@+id/kycMonthlyIncomeWithdrawalSheetCloseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/close_button_data"
+            android:src="@drawable/ic_close"
+            app:tint="@color/black"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/kycMonthlyIncomeWithdrawalSheetOption1TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/monthly_income_option1"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/kycMonthlyIncomeWithdrawalSheetOption2TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/monthly_income_option2"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/kycMonthlyIncomeWithdrawalSheetOption3TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/monthly_income_option3"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/kycMonthlyIncomeWithdrawalSheetOption4TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/monthly_income_option4"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/kycMonthlyIncomeWithdrawalSheetOption5TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_regular"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/monthly_income_option5"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap" />
+
+</LinearLayout>
