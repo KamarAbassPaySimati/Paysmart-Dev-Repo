@@ -3,6 +3,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
@@ -46,14 +47,14 @@ class HomeActivity : BaseActivity() {
 
     private fun initViews() {
 
-//        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                if (b.homeActivity.isDrawerVisible(GravityCompat.END)) b.homeActivity.closeDrawer(
-//                    GravityCompat.END
-//                )
-//                else finish()
-//            }
-//        })
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (b.homeActivity.isDrawerVisible(GravityCompat.END)) b.homeActivity.closeDrawer(
+                    GravityCompat.END
+                )
+                else finish()
+            }
+        })
         b.homeActivityProfileNameTV.text = "Godis Jacob MJOJO"
         b.homeActivityProfilePaymaartIdTV.text = getString(R.string.paymaart_id_formatted, "CMR12345678")
         b.homeActivityProfilePaymaartMemberSinceTV.text = getString(R.string.member_since_formatted, "2024")
@@ -61,45 +62,27 @@ class HomeActivity : BaseActivity() {
 
     private fun setUpListeners() {
 
-//        b.homeActivityMenuIcon.setOnClickListener {
-//            openDrawer()
-//        }
-//
-//        b.homeActivityEyeButton.setOnClickListener {
-//            if (checkKycStatus()) {
-//                //
-//            }
-//        }
-//
-//        b.homeActivityPayAfrimaxButton.setOnClickListener {
-//            if (checkKycStatus()) {
-//                //
-//            }
-//        }
-//
-//        b.homeActivityPayMerchantButton.setOnClickListener {
-//            if (checkKycStatus()) {
-//                //
-//            }
-//        }
-//
-//        b.homeActivityPayPaymaartButton.setOnClickListener {
-//            if (checkKycStatus()) {
-//                //
-//            }
-//        }
-//
-//        b.homeActivityCashInButton.setOnClickListener {
-//            if (checkKycStatus()) {
-//                //
-//            }
-//        }
-//
-//        b.homeActivityCashOutButton.setOnClickListener {
-//            if (checkKycStatus()) {
-//                //
-//            }
-//        }
+        b.homeActivityMenuIcon.setOnClickListener {
+            b.homeActivity.openDrawer(GravityCompat.END)
+        }
+
+        b.homeActivityEyeButton.setOnClickListener {
+        }
+
+        b.homeActivityPayAfrimaxButton.setOnClickListener {
+        }
+
+        b.homeActivityPayMerchantButton.setOnClickListener {
+        }
+
+        b.homeActivityPayPaymaartButton.setOnClickListener {
+        }
+
+        b.homeActivityCashInButton.setOnClickListener {
+        }
+
+        b.homeActivityCashOutButton.setOnClickListener {
+        }
 //
         b.homeActivityTransactionsBox.setOnClickListener {
             toggleTransactions(
