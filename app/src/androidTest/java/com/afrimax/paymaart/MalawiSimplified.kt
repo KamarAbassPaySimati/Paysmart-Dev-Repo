@@ -14,10 +14,10 @@ import org.junit.runner.RunWith
 class MalawiSimplified {
     @When("I select malawi simplified kyc")
     fun iSelectMalawiSimplifiedKyc() {
-        Espresso.onView(withId(R.id.kycSelectActivityMalawiBox))
+        Espresso.onView(withId(R.id.onboardKycSelectActivityMalawiBox))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
-        Espresso.onView(withId(R.id.kycSelectActivitySimplifiedKycButton)).perform(
+        Espresso.onView(withId(R.id.onboardKycSelectActivitySimplifiedKycButton)).perform(
             ViewActions.scrollTo(), ViewActions.click()
         )
         Thread.sleep(7000)
@@ -39,11 +39,9 @@ class MalawiSimplified {
 
     @Then("I should view monthly income and monthly withdrawal selected as {string}")
     fun iShouldSeePreSelectedMonthlyIncome(selectedValue: String) {
-        Espresso.onView(withId(R.id.kycYourInfoActivityMonthlyIncomeTV)).perform(ViewActions.scrollTo())
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityMonthlyIncomeTV)).perform(ViewActions.scrollTo())
             .check(ViewAssertions.matches(ViewMatchers.withText(selectedValue)))
-        Espresso.onView(withId(R.id.kycYourInfoActivityMonthlyWithdrawalTV)).perform(ViewActions.scrollTo())
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityMonthlyWithdrawalTV)).perform(ViewActions.scrollTo())
             .check(ViewAssertions.matches(ViewMatchers.withText(selectedValue)))
     }
-}
-
 }

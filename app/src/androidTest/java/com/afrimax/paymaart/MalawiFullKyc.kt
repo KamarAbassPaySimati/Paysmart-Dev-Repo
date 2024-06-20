@@ -534,6 +534,11 @@ class MalawiFullKyc {
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
+            "Drivers licence" -> {
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocDriverLicenseRBContainer)).perform(
+                    ViewActions.scrollTo(), ViewActions.click()
+                )
+            }
         }
         Thread.sleep(3000)
     }

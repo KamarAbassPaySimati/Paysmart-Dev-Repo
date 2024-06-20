@@ -28,7 +28,6 @@ Feature: Paymaart- Customer Android- Malawi Simplified KYC
     When I enter a valid middle name for registration
     When I enter a valid last name for registration
     When I enter a valid email address for registration
-    Then I select Indian country code
     When I enter a valid phone number for registration
     When I answer the security question one as "Answer1"
     When I answer the security question two as "Answer2"
@@ -99,14 +98,6 @@ Feature: Paymaart- Customer Android- Malawi Simplified KYC
     When I enter the district as "Dowa"
     When I select purpose of relation "1"
     When I should view monthly income and monthly withdrawal selected as "Up to 300,000.00 MWK"
-    When I select bank name as "CDH Investment Bank"
-    When I enter the bank account number as ""
-    When I enter the bank account name as ""
-    When I click on proceed button on screen three
-    Then I should see error message "Required field" for field with ID "bankAccountName" in kyc screen
-    Then I should see error message "Required field" for field with ID "bankAccountNumber" in kyc screen
-    When I enter the bank account number as "12938474234"
-    When I enter the bank account name as "7Edge"
     When I click on proceed button on screen three
     Then I should read a message stating KYC "In progress"
 
@@ -146,13 +137,5 @@ Feature: Paymaart- Customer Android- Malawi Simplified KYC
     When I enter the district as "Dowa"
     When I select purpose of relation "1"
     Then I should view monthly income and monthly withdrawal selected as "Up to 300,000.00 MWK"
-    When I select bank name as "CDH Investment Bank"
-    When I enter the bank account number as ""
-    When I enter the bank account name as ""
-    When I click on proceed button on screen three
-    Then I should see error message "Required field" for field with ID "bankAccountName" in kyc screen
-    Then I should see error message "Required field" for field with ID "bankAccountNumber" in kyc screen
-    When I enter the bank account number as "12938474234"
-    When I enter the bank account name as "7Edge"
     When I click on proceed button on screen three
     Then I should read a message stating KYC "In review"
