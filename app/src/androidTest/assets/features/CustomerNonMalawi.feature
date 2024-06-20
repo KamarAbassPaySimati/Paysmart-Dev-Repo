@@ -103,7 +103,8 @@ Feature: Paymaart- Customer Android- Non-Malawi KYC
     Then I should see error message "Pending" for field with ID "selfieCapture" in kyc screen
     When I select the ID document as "Passport"
     And I capture front of the document and click on looks good
-    Then I should be able to view the preview of the document front
+    And I capture back of the document and click on looks good
+    Then I should be able to view the preview of the document front and back
     When I click on submit button kyc document
     When I select the nature of permit as "Single/Multiple Entry Visa"
     And I enter the reference number as "8379128393"
