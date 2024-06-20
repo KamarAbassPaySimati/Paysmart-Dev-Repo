@@ -101,31 +101,31 @@ class KycSelectActivity : BaseActivity() {
             }
         }
 
-//        b.onboardKycSelectActivitySimplifiedKycButton.setOnClickListener {
-//            /**User already filled simplified kyc and came back, so we are not calling the API again*/
-//            if (kycScope == Constants.KYC_MALAWI_SIMPLIFIED) {
-//                val i = Intent(this, OnboardKycAddressActivity::class.java)
-//                i.putExtra(Constants.KYC_SCOPE, Constants.KYC_MALAWI_SIMPLIFIED)
-//                i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
-//                i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
-//                startKycResultLauncher.launch(i)
-//            } else {
-//                saveCustomerMalawiSimplifiedKycApi()
-//            }
-//        }
+        b.onboardKycSelectActivitySimplifiedKycButton.setOnClickListener {
+            /**User already filled simplified kyc and came back, so we are not calling the API again*/
+            if (kycScope == Constants.KYC_MALAWI_SIMPLIFIED) {
+                val i = Intent(this, KycAddressActivity::class.java)
+                i.putExtra(Constants.KYC_SCOPE, Constants.KYC_MALAWI_SIMPLIFIED)
+                i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
+                i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
+                startKycResultLauncher.launch(i)
+            } else {
+                saveCustomerMalawiSimplifiedKycApi()
+            }
+        }
 
-//        b.onboardKycSelectActivityNonMalawiContainer.setOnClickListener {
-//            /**User already filled non malawi kyc and came back, so we are not calling the API again*/
-//            if (kycScope == Constants.KYC_NON_MALAWI) {
-//                val i = Intent(this, KycAddressActivity::class.java)
-//                i.putExtra(Constants.KYC_SCOPE, Constants.KYC_NON_MALAWI)
-//                i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
-//                i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
-//                startKycResultLauncher.launch(i)
-//            } else {
-//                saveCustomerNonMalawiKycApi()
-//            }
-//        }
+        b.onboardKycSelectActivityNonMalawiContainer.setOnClickListener {
+            /**User already filled non malawi kyc and came back, so we are not calling the API again*/
+            if (kycScope == Constants.KYC_NON_MALAWI) {
+                val i = Intent(this, KycAddressActivity::class.java)
+                i.putExtra(Constants.KYC_SCOPE, Constants.KYC_NON_MALAWI)
+                i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
+                i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
+                startKycResultLauncher.launch(i)
+            } else {
+                saveCustomerNonMalawiKycApi()
+            }
+        }
     }
 
     private fun toggleMalawiCitizenDropList() {
@@ -166,7 +166,6 @@ class KycSelectActivity : BaseActivity() {
                     KycSaveCustomerPreferenceRequest(
                         kyc_type = Constants.KYC_TYPE_MALAWI_FULL,
                         citizen = Constants.KYC_CITIZEN_MALAWIAN,
-                        paymaart_id = paymaartId
                     )
                 )
 
@@ -216,115 +215,113 @@ class KycSelectActivity : BaseActivity() {
         }
     }
 
-//    private fun saveCustomerMalawiSimplifiedKycApi() {
-//        showButtonLoader(
-//            b.onboardKycSelectActivitySimplifiedKycButton,
-//            b.onboardKycSelectActivitySimplifiedKycButtonLoaderLottie
-//        )
-//        lifecycleScope.launch {
-//            val idToken = fetchIdToken()
-//            val saveMalawiSimplifiedPreferenceCall =
-//                ApiClient.apiService.onboardKycSaveCustomerPreference(
-//                    idToken, OnboardKycSavePreferenceRequest(
-//                        kyc_type = Constants.KYC_TYPE_MALAWI_SIMPLIFIED,
-//                        citizen = Constants.KYC_CITIZEN_MALAWIAN,
-//                        paymaart_id = paymaartId
-//                    )
-//                )
-//
-//            saveMalawiSimplifiedPreferenceCall.enqueue(object : Callback<DefaultResponse> {
-//                override fun onResponse(
-//                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
-//                ) {
-//                    val body = response.body()
-//                    if (body != null && response.isSuccessful) {
-//                        runOnUiThread {
-//                            hideButtonLoader(
-//                                b.onboardKycSelectActivitySimplifiedKycButton,
-//                                b.onboardKycSelectActivitySimplifiedKycButtonLoaderLottie,
-//                                getString(R.string.simplified_kyc_star)
-//                            )
-//                            val i = Intent(
-//                                this@OnboardKycSelectActivity, OnboardKycAddressActivity::class.java
-//                            )
-//                            i.putExtra(Constants.KYC_SCOPE, Constants.KYC_MALAWI_SIMPLIFIED)
-//                            i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
-//                            i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
-//                            startKycResultLauncher.launch(i)
-//                        }
-//                    } else {
-//                        runOnUiThread {
-//                            showToast(getString(R.string.default_error_toast))
-//                            hideButtonLoader(
-//                                b.onboardKycSelectActivitySimplifiedKycButton,
-//                                b.onboardKycSelectActivitySimplifiedKycButtonLoaderLottie,
-//                                getString(R.string.simplified_kyc_star)
-//                            )
-//                        }
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-//                    runOnUiThread {
-//                        showToast(getString(R.string.default_error_toast))
-//                        hideButtonLoader(
-//                            b.onboardKycSelectActivitySimplifiedKycButton,
-//                            b.onboardKycSelectActivitySimplifiedKycButtonLoaderLottie,
-//                            getString(R.string.simplified_kyc_star)
-//                        )
-//                    }
-//                }
-//            })
-//        }
-//    }
+    private fun saveCustomerMalawiSimplifiedKycApi() {
+        showButtonLoader(
+            b.onboardKycSelectActivitySimplifiedKycButton,
+            b.onboardKycSelectActivitySimplifiedKycButtonLoaderLottie
+        )
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            val saveMalawiSimplifiedPreferenceCall =
+                ApiClient.apiService.saveCustomerKYCPreference(
+                    idToken, KycSaveCustomerPreferenceRequest(
+                        kyc_type = Constants.KYC_TYPE_MALAWI_SIMPLIFIED,
+                        citizen = Constants.KYC_CITIZEN_MALAWIAN,
+                    )
+                )
+
+            saveMalawiSimplifiedPreferenceCall.enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
+                ) {
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        runOnUiThread {
+                            hideButtonLoader(
+                                b.onboardKycSelectActivitySimplifiedKycButton,
+                                b.onboardKycSelectActivitySimplifiedKycButtonLoaderLottie,
+                                getString(R.string.simplified_kyc_star)
+                            )
+                            val i = Intent(
+                                this@KycSelectActivity, KycAddressActivity::class.java
+                            )
+                            i.putExtra(Constants.KYC_SCOPE, Constants.KYC_MALAWI_SIMPLIFIED)
+                            i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
+                            i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
+                            startKycResultLauncher.launch(i)
+                        }
+                    } else {
+                        runOnUiThread {
+                            showToast(getString(R.string.default_error_toast))
+                            hideButtonLoader(
+                                b.onboardKycSelectActivitySimplifiedKycButton,
+                                b.onboardKycSelectActivitySimplifiedKycButtonLoaderLottie,
+                                getString(R.string.simplified_kyc_star)
+                            )
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    runOnUiThread {
+                        showToast(getString(R.string.default_error_toast))
+                        hideButtonLoader(
+                            b.onboardKycSelectActivitySimplifiedKycButton,
+                            b.onboardKycSelectActivitySimplifiedKycButtonLoaderLottie,
+                            getString(R.string.simplified_kyc_star)
+                        )
+                    }
+                }
+            })
+        }
+    }
 
 
-//    private fun saveCustomerNonMalawiKycApi() {
-//        showNonMalawiButtonLoader()
-//        lifecycleScope.launch {
-//            val idToken = fetchIdToken()
-//            val saveMalawiSimplifiedPreferenceCall =
-//                ApiClient.apiService.onboardKycSaveCustomerPreference(
-//                    idToken, OnboardKycSavePreferenceRequest(
-//                        kyc_type = Constants.KYC_TYPE_NON_MALAWI_FULL,
-//                        citizen = citizenship.ifEmpty { Constants.KYC_CITIZEN_NON_MALAWIAN },
-//                        paymaart_id = paymaartId
-//                    )
-//                )
-//
-//            saveMalawiSimplifiedPreferenceCall.enqueue(object : Callback<DefaultResponse> {
-//                override fun onResponse(
-//                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
-//                ) {
-//                    val body = response.body()
-//                    if (body != null && response.isSuccessful) {
-//                        runOnUiThread {
-//                            hideNonMalawiButtonLoader()
-//                            val i = Intent(
-//                                this@OnboardKycSelectActivity, OnboardKycAddressActivity::class.java
-//                            )
-//                            i.putExtra(Constants.KYC_SCOPE, Constants.KYC_NON_MALAWI)
-//                            i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
-//                            i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
-//                            startKycResultLauncher.launch(i)
-//                        }
-//                    } else {
-//                        runOnUiThread {
-//                            showToast(getString(R.string.default_error_toast))
-//                            hideNonMalawiButtonLoader()
-//                        }
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-//                    runOnUiThread {
-//                        showToast(getString(R.string.default_error_toast))
-//                        hideNonMalawiButtonLoader()
-//                    }
-//                }
-//            })
-//        }
-//    }
+    private fun saveCustomerNonMalawiKycApi() {
+        showNonMalawiButtonLoader()
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            val saveMalawiSimplifiedPreferenceCall =
+                ApiClient.apiService.saveCustomerKYCPreference(
+                    idToken, KycSaveCustomerPreferenceRequest(
+                        kyc_type = Constants.KYC_TYPE_NON_MALAWI_FULL,
+                        citizen = citizenship.ifEmpty { Constants.KYC_CITIZEN_NON_MALAWIAN },
+                    )
+                )
+
+            saveMalawiSimplifiedPreferenceCall.enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
+                ) {
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        runOnUiThread {
+                            hideNonMalawiButtonLoader()
+                            val i = Intent(
+                                this@KycSelectActivity, KycAddressActivity::class.java
+                            )
+                            i.putExtra(Constants.KYC_SCOPE, Constants.KYC_NON_MALAWI)
+                            i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
+                            i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
+                            startKycResultLauncher.launch(i)
+                        }
+                    } else {
+                        runOnUiThread {
+                            showToast(getString(R.string.default_error_toast))
+                            hideNonMalawiButtonLoader()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    runOnUiThread {
+                        showToast(getString(R.string.default_error_toast))
+                        hideNonMalawiButtonLoader()
+                    }
+                }
+            })
+        }
+    }
 
     private fun showNonMalawiButtonLoader() {
         window.setFlags(
