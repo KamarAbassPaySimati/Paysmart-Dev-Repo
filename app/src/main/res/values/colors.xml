@@ -5,6 +5,7 @@
     <color name="background">#FFFFFFFF</color>
 
     <!-- CUSTOM COLORS -->
+    <color name="transparent">#00000000</color>
     <color name="primaryColor">#3B2A6F</color>
     <color name="primaryColorRipple">#5A40AB</color>
     <color name="outlinedButtonRipple">#FCFCFC</color>
@@ -40,4 +41,8 @@
     <color name="accentInformationSecondary">#D9E8FE</color>
     <color name="neutralGreyRipple">#C3C3C3</color>
     <color name="defaultSelected">#D1D4D7</color>
+    <color name="secondaryNormalRipple">#CC6C30</color>
+    <color name="primeMemberStrokeColor">#FDB913</color>
+    <color name="primeXMemberStrokeColor">#CACACAB2</color>
+    <color name="goMemberStrokeColor">#D57829</color>
 </resources>
