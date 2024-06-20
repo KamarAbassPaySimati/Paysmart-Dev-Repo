@@ -89,6 +89,15 @@ object Constants {
     const val KYC_OCCUPATION_OTHER = "kyc_occupation_other"
     const val KYC_OCCUPATION_EDUCATION_TYPE = "kyc_occupation_education_type"
     const val KYC_MEDIA_NAME = "kyc_media_name"
+    const val KYC_TYPE_MALAWI_SIMPLIFIED = "simplified"
+    const val KYC_TYPE_NON_MALAWI_FULL = "full"
+    const val KYC_CITIZEN_NON_MALAWIAN = "Non Malawian"
+    const val KYC_IDENTITY_ID_STUDENT_ID = "kyc_identity_id_student_id"
+    const val KYC_IDENTITY_ID_EMPLOYEE_ID = "kyc_identity_id_employee_id"
+    const val KYC_IDENTITY_VER_RELIGIOUS_INSTITUTION_LETTER =
+        "kyc_identity_ver_religious_institution_letter"
+    const val KYC_IDENTITY_ID_REFUGEE_ID = "kyc_identity_id_refugee_id"
+    const val KYC_IDENTITY_ID_ASYLUM_ID = "kyc_identity_id_asylum_id"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

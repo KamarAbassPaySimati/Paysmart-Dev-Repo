@@ -1,4 +1,4 @@
-Feature:Paymaart- Customer Android- Malawi FULL KYC
+Feature: Paymaart- Customer Android- Malawi Simplified KYC
   As a Customer , I want an option to do Malawi full Kyc so that I can avail the services
   Condition of satisfaction
   Clear instructions and guidance should be provided on what documents are required and in which format.
@@ -64,7 +64,7 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     Then I am redirected to the kyc journey
     When I select complete kyc
     Then I am redirected to kyc select screen
-    When I select malawi full kyc
+    When I select malawi simplified kyc
     Then I am redirected to KYC screen one
 
   Scenario: Missing required fields
@@ -97,8 +97,7 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     When I select the industry sector as "Healthcare service"
     When I enter the district as "Dowa"
     When I select purpose of relation "1"
-    When I select my monthly income as "300,000.00 to 1,000,000.00 MWK"
-    When I select my monthly withdrawal as "300,000.00 to 1,000,000.00 MWK"
+    When I should view monthly income and monthly withdrawal selected as "Up to 300,000.00 MWK"
     When I click on proceed button on screen three
     Then I should read a message stating KYC "In progress"
 
@@ -109,17 +108,17 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     Then I should be redirected to KYC screen two
     When I click on proceed button on screen two
     Then I should see error message "Pending" for field with ID "selfieCapture" in kyc screen
-    When I select the ID document as "National ID"
+    When I select the ID document as "Drivers licence"
     And I capture front of the document and click on looks good
     And I capture back of the document and click on looks good
     Then I should be able to view the preview of the document front and back
-    When I click on submit button for national id
+    When I click on submit button for drivers licence
     When I click on biometric live selfie
     And I click on capture my live selfie and click on submit button
-    When I select the Verification document as "Birth Certificate"
+    When I select the Verification document as "Employer letter"
     And I capture front of the document and click on looks good
     Then I should be able to view the preview of the document front
-    When I click on submit button for birth certificate
+    When I click on submit button for employer letter
     When I click on proceed button on screen two
     Then I should be redirected to KYC screen three
     When I click on proceed button on screen three
@@ -137,7 +136,6 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     When I select the industry sector as "Healthcare service"
     When I enter the district as "Dowa"
     When I select purpose of relation "1"
-    When I select my monthly income as "300,000.00 to 1,000,000.00 MWK"
-    When I select my monthly withdrawal as "300,000.00 to 1,000,000.00 MWK"
+    Then I should view monthly income and monthly withdrawal selected as "Up to 300,000.00 MWK"
     When I click on proceed button on screen three
     Then I should read a message stating KYC "In review"

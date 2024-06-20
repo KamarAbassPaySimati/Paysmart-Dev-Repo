@@ -7,10 +7,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -220,9 +218,9 @@ class KycOccupationActivity : BaseActivity(), KycOccupationEmployedInterface {
             }
 
             Constants.KYC_OCCUPATION_EDUCATION -> {
-//                val i = Intent(this, KycOccupationEducationActivity::class.java)
-//                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
-//                educationResultLauncher.launch(i, options)
+                val i = Intent(this, KycEducationActivity::class.java)
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
+                educationResultLauncher.launch(i, options)
             }
 
             Constants.KYC_OCCUPATION_SEEKING -> {

@@ -15,8 +15,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PaymaartMerchant"
+        android:theme="@style/Theme.Paymaart"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.kyc.KycEducationActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.kyc.KycOccupationActivity"
             android:exported="false" />
