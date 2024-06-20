@@ -1,4 +1,5 @@
 package com.afrimax.paymaart.ui.home
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -17,6 +18,7 @@ import androidx.transition.TransitionManager
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.ui.kyc.KycProgressActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
 
@@ -85,6 +87,7 @@ class HomeActivity : BaseActivity() {
         }
 
         b.homeActivityCashOutButton.setOnClickListener {
+            startActivity(Intent(this, KycProgressActivity::class.java))
         }
 //
         b.homeActivityTransactionsBox.setOnClickListener {

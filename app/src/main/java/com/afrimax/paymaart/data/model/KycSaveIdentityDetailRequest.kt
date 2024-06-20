@@ -1,7 +1,6 @@
 package com.afrimax.paymaart.data.model
 
 data class KycSaveIdentityDetailRequest(
-    val paymaart_id: String,
     val id_document: String,
     val id_document_front: String,
     val id_document_back: String,

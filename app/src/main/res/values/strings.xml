@@ -409,4 +409,18 @@
     <string name="this_action_will_end_your_current_session">This action will end your current session.</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
+    <string name="search_institute">Search Institute</string>
+    <string name="search">Search</string>
+    <string name="other">Other</string>
+    <string name="religious_institution_district_commissioner_letter">Religious Institution/District Commissioner Letter</string>
+    <string name="employee_id">Employee ID</string>
+    <string name="student_id">Student ID</string>
+    <string name="asylum_id">Asylum ID</string>
+    <string name="refugee_id">Refugee ID</string>
+    <string name="next_your_info">Next - Your Info</string>
+    <string name="refugee_id_subtext">Valid Refugee Identity Card displaying a photo and proof of refugee status from an appropriate authority</string>
+    <string name="asylum_id_subtext">Valid Asylum Seeker Identify Card, displaying a photo and proof of asylum seeker status from an appropriate authority</string>
+    <string name="student_id_subtext">Valid Student Identification from recognised Learning Institution</string>
+    <string name="employee_id_subtext">Valid Employee Identification authenticated by a Commissioner for Oaths</string>
+    <string name="religious_institution_letter_subtext">A stamped letter from a Chief, Sub-Chief, Village Headman, Leader of a recognized Religious Institution, or District Commissioner</string>
 </resources>

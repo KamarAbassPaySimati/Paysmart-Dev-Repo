@@ -3,6 +3,7 @@ package com.afrimax.paymaart.data
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
+import com.afrimax.paymaart.data.model.GetInstitutesResponse
 import com.afrimax.paymaart.data.model.GetSharedSecretRequest
 import com.afrimax.paymaart.data.model.GetSharedSecretResponse
 import com.afrimax.paymaart.data.model.GetUserKycDataResponse
@@ -21,6 +22,8 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Query
+
 private const val CUSTOMER_USER = "customer-user"
 private const val BDD = "bdd"
 interface ApiService {
@@ -54,6 +57,9 @@ interface ApiService {
 
     @POST("$CUSTOMER_USER/create-kyc")
     fun saveCustomerPersonalDetails(@Header("Authorization") header: String, @Body body: KycSavePersonalDetailRequest): Call<DefaultResponse>
+
+    @GET("admin-users/list-institution")
+    fun getInstitutes(@Query("search") search: String): Call<GetInstitutesResponse>
 
 
 
