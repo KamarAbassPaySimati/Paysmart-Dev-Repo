@@ -1,0 +1,37 @@
+package com.afrimax.paymaart.data.model
+
+import com.google.gson.annotations.SerializedName
+
+data class HomeScreenResponse(
+    @SerializedName("data")
+    val homeScreenData: HomeScreenData,
+    @SerializedName("success_status")
+    val successStatus: Boolean
+)
+
+data class HomeScreenData(
+    @SerializedName("citizen")
+    val citizen: String,
+    @SerializedName("completed")
+    val completed: String,
+    @SerializedName("created_at")
+    val createdAt: Long,
+    @SerializedName("full_name")
+    val fullName: String,
+    @SerializedName("kyc_status")
+    val kycStatus: String,
+    @SerializedName("kyc_type")
+    val kycType: String,
+    @SerializedName("membership")
+    val membership: String,
+    @SerializedName("paymaart_id")
+    val paymaartId: String,
+    @SerializedName("profile_pic")
+    val profilePic: String,
+    @SerializedName("public_profile")
+    val publicProfile: Boolean,
+    @SerializedName("rejection_reasons")
+    val rejectionReasons: ArrayList<String>?,
+    @SerializedName("account_balance")
+    val accountBalance: String
+)
