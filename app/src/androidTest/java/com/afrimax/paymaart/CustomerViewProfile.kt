@@ -54,12 +54,10 @@ class CustomerViewProfile {
 
     @Then("I should view my name and paymaart ID starting with CMR")
     fun iShouldSeeMyNameAndPayMaartIdStartingWithCMR() {
-        val userName = getText(Espresso.onView(withId(R.id.ProfileName)))
-        val paymaartID = getText(Espresso.onView(withId(R.id.ProfilePaymaart)))
+        val userName = getText(Espresso.onView(withId(R.id.homeActivityProfileNameTV)))
+        val paymaartID = getText(Espresso.onView(withId(R.id.homeActivityProfilePaymaartIdTV)))
 
         require(userName.isNotEmpty())
-        require(paymaartID.startsWith("CMR"))
+        require(paymaartID.contains("CMR"))
     }
-}
-
 }

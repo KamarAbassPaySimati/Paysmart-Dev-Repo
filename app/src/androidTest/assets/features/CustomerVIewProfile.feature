@@ -10,7 +10,6 @@ Feature: Paymaart- Customer Android- View profile
     When I enter a valid middle name for registration
     When I enter a valid last name for registration
     When I enter a valid email address for registration
-    Then I select Indian country code
     When I enter a valid phone number for registration
     When I answer the security question one as "Answer1"
     When I answer the security question two as "Answer2"
