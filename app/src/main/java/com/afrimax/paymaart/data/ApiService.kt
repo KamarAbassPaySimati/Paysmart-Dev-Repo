@@ -7,6 +7,7 @@ import com.afrimax.paymaart.data.model.GetInstitutesResponse
 import com.afrimax.paymaart.data.model.GetSharedSecretRequest
 import com.afrimax.paymaart.data.model.GetSharedSecretResponse
 import com.afrimax.paymaart.data.model.GetUserKycDataResponse
+import com.afrimax.paymaart.data.model.HomeScreenResponse
 import com.afrimax.paymaart.data.model.KycSaveAddressDetailsRequest
 import com.afrimax.paymaart.data.model.ResendCredentialsRequest
 import com.afrimax.paymaart.data.model.KycSaveCustomerPreferenceRequest
@@ -60,6 +61,9 @@ interface ApiService {
 
     @GET("admin-users/list-institution")
     fun getInstitutes(@Query("search") search: String): Call<GetInstitutesResponse>
+
+    @GET("$CUSTOMER_USER/get-home-screen-data")
+    fun getHomeScreenData(@Header("Authorization") header: String): Call<HomeScreenResponse>
 
 
 
