@@ -1,4 +1,4 @@
-Feature:Paymaart- Customer Android- Malawi FULL KYC
+Feature: Paymaart- Customer Android- Non-Malawi KYC
   As a Customer , I want an option to do Malawi full Kyc so that I can avail the services
   Condition of satisfaction
   Clear instructions and guidance should be provided on what documents are required and in which format.
@@ -32,21 +32,11 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     When I answer the security question one as "Answer1"
     When I answer the security question two as "Answer2"
     When I answer the security question three as "Answer3"
-    When I answer the security question four as "Answer4"
     When I agree to the terms and conditions
-    When I submit the registration form
-    Then I should see error message on email "Please Verify Your Email Address"
-    Then I should see error message on phone "Please Verify Your Phone Number"
     When I click on verify email address
-    And I enter the OTP as "001234"
-    And I click on verify OTP
-    Then I should see error message "Invalid OTP" on verify
     When I enter the valid OTP and verify
     Then I should see the verify email address button text changed to "VERIFIED"
     When I click on verify phone number
-    And I enter the OTP as "001234"
-    And I click on verify OTP
-    Then I should see error message "Invalid OTP" on verify
     When I enter the valid OTP and verify
     Then I should see the verify phone number button text changed to "VERIFIED"
     When I submit the registration form
@@ -64,7 +54,7 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     Then I am redirected to the kyc journey
     When I select complete kyc
     Then I am redirected to kyc select screen
-    When I select malawi full kyc
+    When I select non malawi full kyc
     Then I am redirected to KYC screen one
 
   Scenario: Missing required fields
@@ -76,6 +66,7 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
   Scenario: Complete KYC without filling in the ID document section
     When I enter the street name as "Balaka"
     Then I should see the district and town getting prefilled
+    Then I select "Afghan" as the nationality
     When I click on proceed button on screen one
     Then I should be redirected to KYC screen two
     When I click on proceed button on screen two
@@ -105,21 +96,66 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
   Scenario: Complete KYC with filling in the ID document section
     When I enter the street name as "Balaka"
     Then I should see the district and town getting prefilled
+    Then I select "Afghan" as the nationality
     When I click on proceed button on screen one
     Then I should be redirected to KYC screen two
     When I click on proceed button on screen two
     Then I should see error message "Pending" for field with ID "selfieCapture" in kyc screen
-    When I select the ID document as "National ID"
+    When I select the ID document as "Passport"
     And I capture front of the document and click on looks good
     And I capture back of the document and click on looks good
     Then I should be able to view the preview of the document front and back
-    When I click on submit button for national id
+    When I click on submit button kyc document
+    When I select the nature of permit as "Single/Multiple Entry Visa"
+    And I enter the reference number as "8379128393"
     When I click on biometric live selfie
     And I click on capture my live selfie and click on submit button
-    When I select the Verification document as "Birth Certificate"
+    When I select the Verification document as "Drivers licence"
+    And I capture front of the document and click on looks good
+    And I capture back of the document and click on looks good
+    Then I should be able to view the preview of the document front and back
+    When I click on submit button kyc document
+    When I click on proceed button on screen two
+    Then I should be redirected to KYC screen three
+    When I click on proceed button on screen three
+    Then I should see error message "Required field" for field with ID "gender" in kyc screen
+    Then I should see error message "Required field" for field with ID "dateOfBirth" in kyc screen
+    Then I should see error message "Required field" for field with ID "occupation" in kyc screen
+    When I select the gender as "Male"
+    When I select the date of birth as "04-04-1999"
+    When I click on occupation source of funds
+    Then I should be redirected to occupation source of funds selection screen
+    When I select the occupation type as "Employed"
+    When I click on next button
+    Then I should be able to view option to enter employer name
+    When I enter the employer name as "Healthcare"
+    When I select the industry sector as "Healthcare service"
+    When I enter the district as "Dowa"
+    When I select purpose of relation "1"
+    When I select my monthly income as "300,000.00 to 1,000,000.00 MWK"
+    When I select my monthly withdrawal as "300,000.00 to 1,000,000.00 MWK"
+    When I click on proceed button on screen three
+    Then I should read a message stating KYC "In review"
+
+  Scenario: Complete KYC with filling in the ID document section for asylum document
+    When I enter the street name as "Balaka"
+    Then I should see the district and town getting prefilled
+    Then I select "Afghan" as the nationality
+    When I click on proceed button on screen one
+    Then I should be redirected to KYC screen two
+    When I click on proceed button on screen two
+    Then I should see error message "Pending" for field with ID "selfieCapture" in kyc screen
+    When I select the ID document as "Refugee ID"
     And I capture front of the document and click on looks good
     Then I should be able to view the preview of the document front
-    When I click on submit button for birth certificate
+    When I click on submit button kyc document
+    When I click on biometric live selfie
+    And I click on capture my live selfie and click on submit button
+    When I select the Verification document as "Drivers licence"
+    And I capture front of the document and click on looks good
+    And I capture back of the document and click on looks good
+    Then I should be able to view the preview of the document front and back
+    When I click on submit button kyc document
     When I click on proceed button on screen two
     Then I should be redirected to KYC screen three
     When I click on proceed button on screen three

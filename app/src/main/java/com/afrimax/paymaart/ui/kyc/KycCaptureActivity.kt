@@ -183,7 +183,7 @@ class KycCaptureActivity : BaseActivity() {
 
     private fun takePhoto() {
         imageCapture?.let {
-            val fileName = "PMAGT_${System.currentTimeMillis()}.jpg"
+            val fileName = "PMCMR_${System.currentTimeMillis()}.jpg"
             val file = File(externalMediaDirs[0], fileName)
 
 

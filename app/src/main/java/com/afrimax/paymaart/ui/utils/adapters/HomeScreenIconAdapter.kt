@@ -27,8 +27,13 @@ class HomeScreenIconAdapter(
         with(holder) {
             binding.iconImage.visibility = View.GONE
             binding.iconNameInitials.text = getInitials(someList[position])
-            binding.iconName.text = someList[position]
+            binding.iconName.text = getFirstName(someList[position])
         }
+    }
+
+    private fun getFirstName(name: String?): String{
+        if (name.isNullOrEmpty()) return ""
+        return name.split(" ")[0]
     }
 
     private fun getInitials(name: String?): String {
