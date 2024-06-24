@@ -12,7 +12,8 @@
     <string name="two_of_two">2 of 2</string>
     <string name="personal_details">Personal Details</string>
     <string name="profile_picture">Profile Picture</string>
-    <string name="supported_file_types">Supported file types: .png, .jpg, .jpeg for images\nMax file size: 10MB</string>
+    <string name="supported_file_types">Supported file types: .png, .jpg, .jpeg for images, and .pdf for documents\nMax file size: 10MB</string>
+    <string name="supported_file_types_two">Supported file types: .png, .jpg, .jpeg for images\nMax file size: 10MB</string>
     <string name="make_visible">Make visible</string>
     <string name="first_name">First Name</string>
     <string name="enter_first_name">Enter first name</string>
@@ -423,4 +424,19 @@
     <string name="student_id_subtext">Valid Student Identification from recognised Learning Institution</string>
     <string name="employee_id_subtext">Valid Employee Identification authenticated by a Commissioner for Oaths</string>
     <string name="religious_institution_letter_subtext">A stamped letter from a Chief, Sub-Chief, Village Headman, Leader of a recognized Religious Institution, or District Commissioner</string>
+    <string name="delete_account_subtext">If you wish to close your Paymaart account, please select all that apply to your situation:</string>
+    <string name="delete_reason1">I no longer need to use e-payment services</string>
+    <string name="delete_reason2">I have found another e-payment service provider that better suits my needs</string>
+    <string name="delete_reason3">I am experiencing technical difficulties with my Paymaart account</string>
+    <string name="delete_reason4">I am dissatisfied with the customer service provided by Paymaart</string>
+    <string name="delete_reason5">I am concerned about the security of my Paymaart account</string>
+    <string name="delete_guide1">Please note that if you are experiencing technical difficulties or are dissatisfied with the customer service provided by Paymaart, you may consider writing to hello@paymaart.com to escalate the problem to senior management. Your case will be investigated by a dedicated Case Manager who will contact you to investigate the problem and provide a resolution within 7 (seven) days. See also Paymaart’s Complaints Procedure.</string>
+    <string name="delete_guide2">Please also note that while your Paymaart account will be closed according to your wishes, Paymaart will retain a record of your Paymaart transactions for a period of 7 (seven) years, in accordance with Reserve Bank of Malawi regulations for e-payment service providers.</string>
+    <string name="confirm_to_delete">Confirm to Delete</string>
+    <string name="delete_confirm_subtext">This action will send a request to admin for account deletion.</string>
+    <string name="delete">Delete</string>
+    <string name="check_box_icon_data">success_status</string>
+    <string name="account_deletion_request_sent_successfully">Account deletion request sent successfully</string>
+    <string name="delete_request_success_subtext">Please ensure you cash-out or make a pay-out before your account is deleted.</string>
+    <string name="back_to_homepage">Back to Homepage</string>
 </resources>

@@ -3,6 +3,7 @@ package com.afrimax.paymaart.data
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
+import com.afrimax.paymaart.data.model.DeleteAccountReqRequest
 import com.afrimax.paymaart.data.model.GetInstitutesResponse
 import com.afrimax.paymaart.data.model.GetSharedSecretRequest
 import com.afrimax.paymaart.data.model.GetSharedSecretResponse
@@ -64,6 +65,9 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/get-home-screen-data")
     fun getHomeScreenData(@Header("Authorization") header: String): Call<HomeScreenResponse>
+
+    @POST("$CUSTOMER_USER/delete-request")
+    fun deleteAccountRequest(@Header("Authorization") header: String, @Body body: DeleteAccountReqRequest): Call<DefaultResponse>
 
 
 
