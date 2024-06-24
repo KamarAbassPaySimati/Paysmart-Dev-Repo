@@ -41,7 +41,7 @@ class CustomerCompletePendingKyc {
 
     @When("I click on payment option")
     fun clickOnPaymentOptions() {
-        Espresso.onView(withId(R.id.homeActivityBalanceButton)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.homeActivityEyeButton)).perform(ViewActions.click())
         Thread.sleep(3000)
     }
 
