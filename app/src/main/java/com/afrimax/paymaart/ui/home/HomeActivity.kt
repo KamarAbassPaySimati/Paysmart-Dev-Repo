@@ -26,6 +26,7 @@ import com.afrimax.paymaart.data.model.HomeScreenData
 import com.afrimax.paymaart.data.model.HomeScreenResponse
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.kyc.KycProgressActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
@@ -162,6 +163,7 @@ class HomeActivity : BaseActivity() {
         b.homeActivityNavView.homeDrawerDeleteAccountContainer.setOnClickListener {
             dest = DRAWER_DELETE_ACCOUNT
             b.homeActivity.closeDrawer(GravityCompat.END)
+            startActivity(Intent(this, DeleteAccountActivity::class.java))
         }
 
         b.homeActivityNavView.homeDrawerLogOutContainer.setOnClickListener {

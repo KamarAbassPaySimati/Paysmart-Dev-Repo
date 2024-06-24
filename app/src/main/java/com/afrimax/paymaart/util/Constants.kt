@@ -98,6 +98,7 @@ object Constants {
         "kyc_identity_ver_religious_institution_letter"
     const val KYC_IDENTITY_ID_REFUGEE_ID = "kyc_identity_id_refugee_id"
     const val KYC_IDENTITY_ID_ASYLUM_ID = "kyc_identity_id_asylum_id"
+    const val DELETE_REASONS = "delete_reasons"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"
