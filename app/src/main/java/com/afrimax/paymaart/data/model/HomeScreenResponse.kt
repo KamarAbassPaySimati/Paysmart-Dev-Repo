@@ -13,7 +13,7 @@ data class HomeScreenData(
     @SerializedName("citizen")
     val citizen: String,
     @SerializedName("completed")
-    val completed: String,
+    val completed: Boolean,
     @SerializedName("created_at")
     val createdAt: Long,
     @SerializedName("full_name")

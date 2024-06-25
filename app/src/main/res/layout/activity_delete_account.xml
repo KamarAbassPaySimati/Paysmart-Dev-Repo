@@ -227,7 +227,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@drawable/primary_rounded_button_background"
+            android:background="@drawable/primary_rounded_button_background_disabled"
             android:enabled="false"
             android:fontFamily="@font/inter_medium"
             android:text="@string/delete_account"
