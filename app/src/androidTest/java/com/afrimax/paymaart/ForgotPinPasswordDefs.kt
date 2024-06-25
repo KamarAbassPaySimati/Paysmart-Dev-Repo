@@ -42,21 +42,21 @@ class ForgotPinPasswordDefs {
 
     @When("I click on forgot PIN")
     fun iClickForgotPin() {
-        Espresso.onView(withId(R.id.ForgotPinTV))
+        Espresso.onView(withId(R.id.loginActivityForgotPinTV))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
     }
 
     @Then("I should be redirected to forgot password pin screen")
     fun forgotPinPasswordEmailScreen() {
-        Espresso.onView(withId(R.id.forgotPasswordPin))
+        Espresso.onView(withId(R.id.forgotPasswordPinActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
 
     @When("I enter my email address as {string}")
     fun enterEmailAddress(email: String) {
-        Espresso.onView(withId(R.id.forgotPasswordPinEmail)).perform(
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityEmailET)).perform(
             ViewActions.scrollTo(),
             ViewActions.replaceText(""),
             ViewActions.typeText(email), ViewActions.closeSoftKeyboard()
@@ -65,21 +65,21 @@ class ForgotPinPasswordDefs {
 
     @Then("I click on proceed button for forgot password or pin")
     fun iClickProceedButtonForForgotPasswordPin() {
-        Espresso.onView(withId(R.id.forgotPasswordPinProceedButton))
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityProceedButton))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(5000)
     }
 
     @Then("I should be redirected to forgot password or pin OTP screen")
     fun forgotPasswordPinOTPScreen() {
-        Espresso.onView(withId(R.id.forgotPasswordPinOtpView))
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityOtpView))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
 
     @When("I enter the forgot OTP as {string}")
     fun enterOTP(otp: String) {
-        Espresso.onView(withId(R.id.forgotPasswordPinOtp)).perform(
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityOtpET)).perform(
             ViewActions.scrollTo(),
             ViewActions.replaceText(""),
             ViewActions.typeText(otp), ViewActions.closeSoftKeyboard()
@@ -88,7 +88,7 @@ class ForgotPinPasswordDefs {
 
     @And("I click on verify button for forgot password pin")
     fun iClickVerifyButtonForForgotPasswordPin() {
-        Espresso.onView(withId(R.id.forgotPasswordOtpVerifyButton))
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityOtpVerifyButton))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(5000)
     }
@@ -97,7 +97,7 @@ class ForgotPinPasswordDefs {
     fun checkErrorMessageDisplayedForForgot(errorMessage: String, fieldID: String) {
         when (fieldID) {
             "Forgot Password OTP Field" -> {
-                Espresso.onView(withId(R.id.forgotPasswordPinOtpWarningTV))
+                Espresso.onView(withId(R.id.forgotPasswordPinActivityOtpWarningTV))
                     .perform(ViewActions.scrollTo())
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
@@ -106,13 +106,13 @@ class ForgotPinPasswordDefs {
 
     @Then("I should be redirected to confirm forgot pin screen")
     fun updatePinScreen() {
-        Espresso.onView(withId(R.id.forgotPasswordPinSetPinView))
+        Espresso.onView(withId(R.id.forgotPasswordPinActivitySetPinView))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @When("I enter the new PIN as {string}")
     fun enterNewPin(string: String) {
-        Espresso.onView(withId(R.id.forgotPasswordPinNewPin)).perform(
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityNewPinET)).perform(
             ViewActions.scrollTo(),
             ViewActions.replaceText(""),
             ViewActions.typeText(string), ViewActions.closeSoftKeyboard()
@@ -121,7 +121,7 @@ class ForgotPinPasswordDefs {
 
     @When("I enter the confirm new PIN as {string}")
     fun enterConfirmNewPin(pin: String) {
-        Espresso.onView(withId(R.id.forgotPasswordConfirmPin)).perform(
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityConfirmPinET)).perform(
             ViewActions.scrollTo(),
             ViewActions.replaceText(""),
             ViewActions.typeText(pin), ViewActions.closeSoftKeyboard()
@@ -130,7 +130,7 @@ class ForgotPinPasswordDefs {
 
     @And("I enter the security answer as {string} for pin")
     fun enterSecurityQuestionAnswerForPin(securityAnswers: String) {
-        Espresso.onView(withId(R.id.forgotPasswordPinPinSecurityQuestion)).perform(
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityPinSecurityQuestionET)).perform(
             ViewActions.scrollTo(),
             ViewActions.replaceText(""),
             ViewActions.typeText(securityAnswers), ViewActions.closeSoftKeyboard()
@@ -139,7 +139,7 @@ class ForgotPinPasswordDefs {
 
     @And("I enter the security answer as {string} for password")
     fun enterSecurityQuestionAnswerForPassword(securityAnswers: String) {
-        Espresso.onView(withId(R.id.forgotPasswordPinPasswordSecurityQuestion)).perform(
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityPasswordSecurityQuestionET)).perform(
             ViewActions.scrollTo(),
             ViewActions.replaceText(""),
             ViewActions.typeText(securityAnswers), ViewActions.closeSoftKeyboard()
@@ -148,7 +148,7 @@ class ForgotPinPasswordDefs {
 
     @And("I click on reset button for forgot pin")
     fun iClickResetButtonForForgotPin() {
-        Espresso.onView(withId(R.id.forgotPasswordPinPinResetButton))
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityPinResetButton))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(5000)
     }
@@ -158,7 +158,7 @@ class ForgotPinPasswordDefs {
 
         when (fieldID) {
             "New PIN" -> {
-                Espresso.onView(withId(R.id.forgotPasswordPinNewPinWarning)).check(
+                Espresso.onView(withId(R.id.forgotPasswordPinActivityNewPinWarningTV)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -166,7 +166,7 @@ class ForgotPinPasswordDefs {
             }
 
             "Security Answer" -> {
-                Espresso.onView(withId(R.id.forgotPasswordPinPinSecurityQuestionWarning)).check(
+                Espresso.onView(withId(R.id.forgotPasswordPinActivityPinSecurityQuestionWarningTV)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -177,33 +177,33 @@ class ForgotPinPasswordDefs {
 
     @Then("I should view text PIN updated successfully")
     fun viewSuccessMessageForPINUpdate() {
-        val text = getText(Espresso.onView(withId(R.id.forgotPasswordPinUpdatedSubText)))
+        val text = getText(Espresso.onView(withId(R.id.sheetPinPasswordChangeSubTextTV)))
         require(text == "Your PIN has been successfully changed")
     }
 
     @When("I select login with password")
     fun iSelectLoginWithPassword() {
-        Espresso.onView(withId(R.id.loginPasswordButton))
+        Espresso.onView(withId(R.id.loginActivityPasswordButton))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
     }
 
     @When("I click on forgot password")
     fun iClickForgotPassword() {
-        Espresso.onView(withId(R.id.loginForgotPassword))
+        Espresso.onView(withId(R.id.loginActivityForgotPasswordTV))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
     }
 
     @Then("I should be redirected to confirm forgot Password screen")
     fun confirmPasswordScreen() {
-        Espresso.onView(withId(R.id.forgotPasswordPinSetPasswordView))
+        Espresso.onView(withId(R.id.forgotPasswordPinActivitySetPasswordView))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @And("I enter the new password as {string}")
     fun enterNewPassword(string: String) {
-        Espresso.onView(withId(R.id.forgotPasswordPinNewPassword)).perform(
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityNewPasswordET)).perform(
             ViewActions.scrollTo(),
             ViewActions.replaceText(""),
             ViewActions.typeText(string), ViewActions.closeSoftKeyboard()
@@ -212,7 +212,7 @@ class ForgotPinPasswordDefs {
 
     @And("I enter the confirm new password as {string}")
     fun enterConfirmNewPassword(string: String) {
-        Espresso.onView(withId(R.id.forgotPasswordPinConfirmPassword)).perform(
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityConfirmPasswordET)).perform(
             ViewActions.scrollTo(),
             ViewActions.replaceText(""),
             ViewActions.typeText(string), ViewActions.closeSoftKeyboard()
@@ -221,7 +221,7 @@ class ForgotPinPasswordDefs {
 
     @When("I click on reset button for forgot password")
     fun iClickResetForPassword() {
-        Espresso.onView(withId(R.id.forgotPasswordPinPasswordResetButton)).perform(
+        Espresso.onView(withId(R.id.forgotPasswordPinActivityPasswordResetButton)).perform(
             ViewActions.scrollTo(), ViewActions.click()
         )
         Thread.sleep(5000)
@@ -231,7 +231,7 @@ class ForgotPinPasswordDefs {
     fun checkErrorMessageIsDisplayedForPassword(errorMessage: String, fieldID: String) {
         when (fieldID) {
             "New Password" -> {
-                Espresso.onView(withId(R.id.forgotPasswordPinNewPasswordWarning)).check(
+                Espresso.onView(withId(R.id.forgotPasswordPinActivityNewPasswordWarningTV)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -239,7 +239,7 @@ class ForgotPinPasswordDefs {
             }
 
             "Confirm Password" -> {
-                Espresso.onView(withId(R.id.forgotPasswordPinConfirmPasswordWarning)).check(
+                Espresso.onView(withId(R.id.forgotPasswordPinActivityConfirmPasswordWarningTV)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -247,7 +247,7 @@ class ForgotPinPasswordDefs {
             }
 
             "Security Answer" -> {
-                Espresso.onView(withId(R.id.forgotPasswordPinPasswordSecurityQuestionWarning))
+                Espresso.onView(withId(R.id.forgotPasswordPinActivityPasswordSecurityQuestionWarningTV))
                     .check(
                         ViewAssertions.matches(
                             ViewMatchers.withText(errorMessage)
@@ -259,7 +259,7 @@ class ForgotPinPasswordDefs {
 
     @Then("I should view text Password updated successfully")
     fun viewSuccessMessageForPasswordUpdate() {
-        val text = getText(Espresso.onView(withId(R.id.forgotPasswordPinUpdatedSubText)))
+        val text = getText(Espresso.onView(withId(R.id.sheetPinPasswordChangeSubTextTV)))
         require(text == "Your password has been successfully changed")
     }
 

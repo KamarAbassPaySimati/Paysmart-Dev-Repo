@@ -480,4 +480,16 @@
     <string name="pin_does_not_match">Pin does not match</string>
     <string name="weak_password_text">Weak password. Check Guide for strong passwords.</string>
     <string name="weak_pin_text">Weak PIN. Check Guide for strong PIN.</string>
+    <string name="paymaart_password_guide">Paymaart Password Guide</string>
+    <string name="password_guide1">Passwords must not include spaces or any punctuation marks like \'.\', \'!\', or \'?\'.</string>
+    <string name="password_guide2">Avoid using easily guessable personal information such as your name, birthdate, or common words.</string>
+    <string name="password_guide3">Do not use simple patterns like \'12345678\', \'22446688\', \'password\', or sequential keyboard patterns like \'qwerty\'.</string>
+    <string name="password_guide4">Make sure passwords are created with random combinations of characters for better security.</string>
+    <string name="paymaart_pin_guide">Paymaart PIN Guide</string>
+    <string name="pin_guide1">Void obvious patterns like sequences (e.g., 123456) or repeated numbers (e.g., 112233).</string>
+    <string name="pin_guide2">Mix up numbers instead of using the same digit repeatedly.</string>
+    <string name="pin_guide3">Don\'t use easily guessed personal information like birthdates or phone numbers.</string>
+    <string name="pin_guide4">Make your PIN random to improve security.</string>
+    <string name="pin_guide5">Change your PIN regularly for added security, like every 91 days.</string>
+    <string name="pin_guide6">Avoid common choices such as PINs ending in \'0000\' or \'1234\'.</string>
 </resources>

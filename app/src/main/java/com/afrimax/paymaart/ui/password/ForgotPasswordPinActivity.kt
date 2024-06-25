@@ -1,5 +1,6 @@
 package com.afrimax.paymaart.ui.password
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
@@ -25,13 +26,21 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.DefaultResponse
+import com.afrimax.paymaart.data.model.SendForgotOtpResponse
+import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
+import com.afrimax.paymaart.data.model.VerifyForgotOtpResponse
 import com.afrimax.paymaart.databinding.ActivityForgotPasswordPinBinding
 import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.ui.login.LoginActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.PasswordGuideBottomSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.PinGuideBottomSheet
+import com.afrimax.paymaart.util.AESCrypt
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.LoginPinTransformation
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import retrofit2.Call
@@ -95,7 +104,7 @@ class ForgotPasswordPinActivity : BaseActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 val d = Date(millisUntilFinished)
                 b.forgotPasswordPinActivityOtpTimerTV.text =
-                    SimpleDateFormat("mm:ss", Locale.CANADA).apply {
+                    SimpleDateFormat("mm:ss", Locale.getDefault()).apply {
                         timeZone = TimeZone.getTimeZone("GMT")
                     }.format(d)
             }
@@ -108,7 +117,6 @@ class ForgotPasswordPinActivity : BaseActivity() {
     }
 
     private fun setUpListeners() {
-
         b.forgotPasswordPinActivityCloseButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -716,26 +724,43 @@ class ForgotPasswordPinActivity : BaseActivity() {
     }
 
     private fun showPasswordPinUpdatedView() {
-        b.forgotPasswordPinActivityUpdateSuccessfulView.visibility = View.VISIBLE
-        b.forgotPasswordPinActivitySetPinView.visibility = View.GONE
-        b.forgotPasswordPinActivitySetPasswordView.visibility = View.GONE
-        b.forgotPasswordPinActivityOtpView.visibility = View.GONE
-        b.forgotPasswordPinActivityEmailView.visibility = View.GONE
+        val bottomSheetDialog = BottomSheetDialog(this)
+        val dialogView = layoutInflater.inflate(R.layout.pin_password_change_bottom_sheet, null)
+        bottomSheetDialog.setContentView(dialogView)
+        bottomSheetDialog.setCancelable(false)
+        val titleTextView = dialogView.findViewById<TextView>(R.id.sheetPinPasswordChangeTitleTV)
+        val subTitleTextView = dialogView.findViewById<TextView>(R.id.sheetPinPasswordChangeSubTextTV)
+        val loginButton = dialogView.findViewById<AppCompatButton>(R.id.sheetPinPasswordChangeButton)
+        loginButton.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            startActivity(Intent(this@ForgotPasswordPinActivity, LoginActivity::class.java))
+            finishAffinity()
+        }
+//        b.forgotPasswordPinActivityUpdateSuccessfulView.visibility = View.VISIBLE
+//        b.forgotPasswordPinActivitySetPinView.visibility = View.GONE
+//        b.forgotPasswordPinActivitySetPasswordView.visibility = View.GONE
+//        b.forgotPasswordPinActivityOtpView.visibility = View.GONE
+//        b.forgotPasswordPinActivityEmailView.visibility = View.GONE
 
         when (forgotCredentialType) {
             Constants.FORGOT_CREDENTIAL_PIN -> {
-                b.forgotPasswordPinActivityUpdatedTitleTV.text = getString(R.string.pin_changed)
-                b.forgotPasswordPinActivityUpdatedSubTextTV.text =
-                    getString(R.string.your_pin_has_been_successfully_changed)
+                titleTextView.text = getString(R.string.pin_changed)
+                subTitleTextView.text = getString(R.string.your_pin_has_been_successfully_changed)
+//                b.forgotPasswordPinActivityUpdatedTitleTV.text = getString(R.string.pin_changed)
+//                b.forgotPasswordPinActivityUpdatedSubTextTV.text =
+//                    getString(R.string.your_pin_has_been_successfully_changed)
             }
 
             Constants.FORGOT_CREDENTIAL_PASSWORD -> {
-                b.forgotPasswordPinActivityUpdatedTitleTV.text =
-                    getString(R.string.password_changed)
-                b.forgotPasswordPinActivityUpdatedSubTextTV.text =
-                    getString(R.string.your_password_has_been_successfully_changed)
+                titleTextView.text = getString(R.string.password_changed)
+                subTitleTextView.text = getString(R.string.your_password_has_been_successfully_changed)
+//                b.forgotPasswordPinActivityUpdatedTitleTV.text =
+//                    getString(R.string.password_changed)
+//                b.forgotPasswordPinActivityUpdatedSubTextTV.text =
+//                    getString(R.string.your_password_has_been_successfully_changed)
             }
         }
+        bottomSheetDialog.show()
     }
 
     private fun validateOtp(): Boolean {

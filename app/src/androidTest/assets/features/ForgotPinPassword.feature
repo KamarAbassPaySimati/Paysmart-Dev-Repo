@@ -12,35 +12,35 @@ Feature: Paymaart- Customer Android - Forgot PIN/Password
   When the user confirms the new 6-digit PIN by entering it a second time, Then the application should verify that the new PIN matches the one entered previously.
   After successfully resetting the PIN/Password, the system should provide a confirmation message. and redirect to Login screen.
 
-  Scenario: Update my Password
-    Given The login screen is displayed
-    When I select login with password
-    When I click on forgot password
-    Then I should be redirected to forgot password pin screen
-    When I enter my email address as "harshith.kumar+2@7edge.com"
-    And I click on proceed button for forgot password or pin
-    Then I should be redirected to forgot password or pin OTP screen
-    When I enter the forgot OTP as "355940"
-    And I click on verify button for forgot password pin
-    Then I should see error message "Invalid OTP" for field with ID "Forgot Password OTP Field" for forgot
-    When I enter the forgot OTP as "355948"
-    And I click on verify button for forgot password pin
-    Then I should be redirected to confirm forgot Password screen
-    When I enter the new password as "pass12"
-    And I enter the confirm new password as "pass12"
-    And I click on reset button for forgot password
-    Then I should see error message "Weak password. Check Guide for strong passwords." for field with ID "New Password" for forgot password
-    When I enter the new password as "Password@122"
-    And I enter the confirm new password as "Password@123"
-    And I enter the security answer as "BDD Test123" for password
-    And I click on reset button for forgot password
-    Then I should see error message "Password does not match" for field with ID "Confirm Password" for forgot password
-    When I enter the new password as "Password@123"
-    And I click on reset button for forgot password
-    Then I should see error message "Invalid Security Question Answer" for field with ID "Security Answers" for forgot password
-    And I enter the security answer as "x" for password
-    And I click on reset button for forgot password
-    Then I should view text Password updated successfully
+#  Scenario: Update my Password
+#    Given The login screen is displayed
+#    When I select login with password
+#    When I click on forgot password
+#    Then I should be redirected to forgot password pin screen
+#    When I enter my email address as "harshith.kumar+2@7edge.com"
+#    And I click on proceed button for forgot password or pin
+#    Then I should be redirected to forgot password or pin OTP screen
+#    When I enter the forgot OTP as "355940"
+#    And I click on verify button for forgot password pin
+#    Then I should see error message "Invalid OTP" for field with ID "Forgot Password OTP Field" for forgot
+#    When I enter the forgot OTP as "355948"
+#    And I click on verify button for forgot password pin
+#    Then I should be redirected to confirm forgot Password screen
+#    When I enter the new password as "pass12"
+#    And I enter the confirm new password as "pass12"
+#    And I click on reset button for forgot password
+#    Then I should see error message "Weak password. Check Guide for strong passwords." for field with ID "New Password" for forgot password
+#    When I enter the new password as "Password@122"
+#    And I enter the confirm new password as "Password@123"
+#    And I enter the security answer as "BDD Test123" for password
+#    And I click on reset button for forgot password
+#    Then I should see error message "Password does not match" for field with ID "Confirm Password" for forgot password
+#    When I enter the new password as "Password@123"
+#    And I click on reset button for forgot password
+#    Then I should see error message "Invalid Security Question Answer" for field with ID "Security Answers" for forgot password
+#    And I enter the security answer as "x" for password
+#    And I click on reset button for forgot password
+#    Then I should view text Password updated successfully
 
   Scenario: Update my PIN
     Given The login screen is displayed

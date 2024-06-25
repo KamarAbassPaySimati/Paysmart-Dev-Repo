@@ -15,8 +15,11 @@ import com.afrimax.paymaart.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
+import com.afrimax.paymaart.data.model.SendForgotOtpResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
 import com.afrimax.paymaart.data.model.SendOtpResponse
+import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
+import com.afrimax.paymaart.data.model.VerifyForgotOtpResponse
 import com.afrimax.paymaart.data.model.VerifyOtpRequestBody
 import com.afrimax.paymaart.data.model.VerifyOtpResponse
 import retrofit2.Call
@@ -69,7 +72,14 @@ interface ApiService {
     @POST("$CUSTOMER_USER/delete-request")
     fun deleteAccountRequest(@Header("Authorization") header: String, @Body body: DeleteAccountReqRequest): Call<DefaultResponse>
 
+    @GET("$CUSTOMER_USER/request-otp")
+    fun sendForgotOtp(@Query("email_address") emailAddress: String, @Query("type") type: String): Call<SendForgotOtpResponse>
 
+    @GET("$CUSTOMER_USER/validate-otp")
+    fun verifyForgotOtp(@Query(value = "otp") otp: String, @Query("encrypted_otp") encryptedOtp: String, @Query("user_id") userId: String): Call<VerifyForgotOtpResponse>
+
+    @POST("$CUSTOMER_USER/forgot-password")
+    fun updatePinPassword(@Body body: UpdatePinPasswordRequest): Call<DefaultResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
