@@ -500,4 +500,5 @@
     <string name="pin_updated">PIN Updated</string>
     <string name="your_pin_has_been_successfully_updated">Your PIN has been successfully updated</string>
     <string name="enter_current_pin_password">Enter current PIN/password</string>
+    <string name="non_malawi_full_kyc_registration">Non-Malawi Full KYC Registration</string>
 </resources>

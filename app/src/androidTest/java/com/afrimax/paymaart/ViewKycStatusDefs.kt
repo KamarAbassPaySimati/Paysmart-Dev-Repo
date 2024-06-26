@@ -14,12 +14,12 @@ class ViewKycStatusDefs {
 
     @When("I open the menu, I should view the KYC status as {string} and {string}")
     fun openMenuAndCheckKYC(kycType: String, kycStatus: String) {
-        Espresso.onView(withId(R.id.homeMenuIcon)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.homeActivityMenuIcon)).perform(ViewActions.click())
         Thread.sleep(3000)
 
-        Espresso.onView(withId(R.id.homeDrawerKycType)).perform(ViewActions.scrollTo())
+        Espresso.onView(withId(R.id.homeDrawerKycTypeTV)).perform(ViewActions.scrollTo())
             .check(ViewAssertions.matches(ViewMatchers.withText(kycType)))
-        Espresso.onView(withId(R.id.homeDrawerKycStatus)).perform(ViewActions.scrollTo())
+        Espresso.onView(withId(R.id.homeDrawerKycStatusTV)).perform(ViewActions.scrollTo())
             .check(ViewAssertions.matches(ViewMatchers.withText(kycStatus)))
     }
 

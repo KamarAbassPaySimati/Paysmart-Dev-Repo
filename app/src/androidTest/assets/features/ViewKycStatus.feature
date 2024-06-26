@@ -44,6 +44,7 @@ Feature: Paymaart- Customer Android - Kyc verification status
     When I enter the street name as "Balaka"
     Then I should see the district and town getting prefilled
     Then I select "Afghan" as the nationality
+    Then I enter the international address as "Mangalore"
     When I click on proceed button on screen one
     Then I should be redirected to KYC screen two
     When I click on proceed button on screen two
@@ -82,7 +83,7 @@ Feature: Paymaart- Customer Android - Kyc verification status
     Then I should read a message stating KYC "In review"
     And I click on finish button
     And I should be redirected to home screen
-    When I open the menu, I should view the KYC status as "Non-Malawi Full KYC" and "In review"
+    When I open the menu, I should view the KYC status as "Non-Malawi Full KYC Registration" and "In review"
 
   Scenario: Verify In review Kyc status for Malawi Full kyc
     When I select malawi full kyc
@@ -127,7 +128,7 @@ Feature: Paymaart- Customer Android - Kyc verification status
     Then I should read a message stating KYC "In review"
     And I click on finish button
     And I should be redirected to home screen
-    When I open the menu, I should view the KYC status as "Malawi Full KYC" and "In review"
+    When I open the menu, I should view the KYC status as "Malawi Full KYC Registration" and "In review"
 
   Scenario: Verify In review Kyc status for Malawi Simplified Kyc
     When I select malawi simplified kyc
@@ -171,5 +172,5 @@ Feature: Paymaart- Customer Android - Kyc verification status
     Then I should read a message stating KYC "In review"
     And I click on finish button
     And I should be redirected to home screen
-    When I open the menu, I should view the KYC status as "Malawi Simplified KYC" and "In review"
+    When I open the menu, I should view the KYC status as "Malawi Simplified KYC Registration" and "In review"
 
