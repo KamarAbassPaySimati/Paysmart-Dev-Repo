@@ -210,13 +210,13 @@ class KycAddressActivity : BaseActivity() {
             onIntlStreetNameFilled(position)
         }
 
-        b.onboardKycAddressActivityIntlTownET.setOnItemClickListener { _, _, position, _ ->
-            onIntlTownFilled(position)
-        }
-
-        b.onboardKycAddressActivityIntlDistrictET.setOnItemClickListener { _, _, position, _ ->
-            onIntlDistrictFilled(position)
-        }
+//        b.onboardKycAddressActivityIntlTownET.setOnItemClickListener { _, _, position, _ ->
+//            onIntlTownFilled(position)
+//        }
+//
+//        b.onboardKycAddressActivityIntlDistrictET.setOnItemClickListener { _, _, position, _ ->
+//            onIntlDistrictFilled(position)
+//        }
 
 
         b.onboardKycAddressActivitySkipButton.setOnClickListener {
@@ -334,11 +334,12 @@ class KycAddressActivity : BaseActivity() {
         b.onboardKycAddressActivityIntlStreetNameET.removeTextChangedListener(
             intlStreetEditTextWatcher
         )
-        b.onboardKycAddressActivityIntlStreetNameET.setText(malawiPlace.primaryText)
+        b.onboardKycAddressActivityIntlStreetNameET.setText(malawiPlace.fullText)
         b.onboardKycAddressActivityIntlStreetNameET.setSelection(b.onboardKycAddressActivityIntlStreetNameET.text.toString().length)
         b.onboardKycAddressActivityIntlStreetNameET.addTextChangedListener(intlStreetEditTextWatcher)
 
-        lifecycleScope.launch {
+        /**
+            lifecycleScope.launch {
             val place = fetchExactPlace(malawiPlace.placeId)
 
             val addressComponents = place.addressComponents
@@ -373,11 +374,12 @@ class KycAddressActivity : BaseActivity() {
                 )
                 b.onboardKycAddressActivityIntlTownET.addTextChangedListener(intlTownEditTextWatcher)
             }
-
-        }
+           }
+         */
     }
 
-    private fun onIntlTownFilled(position: Int) {
+    /**
+        private fun onIntlTownFilled(position: Int) {
         val malawiPlace = placesList[position]
         b.onboardKycAddressActivityIntlTownET.removeTextChangedListener(intlTownEditTextWatcher)
         b.onboardKycAddressActivityIntlTownET.setText(malawiPlace.primaryText)
@@ -410,17 +412,18 @@ class KycAddressActivity : BaseActivity() {
                 )
             }
         }
-    }
+       }
 
-    private fun onIntlDistrictFilled(position: Int) {
-        val malawiPlace = placesList[position]
-        b.onboardKycAddressActivityIntlDistrictET.removeTextChangedListener(
-            intlDistrictEditTextWatcher
-        )
-        b.onboardKycAddressActivityIntlDistrictET.setText(malawiPlace.primaryText)
-        b.onboardKycAddressActivityIntlDistrictET.setSelection(b.onboardKycAddressActivityDistrictET.text.toString().length)
-        b.onboardKycAddressActivityIntlDistrictET.addTextChangedListener(intlDistrictEditTextWatcher)
-    }
+        private fun onIntlDistrictFilled(position: Int) {
+            val malawiPlace = placesList[position]
+            b.onboardKycAddressActivityIntlDistrictET.removeTextChangedListener(
+                intlDistrictEditTextWatcher
+            )
+            b.onboardKycAddressActivityIntlDistrictET.setText(malawiPlace.primaryText)
+            b.onboardKycAddressActivityIntlDistrictET.setSelection(b.onboardKycAddressActivityDistrictET.text.toString().length)
+            b.onboardKycAddressActivityIntlDistrictET.addTextChangedListener(intlDistrictEditTextWatcher)
+        }
+     */
 
 
     /**Refresh the items in AutoCompleteTextView*/
@@ -454,19 +457,19 @@ class KycAddressActivity : BaseActivity() {
 
     }
 
-    private fun refreshIntlTownSuggestions(array: ArrayList<String>) {
+    /**
+        private fun refreshIntlTownSuggestions(array: ArrayList<String>) {
         val adapter = ArrayAdapter(this, R.layout.text_auto_complete, array)
         b.onboardKycAddressActivityIntlTownET.setAdapter(adapter)
         b.onboardKycAddressActivityIntlTownET.showDropDown()
+        }
 
-    }
-
-    private fun refreshIntlDistrictSuggestions(array: ArrayList<String>) {
-        val adapter = ArrayAdapter(this, R.layout.text_auto_complete, array)
-        b.onboardKycAddressActivityIntlDistrictET.setAdapter(adapter)
-        b.onboardKycAddressActivityIntlDistrictET.showDropDown()
-
-    }
+        private fun refreshIntlDistrictSuggestions(array: ArrayList<String>) {
+            val adapter = ArrayAdapter(this, R.layout.text_auto_complete, array)
+            b.onboardKycAddressActivityIntlDistrictET.setAdapter(adapter)
+            b.onboardKycAddressActivityIntlDistrictET.showDropDown()
+        }
+     */
 
 
     private fun setupEditTextFocusListeners() {
@@ -485,27 +488,29 @@ class KycAddressActivity : BaseActivity() {
 
         //Setup focus listeners for additional fields (Non malawi)
         configureRequiredEditTextFocusListener(
-            b.onboardKycAddressActivityIntlPostalET, b.onboardKycAddressActivityIntlPostalWarningTV
-        )
-        configureRequiredEditTextFocusListener(
-            b.onboardKycAddressActivityIntlHouseNameET,
-            b.onboardKycAddressActivityIntlHouseNameWarningTV
-        )
-        configureRequiredEditTextFocusListener(
             b.onboardKycAddressActivityIntlStreetNameET,
             b.onboardKycAddressActivityIntlStreetNameWarningTV
         )
-        configureRequiredEditTextFocusListener(
-            b.onboardKycAddressActivityIntlLandmarkET,
-            b.onboardKycAddressActivityIntlLandmarkWarningTV
-        )
-        configureRequiredEditTextFocusListener(
-            b.onboardKycAddressActivityIntlTownET, b.onboardKycAddressActivityIntlTownWarningTV
-        )
-        configureRequiredEditTextFocusListener(
-            b.onboardKycAddressActivityIntlDistrictET,
-            b.onboardKycAddressActivityIntlDistrictWarningTV
-        )
+        /**
+            configureRequiredEditTextFocusListener(
+            b.onboardKycAddressActivityIntlPostalET, b.onboardKycAddressActivityIntlPostalWarningTV
+            )
+            configureRequiredEditTextFocusListener(
+                b.onboardKycAddressActivityIntlHouseNameET,
+                b.onboardKycAddressActivityIntlHouseNameWarningTV
+            )
+            configureRequiredEditTextFocusListener(
+                b.onboardKycAddressActivityIntlLandmarkET,
+                b.onboardKycAddressActivityIntlLandmarkWarningTV
+            )
+            configureRequiredEditTextFocusListener(
+                b.onboardKycAddressActivityIntlTownET, b.onboardKycAddressActivityIntlTownWarningTV
+            )
+            configureRequiredEditTextFocusListener(
+                b.onboardKycAddressActivityIntlDistrictET,
+                b.onboardKycAddressActivityIntlDistrictWarningTV
+            )
+         */
 
     }
 
@@ -515,23 +520,27 @@ class KycAddressActivity : BaseActivity() {
         configureDistrictTextChangeListener()
 
         //Setup TextChangeListener for additional fields - Non malawi
-        configureNormalEditTextChangeListener(
-            b.onboardKycAddressActivityIntlPostalET, b.onboardKycAddressActivityIntlPostalWarningTV
-        )
-        configureNormalEditTextChangeListener(
-            b.onboardKycAddressActivityIntlHouseNameET,
-            b.onboardKycAddressActivityIntlHouseNameWarningTV
-        )
         configureIntlStreetNameTextChangeListener()
-        configureNormalEditTextChangeListener(
-            b.onboardKycAddressActivityIntlLandmarkET,
-            b.onboardKycAddressActivityIntlLandmarkWarningTV
-        )
-        configureIntlTownTextChangeListener()
-        configureIntlDistrictTextChangeListener()
+        /**
+            configureIntlTownTextChangeListener()
+            configureIntlDistrictTextChangeListener()
+            configureNormalEditTextChangeListener(
+            b.onboardKycAddressActivityIntlPostalET, b.onboardKycAddressActivityIntlPostalWarningTV
+            )
+            configureNormalEditTextChangeListener(
+                b.onboardKycAddressActivityIntlHouseNameET,
+                b.onboardKycAddressActivityIntlHouseNameWarningTV
+            )
+
+            configureNormalEditTextChangeListener(
+                b.onboardKycAddressActivityIntlLandmarkET,
+                b.onboardKycAddressActivityIntlLandmarkWarningTV
+            )
+         */
     }
 
-    private fun configureNormalEditTextChangeListener(et: EditText, warningText: TextView) {
+    /**
+        private fun configureNormalEditTextChangeListener(et: EditText, warningText: TextView) {
         et.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //
@@ -554,6 +563,7 @@ class KycAddressActivity : BaseActivity() {
 
         })
     }
+     */
 
     private fun configureStreetNameTextChangeListener() {
         streetEditTextWatcher = object : TextWatcher {
@@ -672,7 +682,7 @@ class KycAddressActivity : BaseActivity() {
             override fun afterTextChanged(p0: Editable?) {
 
                 if (b.onboardKycAddressActivityIntlStreetNameET.text.isEmpty()) {
-                    validateOptionalFields()
+//                    validateOptionalFields()
                     /** Following else if block becomes true If: enter at-least 3 characters and it was not done by the AutoCompleteTextView
                      *By default the AutoCompleteTextView will populate whatever is displayed in the drop down menu.
                      *In our case we are showing the fullText retrieved from Places API. But we don't wanna put all those
@@ -696,7 +706,8 @@ class KycAddressActivity : BaseActivity() {
         b.onboardKycAddressActivityIntlStreetNameET.addTextChangedListener(intlStreetEditTextWatcher)
     }
 
-    private fun configureIntlTownTextChangeListener() {
+    /**
+        private fun configureIntlTownTextChangeListener() {
         intlTownEditTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 //
@@ -724,9 +735,11 @@ class KycAddressActivity : BaseActivity() {
             }
         }
         b.onboardKycAddressActivityIntlTownET.addTextChangedListener(intlTownEditTextWatcher)
-    }
+       }
+     */
 
-    private fun configureIntlDistrictTextChangeListener() {
+    /**
+        private fun configureIntlDistrictTextChangeListener() {
         intlDistrictEditTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 //
@@ -756,7 +769,8 @@ class KycAddressActivity : BaseActivity() {
             }
         }
         b.onboardKycAddressActivityIntlDistrictET.addTextChangedListener(intlDistrictEditTextWatcher)
-    }
+       }
+     */
 
     private fun configureNormalEditTextFocusListener(et: EditText) {
         val focusDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_focused)
@@ -906,7 +920,8 @@ class KycAddressActivity : BaseActivity() {
         }
     }
 
-    private fun getTownsIntl(queryString: String) {
+    /**
+        private fun getTownsIntl(queryString: String) {
         val tempPlacesNamesList = ArrayList<String>()
         val token = AutocompleteSessionToken.newInstance()
         val request =
@@ -963,6 +978,7 @@ class KycAddressActivity : BaseActivity() {
             //
         }
     }
+     */
 
     private suspend fun fetchExactPlace(placeId: String): Place {
         val request =
@@ -1003,9 +1019,9 @@ class KycAddressActivity : BaseActivity() {
                     b.onboardKycAddressActivityIntlNationalityWarningTV
             }
 
-            if (!validateOptionalFields()) {
+            if (!validateInternationalAddress()) {
                 isValid = false
-                if (focusView == null) focusView = b.onboardKycAddressActivityIntlDistrictWarningTV
+                if (focusView == null) focusView = b.onboardKycAddressActivityIntlStreetNameWarningTV
             }
         }
 
@@ -1082,7 +1098,24 @@ class KycAddressActivity : BaseActivity() {
         return isValid
     }
 
-    private fun validateIntlTown(): Boolean {
+    private fun validateInternationalAddress(): Boolean{
+        var isValid = true
+        if (b.onboardKycAddressActivityIntlStreetNameET.text.isEmpty()) {
+            isValid = false
+            b.onboardKycAddressActivityIntlStreetNameWarningTV.visibility = View.VISIBLE
+            b.onboardKycAddressActivityIntlStreetNameWarningTV.text = getString(R.string.required_field)
+            b.onboardKycAddressActivityIntlStreetNameET.background =
+                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_error)
+        } else {
+            b.onboardKycAddressActivityIntlStreetNameWarningTV.visibility = View.GONE
+            b.onboardKycAddressActivityIntlStreetNameET.background =
+                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+        }
+        return isValid
+    }
+
+    /**
+        private fun validateIntlTown(): Boolean {
         var isValid = true
         if (b.onboardKycAddressActivityIntlTownET.text.isEmpty()) {
             isValid = false
@@ -1194,6 +1227,7 @@ class KycAddressActivity : BaseActivity() {
         }
         return isValid
     }
+     */
 
     private fun saveCustomerAddressDetailsApi() {
         showButtonLoader(
@@ -1209,24 +1243,23 @@ class KycAddressActivity : BaseActivity() {
         val district = b.onboardKycAddressActivityDistrictET.text.toString()
 
         //Additional fields
-        val intlNationality =
-            b.onboardKycAddressActivityIntlNationalityTV.text.toString().ifEmpty { null }
-        val intlPostal = b.onboardKycAddressActivityIntlPostalET.text.toString().ifEmpty { null }
-        val intlHouseNumber =
-            b.onboardKycAddressActivityIntlHouseNameET.text.toString().ifEmpty { null }
-        val intlStreetName =
-            b.onboardKycAddressActivityIntlStreetNameET.text.toString().ifEmpty { null }
-        val intlLandmark =
-            b.onboardKycAddressActivityIntlLandmarkET.text.toString().ifEmpty { null }
-        val intlTown = b.onboardKycAddressActivityIntlTownET.text.toString().ifEmpty { null }
-        val intlDistrict =
-            b.onboardKycAddressActivityIntlDistrictET.text.toString().ifEmpty { null }
+        val intlNationality = b.onboardKycAddressActivityIntlNationalityTV.text.toString().ifEmpty { null }
+        val intlAddress = b.onboardKycAddressActivityIntlStreetNameET.text.toString().ifEmpty { null }
+        /**
+            val intlPostal = b.onboardKycAddressActivityIntlPostalET.text.toString().ifEmpty { null }
+            val intlHouseNumber =
+                b.onboardKycAddressActivityIntlHouseNameET.text.toString().ifEmpty { null }
+            val intlLandmark =
+                b.onboardKycAddressActivityIntlLandmarkET.text.toString().ifEmpty { null }
+            val intlTown = b.onboardKycAddressActivityIntlTownET.text.toString().ifEmpty { null }
+            val intlDistrict =
+                b.onboardKycAddressActivityIntlDistrictET.text.toString().ifEmpty { null }
+         */
 
         lifecycleScope.launch {
             val idToken = fetchIdToken()
             val saveAddressDetailsCall = ApiClient.apiService.saveCustomerAddressDetails(
                 "Bearer $idToken", KycSaveAddressDetailsRequest(
-                    paymaart_id = paymaartId,
                     po_box_no = poBoxNumber,
                     house_number = houseName,
                     street_name = streetName,
@@ -1234,12 +1267,7 @@ class KycAddressActivity : BaseActivity() {
                     town_village_ta = townVillage,
                     district = district,
                     citizen = intlNationality,
-                    intl_po_box_no = intlPostal,
-                    intl_house_number = intlHouseNumber,
-                    intl_street_name = intlStreetName,
-                    intl_landmark = intlLandmark,
-                    intl_town_village_ta = intlTown,
-                    intl_district = intlDistrict,
+                    intl_address = intlAddress,
                     address_details_status = Constants.KYC_STATUS_COMPLETED
                 )
             )
@@ -1345,12 +1373,14 @@ class KycAddressActivity : BaseActivity() {
 
         //Additional fields for Non malawi
         val intlNationality = data.citizen ?: ""
-        val intlPostal = data.intl_po_box_no ?: ""
-        val intlHouseName = data.intl_house_number ?: ""
-        val intlStreetName = data.intl_street_name ?: ""
-        val intlLandmark = data.intl_landmark ?: ""
-        val intlTown = data.intl_town_village_ta ?: ""
-        val intlDistrict = data.intl_district ?: ""
+        val intlStreetName = data.intl_address ?: ""
+        /**
+            val intlPostal = data.intl_po_box_no ?: ""
+            val intlHouseName = data.intl_house_number ?: ""
+            val intlLandmark = data.intl_landmark ?: ""
+            val intlTown = data.intl_town_village_ta ?: ""
+            val intlDistrict = data.intl_district ?: ""
+         */
 
         val addressDetailsStatus = data.address_details_status ?: ""
 
@@ -1364,10 +1394,10 @@ class KycAddressActivity : BaseActivity() {
             b.onboardKycAddressActivityIntlStreetNameET.removeTextChangedListener(
                 intlStreetEditTextWatcher
             )
-            b.onboardKycAddressActivityIntlTownET.removeTextChangedListener(intlTownEditTextWatcher)
-            b.onboardKycAddressActivityIntlDistrictET.removeTextChangedListener(
-                intlDistrictEditTextWatcher
-            )
+//            b.onboardKycAddressActivityIntlTownET.removeTextChangedListener(intlTownEditTextWatcher)
+//            b.onboardKycAddressActivityIntlDistrictET.removeTextChangedListener(
+//                intlDistrictEditTextWatcher
+//            )
 
             //Populate the fields
             b.onboardKycAddressActivityPOBoxET.setText(poBox)
@@ -1378,20 +1408,24 @@ class KycAddressActivity : BaseActivity() {
             b.onboardKycAddressActivityDistrictET.setText(district)
             //Populate Additional fields
             b.onboardKycAddressActivityIntlNationalityTV.text = intlNationality
-            b.onboardKycAddressActivityIntlPostalET.setText(intlPostal)
-            b.onboardKycAddressActivityIntlHouseNameET.setText(intlHouseName)
             b.onboardKycAddressActivityIntlStreetNameET.setText(intlStreetName)
-            b.onboardKycAddressActivityIntlLandmarkET.setText(intlLandmark)
-            b.onboardKycAddressActivityIntlTownET.setText(intlTown)
-            b.onboardKycAddressActivityIntlDistrictET.setText(intlDistrict)
+            /**
+                b.onboardKycAddressActivityIntlPostalET.setText(intlPostal)
+                b.onboardKycAddressActivityIntlHouseNameET.setText(intlHouseName)
+                b.onboardKycAddressActivityIntlLandmarkET.setText(intlLandmark)
+                b.onboardKycAddressActivityIntlTownET.setText(intlTown)
+                b.onboardKycAddressActivityIntlDistrictET.setText(intlDistrict)
+             */
 
             //Change background of following editTexts
+            /**
             b.onboardKycAddressActivityIntlPostalET.background =
-                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
             b.onboardKycAddressActivityIntlHouseNameET.background =
-                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
             b.onboardKycAddressActivityIntlLandmarkET.background =
-                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+             */
 
 
             //Re-register TextWatchers
@@ -1401,10 +1435,10 @@ class KycAddressActivity : BaseActivity() {
             b.onboardKycAddressActivityIntlStreetNameET.addTextChangedListener(
                 intlStreetEditTextWatcher
             )
-            b.onboardKycAddressActivityIntlTownET.addTextChangedListener(intlTownEditTextWatcher)
-            b.onboardKycAddressActivityIntlDistrictET.addTextChangedListener(
-                intlDistrictEditTextWatcher
-            )
+//            b.onboardKycAddressActivityIntlTownET.addTextChangedListener(intlTownEditTextWatcher)
+//            b.onboardKycAddressActivityIntlDistrictET.addTextChangedListener(
+//                intlDistrictEditTextWatcher
+//            )
         }
 
         b.onboardKycAddressActivitySV.scrollTo(0, 0)
@@ -1423,12 +1457,14 @@ class KycAddressActivity : BaseActivity() {
 
         //Clear additional fields - Non malawi
         b.onboardKycAddressActivityIntlNationalityTV.text = ""
-        b.onboardKycAddressActivityIntlPostalET.setText("")
-        b.onboardKycAddressActivityIntlHouseNameET.setText("")
         b.onboardKycAddressActivityIntlStreetNameET.setText("")
-        b.onboardKycAddressActivityIntlLandmarkET.setText("")
-        b.onboardKycAddressActivityIntlTownET.setText("")
-        b.onboardKycAddressActivityIntlDistrictET.setText("")
+        /**
+            b.onboardKycAddressActivityIntlPostalET.setText("")
+            b.onboardKycAddressActivityIntlHouseNameET.setText("")
+            b.onboardKycAddressActivityIntlLandmarkET.setText("")
+            b.onboardKycAddressActivityIntlTownET.setText("")
+            b.onboardKycAddressActivityIntlDistrictET.setText("")
+         */
 
 
         //Hide any warnings
@@ -1444,24 +1480,26 @@ class KycAddressActivity : BaseActivity() {
 
         //Hide any warnings in additional fields
         b.onboardKycAddressActivityIntlNationalityWarningTV.visibility = View.GONE
-        b.onboardKycAddressActivityIntlPostalWarningTV.visibility = View.GONE
-        b.onboardKycAddressActivityIntlHouseNameWarningTV.visibility = View.GONE
         b.onboardKycAddressActivityIntlStreetNameWarningTV.visibility = View.GONE
-        b.onboardKycAddressActivityIntlLandmarkWarningTV.visibility = View.GONE
-        b.onboardKycAddressActivityIntlTownWarningTV.visibility = View.GONE
-        b.onboardKycAddressActivityIntlDistrictWarningTV.visibility = View.GONE
-        b.onboardKycAddressActivityIntlPostalET.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-        b.onboardKycAddressActivityIntlHouseNameET.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
         b.onboardKycAddressActivityIntlStreetNameET.background =
             ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-        b.onboardKycAddressActivityIntlLandmarkET.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-        b.onboardKycAddressActivityIntlTownET.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-        b.onboardKycAddressActivityIntlDistrictET.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+        /**
+            b.onboardKycAddressActivityIntlPostalWarningTV.visibility = View.GONE
+            b.onboardKycAddressActivityIntlHouseNameWarningTV.visibility = View.GONE
+            b.onboardKycAddressActivityIntlLandmarkWarningTV.visibility = View.GONE
+            b.onboardKycAddressActivityIntlTownWarningTV.visibility = View.GONE
+            b.onboardKycAddressActivityIntlDistrictWarningTV.visibility = View.GONE
+            b.onboardKycAddressActivityIntlPostalET.background =
+                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+            b.onboardKycAddressActivityIntlHouseNameET.background =
+                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+            b.onboardKycAddressActivityIntlLandmarkET.background =
+                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+            b.onboardKycAddressActivityIntlTownET.background =
+                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+            b.onboardKycAddressActivityIntlDistrictET.background =
+                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+         */
     }
 
     private fun clearAllFocusedFields() {
@@ -1484,29 +1522,31 @@ class KycAddressActivity : BaseActivity() {
             unfocusedDrawable
         else b.onboardKycAddressActivityDistrictET.background = errorDrawable
 
-        if (!b.onboardKycAddressActivityIntlPostalWarningTV.isVisible) b.onboardKycAddressActivityIntlPostalET.background =
-            unfocusedDrawable
-        else b.onboardKycAddressActivityIntlPostalET.background = errorDrawable
-
-        if (!b.onboardKycAddressActivityIntlHouseNameWarningTV.isVisible) b.onboardKycAddressActivityIntlHouseNameET.background =
-            unfocusedDrawable
-        else b.onboardKycAddressActivityIntlHouseNameET.background = errorDrawable
-
         if (!b.onboardKycAddressActivityIntlStreetNameWarningTV.isVisible) b.onboardKycAddressActivityIntlStreetNameET.background =
             unfocusedDrawable
         else b.onboardKycAddressActivityIntlStreetNameET.background = errorDrawable
 
-        if (!b.onboardKycAddressActivityIntlLandmarkWarningTV.isVisible) b.onboardKycAddressActivityIntlLandmarkET.background =
+        /**
+            if (!b.onboardKycAddressActivityIntlPostalWarningTV.isVisible) b.onboardKycAddressActivityIntlPostalET.background =
             unfocusedDrawable
-        else b.onboardKycAddressActivityIntlLandmarkET.background = errorDrawable
+            else b.onboardKycAddressActivityIntlPostalET.background = errorDrawable
 
-        if (!b.onboardKycAddressActivityIntlTownWarningTV.isVisible) b.onboardKycAddressActivityIntlTownET.background =
-            unfocusedDrawable
-        else b.onboardKycAddressActivityIntlTownET.background = errorDrawable
+            if (!b.onboardKycAddressActivityIntlHouseNameWarningTV.isVisible) b.onboardKycAddressActivityIntlHouseNameET.background =
+                unfocusedDrawable
+            else b.onboardKycAddressActivityIntlHouseNameET.background = errorDrawable
 
-        if (!b.onboardKycAddressActivityIntlDistrictWarningTV.isVisible) b.onboardKycAddressActivityIntlDistrictET.background =
-            unfocusedDrawable
-        else b.onboardKycAddressActivityIntlDistrictET.background = errorDrawable
+            if (!b.onboardKycAddressActivityIntlLandmarkWarningTV.isVisible) b.onboardKycAddressActivityIntlLandmarkET.background =
+                unfocusedDrawable
+            else b.onboardKycAddressActivityIntlLandmarkET.background = errorDrawable
+
+            if (!b.onboardKycAddressActivityIntlTownWarningTV.isVisible) b.onboardKycAddressActivityIntlTownET.background =
+                unfocusedDrawable
+            else b.onboardKycAddressActivityIntlTownET.background = errorDrawable
+
+            if (!b.onboardKycAddressActivityIntlDistrictWarningTV.isVisible) b.onboardKycAddressActivityIntlDistrictET.background =
+                unfocusedDrawable
+            else b.onboardKycAddressActivityIntlDistrictET.background = errorDrawable
+         */
     }
 
     private fun showButtonLoader(

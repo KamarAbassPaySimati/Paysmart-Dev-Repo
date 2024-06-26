@@ -54,7 +54,8 @@ data class KycUserData(
     val occupation_specify: String?,
     val nature_of_permit: String?,
     val ref_no: String?,
-    val approve_reject_by:String?
+    val approve_reject_by:String?,
+    val intl_address: String?
 )
 
 data class KycBankData(

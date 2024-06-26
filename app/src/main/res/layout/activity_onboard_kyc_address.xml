@@ -440,96 +440,96 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
-                            android:text="@string/international_address_optional"
+                            android:text="@string/international_address"
                             android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
+
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="16dp"-->
+<!--                            android:fontFamily="@font/inter_medium"-->
+<!--                            android:text="@string/postal_zip_code"-->
+<!--                            android:textColor="@color/neutralGreyPrimaryText"-->
+<!--                            android:textSize="14sp" />-->
+
+<!--                        <EditText-->
+<!--                            android:id="@+id/onboardKycAddressActivityIntlPostalET"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:autofillHints=""-->
+<!--                            android:background="@drawable/bg_edit_text_unfocused"-->
+<!--                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "-->
+<!--                            android:ellipsize="end"-->
+<!--                            android:fontFamily="@font/inter_regular"-->
+<!--                            android:hint="@string/enter_postal_zip_code"-->
+<!--                            android:importantForAutofill="no"-->
+<!--                            android:inputType="textNoSuggestions|textCapSentences"-->
+<!--                            android:maxLength="100"-->
+<!--                            android:padding="12dp"-->
+<!--                            android:textColor="@color/neutralGreyPrimaryText"-->
+<!--                            android:textColorHint="@color/editTextHint"-->
+<!--                            android:textSize="14sp" />-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/onboardKycAddressActivityIntlPostalWarningTV"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:fontFamily="@font/inter_medium"-->
+<!--                            android:text="@string/required_field"-->
+<!--                            android:textColor="@color/accentNegative"-->
+<!--                            android:textSize="14sp"-->
+<!--                            android:visibility="gone"-->
+<!--                            tools:visibility="visible" />-->
+
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="16dp"-->
+<!--                            android:fontFamily="@font/inter_medium"-->
+<!--                            android:text="@string/house_name_number"-->
+<!--                            android:textColor="@color/neutralGreyPrimaryText"-->
+<!--                            android:textSize="14sp" />-->
+
+<!--                        <EditText-->
+<!--                            android:id="@+id/onboardKycAddressActivityIntlHouseNameET"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:autofillHints=""-->
+<!--                            android:background="@drawable/bg_edit_text_unfocused"-->
+<!--                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "-->
+<!--                            android:ellipsize="end"-->
+<!--                            android:fontFamily="@font/inter_regular"-->
+<!--                            android:hint="@string/enter_house_name_and_or_number"-->
+<!--                            android:importantForAutofill="no"-->
+<!--                            android:inputType="textNoSuggestions|textCapSentences"-->
+<!--                            android:maxLength="100"-->
+<!--                            android:padding="12dp"-->
+<!--                            android:textColor="@color/neutralGreyPrimaryText"-->
+<!--                            android:textColorHint="@color/editTextHint"-->
+<!--                            android:textSize="14sp" />-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/onboardKycAddressActivityIntlHouseNameWarningTV"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:fontFamily="@font/inter_medium"-->
+<!--                            android:text="@string/required_field"-->
+<!--                            android:textColor="@color/accentNegative"-->
+<!--                            android:textSize="14sp"-->
+<!--                            android:visibility="gone"-->
+<!--                            tools:visibility="visible" />-->
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:fontFamily="@font/inter_medium"
-                            android:text="@string/postal_zip_code"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textSize="14sp" />
-
-                        <EditText
-                            android:id="@+id/onboardKycAddressActivityIntlPostalET"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:autofillHints=""
-                            android:background="@drawable/bg_edit_text_unfocused"
-                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "
-                            android:ellipsize="end"
-                            android:fontFamily="@font/inter_regular"
-                            android:hint="@string/enter_postal_zip_code"
-                            android:importantForAutofill="no"
-                            android:inputType="textNoSuggestions|textCapSentences"
-                            android:maxLength="100"
-                            android:padding="12dp"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textColorHint="@color/editTextHint"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/onboardKycAddressActivityIntlPostalWarningTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="@string/required_field"
-                            android:textColor="@color/accentNegative"
-                            android:textSize="14sp"
-                            android:visibility="gone"
-                            tools:visibility="visible" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="@string/house_name_number"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textSize="14sp" />
-
-                        <EditText
-                            android:id="@+id/onboardKycAddressActivityIntlHouseNameET"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:autofillHints=""
-                            android:background="@drawable/bg_edit_text_unfocused"
-                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "
-                            android:ellipsize="end"
-                            android:fontFamily="@font/inter_regular"
-                            android:hint="@string/enter_house_name_and_or_number"
-                            android:importantForAutofill="no"
-                            android:inputType="textNoSuggestions|textCapSentences"
-                            android:maxLength="100"
-                            android:padding="12dp"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textColorHint="@color/editTextHint"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/onboardKycAddressActivityIntlHouseNameWarningTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="@string/required_field"
-                            android:textColor="@color/accentNegative"
-                            android:textSize="14sp"
-                            android:visibility="gone"
-                            tools:visibility="visible" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="@string/street_name"
+                            android:text="@string/address"
                             android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
@@ -543,7 +543,7 @@
                             android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "
                             android:ellipsize="end"
                             android:fontFamily="@font/inter_regular"
-                            android:hint="@string/enter_street_name"
+                            android:hint="@string/enter_address"
                             android:importantForAutofill="no"
                             android:inputType="textNoSuggestions"
                             android:maxLength="100"
@@ -564,127 +564,127 @@
                             android:visibility="gone"
                             tools:visibility="visible" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="@string/landmark"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textSize="14sp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="16dp"-->
+<!--                            android:fontFamily="@font/inter_medium"-->
+<!--                            android:text="@string/landmark"-->
+<!--                            android:textColor="@color/neutralGreyPrimaryText"-->
+<!--                            android:textSize="14sp" />-->
 
-                        <EditText
-                            android:id="@+id/onboardKycAddressActivityIntlLandmarkET"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:autofillHints=""
-                            android:background="@drawable/bg_edit_text_unfocused"
-                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "
-                            android:ellipsize="end"
-                            android:fontFamily="@font/inter_regular"
-                            android:hint="@string/enter_landmark"
-                            android:importantForAutofill="no"
-                            android:inputType="textNoSuggestions|textCapSentences"
-                            android:maxLength="100"
-                            android:padding="12dp"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textColorHint="@color/editTextHint"
-                            android:textSize="14sp" />
-
-
-                        <TextView
-                            android:id="@+id/onboardKycAddressActivityIntlLandmarkWarningTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="@string/required_field"
-                            android:textColor="@color/accentNegative"
-                            android:textSize="14sp"
-                            android:visibility="gone"
-                            tools:visibility="visible" />
+<!--                        <EditText-->
+<!--                            android:id="@+id/onboardKycAddressActivityIntlLandmarkET"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:autofillHints=""-->
+<!--                            android:background="@drawable/bg_edit_text_unfocused"-->
+<!--                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "-->
+<!--                            android:ellipsize="end"-->
+<!--                            android:fontFamily="@font/inter_regular"-->
+<!--                            android:hint="@string/enter_landmark"-->
+<!--                            android:importantForAutofill="no"-->
+<!--                            android:inputType="textNoSuggestions|textCapSentences"-->
+<!--                            android:maxLength="100"-->
+<!--                            android:padding="12dp"-->
+<!--                            android:textColor="@color/neutralGreyPrimaryText"-->
+<!--                            android:textColorHint="@color/editTextHint"-->
+<!--                            android:textSize="14sp" />-->
 
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="@string/town_village_ta"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textSize="14sp" />
+<!--                        <TextView-->
+<!--                            android:id="@+id/onboardKycAddressActivityIntlLandmarkWarningTV"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:fontFamily="@font/inter_medium"-->
+<!--                            android:text="@string/required_field"-->
+<!--                            android:textColor="@color/accentNegative"-->
+<!--                            android:textSize="14sp"-->
+<!--                            android:visibility="gone"-->
+<!--                            tools:visibility="visible" />-->
 
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/onboardKycAddressActivityIntlTownET"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:autofillHints=""
-                            android:background="@drawable/bg_edit_text_unfocused"
-                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "
-                            android:ellipsize="end"
-                            android:fontFamily="@font/inter_regular"
-                            android:hint="@string/enter_town_village_traditional_authority"
-                            android:importantForAutofill="no"
-                            android:inputType="textNoSuggestions|textCapSentences"
-                            android:maxLength="100"
-                            android:padding="12dp"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textColorHint="@color/editTextHint"
-                            android:textSize="14sp" />
 
-                        <TextView
-                            android:id="@+id/onboardKycAddressActivityIntlTownWarningTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="@string/required_field"
-                            android:textColor="@color/accentNegative"
-                            android:textSize="14sp"
-                            android:visibility="gone"
-                            tools:visibility="visible" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="16dp"-->
+<!--                            android:fontFamily="@font/inter_medium"-->
+<!--                            android:text="@string/town_village_ta"-->
+<!--                            android:textColor="@color/neutralGreyPrimaryText"-->
+<!--                            android:textSize="14sp" />-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="@string/district"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textSize="14sp" />
+<!--                        <com.google.android.material.textfield.MaterialAutoCompleteTextView-->
+<!--                            android:id="@+id/onboardKycAddressActivityIntlTownET"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:autofillHints=""-->
+<!--                            android:background="@drawable/bg_edit_text_unfocused"-->
+<!--                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "-->
+<!--                            android:ellipsize="end"-->
+<!--                            android:fontFamily="@font/inter_regular"-->
+<!--                            android:hint="@string/enter_town_village_traditional_authority"-->
+<!--                            android:importantForAutofill="no"-->
+<!--                            android:inputType="textNoSuggestions|textCapSentences"-->
+<!--                            android:maxLength="100"-->
+<!--                            android:padding="12dp"-->
+<!--                            android:textColor="@color/neutralGreyPrimaryText"-->
+<!--                            android:textColorHint="@color/editTextHint"-->
+<!--                            android:textSize="14sp" />-->
 
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/onboardKycAddressActivityIntlDistrictET"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:autofillHints=""
-                            android:background="@drawable/bg_edit_text_unfocused"
-                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "
-                            android:ellipsize="end"
-                            android:fontFamily="@font/inter_regular"
-                            android:hint="@string/enter_district"
-                            android:importantForAutofill="no"
-                            android:inputType="textNoSuggestions|textCapSentences"
-                            android:maxLength="100"
-                            android:padding="12dp"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textColorHint="@color/editTextHint"
-                            android:textSize="14sp" />
+<!--                        <TextView-->
+<!--                            android:id="@+id/onboardKycAddressActivityIntlTownWarningTV"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:fontFamily="@font/inter_medium"-->
+<!--                            android:text="@string/required_field"-->
+<!--                            android:textColor="@color/accentNegative"-->
+<!--                            android:textSize="14sp"-->
+<!--                            android:visibility="gone"-->
+<!--                            tools:visibility="visible" />-->
 
-                        <TextView
-                            android:id="@+id/onboardKycAddressActivityIntlDistrictWarningTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="@string/required_field"
-                            android:textColor="@color/accentNegative"
-                            android:textSize="14sp"
-                            android:visibility="gone"
-                            tools:visibility="visible" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="16dp"-->
+<!--                            android:fontFamily="@font/inter_medium"-->
+<!--                            android:text="@string/district"-->
+<!--                            android:textColor="@color/neutralGreyPrimaryText"-->
+<!--                            android:textSize="14sp" />-->
+
+<!--                        <com.google.android.material.textfield.MaterialAutoCompleteTextView-->
+<!--                            android:id="@+id/onboardKycAddressActivityIntlDistrictET"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:autofillHints=""-->
+<!--                            android:background="@drawable/bg_edit_text_unfocused"-->
+<!--                            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,. "-->
+<!--                            android:ellipsize="end"-->
+<!--                            android:fontFamily="@font/inter_regular"-->
+<!--                            android:hint="@string/enter_district"-->
+<!--                            android:importantForAutofill="no"-->
+<!--                            android:inputType="textNoSuggestions|textCapSentences"-->
+<!--                            android:maxLength="100"-->
+<!--                            android:padding="12dp"-->
+<!--                            android:textColor="@color/neutralGreyPrimaryText"-->
+<!--                            android:textColorHint="@color/editTextHint"-->
+<!--                            android:textSize="14sp" />-->
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/onboardKycAddressActivityIntlDistrictWarningTV"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:fontFamily="@font/inter_medium"-->
+<!--                            android:text="@string/required_field"-->
+<!--                            android:textColor="@color/accentNegative"-->
+<!--                            android:textSize="14sp"-->
+<!--                            android:visibility="gone"-->
+<!--                            tools:visibility="visible" />-->
 
                     </LinearLayout>
 
