@@ -67,11 +67,11 @@ Feature:Paymaart- Customer Android- Malawi FULL KYC
     When I select malawi full kyc
     Then I am redirected to KYC screen one
 
-#  Scenario: Missing required fields
-#    When I enter the street name as "" for KYC
-#    When I enter the town as "Lilongwe" for KYC
-#    When I click on proceed button on screen one
-#    Then I should see error message "Required field" for field with ID "streetName" in kyc screen
+  Scenario: Missing required fields
+    When I enter the street name as "" for KYC
+    When I enter the town as "Lilongwe" for KYC
+    When I click on proceed button on screen one
+    Then I should see error message "Required field" for field with ID "streetName" in kyc screen
 
   Scenario: Complete KYC without filling in the ID document section
     When I enter the street name as "Balaka"

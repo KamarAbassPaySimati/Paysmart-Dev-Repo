@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/deleteRequestSuccessSheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="16dp"
+    app:backgroundTint="@color/transparent"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="128dp"
+        android:layout_height="3dp"
+        android:backgroundTint="@color/neutralGrey"
+        app:cardCornerRadius="6dp"
+        app:cardElevation="0dp" />
+
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="72dp"
+        android:contentDescription="@string/check_box_icon_data"
+        android:src="@drawable/ico_check_circle_green" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/inter_semibold"
+        android:text="@string/account_deletion_request_sent_successfully"
+        android:textAlignment="center"
+        android:textColor="@color/primaryColor"
+        android:textSize="24sp"
+        tools:ignore="RelativeOverlap" />
+
+    <TextView
+        android:id="@+id/deleteRequestSuccessSheetSubTextTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/inter_medium"
+        android:text="@string/delete_request_success_subtext"
+        android:textAlignment="center"
+        android:textColor="@color/neutralGrey"
+        android:textSize="14sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/deleteRequestSuccessSheetBackToHomeButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/primary_rounded_button_background"
+        android:fontFamily="@font/inter_medium"
+        android:text="@string/back_to_homepage"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".ui.kyc.kycIdentityActivity">
+    tools:context=".ui.kyc.KycIdentityActivity">
 
     <RelativeLayout
         android:id="@+id/onboardKycIdentityActivityBackButtonBox"
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            android:contentDescription="@string/back"
+            android:contentDescription="@string/back_button"
             android:paddingStart="16dp"
             android:paddingTop="16dp"
             android:paddingEnd="8dp"
@@ -222,7 +222,7 @@
                                 android:text="@string/national_id"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="18sp"
-                                app:drawableEndCompat="@drawable/ico_next_arrow_black"/>
+                                app:drawableEndCompat="@drawable/ico_next_arrow_black" />
 
                         </LinearLayout>
 
@@ -331,6 +331,222 @@
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
+                        <LinearLayout
+                            android:id="@+id/onboardKycIdentityActivityIdDocRefugeeIdRBContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/onboardKycIdentityActivityIdDocRefugeeIdRB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:fontFamily="@font/inter_regular"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                app:buttonTint="@color/primaryColor" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:fontFamily="@font/inter_regular"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/refugee_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="18sp"
+                                app:drawableEndCompat="@drawable/ico_next_arrow_black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/onboardKycIdentityActivityIdDocAsylumIdRBContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/onboardKycIdentityActivityIdDocAsylumIdRB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:fontFamily="@font/inter_regular"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                app:buttonTint="@color/primaryColor" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:fontFamily="@font/inter_regular"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/asylum_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="18sp"
+                                app:drawableEndCompat="@drawable/ico_next_arrow_black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/onboardKycIdentityActivityIdDocDriverLicenseRBContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/onboardKycIdentityActivityIdDocDriverLicenseRB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:fontFamily="@font/inter_regular"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                app:buttonTint="@color/primaryColor" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:fontFamily="@font/inter_regular"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/driver_s_licence"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="18sp"
+                                app:drawableEndCompat="@drawable/ico_next_arrow_black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/onboardKycIdentityActivityIdDocTrafficRegisterCardRBContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/onboardKycIdentityActivityIdDocTrafficRegisterCardRB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:fontFamily="@font/inter_regular"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                app:buttonTint="@color/primaryColor" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:fontFamily="@font/inter_regular"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/traffic_register_card"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="18sp"
+                                app:drawableEndCompat="@drawable/ico_next_arrow_black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/onboardKycIdentityActivityIdDocBirthCertificateRBContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/onboardKycIdentityActivityIdDocBirthCertificateRB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:fontFamily="@font/inter_regular"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                app:buttonTint="@color/primaryColor" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:fontFamily="@font/inter_regular"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/birth_certificate"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="18sp"
+                                app:drawableEndCompat="@drawable/ico_next_arrow_black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/onboardKycIdentityActivityIdDocStudentIdRBContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/onboardKycIdentityActivityIdDocStudentIdRB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:fontFamily="@font/inter_regular"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                app:buttonTint="@color/primaryColor" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:fontFamily="@font/inter_regular"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/student_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="18sp"
+                                app:drawableEndCompat="@drawable/ico_next_arrow_black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/onboardKycIdentityActivityIdDocEmployeeIdRBContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/onboardKycIdentityActivityIdDocEmployeeIdRB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:fontFamily="@font/inter_regular"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                app:buttonTint="@color/primaryColor" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:fontFamily="@font/inter_regular"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/employee_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="18sp"
+                                app:drawableEndCompat="@drawable/ico_next_arrow_black" />
+
+                        </LinearLayout>
 
                     </RadioGroup>
 
@@ -520,7 +736,6 @@
 
                         </LinearLayout>
 
-
                         <LinearLayout
                             android:id="@+id/onboardKycIdentityActivityVerDocNationalIdRBContainer"
                             android:layout_width="match_parent"
@@ -608,6 +823,37 @@
                                 android:paddingTop="10dp"
                                 android:paddingBottom="10dp"
                                 android:text="@string/institution_letter"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="18sp"
+                                app:drawableEndCompat="@drawable/ico_next_arrow_black" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/onboardKycIdentityActivityVerDocReligiousInstitutionLetterRBContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatRadioButton
+                                android:id="@+id/onboardKycIdentityActivityVerDocReligiousInstitutionLetterRB"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="false"
+                                android:fontFamily="@font/inter_regular"
+                                android:minWidth="0dp"
+                                android:minHeight="0dp"
+                                app:buttonTint="@color/primaryColor" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="2dp"
+                                android:fontFamily="@font/inter_regular"
+                                android:paddingTop="10dp"
+                                android:paddingBottom="10dp"
+                                android:text="@string/religious_institution_district_commissioner_letter"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="18sp"
                                 app:drawableEndCompat="@drawable/ico_next_arrow_black" />

@@ -238,12 +238,12 @@ class KycAddressActivity : BaseActivity() {
 
     private fun onClickNationality() {
         clearAllFocusedFields()
-//        b.onboardKycAddressActivityIntlNationalityTV.background =
-//            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_focused)
-//
-//        val i = Intent(this, KycNationalityActivity::class.java)
-//        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
-//        nationResultLauncher.launch(i, options)
+        b.onboardKycAddressActivityIntlNationalityTV.background =
+            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_focused)
+
+        val i = Intent(this, KycNationalityActivity::class.java)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
+        nationResultLauncher.launch(i, options)
     }
 
     private fun onStreetNameFilled(position: Int) {

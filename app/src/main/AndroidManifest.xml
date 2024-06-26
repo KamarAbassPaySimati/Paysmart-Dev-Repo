@@ -15,46 +15,69 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PaymaartMerchant"
+        android:theme="@style/Theme.Paymaart"
         tools:targetApi="31">
         <activity
-            android:name=".ui.kyc.KycOccupationActivity"
+            android:name=".ui.delete.DeleteAccountActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.kyc.KycNationalityActivity"
+            android:exported="false"
+            android:taskAffinity=".kyc" />
+        <activity
+            android:name=".ui.kyc.KycEducationActivity"
+            android:exported="false"
+            android:taskAffinity=".kyc" />
+        <activity
+            android:name=".ui.kyc.KycOccupationActivity"
+            android:exported="false"
+            android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.kyc.KycFullScreenPreviewActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.kyc.KycCaptureActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.kyc.KycCaptureUploadActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.kyc.KycLiveSelfieActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.kyc.KycPersonalActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.kyc.KycIdentityActivity"
             android:exported="false"
+            android:taskAffinity=".kyc"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.kyc.KycAddressActivity"
             android:exported="false"
+            android:taskAffinity=".kyc"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.kyc.KycRegistrationProcessActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.kyc.KycSelectActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.kyc.KycRegistrationGuideActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.kyc.KycProgressActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.home.HomeActivity"
             android:exported="false" />

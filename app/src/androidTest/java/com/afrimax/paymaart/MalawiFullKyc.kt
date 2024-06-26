@@ -10,9 +10,11 @@ import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.PickerActions
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import com.afrimax.paymaart.ui.utils.adapters.KycNationAdapter
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -76,14 +78,14 @@ class MalawiFullKyc {
 
     @Then("I select {string} as the nationality")
     fun iSelectTheNation(nation: String) {
-//        Espresso.onView(withId(R.id.onboardKycYourAddressActivityIntlNationalityTV))
-//            .perform(ViewActions.scrollTo(), ViewActions.click())
-//        Thread.sleep(3000)
-//        Espresso.onView(withId(R.id.onboardKycNationalityActivityRV)).perform(
-//            RecyclerViewActions.actionOnItemAtPosition<KycNationAdapter.KycNationViewHolder>(
-//                0, ViewActions.click()
-//            )
-//        )
+        Espresso.onView(withId(R.id.onboardKycAddressActivityIntlNationalityTV))
+            .perform(ViewActions.scrollTo(), ViewActions.click())
+        Thread.sleep(3000)
+        Espresso.onView(withId(R.id.kycNationalityActivityRV)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<KycNationAdapter.KycNationViewHolder>(
+                0, ViewActions.click()
+            )
+        )
         Thread.sleep(3000)
     }
 
@@ -531,6 +533,16 @@ class MalawiFullKyc {
 
             "Passport" -> {
                 Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocPassportTV)).perform(
+                    ViewActions.scrollTo(), ViewActions.click()
+                )
+            }
+            "Drivers licence" -> {
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocDriverLicenseRBContainer)).perform(
+                    ViewActions.scrollTo(), ViewActions.click()
+                )
+            }
+            "Refugee ID" -> {
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocRefugeeIdRBContainer)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }

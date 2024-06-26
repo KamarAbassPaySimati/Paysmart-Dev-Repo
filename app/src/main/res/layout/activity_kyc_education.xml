@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/kycOccupationEducationActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.kyc.KycEducationActivity">
+
+    <ImageView
+        android:id="@+id/kycOccupationEducationActivityCloseButtonIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/back_button"
+        android:padding="16dp"
+        android:src="@drawable/ic_close"
+        app:tint="@color/black"/>
+
+    <LinearLayout
+        android:id="@+id/kycOccupationEducationActivityTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/kycOccupationEducationActivityCloseButtonIV"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/inter_medium"
+            android:includeFontPadding="false"
+            android:text="@string/occupation_source_of_funds"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/inter_regular"
+            android:includeFontPadding="false"
+            android:text="@string/in_full_time_education"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/search_institute"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/kycOccupationEducationActivityET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:autofillHints=""
+            android:background="@drawable/bg_edit_text_unfocused"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890,. "
+            android:drawableStart="@drawable/ico_search_neutral_grey"
+            android:drawablePadding="6dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/inter_regular"
+            android:hint="@string/search"
+            android:importantForAutofill="no"
+            android:inputType="textNoSuggestions"
+            android:maxLength="100"
+            android:padding="12dp"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textColorHint="@color/editTextHint"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/kycOccupationEducationActivityTopBar">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/kycOccupationEducationActivityRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/kycOccupationEducationActivityLoaderLottie"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_loader" />
+
+    </FrameLayout>
+
+</RelativeLayout>

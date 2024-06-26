@@ -328,7 +328,7 @@ class KycLiveSelfieActivity : BaseActivity() {
             val cursor = context.contentResolver.query(uri, null, null, null, null)
             cursor?.moveToFirst()
             fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-                ?: "PMAGT_${System.currentTimeMillis()}.jpg"
+                ?: "PMCMR_${System.currentTimeMillis()}.jpg"
             cursor?.close()
             return fileName
         }

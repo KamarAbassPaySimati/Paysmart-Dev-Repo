@@ -9,12 +9,12 @@ Feature: Paymaart- Customer Android-Login
   Upon successful entry if user is first time logging in user will be navigated to KYC screen
   If user is not first time logging in , then user will be navigated to the Home Screen
 
-#  Scenario: Navigate to login screen
-#    Given The Intro screen is displayed
-#    Then The main app interface should be displayed with text "Elevate your spending game with fast, secure, free e-payments"
-#    When I click the login customer button
-#    Then I see the login screen
-#
+  Scenario: Navigate to login screen
+    Given The Intro screen is displayed
+    Then The main app interface should be displayed with text "Elevate your spending game with fast, secure, free e-payments"
+    When I click the login customer button
+    Then I see the login screen
+
   Scenario: Enter Valid Customer Details and Verify Email Address
     Given I am in registration screen
     When I enter a valid first name for registration
@@ -77,9 +77,8 @@ Feature: Paymaart- Customer Android-Login
     Then I see the TOTP screen
     When I enter the generated OTP
     Then I am redirected to the homepage
-#    When I open menu and click on logout button
-#    Then I should view confirmation popup
-#    When I click on confirm logout button
-#    Then I should be redirected to intro screen
-#  The commented out code will be used in the further feature
+    When I open menu and click on logout button
+    Then I should view confirmation popup
+    When I click on confirm logout button
+    Then I should be redirected to intro screen
 

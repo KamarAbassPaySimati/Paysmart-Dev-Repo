@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sheetCompleteKyc"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:backgroundTint="@color/transparent"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_sheet"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="128dp"
+            android:layout_height="3dp"
+            android:backgroundTint="@color/neutralGrey"
+            app:cardCornerRadius="6dp"
+            app:cardElevation="0dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="72dp"
+            android:contentDescription="@string/image_description"
+            android:src="@drawable/ico_complete_kyc" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/online_kyc_registration"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/sheetCompleteKycSubTextTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/complete_this_now_for_full_access_to_paymaart_services"
+            android:textAlignment="center"
+            android:textColor="@color/neutralGrey"
+            android:textSize="14sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/sheetCompleteKycCompleteKycButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/primary_rounded_button_background"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/complete_kyc_registration"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/sheetCompleteKycSkipTV"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginTop="16dp"
+            android:drawablePadding="12dp"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center"
+            android:text="@string/skip"
+            android:textAlignment="center"
+            android:textColor="@color/primaryColor"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</ScrollView>
