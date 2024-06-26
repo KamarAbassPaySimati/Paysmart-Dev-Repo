@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Paymaart"
         tools:targetApi="31">
         <activity
+            android:name=".ui.password.UpdatePasswordPinActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.password.ForgotPasswordPinActivity"
             android:exported="false" />
         <activity

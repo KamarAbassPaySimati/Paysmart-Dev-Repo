@@ -45,7 +45,7 @@
     <string name="close_button_data">close button</string>
     <string name="bullet_char">•</string>
     <string name="please_provide_unique">Please provide unique and memorable answers that are easy to remember, even years later.</string>
-    <string name="answers_should_be_clear">Answers should be clear and exact (preferably a single word), but they don\\\'t need to be truthful. Indeed, it\\\'s best to use fake answers for security questions to enhance security.</string>
+    <string name="answers_should_be_clear">Answers should be clear and exact (preferably a single word), but they don\'t need to be truthful. Indeed, it\'s best to use fake answers for security questions to enhance security.</string>
     <string name="email_verification">Email Verification</string>
     <string name="email_verify_sub_text">Check your email for a verification OTP. The OTP will be active for 10 minutes.</string>
     <string name="sample_email">john12@gmail.com</string>
@@ -492,4 +492,12 @@
     <string name="pin_guide4">Make your PIN random to improve security.</string>
     <string name="pin_guide5">Change your PIN regularly for added security, like every 91 days.</string>
     <string name="pin_guide6">Avoid common choices such as PINs ending in \'0000\' or \'1234\'.</string>
+    <string name="current_pin_password">Current PIN / Password</string>
+    <string name="new_pin">New PIN</string>
+    <string name="update">Update</string>
+    <string name="password_updated">Password Updated</string>
+    <string name="your_password_has_been_successfully_updated">Your Password has been successfully updated</string>
+    <string name="pin_updated">PIN Updated</string>
+    <string name="your_pin_has_been_successfully_updated">Your PIN has been successfully updated</string>
+    <string name="enter_current_pin_password">Enter current PIN/password</string>
 </resources>

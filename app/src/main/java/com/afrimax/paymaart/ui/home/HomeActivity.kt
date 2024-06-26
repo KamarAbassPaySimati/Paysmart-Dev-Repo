@@ -29,6 +29,8 @@ import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.kyc.KycProgressActivity
+import com.afrimax.paymaart.ui.password.ForgotPasswordPinActivity
+import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
@@ -82,9 +84,6 @@ class HomeActivity : BaseActivity() {
                 else finish()
             }
         })
-        b.homeActivityProfileNameTV.text = "Godis Jacob MJOJO"
-        b.homeActivityProfilePaymaartIdTV.text = getString(R.string.paymaart_id_formatted, "CMR12345678")
-        b.homeActivityProfilePaymaartMemberSinceTV.text = getString(R.string.member_since_formatted, "2024")
     }
 
     private fun setUpListeners() {
@@ -183,20 +182,16 @@ class HomeActivity : BaseActivity() {
         b.homeActivityNavView.homeDrawerUpdatePasswordContainer.setOnClickListener {
             dest = DRAWER_UPDATE_PASSWORD
             b.homeActivity.closeDrawer(GravityCompat.END)
-
         }
 
         b.homeActivityNavView.homeDrawerDeleteAccountContainer.setOnClickListener {
             dest = DRAWER_DELETE_ACCOUNT
             b.homeActivity.closeDrawer(GravityCompat.END)
-            startActivity(Intent(this, DeleteAccountActivity::class.java))
         }
 
         b.homeActivityNavView.homeDrawerLogOutContainer.setOnClickListener {
             dest = DRAWER_LOGOUT
             b.homeActivity.closeDrawer(GravityCompat.END)
-            val logoutSheet = LogoutConfirmationSheet()
-            logoutSheet.show(supportFragmentManager, LogoutConfirmationSheet.TAG)
         }
         setDrawerClosedListener()
     }
@@ -208,6 +203,23 @@ class HomeActivity : BaseActivity() {
             override fun onDrawerOpened(drawerView: View) {}
 
             override fun onDrawerClosed(drawerView: View) {
+                when (dest) {
+                    DRAWER_KYC_DETAILS -> {}
+
+                    DRAWER_UPDATE_PASSWORD -> {
+                        startActivity(Intent(this@HomeActivity, UpdatePasswordPinActivity::class.java))
+                    }
+
+                    DRAWER_DELETE_ACCOUNT -> {
+                        startActivity(Intent(this@HomeActivity, DeleteAccountActivity::class.java))
+                    }
+
+                    DRAWER_LOGOUT -> {
+                        val logoutSheet = LogoutConfirmationSheet()
+                        logoutSheet.show(supportFragmentManager, LogoutConfirmationSheet.TAG)
+                    }
+                }
+                dest = 0
                 isSettingsClicked = false
                 toggleSettings()
             }
@@ -413,6 +425,7 @@ class HomeActivity : BaseActivity() {
     }
 
     companion object {
+        const val DRAWER_KYC_DETAILS = 1
         const val DRAWER_UPDATE_PASSWORD = 9
         const val DRAWER_DELETE_ACCOUNT = 10
         const val DRAWER_LOGOUT = 11
