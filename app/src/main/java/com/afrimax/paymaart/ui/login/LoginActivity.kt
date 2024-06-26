@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -25,6 +26,7 @@ import androidx.core.view.isVisible
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityLoginBinding
+import com.afrimax.paymaart.ui.password.ForgotPasswordPinActivity
 import com.afrimax.paymaart.ui.register.RegisterActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.LoginLoginByDialog
 import com.afrimax.paymaart.ui.utils.interfaces.LoginByDialogInterface
@@ -145,17 +147,17 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
         }
 
         b.loginActivityForgotPinTV.setOnClickListener {
-//            val i = Intent(this, ForgotPasswordPinActivity::class.java)
-//            i.putExtra(Constants.FORGOT_CREDENTIAL_TYPE, Constants.FORGOT_CREDENTIAL_PIN)
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
-//            startActivity(i, options)
+            val i = Intent(this, ForgotPasswordPinActivity::class.java)
+            i.putExtra(Constants.FORGOT_CREDENTIAL_TYPE, Constants.FORGOT_CREDENTIAL_PIN)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
+            startActivity(i, options)
         }
 
         b.loginActivityForgotPasswordTV.setOnClickListener {
-//            val i = Intent(this, ForgotPasswordPinActivity::class.java)
-//            i.putExtra(Constants.FORGOT_CREDENTIAL_TYPE, Constants.FORGOT_CREDENTIAL_PASSWORD)
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
-//            startActivity(i, options)
+            val i = Intent(this, ForgotPasswordPinActivity::class.java)
+            i.putExtra(Constants.FORGOT_CREDENTIAL_TYPE, Constants.FORGOT_CREDENTIAL_PASSWORD)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
+            startActivity(i, options)
         }
 
         setUpEditTextChangeListeners()
