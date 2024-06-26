@@ -60,6 +60,7 @@
             android:fontFamily="@font/inter_regular"
             android:text="@string/please_provide_unique"
             android:textColor="@color/white"
+            android:justificationMode="inter_word"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -88,6 +89,7 @@
             android:fontFamily="@font/inter_regular"
             android:text="@string/answers_should_be_clear"
             android:textColor="@color/white"
+            android:justificationMode="inter_word"
             android:textSize="14sp" />
 
     </LinearLayout>

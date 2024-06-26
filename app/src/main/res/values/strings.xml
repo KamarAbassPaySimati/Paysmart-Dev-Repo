@@ -45,7 +45,7 @@
     <string name="close_button_data">close button</string>
     <string name="bullet_char">•</string>
     <string name="please_provide_unique">Please provide unique and memorable answers that are easy to remember, even years later.</string>
-    <string name="answers_should_be_clear">Answers should be clear and exact (preferably a single word), but they don\\\'t need to be truthful. Indeed, it\\\'s best to use fake answers for security questions to enhance security.</string>
+    <string name="answers_should_be_clear">Answers should be clear and exact (preferably a single word), but they don\'t need to be truthful. Indeed, it\'s best to use fake answers for security questions to enhance security.</string>
     <string name="email_verification">Email Verification</string>
     <string name="email_verify_sub_text">Check your email for a verification OTP. The OTP will be active for 10 minutes.</string>
     <string name="sample_email">john12@gmail.com</string>

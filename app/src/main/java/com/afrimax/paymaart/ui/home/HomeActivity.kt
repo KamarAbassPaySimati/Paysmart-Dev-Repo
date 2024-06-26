@@ -84,9 +84,6 @@ class HomeActivity : BaseActivity() {
                 else finish()
             }
         })
-        b.homeActivityProfileNameTV.text = "Godis Jacob MJOJO"
-        b.homeActivityProfilePaymaartIdTV.text = getString(R.string.paymaart_id_formatted, "CMR12345678")
-        b.homeActivityProfilePaymaartMemberSinceTV.text = getString(R.string.member_since_formatted, "2024")
     }
 
     private fun setUpListeners() {
