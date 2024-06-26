@@ -8,6 +8,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -29,7 +30,9 @@ import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.kyc.KycProgressActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
+import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
+import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -45,6 +48,7 @@ class HomeActivity : BaseActivity() {
     private var rejectionReasons = ArrayList<String>()
     private var dest = 0
     private var isSettingsClicked: Boolean = false
+    private lateinit var mKycStatus: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -90,22 +94,44 @@ class HomeActivity : BaseActivity() {
         }
 
         b.homeActivityEyeButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 
         b.homeActivityPayAfrimaxButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 
         b.homeActivityPayMerchantButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 
         b.homeActivityPayPaymaartButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
+        }
+        b.homeActivityPayPersonButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 
-        b.homeActivityCashInButton.setOnClickListener {
+        b.homeActivityScanQrButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 
         b.homeActivityCashOutButton.setOnClickListener {
-            startActivity(Intent(this, KycProgressActivity::class.java))
+            if (checkKycStatus()){
+                //
+            }
         }
 //
         b.homeActivityTransactionsBox.setOnClickListener {
@@ -249,6 +275,7 @@ class HomeActivity : BaseActivity() {
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
                         runOnUiThread {
+                            "Response".showLogE(body)
                             populateHomeScreenData(body.homeScreenData)
                         }
                     } else {
@@ -294,7 +321,63 @@ class HomeActivity : BaseActivity() {
         val kycStatus = homeScreenData.kycStatus
         val completedStatus = homeScreenData.completed
         rejectionReasons = homeScreenData.rejectionReasons ?: ArrayList()
+
+        when {
+            (kycStatus == null) -> {
+                b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.not_started)
+                b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.neutralGreyPrimaryText))
+//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_not_started)
+            }
+
+            (kycStatus == Constants.KYC_STATUS_IN_PROGRESS && !completedStatus) -> {
+                b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.in_progress)
+                b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentInformation))
+//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_in_progress)
+            }
+
+            kycStatus == Constants.KYC_STATUS_INFO_REQUIRED -> {
+                b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.further_information_required)
+                b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentNegative))
+//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_rejected)
+            }
+
+            kycStatus == Constants.KYC_STATUS_COMPLETED -> {
+                b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.completed)
+                b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentPositive))
+//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_completed)
+            }
+
+            (kycStatus == Constants.KYC_STATUS_IN_PROGRESS && completedStatus) -> {
+                b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.in_review)
+                b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentWarning))
+//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_in_review)
+            }
+
+        }
         hideLoader()
+    }
+
+    private fun checkKycStatus(): Boolean {
+        var status = false
+        when {
+            isKycCompleted() -> status = true
+            isKycInReview() -> Toast.makeText(
+                this,
+                "You can access this feature once admin approves your KYC request",
+                Toast.LENGTH_LONG
+            ).show()
+
+            else -> CompleteKycSheet().show(supportFragmentManager, CompleteKycSheet.TAG)
+        }
+        return status
+    }
+
+    private fun isKycCompleted(): Boolean {
+        return b.homeActivityNavView.homeDrawerKycStatusTV.text == getString(R.string.completed)
+    }
+
+    private fun isKycInReview(): Boolean {
+        return b.homeActivityNavView.homeDrawerKycStatusTV.text == getString(R.string.in_review)
     }
 
     private fun membershipType(text: String, fontColor: Int, background: Int){

@@ -195,7 +195,7 @@
                             android:text="@string/pay"
                             android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp"
-                            android:paddingStart="16dp"/>
+                            android:layout_marginStart="16dp"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -518,7 +518,7 @@
                 android:weightSum="2">
 
                 <LinearLayout
-                    android:id="@+id/homeActivityCashInButton"
+                    android:id="@+id/homeActivityScanQrButton"
                     style="?android:attr/borderlessButtonStyle"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
