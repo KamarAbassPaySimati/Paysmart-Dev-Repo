@@ -96,6 +96,31 @@ class KycCaptureUploadActivity : BaseActivity() {
                 }
             }
 
+            Constants.KYC_IDENTITY_ID_REFUGEE_ID -> {
+                b.kycCaptureUploadActivityHeaderTV.text = getString(R.string.refugee_id)
+                b.kycCaptureUploadActivitySubTextTV.text = getString(R.string.refugee_id_subtext)
+
+                //Hide Back Section
+                b.kycCaptureUploadActivityBackTV.visibility = View.GONE
+                b.kycCaptureUploadActivityMediaBackContainer.visibility = View.GONE
+
+                //Rename front text to 'File name'
+                b.kycCaptureUploadActivityFrontTV.text = getString(R.string.file_name)
+            }
+
+
+            Constants.KYC_IDENTITY_ID_ASYLUM_ID -> {
+                b.kycCaptureUploadActivityHeaderTV.text = getString(R.string.asylum_id)
+                b.kycCaptureUploadActivitySubTextTV.text = getString(R.string.asylum_id_subtext)
+
+                //Hide Back Section
+                b.kycCaptureUploadActivityBackTV.visibility = View.GONE
+                b.kycCaptureUploadActivityMediaBackContainer.visibility = View.GONE
+
+                //Rename front text to 'File name'
+                b.kycCaptureUploadActivityFrontTV.text = getString(R.string.file_name)
+            }
+
             Constants.KYC_IDENTITY_ID_DRIVER_LICENSE, Constants.KYC_IDENTITY_VER_DRIVER_LICENSE -> {
                 b.kycCaptureUploadActivityHeaderTV.text = getString(R.string.driver_s_licence)
                 b.kycCaptureUploadActivitySubTextTV.text =
@@ -112,6 +137,30 @@ class KycCaptureUploadActivity : BaseActivity() {
                 b.kycCaptureUploadActivityHeaderTV.text = getString(R.string.birth_certificate)
                 b.kycCaptureUploadActivitySubTextTV.text =
                     getString(R.string.birth_certificate_subtext)
+
+                //Hide Back Section
+                b.kycCaptureUploadActivityBackTV.visibility = View.GONE
+                b.kycCaptureUploadActivityMediaBackContainer.visibility = View.GONE
+
+                //Rename front text to 'File name'
+                b.kycCaptureUploadActivityFrontTV.text = getString(R.string.file_name)
+            }
+
+            Constants.KYC_IDENTITY_ID_STUDENT_ID -> {
+                b.kycCaptureUploadActivityHeaderTV.text = getString(R.string.student_id)
+                b.kycCaptureUploadActivitySubTextTV.text = getString(R.string.student_id_subtext)
+
+                //Hide Back Section
+                b.kycCaptureUploadActivityBackTV.visibility = View.GONE
+                b.kycCaptureUploadActivityMediaBackContainer.visibility = View.GONE
+
+                //Rename front text to 'File name'
+                b.kycCaptureUploadActivityFrontTV.text = getString(R.string.file_name)
+            }
+
+            Constants.KYC_IDENTITY_ID_EMPLOYEE_ID -> {
+                b.kycCaptureUploadActivityHeaderTV.text = getString(R.string.employee_id)
+                b.kycCaptureUploadActivitySubTextTV.text = getString(R.string.employee_id_subtext)
 
                 //Hide Back Section
                 b.kycCaptureUploadActivityBackTV.visibility = View.GONE
@@ -139,6 +188,20 @@ class KycCaptureUploadActivity : BaseActivity() {
                 b.kycCaptureUploadActivityHeaderTV.text = getString(R.string.institution_letter)
                 b.kycCaptureUploadActivitySubTextTV.text =
                     getString(R.string.institution_letter_subtext)
+
+                //Hide Back Section
+                b.kycCaptureUploadActivityBackTV.visibility = View.GONE
+                b.kycCaptureUploadActivityMediaBackContainer.visibility = View.GONE
+
+                //Rename front text to 'File name'
+                b.kycCaptureUploadActivityFrontTV.text = getString(R.string.file_name)
+            }
+
+            Constants.KYC_IDENTITY_VER_RELIGIOUS_INSTITUTION_LETTER -> {
+                b.kycCaptureUploadActivityHeaderTV.text =
+                    getString(R.string.religious_institution_district_commissioner_letter)
+                b.kycCaptureUploadActivitySubTextTV.text =
+                    getString(R.string.religious_institution_letter_subtext)
 
                 //Hide Back Section
                 b.kycCaptureUploadActivityBackTV.visibility = View.GONE
@@ -358,7 +421,7 @@ class KycCaptureUploadActivity : BaseActivity() {
                 }
             }
             //Have only front
-            Constants.KYC_IDENTITY_ID_BIRTH_CERTIFICATE, Constants.KYC_IDENTITY_VER_BIRTH_CERTIFICATE, Constants.KYC_IDENTITY_VER_EMPLOYER_LETTER, Constants.KYC_IDENTITY_VER_INSTITUTION_LETTER -> {
+            Constants.KYC_IDENTITY_ID_REFUGEE_ID, Constants.KYC_IDENTITY_ID_ASYLUM_ID, Constants.KYC_IDENTITY_ID_BIRTH_CERTIFICATE, Constants.KYC_IDENTITY_ID_STUDENT_ID, Constants.KYC_IDENTITY_ID_EMPLOYEE_ID, Constants.KYC_IDENTITY_VER_RELIGIOUS_INSTITUTION_LETTER, Constants.KYC_IDENTITY_VER_BIRTH_CERTIFICATE, Constants.KYC_IDENTITY_VER_EMPLOYER_LETTER, Constants.KYC_IDENTITY_VER_INSTITUTION_LETTER -> {
                 if (frontImageTag != null || frontFileTag != null) {
                     b.kycCaptureUploadActivitySubmitButton.visibility = View.VISIBLE
                 } else {

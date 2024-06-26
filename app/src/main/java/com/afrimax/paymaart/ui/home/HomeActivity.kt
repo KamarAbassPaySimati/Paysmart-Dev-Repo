@@ -1,8 +1,14 @@
 package com.afrimax.paymaart.ui.home
+
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -11,19 +17,38 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.HomeScreenData
+import com.afrimax.paymaart.data.model.HomeScreenResponse
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
+import com.afrimax.paymaart.ui.kyc.KycProgressActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
+import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
+import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
+import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.showLogE
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.DecimalFormat
+import java.util.Calendar
+import java.util.Date
 
 class HomeActivity : BaseActivity() {
     private lateinit var b: ActivityHomeBinding
     private lateinit var homeScreenIconAdapter: HomeScreenIconAdapter
     private var rejectionReasons = ArrayList<String>()
     private var dest = 0
+    private var isSettingsClicked: Boolean = false
+    private lateinit var mKycStatus: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -44,6 +69,7 @@ class HomeActivity : BaseActivity() {
         initViews()
         setUpListeners()
         setDrawerListeners()
+        getHomeScreenDataApi()
     }
 
     private fun initViews() {
@@ -68,21 +94,44 @@ class HomeActivity : BaseActivity() {
         }
 
         b.homeActivityEyeButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 
         b.homeActivityPayAfrimaxButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 
         b.homeActivityPayMerchantButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 
         b.homeActivityPayPaymaartButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
+        }
+        b.homeActivityPayPersonButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 
-        b.homeActivityCashInButton.setOnClickListener {
+        b.homeActivityScanQrButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 
         b.homeActivityCashOutButton.setOnClickListener {
+            if (checkKycStatus()){
+                //
+            }
         }
 //
         b.homeActivityTransactionsBox.setOnClickListener {
@@ -103,9 +152,9 @@ class HomeActivity : BaseActivity() {
                 b.homeActivityMerchantsTExpandButton
             )
         }
-        b.homeActivityPersonsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        b.homeActivityTransactionsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        b.homeActivityMerchantsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        b.homeActivityPersonsRecyclerView.layoutManager = GridLayoutManager(this, 4)
+        b.homeActivityTransactionsRecyclerView.layoutManager = GridLayoutManager(this, 4)
+        b.homeActivityMerchantsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         val nameList = listOf(
             "John Doe MJR",
             "Jane Smith ABC",
@@ -127,6 +176,7 @@ class HomeActivity : BaseActivity() {
         }
 
         b.homeActivityNavView.homeDrawerSettingsTV.setOnClickListener {
+            isSettingsClicked = !isSettingsClicked
             toggleSettings()
         }
 
@@ -139,13 +189,15 @@ class HomeActivity : BaseActivity() {
         b.homeActivityNavView.homeDrawerDeleteAccountContainer.setOnClickListener {
             dest = DRAWER_DELETE_ACCOUNT
             b.homeActivity.closeDrawer(GravityCompat.END)
+            startActivity(Intent(this, DeleteAccountActivity::class.java))
         }
 
         b.homeActivityNavView.homeDrawerLogOutContainer.setOnClickListener {
             dest = DRAWER_LOGOUT
             b.homeActivity.closeDrawer(GravityCompat.END)
+            val logoutSheet = LogoutConfirmationSheet()
+            logoutSheet.show(supportFragmentManager, LogoutConfirmationSheet.TAG)
         }
-
         setDrawerClosedListener()
     }
 
@@ -156,20 +208,8 @@ class HomeActivity : BaseActivity() {
             override fun onDrawerOpened(drawerView: View) {}
 
             override fun onDrawerClosed(drawerView: View) {
-                when (dest) {
-                    DRAWER_UPDATE_PASSWORD -> {
-                        toggleSettings()
-
-                    }
-
-                    DRAWER_DELETE_ACCOUNT -> {
-                        toggleSettings()
-                    }
-
-                    DRAWER_LOGOUT -> {
-                        toggleSettings()
-                    }
-                }
+                isSettingsClicked = false
+                toggleSettings()
             }
 
             override fun onDrawerStateChanged(newState: Int) {}
@@ -208,21 +248,179 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun toggleSettings() {
-        if (b.homeActivityNavView.homeDrawerSettingsHiddenContainer.isVisible) {
-            b.homeActivityNavView.apply {
-                homeDrawerSettingsDiv.visibility = View.GONE
-                homeDrawerSettingsHiddenContainer.visibility = View.GONE
-            }
-        } else {
+        if (isSettingsClicked) {
             b.homeActivityNavView.apply {
                 homeDrawerSettingsDiv.visibility = View.VISIBLE
                 homeDrawerSettingsHiddenContainer.visibility = View.VISIBLE
             }
+        } else {
+
+            b.homeActivityNavView.apply {
+                homeDrawerSettingsDiv.visibility = View.GONE
+                homeDrawerSettingsHiddenContainer.visibility = View.GONE
+            }
         }
     }
+
+    private fun getHomeScreenDataApi() {
+        showLoader()
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            val homeScreenDataCall = ApiClient.apiService.getHomeScreenData(idToken)
+
+            homeScreenDataCall.enqueue(object : Callback<HomeScreenResponse> {
+                override fun onResponse(
+                    call: Call<HomeScreenResponse>, response: Response<HomeScreenResponse>
+                ) {
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        runOnUiThread {
+                            "Response".showLogE(body)
+                            populateHomeScreenData(body.homeScreenData)
+                        }
+                    } else {
+                        runOnUiThread {
+                            showToast(getString(R.string.default_error_toast))
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<HomeScreenResponse>, t: Throwable) {
+                    runOnUiThread {
+                        showToast(getString(R.string.default_error_toast))
+                    }
+                }
+
+            })
+        }
+    }
+
+    private fun populateHomeScreenData(homeScreenData: HomeScreenData) {
+        b.homeActivityProfileNameTV.text = homeScreenData.fullName
+        b.homeActivityProfilePaymaartIdTV.text = getString(R.string.paymaart_id_formatted, homeScreenData.paymaartId)
+        //Convert UnixTimeStamp
+        val unixTimeMillis = homeScreenData.createdAt * 1000
+        val year = "${Calendar.getInstance().apply { time = Date(unixTimeMillis) }[Calendar.YEAR]}"
+        b.homeActivityProfilePaymaartMemberSinceTV.text = getString(R.string.member_since_formatted, year)
+        //Populate kyc details to side drawer
+        when (homeScreenData.membership){
+            MembershipType.GO.type -> {
+                membershipType(MembershipType.GO.typeName, R.color.goMemberStrokeColor, R.drawable.go_member_bg)
+            }
+            MembershipType.PRIME.type -> {
+                membershipType(MembershipType.GO.typeName, R.color.primeMemberStrokeColor, R.drawable.prime_member_bg)
+            }
+            MembershipType.PRIMEX.type -> {
+                membershipType(MembershipType.GO.typeName, R.color.primeXMemberStrokeColor, R.drawable.prime_x_member_bg)
+            }
+        }
+        val balanceInt = homeScreenData.accountBalance.toInt()
+        b.homeActivityProfileBalanceTV.text = formatNumber(balanceInt)
+        val kycType = homeScreenData.kycType
+        val citizen = homeScreenData.citizen
+        val kycStatus = homeScreenData.kycStatus
+        val completedStatus = homeScreenData.completed
+        rejectionReasons = homeScreenData.rejectionReasons ?: ArrayList()
+
+        when {
+            (kycStatus == null) -> {
+                b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.not_started)
+                b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.neutralGreyPrimaryText))
+//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_not_started)
+            }
+
+            (kycStatus == Constants.KYC_STATUS_IN_PROGRESS && !completedStatus) -> {
+                b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.in_progress)
+                b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentInformation))
+//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_in_progress)
+            }
+
+            kycStatus == Constants.KYC_STATUS_INFO_REQUIRED -> {
+                b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.further_information_required)
+                b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentNegative))
+//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_rejected)
+            }
+
+            kycStatus == Constants.KYC_STATUS_COMPLETED -> {
+                b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.completed)
+                b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentPositive))
+//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_completed)
+            }
+
+            (kycStatus == Constants.KYC_STATUS_IN_PROGRESS && completedStatus) -> {
+                b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.in_review)
+                b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentWarning))
+//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_in_review)
+            }
+
+        }
+        hideLoader()
+    }
+
+    private fun checkKycStatus(): Boolean {
+        var status = false
+        when {
+            isKycCompleted() -> status = true
+            isKycInReview() -> Toast.makeText(
+                this,
+                "You can access this feature once admin approves your KYC request",
+                Toast.LENGTH_LONG
+            ).show()
+
+            else -> CompleteKycSheet().show(supportFragmentManager, CompleteKycSheet.TAG)
+        }
+        return status
+    }
+
+    private fun isKycCompleted(): Boolean {
+        return b.homeActivityNavView.homeDrawerKycStatusTV.text == getString(R.string.completed)
+    }
+
+    private fun isKycInReview(): Boolean {
+        return b.homeActivityNavView.homeDrawerKycStatusTV.text == getString(R.string.in_review)
+    }
+
+    private fun membershipType(text: String, fontColor: Int, background: Int){
+        b.homeActivityMembershipType.text = text
+        b.homeActivityMembershipType.setTextColor(ContextCompat.getColor(this, fontColor))
+        b.homeActivityMembershipType.background = ContextCompat.getDrawable(this, background)
+    }
+
+
+    private fun showLoader() {
+        b.homeActivitySV.visibility = View.GONE
+        b.registrationActivityLoaderLottie.visibility = View.VISIBLE
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+    }
+
+    private fun hideLoader() {
+        b.homeActivitySV.visibility = View.VISIBLE
+        b.registrationActivityLoaderLottie.visibility = View.GONE
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    private fun formatNumber(number: Int): String {
+        val decimalFormat = DecimalFormat("#,###")
+
+        return if (number == 0) {
+            "0.00"
+        } else {
+            decimalFormat.format(number)
+        }
+    }
+
     companion object {
         const val DRAWER_UPDATE_PASSWORD = 9
         const val DRAWER_DELETE_ACCOUNT = 10
         const val DRAWER_LOGOUT = 11
     }
+}
+
+enum class MembershipType(val type: String, val typeName: String){
+    GO("GO", "Go Member"),
+    PRIME("PRIME", "Prime Member"),
+    PRIMEX("PRIMEX", "PrimeX Member")
 }

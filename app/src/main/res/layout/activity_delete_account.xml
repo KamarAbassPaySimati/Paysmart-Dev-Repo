@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/deleteAccountActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.delete.DeleteAccountActivity">
+
+    <RelativeLayout
+        android:id="@+id/deleteAccountActivityTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/deleteAccountActivityBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back_button"
+            android:padding="16dp"
+            android:src="@drawable/ic_arrow_back" />
+
+
+        <TextView
+            android:id="@+id/deleteAccountActivityHeaderTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/deleteAccountActivityGuideButton"
+            android:layout_toEndOf="@+id/deleteAccountActivityBackButton"
+            android:fontFamily="@font/inter_medium"
+            android:includeFontPadding="false"
+            android:text="@string/delete_account"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/deleteAccountActivityGuideButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/guide"
+            android:textColor="@color/accentInformation"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/deleteAccountActivityBottomBar"
+        android:layout_below="@+id/deleteAccountActivityTopBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/inter_medium"
+                android:includeFontPadding="false"
+                android:text="@string/delete_account_subtext"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/deleteAccountActivityReason1CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:checked="false"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="top"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="@string/delete_reason1"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="18sp"
+                app:buttonIconTint="@color/white"
+                app:buttonTint="@color/primaryColor" />
+
+            <CheckBox
+                android:id="@+id/deleteAccountActivityReason2CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/inter_regular"
+                android:checked="false"
+                android:gravity="top"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="@string/delete_reason2"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="18sp"
+                app:buttonIconTint="@color/white"
+                app:buttonTint="@color/primaryColor" />
+
+            <CheckBox
+                android:id="@+id/deleteAccountActivityReason3CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:checked="false"
+                android:gravity="top"
+                android:fontFamily="@font/inter_regular"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="@string/delete_reason3"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="18sp"
+                app:buttonIconTint="@color/white"
+                app:buttonTint="@color/primaryColor" />
+
+            <CheckBox
+                android:id="@+id/deleteAccountActivityReason4CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:checked="false"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="top"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="@string/delete_reason4"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="18sp"
+                app:buttonIconTint="@color/white"
+                app:buttonTint="@color/primaryColor" />
+
+            <CheckBox
+                android:id="@+id/deleteAccountActivityReason5CB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:checked="false"
+                android:fontFamily="@font/inter_regular"
+                android:gravity="top"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:text="@string/delete_reason5"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="18sp"
+                app:buttonIconTint="@color/white"
+                app:buttonTint="@color/primaryColor" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/deleteAccountActivityOthersCL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <CheckBox
+                    android:id="@+id/deleteAccountActivityReason6CB"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:clickable="false"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:buttonIconTint="@color/white"
+                    app:buttonTint="@color/primaryColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/deleteAccountActivityReason6TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:layout_toEndOf="@+id/deleteAccountActivityReason6CB"
+                    android:includeFontPadding="false"
+                    android:text="@string/others"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/deleteAccountActivityReason6CB"
+                    app:layout_constraintStart_toEndOf="@+id/deleteAccountActivityReason6CB"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/deleteAccountActivityReason6SubtextTV"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/deleteAccountActivityReason6TV"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_toEndOf="@+id/deleteAccountActivityReason6CB"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@string/change"
+                    android:textColor="@color/primaryColor"
+                    android:fontFamily="@font/inter_regular"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toEndOf="@+id/deleteAccountActivityReason6CB"
+                    app:layout_constraintTop_toBottomOf="@+id/deleteAccountActivityReason6TV"
+                    tools:visibility="visible" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/deleteAccountActivityBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/deleteAccountActivityDeleteAccountButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/primary_rounded_button_background_disabled"
+            android:enabled="false"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/delete_account"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/deleteAccountActivityDeleteAccountButtonLoaderLottie"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:scaleX="2"
+            android:scaleY="2"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_button_loader" />
+
+
+    </FrameLayout>
+
+</RelativeLayout>

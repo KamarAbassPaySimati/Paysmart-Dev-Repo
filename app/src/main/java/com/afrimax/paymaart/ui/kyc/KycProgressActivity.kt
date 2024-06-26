@@ -25,6 +25,7 @@ import com.afrimax.paymaart.data.model.KycUserData
 import com.afrimax.paymaart.databinding.ActivityKycProgressBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -231,7 +232,7 @@ class KycProgressActivity : BaseActivity() {
 
     private fun populateProgress(data: KycUserData) {
         citizenship = data.citizen ?: ""
-
+        "Response".showLogE(data)
         val addressFilledStatus = data.address_details_status ?: ""
         val identityFilledStatus = data.id_details_status ?: ""
         val infoFilledStatus = data.info_details_status ?: ""
