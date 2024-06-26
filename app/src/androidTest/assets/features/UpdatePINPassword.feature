@@ -48,7 +48,7 @@ Feature: Paymaart- Customer Android- Update PIN/Password
     Then I should see error message "Required field" for field with ID "Current PIN/Password" for updating PIN or Password
     When I enter user PIN "123456" for PIN or Password
 
-  Scenario: Agent updating Pin
+  Scenario: Customer updating Pin
     When I enter the new PIN as "111111" for updating PIN
     And I enter the confirm new PIN as "111111" for updating PIN
     And I click on update button for PIN or Password
@@ -58,7 +58,7 @@ Feature: Paymaart- Customer Android- Update PIN/Password
     And I click on update button for PIN or Password
     Then I should read a message stating "PIN Updated"
 
-  Scenario: Agent updating Password
+  Scenario: Customer updating Password
     When I choose password section for update
     When I enter the new password as "password" for updating password
     And I enter the confirm new password as "password" for updating password

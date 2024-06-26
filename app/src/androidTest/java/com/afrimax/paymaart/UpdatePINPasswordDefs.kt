@@ -13,26 +13,26 @@ class UpdatePINPasswordDefs {
 
     @When("I click the back button in kyc progress screen")
     fun iClickBackButton() {
-        Espresso.onView(ViewMatchers.withId(R.id.ActivityBackButton))
+        Espresso.onView(ViewMatchers.withId(R.id.kycProgressActivityBackButton2IV))
             .perform(ViewActions.click())
         Thread.sleep(3000)
     }
 
     @When("I open menu and navigate to the update PIN or password")
     fun openUpdatePinOrPassword() {
-        Espresso.onView(ViewMatchers.withId(R.id.MenuIcon)).perform(ViewActions.click())
+        Espresso.onView(ViewMatchers.withId(R.id.homeActivityMenuIcon)).perform(ViewActions.click())
         Thread.sleep(3000)
-        Espresso.onView(ViewMatchers.withId(R.id.homeDrawerSettings))
+        Espresso.onView(ViewMatchers.withId(R.id.homeDrawerSettingsTV))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
-        Espresso.onView(ViewMatchers.withId(R.id.homeDrawerUpdatePassword))
+        Espresso.onView(ViewMatchers.withId(R.id.homeDrawerUpdatePasswordContainer))
             .perform(ViewActions.scrollTo(), ViewActions.click())
         Thread.sleep(3000)
     }
 
     @When("I enter user PIN {string} for PIN or Password")
     fun enterUserPin(pin: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinCurrentPassword))
+        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinActivityCurrentPasswordET))
             .perform(
                 ViewActions.scrollTo(), ViewActions.typeText(pin), ViewActions.closeSoftKeyboard()
             )
@@ -40,7 +40,7 @@ class UpdatePINPasswordDefs {
 
     @When("I click on update button for PIN or Password")
     fun clickUpdateButton() {
-        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinUpdateButton))
+        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinActivityUpdateButton))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }
@@ -56,17 +56,17 @@ class UpdatePINPasswordDefs {
     fun checkErrorMessageDisplayed(errorMessage: String, fieldID: String) {
         when (fieldID) {
             "Current PIN/Password" -> {
-                Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinCurrentPasswordWarning))
+                Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinActivityCurrentPasswordWarningTV))
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
 
             "New PIN" -> {
-                Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinNewPinWarning))
+                Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinActivityNewPinWarningTV))
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
 
             "New Password" -> {
-                Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinNewPasswordWarning))
+                Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinActivityNewPasswordWarningTV))
                     .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
             }
         }
@@ -74,7 +74,7 @@ class UpdatePINPasswordDefs {
 
     @When("I enter the new PIN as {string} for updating PIN")
     fun enterNewPin(newPin: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinNewPin)).perform(
+        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinActivityNewPinET)).perform(
             ViewActions.replaceText(""),
             ViewActions.typeText(newPin),
             ViewActions.closeSoftKeyboard()
@@ -83,7 +83,7 @@ class UpdatePINPasswordDefs {
 
     @When("I enter the confirm new PIN as {string} for updating PIN")
     fun enterConfirmPin(confirmPIN: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinConfirmPin)).perform(
+        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinActivityConfirmPinET)).perform(
             ViewActions.replaceText(""),
             ViewActions.typeText(confirmPIN),
             ViewActions.closeSoftKeyboard()
@@ -92,7 +92,7 @@ class UpdatePINPasswordDefs {
 
     @When("I enter the new password as {string} for updating password")
     fun enterNewPassword(newPassword: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinNewPassword)).perform(
+        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinActivityNewPasswordET)).perform(
             ViewActions.replaceText(""),
             ViewActions.typeText(newPassword),
             ViewActions.closeSoftKeyboard()
@@ -101,7 +101,7 @@ class UpdatePINPasswordDefs {
 
     @When("I enter the confirm new password as {string} for updating password")
     fun enterConfirmPassword(confirmPassword: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinConfirmPassword))
+        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinActivityConfirmPasswordET))
             .perform(
                 ViewActions.replaceText(""),
                 ViewActions.typeText(confirmPassword),
@@ -111,7 +111,7 @@ class UpdatePINPasswordDefs {
 
     @When("I should read a message stating {string}")
     fun pinPasswordUpdationSuccessfully(message: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.updatePasswordPinUpdatedTitle))
+        Espresso.onView(ViewMatchers.withId(R.id.sheetPinPasswordChangeTitleTV))
             .check(ViewAssertions.matches(ViewMatchers.withText(message)))
     }
 
