@@ -472,6 +472,11 @@ class HomeActivity : BaseActivity() {
         const val DRAWER_DELETE_ACCOUNT = 10
         const val DRAWER_LOGOUT = 11
     }
+
+    override fun onResume() {
+        super.onResume()
+        getHomeScreenDataApi()
+    }
 }
 
 enum class MembershipType(val type: String, val typeName: String){
