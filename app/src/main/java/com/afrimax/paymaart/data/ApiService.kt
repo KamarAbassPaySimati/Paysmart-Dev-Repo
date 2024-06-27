@@ -18,6 +18,7 @@ import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SendForgotOtpResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
 import com.afrimax.paymaart.data.model.SendOtpResponse
+import com.afrimax.paymaart.data.model.UpdatePinOrPasswordRequest
 import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
 import com.afrimax.paymaart.data.model.VerifyForgotOtpResponse
 import com.afrimax.paymaart.data.model.VerifyOtpRequestBody
@@ -80,6 +81,9 @@ interface ApiService {
 
     @POST("$CUSTOMER_USER/forgot-password")
     fun updatePinPassword(@Body body: UpdatePinPasswordRequest): Call<DefaultResponse>
+
+    @POST("$CUSTOMER_USER/update-password")
+    fun updatePinOrPassword(@Header("Authorization") header: String, @Body body: UpdatePinOrPasswordRequest): Call<DefaultResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

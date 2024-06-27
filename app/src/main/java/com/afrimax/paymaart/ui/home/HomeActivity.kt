@@ -29,6 +29,8 @@ import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.kyc.KycProgressActivity
+import com.afrimax.paymaart.ui.password.ForgotPasswordPinActivity
+import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
@@ -48,7 +50,6 @@ class HomeActivity : BaseActivity() {
     private var rejectionReasons = ArrayList<String>()
     private var dest = 0
     private var isSettingsClicked: Boolean = false
-    private lateinit var mKycStatus: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -82,9 +83,6 @@ class HomeActivity : BaseActivity() {
                 else finish()
             }
         })
-        b.homeActivityProfileNameTV.text = "Godis Jacob MJOJO"
-        b.homeActivityProfilePaymaartIdTV.text = getString(R.string.paymaart_id_formatted, "CMR12345678")
-        b.homeActivityProfilePaymaartMemberSinceTV.text = getString(R.string.member_since_formatted, "2024")
     }
 
     private fun setUpListeners() {
@@ -183,20 +181,16 @@ class HomeActivity : BaseActivity() {
         b.homeActivityNavView.homeDrawerUpdatePasswordContainer.setOnClickListener {
             dest = DRAWER_UPDATE_PASSWORD
             b.homeActivity.closeDrawer(GravityCompat.END)
-
         }
 
         b.homeActivityNavView.homeDrawerDeleteAccountContainer.setOnClickListener {
             dest = DRAWER_DELETE_ACCOUNT
             b.homeActivity.closeDrawer(GravityCompat.END)
-            startActivity(Intent(this, DeleteAccountActivity::class.java))
         }
 
         b.homeActivityNavView.homeDrawerLogOutContainer.setOnClickListener {
             dest = DRAWER_LOGOUT
             b.homeActivity.closeDrawer(GravityCompat.END)
-            val logoutSheet = LogoutConfirmationSheet()
-            logoutSheet.show(supportFragmentManager, LogoutConfirmationSheet.TAG)
         }
         setDrawerClosedListener()
     }
@@ -208,6 +202,23 @@ class HomeActivity : BaseActivity() {
             override fun onDrawerOpened(drawerView: View) {}
 
             override fun onDrawerClosed(drawerView: View) {
+                when (dest) {
+                    DRAWER_KYC_DETAILS -> {}
+
+                    DRAWER_UPDATE_PASSWORD -> {
+                        startActivity(Intent(this@HomeActivity, UpdatePasswordPinActivity::class.java))
+                    }
+
+                    DRAWER_DELETE_ACCOUNT -> {
+                        startActivity(Intent(this@HomeActivity, DeleteAccountActivity::class.java))
+                    }
+
+                    DRAWER_LOGOUT -> {
+                        val logoutSheet = LogoutConfirmationSheet()
+                        logoutSheet.show(supportFragmentManager, LogoutConfirmationSheet.TAG)
+                    }
+                }
+                dest = 0
                 isSettingsClicked = false
                 toggleSettings()
             }
@@ -326,33 +337,58 @@ class HomeActivity : BaseActivity() {
             (kycStatus == null) -> {
                 b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.not_started)
                 b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.neutralGreyPrimaryText))
-//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_not_started)
+                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_not_started)
             }
 
             (kycStatus == Constants.KYC_STATUS_IN_PROGRESS && !completedStatus) -> {
                 b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.in_progress)
                 b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentInformation))
-//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_in_progress)
+                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_in_progress)
             }
 
             kycStatus == Constants.KYC_STATUS_INFO_REQUIRED -> {
                 b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.further_information_required)
                 b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentNegative))
-//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_rejected)
+                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_rejected)
             }
 
             kycStatus == Constants.KYC_STATUS_COMPLETED -> {
                 b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.completed)
                 b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentPositive))
-//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_completed)
+                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_completed)
             }
 
             (kycStatus == Constants.KYC_STATUS_IN_PROGRESS && completedStatus) -> {
                 b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.in_review)
                 b.homeActivityNavView.homeDrawerKycStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentWarning))
-//                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_in_review)
+                b.homeActivityNavView.homeDrawerKycStatusTV.background = ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_in_review)
             }
 
+        }
+
+        when {
+            (kycType == Constants.KYC_TYPE_MALAWI_FULL && citizen == Constants.KYC_CITIZEN_MALAWIAN) -> {
+                b.homeActivityNavView.homeDrawerKycTypeTV.text =
+                    getString(R.string.malawi_full_kyc_registration)
+            }
+
+            (kycType == Constants.KYC_TYPE_MALAWI_SIMPLIFIED && citizen == Constants.KYC_CITIZEN_MALAWIAN) -> {
+                b.homeActivityNavView.homeDrawerKycTypeTV.text =
+                    getString(R.string.malawi_simplified_kyc_registration)
+            }
+
+            //If citizen is null which means the user came to home screen after logging in
+            //for first time
+            citizen == null -> {
+                b.homeActivityNavView.homeDrawerKycTypeTV.text =
+                    getString(R.string.kyc_registration)
+            }
+
+            //Else non malawian user
+            else -> {
+                b.homeActivityNavView.homeDrawerKycTypeTV.text =
+                    getString(R.string.non_malawi_full_kyc_registration)
+            }
         }
         hideLoader()
     }
@@ -413,6 +449,7 @@ class HomeActivity : BaseActivity() {
     }
 
     companion object {
+        const val DRAWER_KYC_DETAILS = 1
         const val DRAWER_UPDATE_PASSWORD = 9
         const val DRAWER_DELETE_ACCOUNT = 10
         const val DRAWER_LOGOUT = 11

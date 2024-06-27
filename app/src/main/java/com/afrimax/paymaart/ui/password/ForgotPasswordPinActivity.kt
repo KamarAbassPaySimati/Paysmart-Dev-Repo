@@ -157,10 +157,6 @@ class ForgotPasswordPinActivity : BaseActivity() {
             onClickReset()
         }
 
-        b.forgotPasswordPinActivityLoginButton.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
         setupEditTextFocusListeners()
         setUpEditTextChangeListeners()
         setUpEmailEditTextFilters(b.forgotPasswordPinActivityEmailET)
@@ -621,7 +617,6 @@ class ForgotPasswordPinActivity : BaseActivity() {
         b.forgotPasswordPinActivityOtpView.visibility = View.GONE
         b.forgotPasswordPinActivitySetPasswordView.visibility = View.GONE
         b.forgotPasswordPinActivitySetPinView.visibility = View.GONE
-        b.forgotPasswordPinActivityUpdateSuccessfulView.visibility = View.GONE
 
         when (forgotCredentialType) {
             Constants.FORGOT_CREDENTIAL_PIN -> {
@@ -643,7 +638,6 @@ class ForgotPasswordPinActivity : BaseActivity() {
         b.forgotPasswordPinActivityEmailView.visibility = View.GONE
         b.forgotPasswordPinActivitySetPasswordView.visibility = View.GONE
         b.forgotPasswordPinActivitySetPinView.visibility = View.GONE
-        b.forgotPasswordPinActivityUpdateSuccessfulView.visibility = View.GONE
 
         when (forgotCredentialType) {
             Constants.FORGOT_CREDENTIAL_PIN -> {
@@ -674,7 +668,6 @@ class ForgotPasswordPinActivity : BaseActivity() {
         b.forgotPasswordPinActivityOtpView.visibility = View.GONE
         b.forgotPasswordPinActivityEmailView.visibility = View.GONE
         b.forgotPasswordPinActivitySetPinView.visibility = View.GONE
-        b.forgotPasswordPinActivityUpdateSuccessfulView.visibility = View.GONE
 
         //Reset fields
         b.forgotPasswordPinActivityNewPasswordET.text.clear()
@@ -703,7 +696,6 @@ class ForgotPasswordPinActivity : BaseActivity() {
         b.forgotPasswordPinActivitySetPasswordView.visibility = View.GONE
         b.forgotPasswordPinActivityOtpView.visibility = View.GONE
         b.forgotPasswordPinActivityEmailView.visibility = View.GONE
-        b.forgotPasswordPinActivityUpdateSuccessfulView.visibility = View.GONE
 
         //Reset fields
         b.forgotPasswordPinActivityNewPinET.text?.clear()
@@ -736,28 +728,15 @@ class ForgotPasswordPinActivity : BaseActivity() {
             startActivity(Intent(this@ForgotPasswordPinActivity, LoginActivity::class.java))
             finishAffinity()
         }
-//        b.forgotPasswordPinActivityUpdateSuccessfulView.visibility = View.VISIBLE
-//        b.forgotPasswordPinActivitySetPinView.visibility = View.GONE
-//        b.forgotPasswordPinActivitySetPasswordView.visibility = View.GONE
-//        b.forgotPasswordPinActivityOtpView.visibility = View.GONE
-//        b.forgotPasswordPinActivityEmailView.visibility = View.GONE
-
         when (forgotCredentialType) {
             Constants.FORGOT_CREDENTIAL_PIN -> {
                 titleTextView.text = getString(R.string.pin_changed)
                 subTitleTextView.text = getString(R.string.your_pin_has_been_successfully_changed)
-//                b.forgotPasswordPinActivityUpdatedTitleTV.text = getString(R.string.pin_changed)
-//                b.forgotPasswordPinActivityUpdatedSubTextTV.text =
-//                    getString(R.string.your_pin_has_been_successfully_changed)
             }
 
             Constants.FORGOT_CREDENTIAL_PASSWORD -> {
                 titleTextView.text = getString(R.string.password_changed)
                 subTitleTextView.text = getString(R.string.your_password_has_been_successfully_changed)
-//                b.forgotPasswordPinActivityUpdatedTitleTV.text =
-//                    getString(R.string.password_changed)
-//                b.forgotPasswordPinActivityUpdatedSubTextTV.text =
-//                    getString(R.string.your_password_has_been_successfully_changed)
             }
         }
         bottomSheetDialog.show()
