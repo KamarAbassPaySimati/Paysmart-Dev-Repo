@@ -501,4 +501,13 @@
     <string name="your_pin_has_been_successfully_updated">Your PIN has been successfully updated</string>
     <string name="enter_current_pin_password">Enter current PIN/password</string>
     <string name="non_malawi_full_kyc_registration">Non-Malawi Full KYC Registration</string>
+    <string name="service_beneficiary">Service Beneficiary</string>
+    <string name="prime">Prime</string>
+    <string name="primeX">PrimeX</string>
+    <string name="popular">POPULAR</string>
+    <string name="choose_prime_for_free_payment">Choose Prime, for totally free e-payments</string>
+    <string name="go">Go</string>
+    <string name="prepaid_30_days">Prepaid, 30 Days, MWK</string>
+    <string name="free">Free</string>
+    <string name="buy">Buy</string>
 </resources>

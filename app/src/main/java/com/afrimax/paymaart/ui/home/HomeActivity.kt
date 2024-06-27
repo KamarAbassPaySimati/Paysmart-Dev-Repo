@@ -1,8 +1,6 @@
 package com.afrimax.paymaart.ui.home
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -28,8 +26,7 @@ import com.afrimax.paymaart.data.model.HomeScreenResponse
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
-import com.afrimax.paymaart.ui.kyc.KycProgressActivity
-import com.afrimax.paymaart.ui.password.ForgotPasswordPinActivity
+import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
@@ -127,9 +124,10 @@ class HomeActivity : BaseActivity() {
         }
 
         b.homeActivityCashOutButton.setOnClickListener {
-            if (checkKycStatus()){
-                //
-            }
+//            if (checkKycStatus()){
+//                //
+//            }
+            startActivity(Intent(this, MembershipPlansActivity::class.java))
         }
 //
         b.homeActivityTransactionsBox.setOnClickListener {
@@ -286,7 +284,6 @@ class HomeActivity : BaseActivity() {
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
                         runOnUiThread {
-                            "Response".showLogE(body)
                             populateHomeScreenData(body.homeScreenData)
                         }
                     } else {
@@ -446,6 +443,11 @@ class HomeActivity : BaseActivity() {
         } else {
             decimalFormat.format(number)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getHomeScreenDataApi()
     }
 
     companion object {
