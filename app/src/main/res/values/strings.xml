@@ -486,7 +486,7 @@
     <string name="password_guide3">Do not use simple patterns like \'12345678\', \'22446688\', \'password\', or sequential keyboard patterns like \'qwerty\'.</string>
     <string name="password_guide4">Make sure passwords are created with random combinations of characters for better security.</string>
     <string name="paymaart_pin_guide">Paymaart PIN Guide</string>
-    <string name="pin_guide1">Void obvious patterns like sequences (e.g., 123456) or repeated numbers (e.g., 112233).</string>
+    <string name="pin_guide1">Avoid obvious patterns like sequences (e.g., 123456) or repeated numbers (e.g., 112233).</string>
     <string name="pin_guide2">Mix up numbers instead of using the same digit repeatedly.</string>
     <string name="pin_guide3">Don\'t use easily guessed personal information like birthdates or phone numbers.</string>
     <string name="pin_guide4">Make your PIN random to improve security.</string>

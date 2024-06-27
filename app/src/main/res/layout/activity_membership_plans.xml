@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/activityMembershipPlan"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -68,7 +68,8 @@
                 android:fontFamily="@font/inter_medium"
                 android:textSize="16sp"
                 android:textColor="@color/white"
-                android:paddingVertical="8dp"/>
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="4dp"/>
 
         </LinearLayout>
 
@@ -188,7 +189,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:layout_marginHorizontal="4dp">
 
@@ -196,20 +197,20 @@
                 android:id="@+id/buy_button_one"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/primary_rounded_button_background"
+                android:layout_height="40dp"
+                android:background="@drawable/primary_rounded_button_background_medium"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/buy"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:layout_marginHorizontal="4dp">
 
@@ -217,34 +218,33 @@
                 android:id="@+id/buy_button_two"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/primary_rounded_button_background"
+                android:layout_height="40dp"
+                android:background="@drawable/primary_rounded_button_background_medium"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/buy"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:layout_marginHorizontal="4dp">
+            android:layout_height="wrap_content"
+            android:layout_weight="2">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buy_button_three"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/primary_outlined_button_background"
+                android:layout_height="40dp"
+                android:background="@drawable/primary_outlined_button_background_medium"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/free"
                 android:textAllCaps="false"
                 android:textColor="@color/primaryColor"
-                android:textSize="18sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 

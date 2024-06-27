@@ -33,7 +33,7 @@ class MembershipPlansActivity : BaseActivity() {
 //        enableEdgeToEdge()
         binding = ActivityMembershipPlansBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activityMembershipPlan)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -42,8 +42,15 @@ class MembershipPlansActivity : BaseActivity() {
         val wic = WindowInsetsControllerCompat(window, window.decorView)
         wic.isAppearanceLightStatusBars = true
         wic.isAppearanceLightNavigationBars = true
+        setUpView()
         setUpRecyclerView()
         populateMemberShipPlan()
+    }
+
+    private fun setUpView(){
+        binding.membershipPlansBackButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun setUpRecyclerView(){

@@ -94,5 +94,5 @@ Feature: Paymaart- Customer Android- Membership banner view(first time)
   Scenario: Membership banner view
     Then I make the user approved
     When I click on the finish button
-    And I should be redirected to home screen
+    Then I should be redirected to membership plans screen
     Then I should read "Choose Prime, for totally free e-payments" above the membership banner

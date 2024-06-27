@@ -1,5 +1,6 @@
 package com.afrimax.paymaart.data
 
+import com.afrimax.paymaart.data.model.ApproveUserRequest
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
@@ -88,7 +89,11 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/view-membership-benefits")
     fun getMembershipDetails(@Header("Authorization") header: String): Call<MembershipPlansResponse>
+
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
     fun getSharedSecret(@Body body: GetSharedSecretRequest, @Header("Authorization") header: String): Call<GetSharedSecretResponse>
+
+    @POST("bdd/approve")
+    fun approveUser(@Body body: ApproveUserRequest, @Header("Authorization") header: String): Call<DefaultResponse>
 }
