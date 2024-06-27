@@ -1,7 +1,10 @@
 package com.afrimax.paymaart.ui.home
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
@@ -328,6 +331,7 @@ class HomeActivity : BaseActivity() {
         val citizen = homeScreenData.citizen
         val kycStatus = homeScreenData.kycStatus
         val completedStatus = homeScreenData.completed
+        val membershipType = homeScreenData.membership
         rejectionReasons = homeScreenData.rejectionReasons ?: ArrayList()
 
         when {
@@ -386,6 +390,18 @@ class HomeActivity : BaseActivity() {
                 b.homeActivityNavView.homeDrawerKycTypeTV.text =
                     getString(R.string.non_malawi_full_kyc_registration)
             }
+        }
+        val bannerVisibility = getBannerVisibility()
+        if(membershipType == MembershipType.GO.type && kycStatus == Constants.KYC_STATUS_COMPLETED && bannerVisibility){
+            val i = Intent(this, MembershipPlansActivity::class.java)
+            i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            val options = ActivityOptions.makeSceneTransitionAnimation(this).toBundle()
+            //Kept some delay before the transition
+            Handler(Looper.getMainLooper()).postDelayed({
+                startActivity(i, options)
+            }, 1000)
+
+
         }
         hideLoader()
     }

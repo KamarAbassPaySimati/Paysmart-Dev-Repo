@@ -11,6 +11,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.afrimax.paymaart.util.Constants
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
 import com.amplifyframework.core.Amplify
@@ -28,6 +29,18 @@ open class BaseActivity: AppCompatActivity() {
         val sharedPreferences: SharedPreferences =
             this.getSharedPreferences(Constants.USER_DATA_PREFS, Context.MODE_PRIVATE)
         return sharedPreferences.getString(Constants.PREF_KEY_LOGIN_MODE, null)
+    }
+
+    fun setMembershipBannerVisibility(shown: Boolean){
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(Constants.USER_DATA_PREFS, Context.MODE_PRIVATE)
+        sharedPreferences.edit {
+            putBoolean(Constants.BANNER_VISIBILITY_FLAG, shown)
+        }
+    }
+
+    fun getBannerVisibility() : Boolean {
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(Constants.USER_DATA_PREFS, Context.MODE_PRIVATE)
+        return sharedPreferences.getBoolean(Constants.BANNER_VISIBILITY_FLAG, true)
     }
 
     fun Context.toPx(dp: Int): Int = TypedValue.applyDimension(
