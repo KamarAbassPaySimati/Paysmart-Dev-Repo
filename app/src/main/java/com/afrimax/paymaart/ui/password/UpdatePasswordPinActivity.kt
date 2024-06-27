@@ -660,12 +660,12 @@ class UpdatePasswordPinActivity : BaseActivity() {
         when (choosenType) {
             Constants.SELECTION_PIN -> {
                 titleTextView.text = getString(R.string.pin_updated)
-                subTitleTextView.text = getString(R.string.your_password_has_been_successfully_updated)
+                subTitleTextView.text = getString(R.string.your_pin_has_been_successfully_updated)
             }
 
             Constants.SELECTION_PASSWORD -> {
                 titleTextView.text = getString(R.string.password_updated)
-                subTitleTextView.text = getString(R.string.your_pin_has_been_successfully_updated)
+                subTitleTextView.text = getString(R.string.your_password_has_been_successfully_updated)
             }
         }
         bottomSheetDialog.show()
