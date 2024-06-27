@@ -24,6 +24,9 @@
             android:name=".ui.password.ForgotPasswordPinActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.membership.MembershipPlansActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.delete.DeleteAccountActivity"
             android:exported="false" />
         <activity

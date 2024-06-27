@@ -1,9 +1,10 @@
 package com.afrimax.paymaart.ui.home
 
+import android.app.ActivityOptions
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
@@ -28,8 +29,7 @@ import com.afrimax.paymaart.data.model.HomeScreenResponse
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
-import com.afrimax.paymaart.ui.kyc.KycProgressActivity
-import com.afrimax.paymaart.ui.password.ForgotPasswordPinActivity
+import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
@@ -127,9 +127,10 @@ class HomeActivity : BaseActivity() {
         }
 
         b.homeActivityCashOutButton.setOnClickListener {
-            if (checkKycStatus()){
-                //
-            }
+//            if (checkKycStatus()){
+//                //
+//            }
+            startActivity(Intent(this, MembershipPlansActivity::class.java))
         }
 //
         b.homeActivityTransactionsBox.setOnClickListener {
@@ -286,7 +287,6 @@ class HomeActivity : BaseActivity() {
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
                         runOnUiThread {
-                            "Response".showLogE(body)
                             populateHomeScreenData(body.homeScreenData)
                         }
                     } else {
@@ -331,6 +331,7 @@ class HomeActivity : BaseActivity() {
         val citizen = homeScreenData.citizen
         val kycStatus = homeScreenData.kycStatus
         val completedStatus = homeScreenData.completed
+        val membershipType = homeScreenData.membership
         rejectionReasons = homeScreenData.rejectionReasons ?: ArrayList()
 
         when {
@@ -390,6 +391,18 @@ class HomeActivity : BaseActivity() {
                     getString(R.string.non_malawi_full_kyc_registration)
             }
         }
+        val bannerVisibility = getBannerVisibility()
+        if(membershipType == MembershipType.GO.type && kycStatus == Constants.KYC_STATUS_COMPLETED && bannerVisibility){
+            val i = Intent(this, MembershipPlansActivity::class.java)
+            i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            val options = ActivityOptions.makeSceneTransitionAnimation(this).toBundle()
+            //Kept some delay before the transition
+            Handler(Looper.getMainLooper()).postDelayed({
+                startActivity(i, options)
+            }, 1000)
+
+
+        }
         hideLoader()
     }
 
@@ -448,16 +461,16 @@ class HomeActivity : BaseActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        getHomeScreenDataApi()
+    }
+
     companion object {
         const val DRAWER_KYC_DETAILS = 1
         const val DRAWER_UPDATE_PASSWORD = 9
         const val DRAWER_DELETE_ACCOUNT = 10
         const val DRAWER_LOGOUT = 11
-    }
-
-    override fun onResume() {
-        super.onResume()
-        getHomeScreenDataApi()
     }
 }
 

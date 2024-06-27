@@ -102,6 +102,7 @@ object Constants {
     const val FORGOT_CREDENTIAL_TYPE = "forgot_credential_type"
     const val FORGOT_CREDENTIAL_PIN = "forgot_credential_pin"
     const val FORGOT_CREDENTIAL_PASSWORD = "forgot_credential_password"
+    const val BANNER_VISIBILITY_FLAG = "banner_visibility_flag"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

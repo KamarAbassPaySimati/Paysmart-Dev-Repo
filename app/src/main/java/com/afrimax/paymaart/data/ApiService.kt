@@ -1,5 +1,6 @@
 package com.afrimax.paymaart.data
 
+import com.afrimax.paymaart.data.model.ApproveUserRequest
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
@@ -14,6 +15,7 @@ import com.afrimax.paymaart.data.model.ResendCredentialsRequest
 import com.afrimax.paymaart.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
+import com.afrimax.paymaart.data.model.MembershipPlansResponse
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SendForgotOtpResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
@@ -85,7 +87,13 @@ interface ApiService {
     @POST("$CUSTOMER_USER/update-password")
     fun updatePinOrPassword(@Header("Authorization") header: String, @Body body: UpdatePinOrPasswordRequest): Call<DefaultResponse>
 
+    @GET("$CUSTOMER_USER/view-membership-benefits")
+    fun getMembershipDetails(@Header("Authorization") header: String): Call<MembershipPlansResponse>
+
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
     fun getSharedSecret(@Body body: GetSharedSecretRequest, @Header("Authorization") header: String): Call<GetSharedSecretResponse>
+
+    @POST("bdd/approve")
+    fun approveUser(@Body body: ApproveUserRequest, @Header("Authorization") header: String): Call<DefaultResponse>
 }
