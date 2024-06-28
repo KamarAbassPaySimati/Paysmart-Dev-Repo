@@ -91,7 +91,7 @@ interface ApiService {
     @GET("$CUSTOMER_USER/view-membership-benefits")
     fun getMembershipDetails(@Header("Authorization") header: String): Call<MembershipPlansResponse>
 
-    @GET("$CUSTOMER_USER/view-self-kyc-agent")
+    @GET("$CUSTOMER_USER/view-self-kyc-customer")
     fun getSelfKycDetails(@Query(value = "password") password: String, @Header("Authorization") header: String): Call<SelfKycDetailsResponse>
 
     //For BDD purpose

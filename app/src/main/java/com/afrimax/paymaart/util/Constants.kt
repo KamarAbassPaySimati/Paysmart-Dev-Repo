@@ -114,6 +114,8 @@ object Constants {
     const val VIEW_SCOPE_FILL = "view_scope_fill" // used when user filling kyc for first time
     const val VIEW_SCOPE_EDIT = "view_scope_edit" // used for editing existing kyc
     const val VIEW_SCOPE_UPDATE = "view_scope_update" // used for upgrading simplified to full kyc
+    const val PUBLIC_PROFILE = "public_profile"
+    const val PROFILE_PICTURE = "profile_picture"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

@@ -24,6 +24,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ViewKycPasswordSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.ViewKycPinSheet
 import com.afrimax.paymaart.ui.utils.interfaces.ViewSelfKycInterface
 import com.afrimax.paymaart.util.Constants
+import com.bumptech.glide.Glide
 import jp.wasabeef.blurry.Blurry
 import java.util.Calendar
 import java.util.Date
@@ -33,6 +34,8 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
 
     private lateinit var kycStatus: String
     private lateinit var kycType: String
+    private lateinit var profilePicture: String
+    private var publicProfile: Boolean = false
     private var isBlurred = false
 
     private var idFrontKey = ""
@@ -65,6 +68,8 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
     private fun initViews() {
         kycStatus = intent.getStringExtra(Constants.KYC_STATUS) ?: getString(R.string.not_started)
         kycType = intent.getStringExtra(Constants.KYC_TYPE) ?: ""
+        profilePicture = intent.getStringExtra(Constants.PROFILE_PICTURE) ?: ""
+        publicProfile = intent.getBooleanExtra(Constants.PUBLIC_PROFILE, false)
     }
 
     private fun setupLayout() {
@@ -74,6 +79,15 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         //populate views
         val nameList = accountName.uppercase().split(" ")
         val shortName = "${nameList[0][0]}${nameList[1][0]}${nameList[2][0]}"
+        if (publicProfile && profilePicture.isNotEmpty()){
+            b.viewSelfKycActivityProfileIV.visibility = View.VISIBLE
+            Glide
+                .with(this)
+                .load(profilePicture)
+                .into(b.viewSelfKycActivityProfileIV)
+            b.viewSelfKycActivityShortNameTV.visibility = View.GONE
+
+        }
         b.viewSelfKycActivityShortNameTV.text = shortName
         b.viewSelfKycActivityNameTV.text = accountName
         b.viewSelfKycActivityPaymaartIdTV.text = paymaartId
