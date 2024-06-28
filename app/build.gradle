@@ -208,4 +208,7 @@ dependencies {
 
     //Espresso Contrib
     androidTestImplementation libs.espresso.contrib
+
+    //Blurry
+    implementation libs.blurry
 }

@@ -127,10 +127,9 @@ class HomeActivity : BaseActivity() {
         }
 
         b.homeActivityCashOutButton.setOnClickListener {
-//            if (checkKycStatus()){
-//                //
-//            }
-            startActivity(Intent(this, MembershipPlansActivity::class.java))
+            if (checkKycStatus()){
+                //
+            }
         }
 //
         b.homeActivityTransactionsBox.setOnClickListener {
