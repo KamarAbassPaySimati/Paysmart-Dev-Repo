@@ -18,7 +18,7 @@
     <color name="grey1">#E5E9EB</color>
     <color name="grey2">#8E949A</color>
     <color name="offWhite">#F8F8F8</color>
-    <color name="offWhite2">#DDDD</color>
+    <color name="offWhite2">#DDDD</color>f
     <color name="errorRed">#FF4343</color>
     <color name="successGreen">#13B681</color>
     <color name="blue1">#0066F6</color>
@@ -45,4 +45,12 @@
     <color name="primeMemberStrokeColor">#FDB913</color>
     <color name="primeXMemberStrokeColor">#CACACAB2</color>
     <color name="goMemberStrokeColor">#D57829</color>
+    <color name="primaryLightActive">#8075A1</color>
+    <color name="primeCardBackground">#EA7024</color>
+    <color name="primeXCardBackground">#FDB913</color>
+    <color name="goCardBackground">#D57829</color>
+    <color name="popularCardColor">#E92233</color>
+    <color name="primeMembershipCardColor">#FFA56D</color>
+    <color name="primeXMembershipCardColor">#F9E1A8</color>
+    <color name="goMembershipCardColor">#FFD7B4</color>
 </resources>

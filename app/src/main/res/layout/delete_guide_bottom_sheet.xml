@@ -63,7 +63,8 @@
             android:text="@string/delete_guide1"
             android:textColor="@color/white"
             android:textColorLink="@color/accentInformation"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:justificationMode="inter_word"/>
 
     </LinearLayout>
 
@@ -91,7 +92,8 @@
             android:fontFamily="@font/inter_regular"
             android:text="@string/delete_guide2"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:justificationMode="inter_word" />
 
     </LinearLayout>
 

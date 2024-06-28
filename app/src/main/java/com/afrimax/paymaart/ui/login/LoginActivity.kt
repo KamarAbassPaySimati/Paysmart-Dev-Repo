@@ -17,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -25,11 +26,13 @@ import androidx.core.view.isVisible
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityLoginBinding
+import com.afrimax.paymaart.ui.password.ForgotPasswordPinActivity
 import com.afrimax.paymaart.ui.register.RegisterActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.LoginLoginByDialog
 import com.afrimax.paymaart.ui.utils.interfaces.LoginByDialogInterface
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.LoginPinTransformation
+import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
 import com.amplifyframework.auth.cognito.options.AuthFlowType
@@ -145,17 +148,17 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
         }
 
         b.loginActivityForgotPinTV.setOnClickListener {
-//            val i = Intent(this, ForgotPasswordPinActivity::class.java)
-//            i.putExtra(Constants.FORGOT_CREDENTIAL_TYPE, Constants.FORGOT_CREDENTIAL_PIN)
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
-//            startActivity(i, options)
+            val i = Intent(this, ForgotPasswordPinActivity::class.java)
+            i.putExtra(Constants.FORGOT_CREDENTIAL_TYPE, Constants.FORGOT_CREDENTIAL_PIN)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
+            startActivity(i, options)
         }
 
         b.loginActivityForgotPasswordTV.setOnClickListener {
-//            val i = Intent(this, ForgotPasswordPinActivity::class.java)
-//            i.putExtra(Constants.FORGOT_CREDENTIAL_TYPE, Constants.FORGOT_CREDENTIAL_PASSWORD)
-//            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
-//            startActivity(i, options)
+            val i = Intent(this, ForgotPasswordPinActivity::class.java)
+            i.putExtra(Constants.FORGOT_CREDENTIAL_TYPE, Constants.FORGOT_CREDENTIAL_PASSWORD)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
+            startActivity(i, options)
         }
 
         setUpEditTextChangeListeners()
@@ -724,7 +727,7 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
             validatePassword(b.loginActivityPasswordET, b.loginActivityPasswordWarningTV)
 
         if (isValidPaymaartId && isValidPassword) {
-            val paymaartId = b.loginActivityPaymaartIdET.text.toString()
+            val paymaartId =  getString(R.string.paymaart_code) + b.loginActivityPaymaartIdET.text.toString()
             val password = b.loginActivityPasswordET.text.toString()
             amplifyStartLogIn(
                 paymaartId, password, Constants.SELECTION_PAYMAART_ID, Constants.SELECTION_PASSWORD
@@ -741,12 +744,13 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
         val options =
             AWSCognitoAuthSignInOptions.builder().authFlowType(AuthFlowType.USER_SRP_AUTH).build()
-
+        "Result".showLogE(passCode)
         try {
             Amplify.Auth.signIn(userName, passCode, options, { result ->
                 runOnUiThread {
                     hideButtonLoader()
                 }
+                "Result".showLogE(result)
                 val nextStep = result.nextStep
                 when (nextStep.signInStep) {
                     AuthSignInStep.CONFIRM_SIGN_IN_WITH_TOTP_CODE -> {
@@ -781,6 +785,7 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
                 }
 
             }) { error ->
+                "Response".showLogE(error)
                 runOnUiThread {
                     hideButtonLoader()
                     when (loginBy) {

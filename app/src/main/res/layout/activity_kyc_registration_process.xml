@@ -56,6 +56,7 @@
                 android:fontFamily="@font/inter_regular"
                 android:text="@string/kyc_process_text1"
                 android:textColor="@color/white"
+                android:justificationMode="inter_word"
                 android:textSize="14sp" />
 
             <LinearLayout
@@ -80,7 +81,8 @@
                     android:fontFamily="@font/inter_regular"
                     android:text="@string/kyc_process_text2"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:justificationMode="inter_word" />
 
             </LinearLayout>
 
@@ -106,7 +108,8 @@
                     android:fontFamily="@font/inter_regular"
                     android:text="@string/kyc_process_text3"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:justificationMode="inter_word" />
 
             </LinearLayout>
 
@@ -132,7 +135,8 @@
                     android:fontFamily="@font/inter_regular"
                     android:text="@string/kyc_process_text4"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:justificationMode="inter_word" />
 
             </LinearLayout>
 
@@ -158,7 +162,8 @@
                     android:fontFamily="@font/inter_regular"
                     android:text="@string/kyc_process_text5"
                     android:textColor="@color/white"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:justificationMode="inter_word" />
 
             </LinearLayout>
 
