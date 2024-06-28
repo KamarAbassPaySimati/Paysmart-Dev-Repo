@@ -89,6 +89,13 @@ class MalawiFullKyc {
         Thread.sleep(3000)
     }
 
+    @Given("I enter the international address as {string}")
+    fun iEnterTheInternationalAddress(street: String) {
+        Espresso.onView(withId(R.id.onboardKycAddressActivityIntlStreetNameET)).perform(
+            ViewActions.scrollTo(), ViewActions.typeText(street), ViewActions.closeSoftKeyboard()
+        )
+        Thread.sleep(5000)
+    }
 
     @Then("I am redirected to KYC screen one")
     fun iAmRedirectedToKycSelectScreen() {

@@ -99,6 +99,10 @@ object Constants {
     const val KYC_IDENTITY_ID_REFUGEE_ID = "kyc_identity_id_refugee_id"
     const val KYC_IDENTITY_ID_ASYLUM_ID = "kyc_identity_id_asylum_id"
     const val DELETE_REASONS = "delete_reasons"
+    const val FORGOT_CREDENTIAL_TYPE = "forgot_credential_type"
+    const val FORGOT_CREDENTIAL_PIN = "forgot_credential_pin"
+    const val FORGOT_CREDENTIAL_PASSWORD = "forgot_credential_password"
+    const val BANNER_VISIBILITY_FLAG = "banner_visibility_flag"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

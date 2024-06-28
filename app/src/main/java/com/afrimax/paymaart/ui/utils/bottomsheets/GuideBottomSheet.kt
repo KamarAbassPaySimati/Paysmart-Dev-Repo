@@ -1,5 +1,6 @@
 package com.afrimax.paymaart.ui.utils.bottomsheets
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
