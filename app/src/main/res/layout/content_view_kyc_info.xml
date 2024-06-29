@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/gender"
+        android:textColor="@color/neutralGrey"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/viewKycInfoDetailsGenderTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/dash"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/date_of_birth"
+        android:textColor="@color/neutralGrey"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/viewKycYourInfoDobTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/dash"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg_kyc_details_card"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/occupation_source_of_funds"
+            android:textColor="@color/neutralGrey"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/viewKycYourInfoOccupationTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/dash"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:id="@+id/viewKycYourInfoOccupationDetailsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/details"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/viewKycYourInfoOccupationDetailsTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/dash"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/viewKycYourInfoEmployedDetailsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/employer_name"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/viewKycYourInfoEmployerNameTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/dash"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/industry_sector"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/viewKycYourInfoIndustrySectorTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/dash"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/town_district"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/viewKycYourInfoTownDistrictTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/dash"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/business_relationship_note2"
+        android:textColor="@color/neutralGrey"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/viewKycYourInfoRelationshipDashTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/dash"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="14sp" />
+
+    <CheckBox
+        android:id="@+id/viewKycYourInfoRelationship1CB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:checked="true"
+        android:enabled="false"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="top"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="@string/business_relationship1"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:buttonIconTint="@color/white"
+        app:buttonTint="@color/primaryColor"
+        tools:visibility="visible" />
+
+    <CheckBox
+        android:id="@+id/viewKycYourInfoRelationship2CB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:checked="true"
+        android:enabled="false"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="top"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="@string/business_relationship2"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:buttonIconTint="@color/white"
+        app:buttonTint="@color/primaryColor"
+        tools:visibility="visible" />
+
+    <CheckBox
+        android:id="@+id/viewKycYourInfoRelationship3CB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:checked="true"
+        android:enabled="false"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="top"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="@string/business_relationship3"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:buttonIconTint="@color/white"
+        app:buttonTint="@color/primaryColor"
+        tools:visibility="visible" />
+
+    <CheckBox
+        android:id="@+id/viewKycYourInfoRelationship4CB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:checked="true"
+        android:enabled="false"
+        android:fontFamily="@font/inter_regular"
+        android:gravity="top"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        android:text="@string/business_relationship4"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:buttonIconTint="@color/white"
+        app:buttonTint="@color/primaryColor"
+        tools:visibility="visible" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/monthly_withdrawal"
+        android:textColor="@color/neutralGrey"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/viewKycYourInfoMonthlyWithdrawalTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/dash"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/monthly_income"
+        android:textColor="@color/neutralGrey"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/viewKycYourInfoMonthlyIncomeTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="12dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/dash"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="14sp" />
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_marginEnd="12dp"-->
+<!--        android:fontFamily="@font/inter_medium"-->
+<!--        android:text="@string/banking_information_for_payouts"-->
+<!--        android:textColor="@color/neutralGreyPrimaryText"-->
+<!--        android:textSize="14sp" />-->
+
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_marginEnd="12dp"-->
+<!--        android:fontFamily="@font/inter_regular"-->
+<!--        android:text="@string/bank_name"-->
+<!--        android:textColor="@color/neutralGrey"-->
+<!--        android:textSize="14sp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/viewKycYourInfoBankNameTV"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="6dp"-->
+<!--        android:layout_marginEnd="12dp"-->
+<!--        android:fontFamily="@font/inter_regular"-->
+<!--        android:text="@string/dash"-->
+<!--        android:textColor="@color/neutralGreyPrimaryText"-->
+<!--        android:textSize="14sp" />-->
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_marginEnd="12dp"-->
+<!--        android:fontFamily="@font/inter_regular"-->
+<!--        android:text="@string/account_number"-->
+<!--        android:textColor="@color/neutralGrey"-->
+<!--        android:textSize="14sp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/viewKycYourInfoAccountNumberTV"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="6dp"-->
+<!--        android:layout_marginEnd="12dp"-->
+<!--        android:fontFamily="@font/inter_regular"-->
+<!--        android:text="@string/dash"-->
+<!--        android:textColor="@color/neutralGreyPrimaryText"-->
+<!--        android:textSize="14sp" />-->
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:layout_marginEnd="12dp"-->
+<!--        android:fontFamily="@font/inter_regular"-->
+<!--        android:text="@string/account_name"-->
+<!--        android:textColor="@color/neutralGrey"-->
+<!--        android:textSize="14sp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/viewKycYourInfoAccountNameTV"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="6dp"-->
+<!--        android:layout_marginEnd="12dp"-->
+<!--        android:fontFamily="@font/inter_regular"-->
+<!--        android:text="@string/dash"-->
+<!--        android:textColor="@color/neutralGreyPrimaryText"-->
+<!--        android:textSize="14sp" />-->
+
+</LinearLayout>
