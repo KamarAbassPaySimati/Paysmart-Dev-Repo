@@ -17,6 +17,7 @@ import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
+import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
 import com.afrimax.paymaart.data.model.SendForgotOtpResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
 import com.afrimax.paymaart.data.model.SendOtpResponse
@@ -89,6 +90,9 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/view-membership-benefits")
     fun getMembershipDetails(@Header("Authorization") header: String): Call<MembershipPlansResponse>
+
+    @GET("$CUSTOMER_USER/view-self-kyc-customer")
+    fun getSelfKycDetails(@Query(value = "password") password: String, @Header("Authorization") header: String): Call<SelfKycDetailsResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

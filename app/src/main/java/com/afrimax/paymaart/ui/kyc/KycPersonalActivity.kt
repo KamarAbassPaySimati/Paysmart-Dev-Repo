@@ -400,7 +400,7 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
             "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
         )
 
-        val dpd = DatePickerDialog(this, { _, year, monthOfYear, dayOfMonth ->
+        val dpd = DatePickerDialog(this, R.style.date_picker_theme,{ _, year, monthOfYear, dayOfMonth ->
             val formattedDate = "$dayOfMonth-${monthsList[monthOfYear]}-$year"
             b.onboardKycPersonalActivityDOBTV.text = formattedDate
 
