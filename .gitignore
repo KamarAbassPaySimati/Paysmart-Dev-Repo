@@ -75,3 +75,4 @@ captures
 /app/src/main/assets/env
 /.env
 /features/support/env.rb
+/*.dm
