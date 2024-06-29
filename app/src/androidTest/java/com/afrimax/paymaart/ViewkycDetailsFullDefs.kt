@@ -11,8 +11,11 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
+import io.cucumber.junit.Cucumber
 import org.hamcrest.Matcher
+import org.junit.runner.RunWith
 
+@RunWith(Cucumber::class)
 class ViewkycDetailsFullDefs {
 
     private fun getText(matcher: ViewInteraction): String {
@@ -35,12 +38,12 @@ class ViewkycDetailsFullDefs {
         return text
     }
 
-    @When("I click on the finish button")
-    fun clickOnFinishButton() {
-        Espresso.onView(ViewMatchers.withId(R.id.kycProgressActivityFinishButton))
-            .perform(ViewActions.click())
-        Thread.sleep(5000)
-    }
+//    @When("I click on the finish button")
+//    fun clickOnFinishButton() {
+//        Espresso.onView(ViewMatchers.withId(R.id.kycProgressActivityFinishButton))
+//            .perform(ViewActions.click())
+//        Thread.sleep(5000)
+//    }
 
     @When("I open menu and navigate to the KYC reg details")
     fun openKycDetails() {

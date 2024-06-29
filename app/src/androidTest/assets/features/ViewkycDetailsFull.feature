@@ -75,6 +75,7 @@ Feature: Paymaart- Customer Android- View KYC Details(Full)
     When I select purpose of relation "1"
     When I select my monthly income as "300,000.00 to 1,000,000.00 MWK"
     When I select my monthly withdrawal as "300,000.00 to 1,000,000.00 MWK"
+    When I click on proceed button on screen three
     Then I should read a message stating KYC "In review"
     When I click on the finish button
     Then I should be redirected to home screen
