@@ -7,7 +7,9 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
+import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
@@ -51,6 +53,10 @@ class ViewKycDetailsSimplified {
         Espresso.onView(ViewMatchers.withId(R.id.kycCaptureUploadActivitySubmitButton))
             .perform(ViewActions.click())
         Thread.sleep(5000)
+    }
+    @Given("I am in home screen")
+    fun iAmInHomeScreen( ){
+        Espresso.onView(ViewMatchers.withId(R.id.homeActivity)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
 }
