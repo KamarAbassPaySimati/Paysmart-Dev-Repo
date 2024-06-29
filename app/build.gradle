@@ -211,4 +211,7 @@ dependencies {
 
     //Blurry
     implementation libs.blurry
+
+    //SDP library for uniform size of layout resources in all type of screens
+    implementation libs.sdp.android
 }
