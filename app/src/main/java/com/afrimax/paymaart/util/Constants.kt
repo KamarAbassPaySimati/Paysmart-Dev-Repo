@@ -103,6 +103,19 @@ object Constants {
     const val FORGOT_CREDENTIAL_PIN = "forgot_credential_pin"
     const val FORGOT_CREDENTIAL_PASSWORD = "forgot_credential_password"
     const val BANNER_VISIBILITY_FLAG = "banner_visibility_flag"
+    const val KYC_TYPE = "kyc_type"
+    const val KYC_NAME = "kyc_name"
+    const val KYC_PAYMAART_ID = "kyc_paymaart_id"
+    const val KYC_PHONE_NUMBER = "kyc_phone_number"
+    const val KYC_COUNTRY_CODE = "kyc_country_code"
+    const val KYC_STATUS = "kyc_status"
+    const val KYC_REJECTION_REASONS = "kyc_reason_reasons"
+    const val VIEW_SCOPE = "view_scope"
+    const val VIEW_SCOPE_FILL = "view_scope_fill" // used when user filling kyc for first time
+    const val VIEW_SCOPE_EDIT = "view_scope_edit" // used for editing existing kyc
+    const val VIEW_SCOPE_UPDATE = "view_scope_update" // used for upgrading simplified to full kyc
+    const val PUBLIC_PROFILE = "public_profile"
+    const val PROFILE_PICTURE = "profile_picture"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"
