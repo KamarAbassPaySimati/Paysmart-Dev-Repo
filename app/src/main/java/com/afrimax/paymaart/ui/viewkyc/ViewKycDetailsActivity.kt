@@ -16,6 +16,7 @@ import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.model.ViewUserData
 import com.afrimax.paymaart.databinding.ActivityViewKycDetailsBinding
+import com.afrimax.paymaart.databinding.ContentViewKycReasonForRejectionBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.kyc.KycFullScreenPreviewActivity
 import com.afrimax.paymaart.ui.kyc.KycPersonalActivity
@@ -398,16 +399,16 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
     }
 
     private fun addRejectionReason(number: String, reason: String) {
-//        val index = reason.indexOf(":")
-//        val part1 = reason.substring(0, index + 1).trim()
-//        val part2 = reason.substring(index + 1).trim()
-//        val child = ContentViewKycReasonForRejectionBinding.inflate(
-//            layoutInflater, b.viewSelfKycActivityReasonForRejectionHiddenContainer, false
-//        )
-//        child.viewKycRejectionNumberTV.text = number
-//        child.viewKycRejectionTitleTV.text = part1
-//        child.viewKycRejectionDescriptionTV.text = part2
-//        b.viewSelfKycActivityReasonForRejectionHiddenContainer.addView(child.root)
+        val index = reason.indexOf(":")
+        val part1 = reason.substring(0, index + 1).trim()
+        val part2 = reason.substring(index + 1).trim()
+        val child = ContentViewKycReasonForRejectionBinding.inflate(
+            layoutInflater, b.viewSelfKycActivityReasonForRejectionHiddenContainer, false
+        )
+        child.viewKycRejectionNumberTV.text = number
+        child.viewKycRejectionTitleTV.text = part1
+        child.viewKycRejectionDescriptionTV.text = part2
+        b.viewSelfKycActivityReasonForRejectionHiddenContainer.addView(child.root)
 
     }
 
@@ -785,15 +786,18 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         if (kycType == getString(R.string.non_malawi_full_kyc_registration)) {
             b.viewSelfKycActivityYourAddressHiddenContainer.viewKycYourAddressNationalityTV.text =
                 data.citizen ?: "-"
-
-            val intlAddressComponents = ArrayList<String>()
-            if (!data.intl_po_box_no.isNullOrEmpty()) intlAddressComponents.add(data.intl_po_box_no)
-            if (!data.intl_house_number.isNullOrEmpty()) intlAddressComponents.add(data.intl_house_number)
-            if (!data.intl_street_name.isNullOrEmpty()) intlAddressComponents.add(data.intl_street_name)
-            if (!data.intl_town_village_ta.isNullOrEmpty()) intlAddressComponents.add(data.intl_town_village_ta)
-            if (!data.intl_district.isNullOrEmpty()) intlAddressComponents.add(data.intl_district)
-
-            val intlAddress = intlAddressComponents.joinToString(separator = ", ").ifEmpty { "-" }
+            //All these implementation have been changed.
+            //`intl_address` will contain the international address of the non malawian customer.
+            /**
+                val intlAddressComponents = ArrayList<String>()
+                if (!data.intl_po_box_no.isNullOrEmpty()) intlAddressComponents.add(data.intl_po_box_no)
+                if (!data.intl_house_number.isNullOrEmpty()) intlAddressComponents.add(data.intl_house_number)
+                if (!data.intl_street_name.isNullOrEmpty()) intlAddressComponents.add(data.intl_street_name)
+                if (!data.intl_town_village_ta.isNullOrEmpty()) intlAddressComponents.add(data.intl_town_village_ta)
+                if (!data.intl_district.isNullOrEmpty()) intlAddressComponents.add(data.intl_district)
+                val intlAddress = intlAddressComponents.joinToString(separator = ", ").ifEmpty { "-" }
+             */
+            val intlAddress = data.intl_address ?: ""
             b.viewSelfKycActivityYourAddressHiddenContainer.viewKycYourAddressInternationalAddressTV.text =
                 intlAddress
         }
