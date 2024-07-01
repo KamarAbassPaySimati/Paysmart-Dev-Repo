@@ -510,4 +510,21 @@
     <string name="prepaid_30_days">Prepaid, 30 Days, MWK</string>
     <string name="free">Free</string>
     <string name="buy">Buy</string>
+    <string name="kyc_details">KYC Details</string>
+    <string name="view_kyc_background_data">View Kyc Background</string>
+    <string name="reason_for_pending_kyc">Reason for Pending KYC</string>
+    <string name="contact_details">Contact Details</string>
+    <string name="dash">-</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="details">Details</string>
+    <string name="business_relationship_note2">Purpose and intended nature of the business relationship</string>
+    <string name="blur_layer_data">Blur layer</string>
+    <string name="lock_icon_data">Lock icon</string>
+    <string name="please_use_your_password_pin_to_view_kyc_details">Please use your PIN/Password to view KYC Details</string>
+    <string name="complete_kyc_subtext">Complete KYC registration now for full access to Paymaart services</string>
+    <string name="edit">Edit</string>
+    <string name="view_kyc_details">View KYC Details</string>
+    <string name="enter_your_pin_to_view_your_kyc_details">Enter your PIN to view your KYC details</string>
+    <string name="view">View</string>
+    <string name="enter_your_password_to_view_your_kyc_details">Enter your password to view your KYC details</string>
 </resources>

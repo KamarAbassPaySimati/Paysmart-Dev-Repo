@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewSelfKycActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.viewkyc.ViewKycDetailsActivity">
+
+    <RelativeLayout
+        android:id="@+id/viewSelfKycActivityTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/viewSelfKycActivityBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back_button"
+            android:padding="16dp"
+            android:src="@drawable/ic_arrow_back" />
+
+
+        <TextView
+            android:id="@+id/viewSelfKycActivityHeaderTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/viewSelfKycActivityBackButton"
+            android:fontFamily="@font/inter_medium"
+            android:includeFontPadding="false"
+            android:text="@string/kyc_details"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="16sp" />
+
+
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/viewSelfKycActivityBaseCV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/viewSelfKycActivityBottomBar"
+        android:layout_below="@+id/viewSelfKycActivityTopBar"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="0dp">
+
+        <ScrollView
+            android:id="@+id/viewSelfKycActivitySV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/viewSelfKycActivityBgIV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/viewSelfKycActivityPaymaartIdContainer"
+                        android:layout_marginTop="-80dp"
+                        android:contentDescription="@string/view_kyc_background_data"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ico_view_kyc_bg" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/viewSelfKycActivityProfileContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="16dp">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/viewSelfKycActivityProfileIV"
+                            android:layout_width="96dp"
+                            app:shapeAppearanceOverlay="@style/profileImagePreview"
+                            android:layout_height="0dp"
+                            android:scaleType="centerCrop"
+                            android:contentDescription="@string/image_description"
+                            android:src="@drawable/ic_no_image"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:visibility="gone"/>
+
+                        <TextView
+                            android:id="@+id/viewSelfKycActivityShortNameTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:padding="16dp"
+                            android:text="@string/mwk"
+                            android:textColor="@color/primaryColor"
+                            android:textSize="24sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:background="@drawable/bg_kyc_profile"
+                            android:visibility="visible"/>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/viewSelfKycActivityNameTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/viewSelfKycActivityProfileContainer"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="@string/account_name"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/viewSelfKycActivityPaymaartIdContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/viewSelfKycActivityNameTV"
+                        android:layout_centerHorizontal="true"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_regular"
+                            android:text="@string/paymaart_id"
+                            android:textColor="@color/neutralGreyPrimaryText"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/viewSelfKycActivityPaymaartIdTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textAllCaps="true"
+                            android:text="@string/paymaart_id"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/viewSelfKycActivityKycStatusContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_view_kyc_card"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/viewSelfKycActivityKycStatusBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:id="@+id/viewSelfKycActivityKycTypeTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@+id/viewSelfKycActivityKycStatusTV"
+                            android:fontFamily="@font/inter_semibold"
+                            android:text="@string/kyc_registration"
+                            android:textColor="@color/primaryColor"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/viewSelfKycActivityKycStatusTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/bg_home_drawer_kyc_rejected"
+                            android:fontFamily="@font/inter_semibold"
+                            android:gravity="center"
+                            android:paddingStart="10dp"
+                            android:paddingTop="2dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="2dp"
+                            android:text="@string/pending"
+                            android:textColor="@color/accentNegative"
+                            android:textSize="14sp" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/viewSelfKycActivityReasonForRejectionBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentTop="true"
+                            android:background="@color/neutralGreyOutline" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:layout_toStartOf="@+id/viewSelfKycActivityKycStatusExpandButton"
+                            android:fontFamily="@font/inter_regular"
+                            android:text="@string/reason_for_pending_kyc"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/viewSelfKycActivityKycStatusExpandButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginTop="12dp"
+                            android:layout_marginBottom="12dp"
+                            android:contentDescription="@string/expand_button_data"
+                            android:src="@drawable/ico_expand_neutral_grey_primary_text" />
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/viewSelfKycActivityReasonForRejectionHiddenContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <FrameLayout
+                    android:id="@+id/viewSelfKycActivityKycDetailsHolder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:id="@+id/viewSelfKycActivityKycDetailsContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:id="@+id/viewSelfKycActivityContactDetailsContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_kyc_details_card"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:id="@+id/viewSelfKycActivityContactDetailsBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="12dp">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginEnd="12dp"
+                                    android:layout_toStartOf="@+id/viewSelfKycActivityContactDetailsExpandButton"
+                                    android:fontFamily="@font/inter_semibold"
+                                    android:text="@string/contact_details"
+                                    android:textColor="@color/neutralGreyPrimaryText"
+                                    android:textSize="14sp" />
+
+                                <ImageView
+                                    android:id="@+id/viewSelfKycActivityContactDetailsExpandButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:contentDescription="@string/expand_button_data"
+                                    android:src="@drawable/ico_expand_neutral_grey_primary_text" />
+
+                            </RelativeLayout>
+
+                            <include
+                                android:id="@+id/viewSelfKycActivityContactDetailsHiddenContainer"
+                                layout="@layout/content_view_kyc_contact_details"
+                                android:visibility="gone"
+                                tools:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/viewSelfKycActivityYourAddressContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_kyc_details_card"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:id="@+id/viewSelfKycActivityYourAddressBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="12dp">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginEnd="12dp"
+                                    android:layout_toStartOf="@+id/viewSelfKycActivityYourAddressExpandButton"
+                                    android:fontFamily="@font/inter_semibold"
+                                    android:text="@string/your_address"
+                                    android:textColor="@color/neutralGreyPrimaryText"
+                                    android:textSize="14sp" />
+
+                                <ImageView
+                                    android:id="@+id/viewSelfKycActivityYourAddressExpandButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:contentDescription="@string/expand_button_data"
+                                    android:src="@drawable/ico_expand_neutral_grey_primary_text" />
+
+                            </RelativeLayout>
+
+                            <include
+                                android:id="@+id/viewSelfKycActivityYourAddressHiddenContainer"
+                                layout="@layout/content_view_kyc_your_address"
+                                android:visibility="gone"
+                                tools:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/viewSelfKycActivityYourIdentityContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_kyc_details_card"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:id="@+id/viewSelfKycActivityYourIdentityBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="12dp">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginEnd="12dp"
+                                    android:layout_toStartOf="@+id/viewSelfKycActivityYourIdentityExpandButton"
+                                    android:fontFamily="@font/inter_semibold"
+                                    android:text="@string/your_identity"
+                                    android:textColor="@color/neutralGreyPrimaryText"
+                                    android:textSize="14sp" />
+
+                                <ImageView
+                                    android:id="@+id/viewSelfKycActivityYourIdentityExpandButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:contentDescription="@string/expand_button_data"
+                                    android:src="@drawable/ico_expand_neutral_grey_primary_text" />
+
+                            </RelativeLayout>
+
+                            <include
+                                android:id="@+id/viewSelfKycActivityYourIdentityHiddenContainer"
+                                layout="@layout/content_view_kyc_your_identity"
+                                android:visibility="gone"
+                                tools:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/viewSelfKycActivityYourInfoContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_kyc_details_card"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:id="@+id/viewSelfKycActivityYourInfoBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="12dp">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginEnd="12dp"
+                                    android:layout_toStartOf="@+id/viewSelfKycActivityYourInfoExpandButton"
+                                    android:fontFamily="@font/inter_semibold"
+                                    android:text="@string/your_info"
+                                    android:textColor="@color/neutralGreyPrimaryText"
+                                    android:textSize="14sp" />
+
+                                <ImageView
+                                    android:id="@+id/viewSelfKycActivityYourInfoExpandButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:contentDescription="@string/expand_button_data"
+                                    android:src="@drawable/ico_expand_neutral_grey_primary_text" />
+
+                            </RelativeLayout>
+
+                            <include
+                                android:id="@+id/viewSelfKycActivityYourInfoHiddenContainer"
+                                layout="@layout/content_view_kyc_info"
+                                android:visibility="gone"
+                                tools:visibility="gone" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/viewSelfKycActivityBlur1IV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/blur_layer_data" />
+
+                    <LinearLayout
+                        android:id="@+id/viewSelfKycActivityLockedContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/primaryColor"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/lock_icon_data"
+                                android:padding="24dp"
+                                android:src="@drawable/ico_lock_white" />
+
+                        </androidx.cardview.widget.CardView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:fontFamily="@font/inter_semibold"
+                            android:text="@string/please_use_your_password_pin_to_view_kyc_details"
+                            android:textAlignment="center"
+                            android:textColor="@color/primaryColor"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:id="@+id/viewSelfKycActivityCompleteKycBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_view_kyc_card"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/online_kyc_registration"
+                        android:textAlignment="center"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/complete_kyc_subtext"
+                        android:textAlignment="center"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </androidx.cardview.widget.CardView>
+
+    <FrameLayout
+        android:id="@+id/viewSelfKycActivityBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/viewSelfKycActivityCompleteKycButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/primary_rounded_button_background"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/complete_kyc_registration"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/viewSelfKycActivityEditButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/primary_outlined_button_background"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/inter_medium"
+                android:gravity="center"
+                android:text="@string/edit"
+                android:textAllCaps="false"
+                android:textColor="@color/primaryColor"
+                android:textSize="18sp"
+                app:drawableStartCompat="@drawable/ico_edit_primary" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/viewSelfKycActivityBlur2IV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/image_description" />
+
+    </FrameLayout>
+
+</RelativeLayout>

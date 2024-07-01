@@ -34,6 +34,7 @@ import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
+import com.afrimax.paymaart.ui.viewkyc.ViewKycDetailsActivity
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
@@ -50,6 +51,8 @@ class HomeActivity : BaseActivity() {
     private var rejectionReasons = ArrayList<String>()
     private var dest = 0
     private var isSettingsClicked: Boolean = false
+    private var publicProfile: Boolean = false
+    private var profilePicUrl: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -127,10 +130,9 @@ class HomeActivity : BaseActivity() {
         }
 
         b.homeActivityCashOutButton.setOnClickListener {
-//            if (checkKycStatus()){
-//                //
-//            }
-            startActivity(Intent(this, MembershipPlansActivity::class.java))
+            if (checkKycStatus()){
+                //
+            }
         }
 //
         b.homeActivityTransactionsBox.setOnClickListener {
@@ -204,7 +206,21 @@ class HomeActivity : BaseActivity() {
 
             override fun onDrawerClosed(drawerView: View) {
                 when (dest) {
-                    DRAWER_KYC_DETAILS -> {}
+                    DRAWER_KYC_DETAILS -> {
+                        val i = Intent(this@HomeActivity, ViewKycDetailsActivity::class.java)
+                        i.putExtra(Constants.KYC_NAME, b.homeActivityProfileNameTV.text.toString())
+                        i.putExtra(Constants.KYC_PAYMAART_ID, b.homeActivityProfilePaymaartIdTV.text.toString())
+                        i.putExtra(Constants.KYC_TYPE, b.homeActivityNavView.homeDrawerKycTypeTV.text.toString())
+                        i.putExtra(Constants.KYC_STATUS, b.homeActivityNavView.homeDrawerKycStatusTV.text.toString())
+                        i.putExtra(Constants.PUBLIC_PROFILE, publicProfile)
+                        i.putExtra(Constants.PROFILE_PICTURE, profilePicUrl)
+                        if (b.homeActivityNavView.homeDrawerKycStatusTV.text.toString() == getString(
+                                R.string.further_information_required
+                            ))
+                            i.putExtra(Constants.KYC_REJECTION_REASONS, rejectionReasons)
+
+                        startActivity(i)
+                    }
 
                     DRAWER_UPDATE_PASSWORD -> {
                         startActivity(Intent(this@HomeActivity, UpdatePasswordPinActivity::class.java))
@@ -325,13 +341,15 @@ class HomeActivity : BaseActivity() {
                 membershipType(MembershipType.GO.typeName, R.color.primeXMemberStrokeColor, R.drawable.prime_x_member_bg)
             }
         }
-        val balanceInt = homeScreenData.accountBalance.toInt()
+        val balanceInt = homeScreenData.accountBalance.toDouble()
         b.homeActivityProfileBalanceTV.text = formatNumber(balanceInt)
         val kycType = homeScreenData.kycType
         val citizen = homeScreenData.citizen
         val kycStatus = homeScreenData.kycStatus
         val completedStatus = homeScreenData.completed
         val membershipType = homeScreenData.membership
+        profilePicUrl = homeScreenData.profilePic
+        publicProfile = homeScreenData.publicProfile
         rejectionReasons = homeScreenData.rejectionReasons ?: ArrayList()
 
         when {
@@ -451,10 +469,10 @@ class HomeActivity : BaseActivity() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    private fun formatNumber(number: Int): String {
-        val decimalFormat = DecimalFormat("#,###")
+    private fun formatNumber(number: Double): String {
+        val decimalFormat = DecimalFormat("#,###.##")
 
-        return if (number == 0) {
+        return if (number == 0.00) {
             "0.00"
         } else {
             decimalFormat.format(number)
