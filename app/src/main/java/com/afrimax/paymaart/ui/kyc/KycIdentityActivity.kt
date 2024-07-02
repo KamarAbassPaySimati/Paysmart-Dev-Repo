@@ -23,6 +23,9 @@ import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.GetUserKycDataResponse
 import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycUserData
+import com.afrimax.paymaart.data.model.SaveNewIdentityDetailsSelfKycRequest
+import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
+import com.afrimax.paymaart.data.model.ViewUserData
 import com.afrimax.paymaart.databinding.ActivityOnboardKycIdentityBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.KycNatureOfPermitSheet
@@ -37,20 +40,16 @@ import retrofit2.Response
 
 class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
     private lateinit var b: ActivityOnboardKycIdentityBinding
-
     private lateinit var kycScope: String
-    private lateinit var paymaartId: String
-    private lateinit var onboardScope: String
-
+    private lateinit var viewScope: String
     private lateinit var identityDocsResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var infoResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var cameraPermissionCheckLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var nextScreenResultLauncher: ActivityResultLauncher<Intent>
-
     private var shouldReloadDocs = true
-
     private var natureOfPermit = ""
     private var numberOfReference = ""
+    private var sendEmail = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,15 +72,15 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
 
     private fun initViews() {
         kycScope = intent.getStringExtra(Constants.KYC_SCOPE) ?: ""
-        paymaartId = intent.getStringExtra(Constants.ONBOARD_USER_PAYMAART_ID) ?: ""
-        onboardScope = intent.getStringExtra(Constants.ONBOARD_SCOPE) ?: ""
+        viewScope = intent.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_FILL
+        sendEmail = intent.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 val callbackIntent = Intent()
                 callbackIntent.putExtra(Constants.KYC_SCOPE, kycScope)
-                callbackIntent.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
-                callbackIntent.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
+                callbackIntent.putExtra(Constants.VIEW_SCOPE, viewScope)
+                callbackIntent.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
                 setResult(RESULT_CANCELED, callbackIntent)
                 finish()
             }
@@ -116,8 +115,7 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
         infoResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 //Don't reload data from getUserKycDataApi
-                if (result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) shouldReloadDocs =
-                    false
+                if (result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) shouldReloadDocs = false
             }
 
         nextScreenResultLauncher =
@@ -125,8 +123,8 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
                 val data = result.data
                 if ((result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) && data != null) {
                     kycScope = data.getStringExtra(Constants.KYC_SCOPE) ?: ""
-                    paymaartId = intent.getStringExtra(Constants.ONBOARD_USER_PAYMAART_ID) ?: ""
-                    onboardScope = intent.getStringExtra(Constants.ONBOARD_SCOPE) ?: ""
+                    viewScope = data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_FILL
+                    sendEmail = data.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
                 }
             }
     }
@@ -139,10 +137,8 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
                 //Show relevant Id doc fields
                 b.onboardKycIdentityActivityIdDocNationalIdRBContainer.visibility = View.VISIBLE
                 b.onboardKycIdentityActivityIdDocPassportRBContainer.visibility = View.VISIBLE
-
                 b.onboardKycIdentityActivityIdDocDriverLicenseRBContainer.visibility = View.GONE
-                b.onboardKycIdentityActivityIdDocTrafficRegisterCardRBContainer.visibility =
-                    View.GONE
+                b.onboardKycIdentityActivityIdDocTrafficRegisterCardRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityIdDocBirthCertificateRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityIdDocStudentIdRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityIdDocEmployeeIdRBContainer.visibility = View.GONE
@@ -150,18 +146,12 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
                 b.onboardKycIdentityActivityIdDocAsylumIdRBContainer.visibility = View.GONE
 
                 //Show relevant Verification doc
-                b.onboardKycIdentityActivityVerDocBirthCertificateRBContainer.visibility =
-                    View.VISIBLE
+                b.onboardKycIdentityActivityVerDocBirthCertificateRBContainer.visibility = View.VISIBLE
                 b.onboardKycIdentityActivityVerDocDriverLicenseRBContainer.visibility = View.VISIBLE
-                b.onboardKycIdentityActivityVerDocEmployerLetterRBContainer.visibility =
-                    View.VISIBLE
-                b.onboardKycIdentityActivityVerDocInstitutionLetterRBContainer.visibility =
-                    View.VISIBLE
-                b.onboardKycIdentityActivityVerDocTrafficRegisterCardRBContainer.visibility =
-                    View.VISIBLE
-
-                b.onboardKycIdentityActivityVerDocReligiousInstitutionLetterRBContainer.visibility =
-                    View.GONE
+                b.onboardKycIdentityActivityVerDocEmployerLetterRBContainer.visibility = View.VISIBLE
+                b.onboardKycIdentityActivityVerDocInstitutionLetterRBContainer.visibility = View.VISIBLE
+                b.onboardKycIdentityActivityVerDocTrafficRegisterCardRBContainer.visibility = View.VISIBLE
+                b.onboardKycIdentityActivityVerDocReligiousInstitutionLetterRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityVerDocNationalIdRBContainer.visibility = View.GONE
             }
 
@@ -170,45 +160,33 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
 
                 //Show relevant Id doc fields
                 b.onboardKycIdentityActivityIdDocDriverLicenseRBContainer.visibility = View.VISIBLE
-                b.onboardKycIdentityActivityIdDocTrafficRegisterCardRBContainer.visibility =
-                    View.VISIBLE
-                b.onboardKycIdentityActivityIdDocBirthCertificateRBContainer.visibility =
-                    View.VISIBLE
+                b.onboardKycIdentityActivityIdDocTrafficRegisterCardRBContainer.visibility = View.VISIBLE
+                b.onboardKycIdentityActivityIdDocBirthCertificateRBContainer.visibility = View.VISIBLE
                 b.onboardKycIdentityActivityIdDocStudentIdRBContainer.visibility = View.VISIBLE
                 b.onboardKycIdentityActivityIdDocEmployeeIdRBContainer.visibility = View.VISIBLE
-
                 b.onboardKycIdentityActivityIdDocNationalIdRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityIdDocPassportRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityIdDocRefugeeIdRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityIdDocAsylumIdRBContainer.visibility = View.GONE
 
                 //Show relevant Verification doc
-                b.onboardKycIdentityActivityVerDocEmployerLetterRBContainer.visibility =
-                    View.VISIBLE
-                b.onboardKycIdentityActivityVerDocInstitutionLetterRBContainer.visibility =
-                    View.VISIBLE
-                b.onboardKycIdentityActivityVerDocReligiousInstitutionLetterRBContainer.visibility =
-                    View.VISIBLE
-
+                b.onboardKycIdentityActivityVerDocEmployerLetterRBContainer.visibility = View.VISIBLE
+                b.onboardKycIdentityActivityVerDocInstitutionLetterRBContainer.visibility = View.VISIBLE
+                b.onboardKycIdentityActivityVerDocReligiousInstitutionLetterRBContainer.visibility = View.VISIBLE
                 b.onboardKycIdentityActivityVerDocBirthCertificateRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityVerDocDriverLicenseRBContainer.visibility = View.GONE
-                b.onboardKycIdentityActivityVerDocTrafficRegisterCardRBContainer.visibility =
-                    View.GONE
+                b.onboardKycIdentityActivityVerDocTrafficRegisterCardRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityVerDocNationalIdRBContainer.visibility = View.GONE
             }
 
             Constants.KYC_NON_MALAWI -> {
-                b.onboardKycIdentityActivityBackButtonTV.text =
-                    getString(R.string.non_malawi_full_kyc)
-
+                b.onboardKycIdentityActivityBackButtonTV.text = getString(R.string.non_malawi_full_kyc)
                 //Show relevant Id doc fields
                 b.onboardKycIdentityActivityIdDocPassportRBContainer.visibility = View.VISIBLE
                 b.onboardKycIdentityActivityIdDocRefugeeIdRBContainer.visibility = View.VISIBLE
                 b.onboardKycIdentityActivityIdDocAsylumIdRBContainer.visibility = View.VISIBLE
-
                 b.onboardKycIdentityActivityIdDocDriverLicenseRBContainer.visibility = View.GONE
-                b.onboardKycIdentityActivityIdDocTrafficRegisterCardRBContainer.visibility =
-                    View.GONE
+                b.onboardKycIdentityActivityIdDocTrafficRegisterCardRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityIdDocBirthCertificateRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityIdDocStudentIdRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityIdDocEmployeeIdRBContainer.visibility = View.GONE
@@ -217,16 +195,33 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
                 //Show relevant Verification doc
                 b.onboardKycIdentityActivityVerDocDriverLicenseRBContainer.visibility = View.VISIBLE
                 b.onboardKycIdentityActivityVerDocNationalIdRBContainer.visibility = View.VISIBLE
-                b.onboardKycIdentityActivityVerDocEmployerLetterRBContainer.visibility =
-                    View.VISIBLE
-                b.onboardKycIdentityActivityVerDocInstitutionLetterRBContainer.visibility =
-                    View.VISIBLE
-
-                b.onboardKycIdentityActivityVerDocReligiousInstitutionLetterRBContainer.visibility =
-                    View.GONE
+                b.onboardKycIdentityActivityVerDocEmployerLetterRBContainer.visibility = View.VISIBLE
+                b.onboardKycIdentityActivityVerDocInstitutionLetterRBContainer.visibility = View.VISIBLE
+                b.onboardKycIdentityActivityVerDocReligiousInstitutionLetterRBContainer.visibility = View.GONE
                 b.onboardKycIdentityActivityVerDocBirthCertificateRBContainer.visibility = View.GONE
-                b.onboardKycIdentityActivityVerDocTrafficRegisterCardRBContainer.visibility =
-                    View.GONE
+                b.onboardKycIdentityActivityVerDocTrafficRegisterCardRBContainer.visibility = View.GONE
+            }
+        }
+        when (viewScope) {
+            Constants.VIEW_SCOPE_FILL -> {
+                b.onboardKycIdentityActivityPB.max = 99
+                b.onboardKycIdentityActivityPB.progress = 66
+                b.onboardKycIdentityActivityProgressCountTV.text = getString(R.string.step2of3)
+            }
+
+            Constants.VIEW_SCOPE_EDIT -> {
+                b.onboardKycIdentityActivityPB.max = 100
+                b.onboardKycIdentityActivityPB.progress = 75
+                b.onboardKycIdentityActivityProgressCountTV.text = getString(R.string.step2of4)
+            }
+
+            Constants.VIEW_SCOPE_UPDATE -> {
+                b.onboardKycIdentityActivityPB.max = 100
+                b.onboardKycIdentityActivityPB.progress = 75
+                b.onboardKycIdentityActivityProgressCountTV.text = getString(R.string.step3of4)
+
+                //Hide skip button
+                b.onboardKycIdentityActivitySkipButton.visibility = View.GONE
             }
         }
     }
@@ -411,16 +406,11 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
 
                 Constants.KYC_IDENTITY_LIVE_SELFIE -> {
                     b.onboardKycIdentityActivitySelfieStatusTV.text = getString(R.string.submitted)
-                    b.onboardKycIdentityActivitySelfieStatusTV.setTextColor(
-                        ContextCompat.getColor(
-                            this, R.color.accentPositive
-                        )
-                    )
+                    b.onboardKycIdentityActivitySelfieStatusTV.setTextColor(ContextCompat.getColor(this, R.color.accentPositive))
 
                     //Store the url
-                    if (kycSelfieUrl.isNotEmpty()) b.onboardKycIdentityActivitySelfieTV.setTag(
-                        R.string.key_selfie_url, kycSelfieUrl
-                    )
+                    if (kycSelfieUrl.isNotEmpty())
+                        b.onboardKycIdentityActivitySelfieTV.setTag(R.string.key_selfie_url, kycSelfieUrl)
                 }
 
             }
@@ -706,9 +696,9 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
 
         b.onboardKycIdentityActivitySkipButton.setOnClickListener {
             val i = Intent(this, KycPersonalActivity::class.java)
-            i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
             i.putExtra(Constants.KYC_SCOPE, kycScope)
-            i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
+            i.putExtra(Constants.VIEW_SCOPE, viewScope)
+            i.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
             nextScreenResultLauncher.launch(i)
         }
 
@@ -753,7 +743,12 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
 
     private fun validateFieldsForSaveAndContinue() {
         if (validateIdDocument() && validateSelfie() && validateVerificationDocument()) {
-            saveCustomerIdentityDetailsApi()
+            when (viewScope) {
+                Constants.VIEW_SCOPE_FILL -> saveCustomerIdentityDetailsApi()
+                Constants.VIEW_SCOPE_EDIT -> saveCustomerNewIdentityDetailsApi()
+//                Constants.VIEW_SCOPE_UPDATE -> {}
+            }
+
         } else {
             showToast("Please complete pending tasks")
         }
@@ -1079,9 +1074,93 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
                                 this@KycIdentityActivity,
                                 KycPersonalActivity::class.java
                             )
-                            i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
                             i.putExtra(Constants.KYC_SCOPE, kycScope)
-                            i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
+                            i.putExtra(Constants.VIEW_SCOPE, viewScope)
+                            nextScreenResultLauncher.launch(i)
+                        }
+                    } else {
+                        runOnUiThread {
+                            showToast(getString(R.string.default_error_toast))
+                            hideButtonLoader(
+                                b.onboardKycIdentityActivitySaveAndContinueButton,
+                                b.onboardKycIdentityActivitySaveAndContinueButtonLoaderLottie,
+                                getString(R.string.save_and_continue)
+                            )
+                        }
+                    }
+                }
+
+                override fun onFailure(
+                    call: Call<DefaultResponse>, t: Throwable
+                ) {
+                    runOnUiThread {
+                        showToast(getString(R.string.default_error_toast))
+                        hideButtonLoader(
+                            b.onboardKycIdentityActivitySaveAndContinueButton,
+                            b.onboardKycIdentityActivitySaveAndContinueButtonLoaderLottie,
+                            getString(R.string.save_and_continue)
+                        )
+                    }
+                }
+            })
+        }
+    }
+
+    private fun saveCustomerNewIdentityDetailsApi() {
+        showButtonLoader(
+            b.onboardKycIdentityActivitySaveAndContinueButton,
+            b.onboardKycIdentityActivitySaveAndContinueButtonLoaderLottie
+        )
+
+        val idDocument = getSelectedIdDocument()
+        val idDocFront = getIdDocumentFront()
+        val idDocBack = getIdDocumentBack()
+        val verificationDoc = getSelectedVerificationDocument()
+        val verificationDocFront = getVerificationDocumentFront()
+        val verificationDocBack = getVerificationDocumentBack()
+        val selfie = getSelfie()
+
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+
+            val saveYourIdentityCall = ApiClient.apiService.saveNewIdentityDetailsSelfKyc(
+                idToken, SaveNewIdentityDetailsSelfKycRequest(
+                    id_document = idDocument,
+                    id_document_front = idDocFront,
+                    id_document_back = idDocBack,
+                    verification_document = verificationDoc,
+                    verification_document_front = verificationDocFront,
+                    verification_document_back = verificationDocBack,
+                    selfie = selfie,
+                    nature_of_permit = natureOfPermit.ifEmpty { null },
+                    ref_no = numberOfReference.ifEmpty { null },
+                    id_details_status = Constants.KYC_STATUS_COMPLETED,
+                    sent_email = sendEmail
+                )
+            )
+
+            saveYourIdentityCall.enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
+                ) {
+
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        //Email already sent, so stop sending email again for further  by making sendEmail value false
+                        sendEmail = false
+
+                        runOnUiThread {
+                            hideButtonLoader(
+                                b.onboardKycIdentityActivitySaveAndContinueButton,
+                                b.onboardKycIdentityActivitySaveAndContinueButtonLoaderLottie,
+                                getString(R.string.save_and_continue)
+                            )
+                            val i = Intent(
+                                this@KycIdentityActivity, KycPersonalActivity::class.java
+                            )
+                            i.putExtra(Constants.KYC_SCOPE, kycScope)
+                            i.putExtra(Constants.VIEW_SCOPE, viewScope)
+                            i.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
                             nextScreenResultLauncher.launch(i)
                         }
                     } else {
@@ -1114,10 +1193,18 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
 
     override fun onResume() {
         super.onResume()
-
         //Fetch Kyc Details
-        if (shouldReloadDocs) getCustomerKycDataApi()
-        else shouldReloadDocs = true
+        when (viewScope) {
+            Constants.VIEW_SCOPE_FILL -> {
+                if (shouldReloadDocs) getCustomerKycDataApi()
+                else shouldReloadDocs = true
+            }
+
+            Constants.VIEW_SCOPE_EDIT, Constants.VIEW_SCOPE_UPDATE -> {
+                if (shouldReloadDocs) getCustomerLatestKycDataApi()
+                else shouldReloadDocs = true
+            }
+        }
     }
 
     private fun getCustomerKycDataApi() {
@@ -1151,6 +1238,37 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
             })
         }
 
+    }
+
+    private fun getCustomerLatestKycDataApi() {
+        //Clear all prefilled data
+        clearAllFields()
+
+        //Hide main UI
+        b.onboardKycIdentityActivityLoaderLottie.visibility = View.VISIBLE
+        b.onboardKycIdentityActivityContentBox.visibility = View.GONE
+
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            val getUserKycDataCall = ApiClient.apiService.getSelfKycUserData("Bearer $idToken")
+
+            getUserKycDataCall.enqueue(object : Callback<SelfKycDetailsResponse> {
+                override fun onResponse(
+                    call: Call<SelfKycDetailsResponse>, response: Response<SelfKycDetailsResponse>
+                ) {
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        populateLatestKycIdentityFields(body.data)
+                    } else {
+                        runOnUiThread { showToast(getString(R.string.default_error_toast)) }
+                    }
+                }
+
+                override fun onFailure(call: Call<SelfKycDetailsResponse>, t: Throwable) {
+                    runOnUiThread { showToast(getString(R.string.default_error_toast)) }
+                }
+            })
+        }
     }
 
     private fun populateKycIdentityFields(data: KycUserData) {
@@ -1212,6 +1330,211 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
                             View.VISIBLE
                         b.onboardKycIdentityActivityIdDocPassportNumberOfReferencesTV.visibility =
                             View.VISIBLE
+                        checkAndMarkSubmittedForPassport()
+                    }
+                }
+
+                getString(R.string.refugee_id) -> {
+                    b.onboardKycIdentityActivityIdDocRefugeeIdRB.isChecked = true
+                    b.onboardKycIdentityActivityIdDocRefugeeIdRB.setTag(
+                        R.string.key_document_front_url, idDocFront
+                    )
+                }
+
+                getString(R.string.asylum_id) -> {
+                    b.onboardKycIdentityActivityIdDocAsylumIdRB.isChecked = true
+                    b.onboardKycIdentityActivityIdDocAsylumIdRB.setTag(
+                        R.string.key_document_front_url, idDocFront
+                    )
+                }
+
+                getString(R.string.driver_s_licence) -> {
+                    b.onboardKycIdentityActivityIdDocDriverLicenseRB.isChecked = true
+                    b.onboardKycIdentityActivityIdDocDriverLicenseRB.setTag(
+                        R.string.key_document_front_url, idDocFront
+                    )
+                    b.onboardKycIdentityActivityIdDocDriverLicenseRB.setTag(
+                        R.string.key_document_back_url, idDocBack
+                    )
+                }
+
+                getString(R.string.traffic_register_card) -> {
+                    b.onboardKycIdentityActivityIdDocTrafficRegisterCardRB.isChecked = true
+                    b.onboardKycIdentityActivityIdDocTrafficRegisterCardRB.setTag(
+                        R.string.key_document_front_url, idDocFront
+                    )
+                    b.onboardKycIdentityActivityIdDocTrafficRegisterCardRB.setTag(
+                        R.string.key_document_back_url, idDocBack
+                    )
+                }
+
+                getString(R.string.birth_certificate) -> {
+                    b.onboardKycIdentityActivityIdDocBirthCertificateRB.isChecked = true
+                    b.onboardKycIdentityActivityIdDocBirthCertificateRB.setTag(
+                        R.string.key_document_front_url, idDocFront
+                    )
+                }
+
+                getString(R.string.student_id) -> {
+                    b.onboardKycIdentityActivityIdDocStudentIdRB.isChecked = true
+                    b.onboardKycIdentityActivityIdDocStudentIdRB.setTag(
+                        R.string.key_document_front_url, idDocFront
+                    )
+                }
+
+                getString(R.string.employee_id) -> {
+                    b.onboardKycIdentityActivityIdDocEmployeeIdRB.isChecked = true
+                    b.onboardKycIdentityActivityIdDocEmployeeIdRB.setTag(
+                        R.string.key_document_front_url, idDocFront
+                    )
+                }
+            }
+
+            //Change the status to submitted
+            b.onboardKycIdentityActivitySelfieStatusTV.text = getString(R.string.submitted)
+            b.onboardKycIdentityActivitySelfieStatusTV.setTextColor(
+                ContextCompat.getColor(
+                    this, R.color.accentPositive
+                )
+            )
+
+            //Store selfie details
+            b.onboardKycIdentityActivitySelfieTV.setTag(
+                R.string.key_selfie_url, selfie
+            )
+
+
+            //Change the status to submitted
+            b.onboardKycIdentityActivityVerificationDocumentStatusTV.text =
+                getString(R.string.submitted)
+            b.onboardKycIdentityActivityVerificationDocumentStatusTV.setTextColor(
+                ContextCompat.getColor(
+                    this, R.color.accentPositive
+                )
+            )
+
+            //Store verification document details as tags
+            when (verificationDoc) {
+                getString(R.string.driver_s_licence) -> {
+                    b.onboardKycIdentityActivityVerDocDriverLicenseRB.isChecked = true
+                    b.onboardKycIdentityActivityVerDocDriverLicenseRB.setTag(
+                        R.string.key_document_front_url, verificationDocFront
+                    )
+                    b.onboardKycIdentityActivityVerDocDriverLicenseRB.setTag(
+                        R.string.key_document_back_url, verificationDocBack
+                    )
+                }
+
+                getString(R.string.national_id) -> {
+                    b.onboardKycIdentityActivityVerDocNationalIdRB.isChecked = true
+                    b.onboardKycIdentityActivityVerDocNationalIdRB.setTag(
+                        R.string.key_document_front_url, verificationDocFront
+                    )
+                    b.onboardKycIdentityActivityVerDocNationalIdRB.setTag(
+                        R.string.key_document_back_url, verificationDocBack
+                    )
+                }
+
+                getString(R.string.traffic_register_card) -> {
+                    b.onboardKycIdentityActivityVerDocTrafficRegisterCardRB.isChecked = true
+                    b.onboardKycIdentityActivityVerDocTrafficRegisterCardRB.setTag(
+                        R.string.key_document_front_url, verificationDocFront
+                    )
+                    b.onboardKycIdentityActivityVerDocTrafficRegisterCardRB.setTag(
+                        R.string.key_document_back_url, verificationDocBack
+                    )
+                }
+
+                getString(R.string.birth_certificate) -> {
+                    b.onboardKycIdentityActivityVerDocBirthCertificateRB.isChecked = true
+                    b.onboardKycIdentityActivityVerDocBirthCertificateRB.setTag(
+                        R.string.key_document_front_url, verificationDocFront
+                    )
+                }
+
+                getString(R.string.employer_letter) -> {
+                    b.onboardKycIdentityActivityVerDocEmployerLetterRB.isChecked = true
+                    b.onboardKycIdentityActivityVerDocEmployerLetterRB.setTag(
+                        R.string.key_document_front_url, verificationDocFront
+                    )
+                }
+
+                getString(R.string.institution_letter) -> {
+                    b.onboardKycIdentityActivityVerDocInstitutionLetterRB.isChecked = true
+                    b.onboardKycIdentityActivityVerDocInstitutionLetterRB.setTag(
+                        R.string.key_document_front_url, verificationDocFront
+                    )
+                }
+
+                getString(R.string.religious_institution_district_commissioner_letter) -> {
+                    b.onboardKycIdentityActivityVerDocReligiousInstitutionLetterRB.isChecked = true
+                    b.onboardKycIdentityActivityVerDocReligiousInstitutionLetterRB.setTag(
+                        R.string.key_document_front_url, verificationDocFront
+                    )
+                }
+            }
+        }
+
+        b.onboardKycIdentityActivitySV.scrollTo(0, 0)
+        b.onboardKycIdentityActivityLoaderLottie.visibility = View.GONE
+        b.onboardKycIdentityActivityContentBox.visibility = View.VISIBLE
+    }
+
+    private fun populateLatestKycIdentityFields(data: ViewUserData) {
+        var isValid = true
+
+        val idDocument = data.id_document ?: ""
+        val idDocFront = data.id_document_front ?: ""
+        val idDocBack = data.id_document_back ?: ""
+        val selfie = data.selfie ?: ""
+        val verificationDoc = data.verification_document ?: ""
+        val verificationDocFront = data.verification_document_front ?: ""
+        val verificationDocBack = data.verification_document_back ?: ""
+        val idDetailsStatus = data.id_details_status ?: ""
+
+        if (idDocument.isEmpty() || idDocFront.isEmpty() || selfie.isEmpty() || verificationDoc.isEmpty() || verificationDocFront.isEmpty()) isValid =
+            false
+
+        if (isValid && idDetailsStatus == Constants.KYC_STATUS_COMPLETED) {
+            //We assume if the status complete , then all the required fields will be provided from the backend
+
+            //Change the status to submitted
+            b.onboardKycIdentityActivityIdDocumentStatusTV.text = getString(R.string.submitted)
+            b.onboardKycIdentityActivityIdDocumentStatusTV.setTextColor(
+                ContextCompat.getColor(
+                    this, R.color.accentPositive
+                )
+            )
+
+            //Store id document details as tags
+            when (idDocument) {
+                getString(R.string.national_id) -> {
+                    b.onboardKycIdentityActivityIdDocNationalIdRB.isChecked = true
+                    b.onboardKycIdentityActivityIdDocNationalIdRB.setTag(
+                        R.string.key_document_front_url, idDocFront
+                    )
+                    b.onboardKycIdentityActivityIdDocNationalIdRB.setTag(
+                        R.string.key_document_back_url, idDocBack
+                    )
+                }
+
+                getString(R.string.passport) -> {
+                    b.onboardKycIdentityActivityIdDocPassportRB.isChecked = true
+                    b.onboardKycIdentityActivityIdDocPassportRB.setTag(
+                        R.string.key_document_front_url, idDocFront
+                    )
+                    //show additional fields
+                    if (kycScope == Constants.KYC_NON_MALAWI) {
+                        //For non malawi passport , 2 fields are required
+                        b.onboardKycIdentityActivityIdDocPassportRB.setTag(
+                            R.string.key_document_back_url, idDocBack
+                        )
+
+                        natureOfPermit = data.nature_of_permit ?: ""
+                        numberOfReference = data.ref_no ?: ""
+                        b.onboardKycIdentityActivityIdDocPassportStatusContainer.visibility = View.VISIBLE
+                        b.onboardKycIdentityActivityIdDocPassportNatureOfPermitTV.visibility = View.VISIBLE
+                        b.onboardKycIdentityActivityIdDocPassportNumberOfReferencesTV.visibility = View.VISIBLE
                         checkAndMarkSubmittedForPassport()
                     }
                 }

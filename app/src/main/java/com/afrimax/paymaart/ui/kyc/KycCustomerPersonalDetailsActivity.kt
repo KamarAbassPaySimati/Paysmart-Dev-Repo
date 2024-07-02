@@ -49,18 +49,13 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     private lateinit var b: ActivityKycCustomerPersonalDetailsBinding
     private lateinit var kycScope: String
     private lateinit var viewScope: String
-
     private var isEmailVerified = false
     private var isPhoneVerified = false
-
     private var emailRecordId = ""
     private var phoneRecordId = ""
-
     private var shouldKeepPhoneNumber = false
-
     private var isEmailUpdated = false
     private var isPhoneUpdated = false
-
     private lateinit var nextScreenResultLauncher: ActivityResultLauncher<Intent>
     private var sendEmail = true
 
@@ -138,8 +133,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                 val data = result.data
                 if ((result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) && data != null) {
                     kycScope = data.getStringExtra(Constants.KYC_SCOPE) ?: ""
-                    viewScope =
-                        data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
+                    viewScope = data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
                     sendEmail = data.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
                 }
             }

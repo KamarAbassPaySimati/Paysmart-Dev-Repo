@@ -10,16 +10,19 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
+import net.datafaker.Faker
 import org.hamcrest.CoreMatchers
 import org.hamcrest.Matcher
 import org.junit.runner.RunWith
 
 @RunWith(Cucumber::class)
 class EditSelfkycDetailsFull {
+    private val faker = Faker()
 
     private fun getText(matcher: ViewInteraction): String {
         var text = String()
@@ -48,7 +51,7 @@ class EditSelfkycDetailsFull {
         )
         Thread.sleep(5000)
 
-        Espresso.onView(withId(R.id.kycYourAddressActivity))
+        Espresso.onView(withId(R.id.onboardKycAddressActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Thread.sleep(5000)
     }
@@ -61,10 +64,10 @@ class EditSelfkycDetailsFull {
         )
         Thread.sleep(5000)
 
-        Espresso.onView(withId(R.id.kycYourAddressActivitySkipButton)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.onboardKycAddressActivitySkipButton)).perform(ViewActions.click())
         Thread.sleep(5000)
 
-        Espresso.onView(withId(R.id.kycYourIdentityActivity))
+        Espresso.onView(withId(R.id.onboardKycIdentityActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Thread.sleep(5000)
     }
@@ -76,13 +79,13 @@ class EditSelfkycDetailsFull {
         )
         Thread.sleep(5000)
 
-        Espresso.onView(withId(R.id.kycYourAddressActivitySkipButton)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.onboardKycAddressActivitySkipButton)).perform(ViewActions.click())
         Thread.sleep(5000)
 
-        Espresso.onView(withId(R.id.kycYourIdentityActivitySkipButton)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.onboardKycIdentityActivitySkipButton)).perform(ViewActions.click())
         Thread.sleep(5000)
 
-        Espresso.onView(withId(R.id.kycYourInfoActivity))
+        Espresso.onView(withId(R.id.onboardKycPersonalActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Thread.sleep(5000)
     }
@@ -98,19 +101,19 @@ class EditSelfkycDetailsFull {
     fun redirectingToNextScreen(screen: String) {
         when (screen) {
             "Your Address" -> {
-                Espresso.onView(withId(R.id.kycYourAddressActivity))
+                Espresso.onView(withId(R.id.onboardKycAddressActivity))
                     .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
                 Thread.sleep(5000)
             }
 
             "Your Identity" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivity))
+                Espresso.onView(withId(R.id.onboardKycIdentityActivity))
                     .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
                 Thread.sleep(5000)
             }
 
             "Your Info" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivity))
+                Espresso.onView(withId(R.id.onboardKycPersonalActivity))
                     .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
                 Thread.sleep(5000)
             }
@@ -143,9 +146,9 @@ class EditSelfkycDetailsFull {
 
     @Then("I should see prefilled fields for your address screen")
     fun addressScreenPrefilled() {
-        val streetName = getText(Espresso.onView(withId(R.id.kycYourAddressActivityStreetNameET)))
-        val town = getText(Espresso.onView(withId(R.id.kycYourAddressActivityTownET)))
-        val district = getText(Espresso.onView(withId(R.id.kycYourAddressActivityDistrictET)))
+        val streetName = getText(Espresso.onView(withId(R.id.onboardKycAddressActivityStreetNameET)))
+        val town = getText(Espresso.onView(withId(R.id.onboardKycAddressActivityTownET)))
+        val district = getText(Espresso.onView(withId(R.id.onboardKycAddressActivityDistrictET)))
 
         require(streetName.isNotEmpty())
         require(town.isNotEmpty())
@@ -155,10 +158,10 @@ class EditSelfkycDetailsFull {
     @Then("I should see prefilled fields for your info screen")
     fun yourInfoPrefilled() {
 
-        val dob = getText(Espresso.onView(withId(R.id.kycYourInfoActivityDOBTV)))
-        val occupation = getText(Espresso.onView(withId(R.id.kycYourInfoActivityOccupationTV)))
-        val monthlyIncome = getText(Espresso.onView(withId(R.id.kycYourInfoActivityMonthlyIncomeTV)))
-        val monthlyWithdrawal = getText(Espresso.onView(withId(R.id.kycYourInfoActivityMonthlyWithdrawalTV)))
+        val dob = getText(Espresso.onView(withId(R.id.onboardKycPersonalActivityDOBTV)))
+        val occupation = getText(Espresso.onView(withId(R.id.onboardKycPersonalActivityOccupationTV)))
+        val monthlyIncome = getText(Espresso.onView(withId(R.id.onboardKycPersonalActivityMonthlyIncomeTV)))
+        val monthlyWithdrawal = getText(Espresso.onView(withId(R.id.onboardKycPersonalActivityMonthlyWithdrawalTV)))
 
         require(dob.isNotEmpty())
         require(occupation.isNotEmpty())
@@ -227,7 +230,7 @@ class EditSelfkycDetailsFull {
 
     @When("I click on save and continue button for Your Info screen")
     fun iClickSaveAndContinueYourInfoScreen() {
-        Espresso.onView(withId(R.id.kycYourInfoActivitySaveAndContinueButton)).perform(
+        Espresso.onView(withId(R.id.onboardKycPersonalActivitySaveAndContinueButton)).perform(
             ViewActions.click()
         )
         Thread.sleep(5000)
@@ -235,7 +238,7 @@ class EditSelfkycDetailsFull {
 
     @When("I click on save and continue button for editing your address screen")
     fun iClickSaveAndContinueAddressScreen() {
-        Espresso.onView(withId(R.id.kycYourAddressActivitySaveAndContinueButton)).perform(
+        Espresso.onView(withId(R.id.onboardKycAddressActivitySaveAndContinueButton)).perform(
             ViewActions.click()
         )
         Thread.sleep(5000)
@@ -270,7 +273,7 @@ class EditSelfkycDetailsFull {
             }
 
             "street name" -> {
-                Espresso.onView(withId(R.id.kycYourAddressActivityStreetNameWarningTV)).check(
+                Espresso.onView(withId(R.id.onboardKycAddressActivityStreetNameWarningTV)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -368,7 +371,7 @@ class EditSelfkycDetailsFull {
 
     @When("I update the street name as {string} for your address screen")
     fun iStreetName(street: String) {
-        Espresso.onView(withId(R.id.kycYourAddressActivityStreetNameET)).perform(
+        Espresso.onView(withId(R.id.onboardKycAddressActivityStreetNameET)).perform(
             ViewActions.scrollTo(),
             ViewActions.replaceText(""),
             ViewActions.typeText(street),
@@ -381,17 +384,17 @@ class EditSelfkycDetailsFull {
     fun selectIDDocument(idDocument: String) {
         when (idDocument) {
             "National ID" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivityIdDocNationalIdRBContainer)).perform(
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocNationalIdRBContainer)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
             "Drivers licence" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivityIdDocDriverLicenseRBContainer)).perform(
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocDriverLicenseRBContainer)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
             "Refugee ID" -> {
-                Espresso.onView(withId(R.id.kycYourIdentityActivityIdDocRefugeeIdRBContainer)).perform(
+                Espresso.onView(withId(R.id.onboardKycIdentityActivityIdDocRefugeeIdRBContainer)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
@@ -401,7 +404,7 @@ class EditSelfkycDetailsFull {
 
     @When("I click on save and continue button for Identity screen")
     fun iClickSaveAndContinueIdentityScreen() {
-        Espresso.onView(withId(R.id.kycYourIdentityActivitySaveAndContinueButton)).perform(
+        Espresso.onView(withId(R.id.onboardKycIdentityActivitySaveAndContinueButton)).perform(
             ViewActions.click()
         )
         Thread.sleep(5000)
@@ -411,19 +414,19 @@ class EditSelfkycDetailsFull {
     fun selectGender(gender: String) {
         when (gender) {
             "Male" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityGenderMaleRB)).perform(
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityGenderMaleRB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
 
             "Female" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityGenderFemaleRB)).perform(
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityGenderFemaleRB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
 
             "Other" -> {
-                Espresso.onView(withId(R.id.kycYourInfoActivityGenderUndisclosedRB)).perform(
+                Espresso.onView(withId(R.id.onboardKycPersonalActivityGenderUndisclosedRB)).perform(
                     ViewActions.scrollTo(), ViewActions.click()
                 )
             }
@@ -432,7 +435,7 @@ class EditSelfkycDetailsFull {
 
     @When("I update Occupation to others")
     fun selectOccupationType() {
-        Espresso.onView(withId(R.id.kycYourInfoActivityOccupationTV)).perform(
+        Espresso.onView(withId(R.id.onboardKycPersonalActivityOccupationTV)).perform(
             ViewActions.scrollTo(), ViewActions.click()
         )
         Thread.sleep(3000)
@@ -458,8 +461,8 @@ class EditSelfkycDetailsFull {
             .inRoot(RootMatchers.isPlatformPopup()).atPosition(0).perform(ViewActions.click())
         Thread.sleep(5000)
 
-        val district = getText(Espresso.onView(withId(R.id.kycYourAddressActivityDistrictET)))
-        val town = getText(Espresso.onView(withId(R.id.kycYourAddressActivityTownET)))
+        val district = getText(Espresso.onView(withId(R.id.onboardKycAddressActivityDistrictET)))
+        val town = getText(Espresso.onView(withId(R.id.onboardKycAddressActivityTownET)))
 
         require(town.isNotEmpty())
         require(district.isNotEmpty())

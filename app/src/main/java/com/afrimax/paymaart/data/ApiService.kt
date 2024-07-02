@@ -17,6 +17,8 @@ import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
 import com.afrimax.paymaart.data.model.SaveBasicDetailsSelfKycRequest
+import com.afrimax.paymaart.data.model.SaveNewAddressDetailsSelfKycRequest
+import com.afrimax.paymaart.data.model.SaveNewIdentityDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
 import com.afrimax.paymaart.data.model.SendForgotOtpResponse
@@ -100,22 +102,28 @@ interface ApiService {
     @GET("$CUSTOMER_USER/view-self-kyc-customer")
     fun getSelfKycDetails(@Query(value = "password") password: String, @Header("Authorization") header: String): Call<SelfKycDetailsResponse>
 
-    @POST("$KYC_UPDATE/send-otp-mobile")
+    @POST("$KYC_UPDATE/send-otp-mobile-customer")
     fun sendOtpForEditSelfKyc(@Header("Authorization") header: String, @Body body: SendOtpForEditSelfKycRequest): Call<SendOtpForEditSelfKycResponse>
 
-    @GET("$KYC_UPDATE/view-kyc-data-mobile")
+    @GET("$KYC_UPDATE/view-kyc-data-mobile-customer")
     fun getSelfKycUserData(@Header("Authorization") header: String): Call<SelfKycDetailsResponse>
 
-    @POST("$KYC_UPDATE/update/basicDetails-agent-self")
+    @POST("$KYC_UPDATE/update/basicDetails-customer-self")
     fun saveBasicDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveBasicDetailsSelfKycRequest): Call<DefaultResponse>
 
-    @POST("kyc-update/verify-otp-mobile")
+    @POST("$KYC_UPDATE/verify-otp-mobile")
     fun verifyOtpForEditSelfKyc(@Header("Authorization") header: String, @Body body: VerifyOtpForEditSelfKycRequest): Call<VerifyOtpForEditSelfKycResponse>
+
+    @POST("$KYC_UPDATE/update/addressDetails-customer-self")
+    fun saveNewAddressDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveNewAddressDetailsSelfKycRequest): Call<DefaultResponse>
+
+    @POST("$KYC_UPDATE/update/documentsDetails-customer-self")
+    fun saveNewIdentityDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveNewIdentityDetailsSelfKycRequest): Call<DefaultResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
     fun getSharedSecret(@Body body: GetSharedSecretRequest, @Header("Authorization") header: String): Call<GetSharedSecretResponse>
 
-    @POST("bdd/approve")
+    @POST("$BDD/approve")
     fun approveUser(@Body body: ApproveUserRequest, @Header("Authorization") header: String): Call<DefaultResponse>
 }

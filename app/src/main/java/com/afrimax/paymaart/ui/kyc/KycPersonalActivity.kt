@@ -29,6 +29,8 @@ import com.afrimax.paymaart.data.model.GetUserKycDataResponse
 import com.afrimax.paymaart.data.model.KycBankData
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.KycUserData
+import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
+import com.afrimax.paymaart.data.model.ViewUserData
 import com.afrimax.paymaart.databinding.ActivityKycPersonalBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.KycBanksSheet
@@ -51,24 +53,20 @@ import java.util.Date
 
 class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
     private lateinit var b: ActivityKycPersonalBinding
-
     private lateinit var kycScope: String
     private lateinit var viewScope: String
-
     private lateinit var occupationResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var placesClient: PlacesClient
     private lateinit var placesList: ArrayList<MalawiPlace>
     private lateinit var townDistrictEditTextWatcher: TextWatcher
-
     private var unixTime = ""
     private var selectedCategory = ""
     private var selectedSubCategory = ""
     private var isCustomInstitute = false
-
     private lateinit var infoResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var nextScreenResultLauncher: ActivityResultLauncher<Intent>
     private var shouldReloadDocs = true
-
+    private var sendEmail = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +90,7 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
     private fun initViews() {
         kycScope = intent.getStringExtra(Constants.KYC_SCOPE) ?: ""
         viewScope = intent.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
+        sendEmail = intent.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
 
         Places.initialize(applicationContext, BuildConfig.PLACES_API_KEY)
         placesClient = Places.createClient(this)
@@ -135,6 +134,7 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
                 if ((result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) && data != null) {
                     kycScope = data.getStringExtra(Constants.KYC_SCOPE) ?: ""
                     viewScope = data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
+                    sendEmail = data.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
                 }
             }
     }
@@ -175,6 +175,29 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
             Constants.KYC_NON_MALAWI -> {
                 b.onboardKycPersonalActivityBackButtonTV.text =
                     getString(R.string.non_malawi_full_kyc)
+            }
+        }
+
+        when (viewScope) {
+            Constants.VIEW_SCOPE_FILL -> {
+                b.onboardKycPersonalActivityPB.max = 99
+                b.onboardKycPersonalActivityPB.progress = 99
+                b.onboardKycPersonalActivityProgressCountTV.text = getString(R.string.step3of3)
+            }
+
+            Constants.VIEW_SCOPE_EDIT -> {
+                b.onboardKycPersonalActivityPB.max = 100
+                b.onboardKycPersonalActivityPB.progress = 100
+                b.onboardKycPersonalActivityProgressCountTV.text = getString(R.string.step4of4)
+            }
+
+            Constants.VIEW_SCOPE_UPDATE -> {
+                b.onboardKycPersonalActivityPB.max = 100
+                b.onboardKycPersonalActivityPB.progress = 100
+                b.onboardKycPersonalActivityProgressCountTV.text = getString(R.string.step4of4)
+
+                //hide skip button
+                b.onboardKycPersonalActivitySkipButton.visibility = View.GONE
             }
         }
     }
@@ -279,11 +302,26 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
         }
 
         b.onboardKycPersonalActivitySkipButton.setOnClickListener {
-            val i = Intent(this, KycProgressActivity::class.java)
-            i.putExtra(Constants.ONBOARD_PROGRESS_SCOPE, Constants.ONBOARD_PROGRESS_SCOPE_FINAL)
-            i.putExtra(Constants.VIEW_SCOPE, viewScope)
-            i.putExtra(Constants.KYC_SCOPE, kycScope)
-            nextScreenResultLauncher.launch(i)
+            when (viewScope) {
+                Constants.VIEW_SCOPE_FILL -> {
+                    val i = Intent(this, KycProgressActivity::class.java)
+                    i.putExtra(Constants.KYC_SCOPE, kycScope)
+                    i.putExtra(
+                        Constants.ONBOARD_PROGRESS_SCOPE, Constants.ONBOARD_PROGRESS_SCOPE_FINAL
+                    )
+                    i.putExtra(Constants.VIEW_SCOPE, viewScope)
+                    i.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
+                    nextScreenResultLauncher.launch(i)
+                }
+
+                Constants.VIEW_SCOPE_EDIT -> {
+                    val i = Intent(this, KycEditSuccessfulActivity::class.java)
+                    i.putExtra(Constants.KYC_SCOPE, kycScope)
+                    i.putExtra(Constants.VIEW_SCOPE, viewScope)
+                    i.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
+                    nextScreenResultLauncher.launch(i)
+                }
+            }
         }
 
         b.onboardKycPersonalActivitySaveAndContinueButton.setOnClickListener {
@@ -1102,6 +1140,38 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
 
     }
 
+    private fun getCustomerLatestKycDataApi() {
+        //Clear all prefilled data
+        clearAllFields()
+
+        //Hide main UI
+        b.onboardKycPersonalActivityLoaderLottie.visibility = View.VISIBLE
+        b.onboardKycPersonalActivityContentBox.visibility = View.GONE
+
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            val getUserKycDataCall = ApiClient.apiService.getSelfKycUserData("Bearer $idToken")
+
+            getUserKycDataCall.enqueue(object : Callback<SelfKycDetailsResponse> {
+                override fun onResponse(
+                    call: Call<SelfKycDetailsResponse>, response: Response<SelfKycDetailsResponse>
+                ) {
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        populateLatestKycInfoFields(body.data)
+                    } else {
+                        runOnUiThread { showToast(getString(R.string.default_error_toast)) }
+                    }
+                }
+
+                override fun onFailure(call: Call<SelfKycDetailsResponse>, t: Throwable) {
+                    runOnUiThread { showToast(getString(R.string.default_error_toast)) }
+                }
+            })
+        }
+
+    }
+
     private fun populateKycInfoFields(userData: KycUserData, bankDetails: KycBankData?) {
         var isValid = true
 
@@ -1150,6 +1220,47 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
         b.onboardKycPersonalActivityLoaderLottie.visibility = View.GONE
         b.onboardKycPersonalActivityContentBox.visibility = View.VISIBLE
 
+    }
+
+    private fun populateLatestKycInfoFields(data: ViewUserData){
+        var isValid = true
+
+        val gender = data.gender ?: ""
+        val dob = data.dob.toString()
+        val occupation = data.occupation ?: ""
+
+        val purposeOfRelation = data.purpose_of_relation
+        val monthlyIncome = data.monthly_income ?: ""
+        val monthlyWithdrawal = data.monthly_withdrawal ?: ""
+
+        if (gender.isEmpty() || dob.isEmpty() || occupation.isEmpty() || purposeOfRelation.isNullOrEmpty()) isValid =
+            false
+
+        if (isValid) {
+            //Select the gender
+            setGender(gender)
+            //Set DOB
+            setDob(dob.toLong())
+            //Set occupation
+            setLatestOccupation(data)
+            //Set Purpose of relations
+            setLatestPurposeOfRelations(data.purpose_of_relation)
+            //Set monthly income if kyc not belongs to simplified category
+            if (kycScope != Constants.KYC_MALAWI_SIMPLIFIED) b.onboardKycPersonalActivityMonthlyIncomeTV.text =
+                monthlyIncome
+            //Set monthly withdrawal if kyc not belongs to simplified category
+            if (kycScope != Constants.KYC_MALAWI_SIMPLIFIED) b.onboardKycPersonalActivityMonthlyWithdrawalTV.text =
+                monthlyWithdrawal
+            //Set bank details
+//            if (!data.bank_details.isNullOrEmpty()) setLatestBankDetails(data.bank_details[0]) else setLatestBankDetails(
+//                null
+//            )
+        }
+
+        //Hide main UI
+        b.onboardKycPersonalActivitySV.scrollTo(0, 0)
+        b.onboardKycPersonalActivityLoaderLottie.visibility = View.GONE
+        b.onboardKycPersonalActivityContentBox.visibility = View.VISIBLE
     }
 
     private fun setGender(gender: String) {
@@ -1295,6 +1406,106 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
             b.onboardKycPersonalActivityAccountNameET.background =
                 ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
             b.onboardKycPersonalActivityAccountNameWarningTV.visibility = View.GONE
+        }
+    }
+
+    private fun setLatestOccupation(userData: ViewUserData) {
+        val occupation = userData.occupation ?: ""
+        //For employed
+        val employedRole = userData.employed_role ?: ""
+        val employerName = userData.employer_name ?: ""
+        val industry = userData.industry ?: ""
+        val townDistrict = userData.occupation_town ?: ""
+        //For self employed
+        val selfEmployedSpecify = userData.self_employed_specify ?: ""
+        //For full time education
+        val institute = userData.institute ?: ""
+        val instituteSpecify = userData.institute_specify ?: ""
+        //For other
+        val occupationSpecify = userData.occupation_specify ?: ""
+        //Hide additional employer fields by default
+        b.onboardKycPersonalActivityEmployerDetailsContainer.visibility = View.GONE
+        selectedCategory = occupation
+        when (occupation) {
+            getString(R.string.employed) -> {
+                selectedSubCategory = employedRole
+                //Show additional employer fields
+                b.onboardKycPersonalActivityEmployerDetailsContainer.visibility = View.VISIBLE
+                //set all the employer fields
+                b.onboardKycPersonalActivityEmployerNameET.setText(employerName)
+                b.onboardKycPersonalActivityEmployerNameET.background =
+                    ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+                b.onboardKycPersonalActivityEmployerNameWarningTV.visibility = View.GONE
+
+                b.onboardKycPersonalActivityIndustrySectorTV.text = industry
+
+                b.onboardKycPersonalActivityTownDistrictET.removeTextChangedListener(
+                    townDistrictEditTextWatcher
+                )
+                b.onboardKycPersonalActivityTownDistrictET.setText(townDistrict)
+                b.onboardKycPersonalActivityTownDistrictET.addTextChangedListener(
+                    townDistrictEditTextWatcher
+                )
+            }
+            getString(R.string.self_employed) -> {
+                selectedSubCategory = selfEmployedSpecify
+            }
+            getString(R.string.in_full_time_education) -> {
+                if (instituteSpecify.isNotEmpty()) {
+                    isCustomInstitute = true
+
+                    selectedSubCategory = instituteSpecify
+                } else {
+                    selectedSubCategory = institute
+                }
+            }
+            getString(R.string.others) -> {
+                selectedSubCategory = occupationSpecify
+            }
+        }
+
+        val formattedText =
+            if (selectedSubCategory.isNotEmpty()) "$selectedCategory - $selectedSubCategory"
+            else selectedCategory
+        b.onboardKycPersonalActivityOccupationTV.text = formattedText
+
+        if (viewScope == Constants.VIEW_SCOPE_UPDATE) {
+            //Grey out
+            b.onboardKycPersonalActivityOccupationTV.background =
+                ContextCompat.getDrawable(this, R.color.defaultSelected)
+            b.onboardKycPersonalActivityOccupationTV.isEnabled = false
+
+            b.onboardKycPersonalActivityEmployerNameET.background =
+                ContextCompat.getDrawable(this, R.color.defaultSelected)
+            b.onboardKycPersonalActivityEmployerNameET.isEnabled = false
+
+            b.onboardKycPersonalActivityIndustrySectorTV.background =
+                ContextCompat.getDrawable(this, R.color.defaultSelected)
+            b.onboardKycPersonalActivityIndustrySectorTV.isEnabled = false
+
+            b.onboardKycPersonalActivityTownDistrictET.background =
+                ContextCompat.getDrawable(this, R.color.defaultSelected)
+            b.onboardKycPersonalActivityTownDistrictET.isEnabled = false
+        }
+    }
+
+    private fun setLatestPurposeOfRelations(purposeOfRelations: ArrayList<String>?){
+        if (!purposeOfRelations.isNullOrEmpty()) {
+            for (item in purposeOfRelations) {
+                when (item) {
+                    getString(R.string.business_relationship1) -> b.onboardKycPersonalActivityBusinessRelationShip1CB.isChecked = true
+                    getString(R.string.business_relationship2) -> b.onboardKycPersonalActivityBusinessRelationShip2CB.isChecked = true
+                    getString(R.string.business_relationship3) -> b.onboardKycPersonalActivityBusinessRelationShip3CB.isChecked = true
+                    getString(R.string.business_relationship4) -> b.onboardKycPersonalActivityBusinessRelationShip4CB.isChecked = true
+                }
+            }
+        }
+
+        if (viewScope == Constants.VIEW_SCOPE_UPDATE) {
+            b.onboardKycPersonalActivityBusinessRelationShip1CB.isEnabled = false
+            b.onboardKycPersonalActivityBusinessRelationShip2CB.isEnabled = false
+            b.onboardKycPersonalActivityBusinessRelationShip3CB.isEnabled = false
+            b.onboardKycPersonalActivityBusinessRelationShip4CB.isEnabled = false
         }
     }
 
