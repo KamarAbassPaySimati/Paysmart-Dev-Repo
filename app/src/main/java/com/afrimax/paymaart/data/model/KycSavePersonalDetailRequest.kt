@@ -1,7 +1,6 @@
 package com.afrimax.paymaart.data.model
 
 data class KycSavePersonalDetailRequest(
-    val paymaart_id:String,
     val gender: String,
     val dob: String,
     val occupation: String,

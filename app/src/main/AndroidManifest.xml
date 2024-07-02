@@ -18,6 +18,10 @@
         android:theme="@style/Theme.Paymaart"
         tools:targetApi="31">
         <activity
+            android:name=".ui.kyc.KycCustomerPersonalDetailsActivity"
+            android:exported="false"
+            android:taskAffinity=".viewKyc"/>
+        <activity
             android:name=".ui.viewkyc.ViewKycDetailsActivity"
             android:exported="false" />
         <activity

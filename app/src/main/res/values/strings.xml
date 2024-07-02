@@ -527,4 +527,10 @@
     <string name="enter_your_pin_to_view_your_kyc_details">Enter your PIN to view your KYC details</string>
     <string name="view">View</string>
     <string name="enter_your_password_to_view_your_kyc_details">Enter your password to view your KYC details</string>
+    <string name="email_phone_info_note">Enter a valid email and phone number. To confirm it’s you, we will send a verification code.</string>
+    <string name="step1of4">1 of 4</string>
+    <string name="next_kyc_details">Next - KYC Details</string>
+    <string name="edit_simplified_subtext">\'Upgrade to Full KYC\' requires additional documentation for verification. Select \'Edit Simplified KYC\' to modify existing details.</string>
+    <string name="upgrade_to_full_kyc">Upgrade to Full KYC</string>
+    <string name="edit_simplified_kyc">Edit Simplified KYC</string>
 </resources>

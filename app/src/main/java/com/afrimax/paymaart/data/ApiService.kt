@@ -16,14 +16,19 @@ import com.afrimax.paymaart.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
+import com.afrimax.paymaart.data.model.SaveBasicDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
 import com.afrimax.paymaart.data.model.SendForgotOtpResponse
+import com.afrimax.paymaart.data.model.SendOtpForEditSelfKycRequest
+import com.afrimax.paymaart.data.model.SendOtpForEditSelfKycResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
 import com.afrimax.paymaart.data.model.SendOtpResponse
 import com.afrimax.paymaart.data.model.UpdatePinOrPasswordRequest
 import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
 import com.afrimax.paymaart.data.model.VerifyForgotOtpResponse
+import com.afrimax.paymaart.data.model.VerifyOtpForEditSelfKycRequest
+import com.afrimax.paymaart.data.model.VerifyOtpForEditSelfKycResponse
 import com.afrimax.paymaart.data.model.VerifyOtpRequestBody
 import com.afrimax.paymaart.data.model.VerifyOtpResponse
 import retrofit2.Call
@@ -35,6 +40,7 @@ import retrofit2.http.Query
 
 private const val CUSTOMER_USER = "customer-user"
 private const val BDD = "bdd"
+private const val KYC_UPDATE = "kyc-update"
 interface ApiService {
 
     @GET("$CUSTOMER_USER/security-questions")
@@ -93,6 +99,18 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/view-self-kyc-customer")
     fun getSelfKycDetails(@Query(value = "password") password: String, @Header("Authorization") header: String): Call<SelfKycDetailsResponse>
+
+    @POST("$KYC_UPDATE/send-otp-mobile")
+    fun sendOtpForEditSelfKyc(@Header("Authorization") header: String, @Body body: SendOtpForEditSelfKycRequest): Call<SendOtpForEditSelfKycResponse>
+
+    @GET("$KYC_UPDATE/view-kyc-data-mobile")
+    fun getSelfKycUserData(@Header("Authorization") header: String): Call<SelfKycDetailsResponse>
+
+    @POST("$KYC_UPDATE/update/basicDetails-agent-self")
+    fun saveBasicDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveBasicDetailsSelfKycRequest): Call<DefaultResponse>
+
+    @POST("kyc-update/verify-otp-mobile")
+    fun verifyOtpForEditSelfKyc(@Header("Authorization") header: String, @Body body: VerifyOtpForEditSelfKycRequest): Call<VerifyOtpForEditSelfKycResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

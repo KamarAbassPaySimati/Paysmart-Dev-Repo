@@ -53,8 +53,7 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
     private lateinit var b: ActivityKycPersonalBinding
 
     private lateinit var kycScope: String
-    private lateinit var paymaartId: String
-    private lateinit var onboardScope: String
+    private lateinit var viewScope: String
 
     private lateinit var occupationResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var placesClient: PlacesClient
@@ -92,8 +91,7 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
 
     private fun initViews() {
         kycScope = intent.getStringExtra(Constants.KYC_SCOPE) ?: ""
-        paymaartId = intent.getStringExtra(Constants.ONBOARD_USER_PAYMAART_ID) ?: ""
-        onboardScope = intent.getStringExtra(Constants.ONBOARD_SCOPE) ?: ""
+        viewScope = intent.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
 
         Places.initialize(applicationContext, BuildConfig.PLACES_API_KEY)
         placesClient = Places.createClient(this)
@@ -104,8 +102,6 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
             override fun handleOnBackPressed() {
                 val callbackIntent = Intent()
                 callbackIntent.putExtra(Constants.KYC_SCOPE, kycScope)
-                callbackIntent.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
-                callbackIntent.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
                 setResult(RESULT_CANCELED, callbackIntent)
                 finish()
             }
@@ -138,8 +134,7 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
                 val data = result.data
                 if ((result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) && data != null) {
                     kycScope = data.getStringExtra(Constants.KYC_SCOPE) ?: ""
-                    paymaartId = intent.getStringExtra(Constants.ONBOARD_USER_PAYMAART_ID) ?: ""
-                    onboardScope = intent.getStringExtra(Constants.ONBOARD_SCOPE) ?: ""
+                    viewScope = data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
                 }
             }
     }
@@ -286,9 +281,8 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
         b.onboardKycPersonalActivitySkipButton.setOnClickListener {
             val i = Intent(this, KycProgressActivity::class.java)
             i.putExtra(Constants.ONBOARD_PROGRESS_SCOPE, Constants.ONBOARD_PROGRESS_SCOPE_FINAL)
-            i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
+            i.putExtra(Constants.VIEW_SCOPE, viewScope)
             i.putExtra(Constants.KYC_SCOPE, kycScope)
-            i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
             nextScreenResultLauncher.launch(i)
         }
 
@@ -994,7 +988,6 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
             val idToken = fetchIdToken()
             val saveInfoDetailsCall = ApiClient.apiService.saveCustomerPersonalDetails(
                 "Bearer $idToken", KycSavePersonalDetailRequest(
-                    paymaart_id = paymaartId,
                     gender = gender,
                     dob = dob,
                     occupation = occupation,
@@ -1036,9 +1029,7 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
                                 Constants.ONBOARD_PROGRESS_SCOPE,
                                 Constants.ONBOARD_PROGRESS_SCOPE_FINAL
                             )
-                            i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
                             i.putExtra(Constants.KYC_SCOPE, kycScope)
-                            i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
                             nextScreenResultLauncher.launch(i)
                         }
                     } else {
