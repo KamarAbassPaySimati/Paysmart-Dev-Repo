@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter_medium"
             android:text="@string/verification_code"
-            android:textColor="@color/neutralGrey"
+            android:textColor="@color/neutralGreyPrimaryText"
             android:textSize="14sp" />
 
         <RelativeLayout
@@ -98,7 +98,7 @@
                 android:inputType="number"
                 android:maxLength="6"
                 android:padding="12dp"
-                android:textColor="@color/neutralGrey"
+                android:textColor="@color/neutralGreyPrimaryText"
                 android:textColorHint="@color/grey2"
                 android:textSize="14sp" />
 

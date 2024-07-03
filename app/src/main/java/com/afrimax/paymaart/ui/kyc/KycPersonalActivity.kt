@@ -29,6 +29,7 @@ import com.afrimax.paymaart.data.model.GetUserKycDataResponse
 import com.afrimax.paymaart.data.model.KycBankData
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.KycUserData
+import com.afrimax.paymaart.data.model.SaveNewInfoDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
 import com.afrimax.paymaart.data.model.ViewUserData
 import com.afrimax.paymaart.databinding.ActivityKycPersonalBinding
@@ -674,7 +675,10 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
         }
 
         if (isValid) {
-            saveCustomerPersonalDetailsApi()
+            when (viewScope) {
+                Constants.VIEW_SCOPE_FILL -> saveCustomerPersonalDetailsApi()
+                Constants.VIEW_SCOPE_EDIT -> saveCustomerLatestPersonalDetailsApi()
+            }
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
@@ -1099,12 +1103,149 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
         }
     }
 
+    private fun saveCustomerLatestPersonalDetailsApi() {
+        showButtonLoader(
+            b.onboardKycPersonalActivitySaveAndContinueButton,
+            b.onboardKycPersonalActivitySaveAndContinueButtonLoaderLottie
+        )
+
+        val gender = getGender()
+        val dob = unixTime
+        val occupation = selectedCategory
+
+        //For employed
+        var employedRole = ""
+        var employerName = ""
+        var industry = ""
+        var townDistrict = ""
+
+        //For self employed
+        var selfEmployedSpecify = ""
+
+        //For full time education
+        var institute = ""
+        var instituteSpecify = ""
+
+        //For other
+        var occupationSpecify = ""
+
+        when (occupation) {
+            getString(R.string.employed) -> {
+                employedRole = selectedSubCategory
+                employerName = b.onboardKycPersonalActivityEmployerNameET.text.toString()
+                industry = b.onboardKycPersonalActivityIndustrySectorTV.text.toString()
+                townDistrict = b.onboardKycPersonalActivityTownDistrictET.text.toString()
+            }
+
+            getString(R.string.self_employed) -> {
+                selfEmployedSpecify = selectedSubCategory
+            }
+
+            getString(R.string.in_full_time_education) -> {
+                if (isCustomInstitute) {
+                    institute = getString(R.string.others)
+                    instituteSpecify = selectedSubCategory
+                } else {
+                    institute = selectedSubCategory
+                }
+            }
+
+            getString(R.string.others) -> {
+                occupationSpecify = selectedSubCategory
+            }
+        }
+
+        val purposeOfRelation = getPurposeOfRelation()
+        val monthlyIncome = b.onboardKycPersonalActivityMonthlyIncomeTV.text.toString()
+        val monthlyWithdrawal = b.onboardKycPersonalActivityMonthlyWithdrawalTV.text.toString()
+
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            val saveYourInfoCall = ApiClient.apiService.saveNewInfoDetailsSelfKyc(
+                idToken, SaveNewInfoDetailsSelfKycRequest(
+                    gender = gender,
+                    dob = dob,
+                    occupation = occupation,
+                    employed_role = employedRole,
+                    employer_name = employerName,
+                    self_employed_specify = selfEmployedSpecify,
+                    institute = institute,
+                    institute_specify = instituteSpecify,
+                    occupation_specify = occupationSpecify,
+                    industry = industry,
+                    occupation_town = townDistrict,
+                    purpose_of_relation = purposeOfRelation,
+                    monthly_income = monthlyIncome,
+                    monthly_withdrawal = monthlyWithdrawal,
+                    info_details_status = Constants.KYC_STATUS_COMPLETED,
+                    sent_email = sendEmail
+                )
+            )
+
+            saveYourInfoCall.enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
+                ) {
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        //Email already sent, so stop sending email again for further  by making sendEmail valuew false
+                        sendEmail = false
+
+                        runOnUiThread {
+                            hideButtonLoader(
+                                b.onboardKycPersonalActivitySaveAndContinueButton,
+                                b.onboardKycPersonalActivitySaveAndContinueButtonLoaderLottie,
+                                getString(R.string.save_and_continue)
+                            )
+                            val i = Intent(
+                                this@KycPersonalActivity, KycEditSuccessfulActivity::class.java
+                            )
+                            i.putExtra(Constants.KYC_SCOPE, kycScope)
+                            i.putExtra(Constants.VIEW_SCOPE, viewScope)
+                            i.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
+                            nextScreenResultLauncher.launch(i)
+                        }
+                    } else {
+                        runOnUiThread {
+                            showToast(getString(R.string.default_error_toast))
+                            hideButtonLoader(
+                                b.onboardKycPersonalActivitySaveAndContinueButton,
+                                b.onboardKycPersonalActivitySaveAndContinueButtonLoaderLottie,
+                                getString(R.string.save_and_continue)
+                            )
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    runOnUiThread {
+                        showToast(getString(R.string.default_error_toast))
+                        hideButtonLoader(
+                            b.onboardKycPersonalActivitySaveAndContinueButton,
+                            b.onboardKycPersonalActivitySaveAndContinueButtonLoaderLottie,
+                            getString(R.string.save_and_continue)
+                        )
+                    }
+                }
+
+            })
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-
         //Fetch Kyc Details
-        if (shouldReloadDocs) getCustomerKycDataApi()
-        else shouldReloadDocs = true
+        when (viewScope) {
+            Constants.VIEW_SCOPE_FILL -> {
+                if (shouldReloadDocs) getCustomerKycDataApi()
+                else shouldReloadDocs = true
+            }
+
+            Constants.VIEW_SCOPE_EDIT, Constants.VIEW_SCOPE_UPDATE -> {
+                if (shouldReloadDocs) getCustomerLatestKycDataApi()
+                else shouldReloadDocs = true
+            }
+        }
     }
 
     private fun getCustomerKycDataApi() {
@@ -1251,10 +1392,6 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
             //Set monthly withdrawal if kyc not belongs to simplified category
             if (kycScope != Constants.KYC_MALAWI_SIMPLIFIED) b.onboardKycPersonalActivityMonthlyWithdrawalTV.text =
                 monthlyWithdrawal
-            //Set bank details
-//            if (!data.bank_details.isNullOrEmpty()) setLatestBankDetails(data.bank_details[0]) else setLatestBankDetails(
-//                null
-//            )
         }
 
         //Hide main UI

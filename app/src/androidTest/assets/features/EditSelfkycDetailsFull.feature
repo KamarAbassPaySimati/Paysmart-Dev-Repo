@@ -99,7 +99,7 @@ Feature: Paymaart- Customer Android- Edit Self KYC Details(Full)
     And I click on edit button for Kyc details screen
     Then I should be redirected to "personal details" screen
 
-  Scenario: Agent editing KYC details
+  Scenario: Customer editing KYC details
     And I should see prefilled fields for personal details screen
     When I update email field with ""
     And I update phone number field with ""

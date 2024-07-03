@@ -19,6 +19,7 @@ import com.afrimax.paymaart.data.model.MembershipPlansResponse
 import com.afrimax.paymaart.data.model.SaveBasicDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveNewAddressDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveNewIdentityDetailsSelfKycRequest
+import com.afrimax.paymaart.data.model.SaveNewInfoDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
 import com.afrimax.paymaart.data.model.SendForgotOtpResponse
@@ -111,7 +112,7 @@ interface ApiService {
     @POST("$KYC_UPDATE/update/basicDetails-customer-self")
     fun saveBasicDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveBasicDetailsSelfKycRequest): Call<DefaultResponse>
 
-    @POST("$KYC_UPDATE/verify-otp-mobile")
+    @POST("$KYC_UPDATE/verify-otp-mobile-customer")
     fun verifyOtpForEditSelfKyc(@Header("Authorization") header: String, @Body body: VerifyOtpForEditSelfKycRequest): Call<VerifyOtpForEditSelfKycResponse>
 
     @POST("$KYC_UPDATE/update/addressDetails-customer-self")
@@ -119,6 +120,9 @@ interface ApiService {
 
     @POST("$KYC_UPDATE/update/documentsDetails-customer-self")
     fun saveNewIdentityDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveNewIdentityDetailsSelfKycRequest): Call<DefaultResponse>
+
+    @POST("$KYC_UPDATE/update/infoDetails-customer-self")
+    fun saveNewInfoDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveNewInfoDetailsSelfKycRequest): Call<DefaultResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
