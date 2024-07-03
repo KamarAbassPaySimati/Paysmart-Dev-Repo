@@ -55,7 +55,7 @@
                 android:fontFamily="@font/inter_medium"
                 android:maxLines="1"
                 android:text="@string/next_kyc_registration"
-                android:textColor="@color/neutralGrey"
+                android:textColor="@color/neutralGreyPrimaryText"
                 android:textSize="14sp" />
 
         </RelativeLayout>
@@ -89,7 +89,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/inter_regular"
                 android:text="@string/one_of_two"
-                android:textColor="@color/neutralGrey"
+                android:textColor="@color/neutralGreyPrimaryText"
                 android:textSize="14sp" />
 
         </FrameLayout>
@@ -128,7 +128,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/inter_medium"
                         android:text="@string/personal_details"
-                        android:textColor="@color/neutralGrey"
+                        android:textColor="@color/neutralGreyPrimaryText"
                         android:textSize="14sp" />
 
                     <LinearLayout
@@ -143,7 +143,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/profile_picture"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
                         <TextView
@@ -152,7 +152,7 @@
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/supported_file_types_two"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGrey2"
                             android:textSize="12sp" />
                         
 
@@ -199,7 +199,7 @@
                                 android:minWidth="0dp"
                                 android:minHeight="0dp"
                                 android:text="@string/make_visible"
-                                android:textColor="@color/neutralGrey"
+                                android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp"
                                 app:buttonIconTint="@color/white"
                                 app:buttonTint="@color/primaryColor"
@@ -223,7 +223,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/first_name"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
                         <EditText
@@ -241,7 +241,7 @@
                             android:inputType="textFilter|textCapSentences"
                             android:maxLength="100"
                             android:padding="12dp"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textColorHint="@color/grey2"
                             android:textSize="14sp" />
 
@@ -271,7 +271,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/middle_name"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
                         <EditText
@@ -289,7 +289,7 @@
                             android:inputType="textPersonName|textCapSentences"
                             android:maxLength="100"
                             android:padding="12dp"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textColorHint="@color/grey2"
                             android:textSize="14sp" />
 
@@ -319,7 +319,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/last_name"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
                         <EditText
@@ -337,7 +337,7 @@
                             android:inputType="textPersonName|textCapSentences"
                             android:maxLength="100"
                             android:padding="12dp"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textColorHint="@color/grey2"
                             android:textSize="14sp" />
 
@@ -361,7 +361,7 @@
                         android:layout_marginTop="32dp"
                         android:fontFamily="@font/inter_medium"
                         android:text="@string/enter_a_valid_email_and_phone"
-                        android:textColor="@color/neutralGrey"
+                        android:textColor="@color/neutralGreyPrimaryText"
                         android:textSize="14sp" />
 
                     <LinearLayout
@@ -376,7 +376,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/email"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
                         <RelativeLayout
@@ -401,7 +401,7 @@
                                 android:inputType="textEmailAddress"
                                 android:maxLength="100"
                                 android:padding="12dp"
-                                android:textColor="@color/neutralGrey"
+                                android:textColor="@color/neutralGreyPrimaryText"
                                 android:textColorHint="@color/grey2"
                                 android:textSize="14sp"
                                 tools:ignore="TextFields" />
@@ -482,7 +482,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/phone"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
                         <RelativeLayout
@@ -554,7 +554,7 @@
                                 android:maxLength="11"
                                 android:maxLines="1"
                                 android:padding="12dp"
-                                android:textColor="@color/neutralGrey"
+                                android:textColor="@color/neutralGreyPrimaryText"
                                 android:textColorHint="@color/grey2"
                                 android:textSize="14sp"/>
 
@@ -629,7 +629,7 @@
                         android:layout_marginTop="32dp"
                         android:fontFamily="@font/inter_medium"
                         android:text="@string/security_question_registration_header"
-                        android:textColor="@color/neutralGrey"
+                        android:textColor="@color/neutralGreyPrimaryText"
                         android:textSize="14sp" />
 
                     <TextView
@@ -667,7 +667,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/childhood_nickname"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
                         <EditText
@@ -684,7 +684,7 @@
                             android:inputType="textNoSuggestions|textCapSentences"
                             android:maxLength="100"
                             android:padding="12dp"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textColorHint="@color/grey2"
                             android:textSize="14sp" />
 
@@ -703,7 +703,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/make_and_model_of_car"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
                         <EditText
@@ -720,7 +720,7 @@
                             android:inputType="textFilter|textCapSentences"
                             android:maxLength="100"
                             android:padding="12dp"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textColorHint="@color/grey2"
                             android:textSize="14sp" />
 
@@ -739,7 +739,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/name_of_childhood_teacher"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
                         <EditText
@@ -756,7 +756,7 @@
                             android:inputType="textFilter|textCapSentences"
                             android:maxLength="100"
                             android:padding="12dp"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textColorHint="@color/grey2"
                             android:textSize="14sp" />
 
@@ -775,7 +775,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/inter_medium"
                             android:text="@string/name_of_place_you_first_visited"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textSize="14sp" />
 
                         <EditText
@@ -792,7 +792,7 @@
                             android:inputType="textFilter|textCapSentences"
                             android:maxLength="100"
                             android:padding="12dp"
-                            android:textColor="@color/neutralGrey"
+                            android:textColor="@color/neutralGreyPrimaryText"
                             android:textColorHint="@color/grey2"
                             android:textSize="14sp" />
 
@@ -830,7 +830,7 @@
                                 android:layout_toEndOf="@+id/onboardRegistrationActivityCB"
                                 android:fontFamily="@font/inter_medium"
                                 android:text="@string/terms_and_conditions"
-                                android:textColor="@color/neutralGrey"
+                                android:textColor="@color/neutralGreyPrimaryText"
                                 android:textColorLink="@color/accentInformation"
                                 android:textSize="14sp" />
 
