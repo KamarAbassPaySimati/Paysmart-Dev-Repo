@@ -50,6 +50,7 @@ Feature: Paymaart- Customer Android- Edit Self KYC Details(Non-Malawi)Paymaart- 
     When I enter the street name as "Balaka"
     Then I should see the district and town getting prefilled
     Then I select "Afghan" as the nationality
+    Then I enter the international address as "Mangalore"
     When I click on proceed button on screen one
     Then I should be redirected to KYC screen two
     When I click on proceed button on screen two

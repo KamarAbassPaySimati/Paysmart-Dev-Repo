@@ -6,24 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
+import androidx.lifecycle.lifecycleScope
+import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.databinding.EditSimplifiedKycBottomSheetBinding
+import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.kyc.KycCustomerPersonalDetailsActivity
 import com.afrimax.paymaart.util.Constants
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class EditSimplifiedKycSheet: BottomSheetDialogFragment() {
     private lateinit var b: EditSimplifiedKycBottomSheetBinding
-    private lateinit var paymaartId: String
-    private lateinit var onboardScope: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         b = EditSimplifiedKycBottomSheetBinding.inflate(inflater, container, false)
-
-        paymaartId = requireArguments().getString(Constants.ONBOARD_USER_PAYMAART_ID) ?: ""
-        onboardScope = requireArguments().getString(Constants.ONBOARD_SCOPE) ?: ""
 
         setUpListeners()
 
@@ -54,56 +58,56 @@ class EditSimplifiedKycSheet: BottomSheetDialogFragment() {
 
     }
 
-//    private fun saveSelfPreferenceApi() {
-//        showButtonLoader(
-//            b.editSimplifiedKycSheetUpgradeButton, b.editSimplifiedKycSheetUpgradeButtonLoaderLottie
-//        )
-//
-//        lifecycleScope.launch {
-//            val activity = requireActivity() as BaseActivity
-//            val idToken = activity.fetchIdToken()
-//
-//            val switchToFullApiCall = ApiClient.apiService.switchToFullKyc(idToken)
-//
-//            switchToFullApiCall.enqueue(object : Callback<DefaultResponse> {
-//                override fun onResponse(
-//                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
-//                ) {
-//                    hideButtonLoader(
-//                        b.editSimplifiedKycSheetUpgradeButton,
-//                        b.editSimplifiedKycSheetUpgradeButtonLoaderLottie,
-//                        getString(
-//                            R.string.upgrade_to_full_kyc
-//                        )
-//                    )
-//                    val body = response.body()
-//                    if (body != null && response.isSuccessful) {
-//                        dismiss()
-//                        val i = Intent(requireContext(), KycYourPersonalDetailsActivity::class.java)
-//                        i.putExtra(Constants.KYC_SCOPE, Constants.KYC_MALAWI_FULL)
-//                        i.putExtra(Constants.VIEW_SCOPE, Constants.VIEW_SCOPE_UPDATE)
-//                        startActivity(i)
-//                        activity.finish()
-//                    } else {
-//                        activity.showToast(getString(R.string.default_error_toast))
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-//                    hideButtonLoader(
-//                        b.editSimplifiedKycSheetUpgradeButton,
-//                        b.editSimplifiedKycSheetUpgradeButtonLoaderLottie,
-//                        getString(
-//                            R.string.upgrade_to_full_kyc
-//                        )
-//                    )
-//                    activity.showToast(getString(R.string.default_error_toast))
-//                }
-//
-//
-//            })
-//        }
-//    }
+    private fun saveSelfPreferenceApi() {
+        showButtonLoader(
+            b.editSimplifiedKycSheetUpgradeButton, b.editSimplifiedKycSheetUpgradeButtonLoaderLottie
+        )
+
+        lifecycleScope.launch {
+            val activity = requireActivity() as BaseActivity
+            val idToken = activity.fetchIdToken()
+
+            val switchToFullApiCall = ApiClient.apiService.switchToFullKyc(idToken)
+
+            switchToFullApiCall.enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
+                ) {
+                    hideButtonLoader(
+                        b.editSimplifiedKycSheetUpgradeButton,
+                        b.editSimplifiedKycSheetUpgradeButtonLoaderLottie,
+                        getString(
+                            R.string.upgrade_to_full_kyc
+                        )
+                    )
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        dismiss()
+                        val i = Intent(requireContext(), KycCustomerPersonalDetailsActivity::class.java)
+                        i.putExtra(Constants.KYC_SCOPE, Constants.KYC_MALAWI_FULL)
+                        i.putExtra(Constants.VIEW_SCOPE, Constants.VIEW_SCOPE_UPDATE)
+                        startActivity(i)
+                        activity.finish()
+                    } else {
+                        activity.showToast(getString(R.string.default_error_toast))
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    hideButtonLoader(
+                        b.editSimplifiedKycSheetUpgradeButton,
+                        b.editSimplifiedKycSheetUpgradeButtonLoaderLottie,
+                        getString(
+                            R.string.upgrade_to_full_kyc
+                        )
+                    )
+                    activity.showToast(getString(R.string.default_error_toast))
+                }
+
+
+            })
+        }
+    }
 
 
 

@@ -82,6 +82,8 @@ android {
             buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
+            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "SECRET_KEY", "\"${env.RECAPTCHA_SECRET_KEY.value}\"")
         }
 
         qa{
@@ -97,6 +99,8 @@ android {
             buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
+            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "SECRET_KEY", "\"${env.RECAPTCHA_SECRET_KEY.value}\"")
         }
 
         preprod{
@@ -112,6 +116,8 @@ android {
             buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
+            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "SECRET_KEY", "\"${env.RECAPTCHA_SECRET_KEY.value}\"")
         }
 
         production{
@@ -126,6 +132,8 @@ android {
             buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
+            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "SECRET_KEY", "\"${env.RECAPTCHA_SECRET_KEY.value}\"")
         }
     }
 
@@ -219,5 +227,7 @@ dependencies {
     implementation libs.androidx.exifinterface
 
     //Google Recaptcha
-    implementation libs.recaptcha
+    implementation libs.play.services.safetynet
+    implementation libs.play.services.base
+//    implementation libs.play.services.recaptcha
 }

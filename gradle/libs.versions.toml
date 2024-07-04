@@ -27,6 +27,9 @@ orgJacocoCore = "0.8.8"
 pdfViewer = "2.1.1"
 pinedittextfieldVersion = "1.2.6"
 places = "3.5.0"
+playServicesBase = "latest"
+playServicesRecaptcha = "17.1.0"
+playServicesSafetynet = "18.1.0"
 poiOoxml = "3.17"
 recaptcha = "18.5.1"
 retrofit = "2.11.0"
@@ -37,6 +40,7 @@ dotenv = "4.0.0"
 zoomlayout = "1.9.0"
 lifecycleLivedataKtx = "2.8.1"
 fragmentKtx = "1.5.6"
+recaptchaVersion = "18.5.1"
 
 [libraries]
 aalto-xml = { module = "com.fasterxml:aalto-xml", version.ref = "aaltoXml" }
@@ -71,8 +75,10 @@ org-jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "orgJac
 pdf-viewer = { module = "io.github.afreakyelf:Pdf-Viewer", version.ref = "pdfViewer" }
 pinedittextfield = { module = "com.github.poovamraj:PinEditTextField", version.ref = "pinedittextfieldVersion" }
 places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
+play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "playServicesBase" }
+play-services-recaptcha = { module = "com.google.android.gms:play-services-recaptcha", version.ref = "playServicesRecaptcha" }
+play-services-safetynet = { module = "com.google.android.gms:play-services-safetynet", version.ref = "playServicesSafetynet" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
-recaptcha = { module = "com.google.android.recaptcha:recaptcha", version.ref = "recaptcha" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
 stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }
