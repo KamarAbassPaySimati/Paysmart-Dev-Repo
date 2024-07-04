@@ -28,6 +28,7 @@ pdfViewer = "2.1.1"
 pinedittextfieldVersion = "1.2.6"
 places = "3.5.0"
 poiOoxml = "3.17"
+recaptcha = "18.5.1"
 retrofit = "2.11.0"
 sdpAndroid = "1.1.0"
 staxApi = "1.0"
@@ -71,6 +72,7 @@ pdf-viewer = { module = "io.github.afreakyelf:Pdf-Viewer", version.ref = "pdfVie
 pinedittextfield = { module = "com.github.poovamraj:PinEditTextField", version.ref = "pinedittextfieldVersion" }
 places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
+recaptcha = { module = "com.google.android.recaptcha:recaptcha", version.ref = "recaptcha" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
 stax-api = { module = "javax.xml.stream:stax-api", version.ref = "staxApi" }

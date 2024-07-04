@@ -60,6 +60,9 @@ import com.amplifyframework.kotlin.core.Amplify
 import com.amplifyframework.storage.StorageException
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.recaptcha.Recaptcha
+import com.google.android.recaptcha.RecaptchaAction
+import com.google.android.recaptcha.RecaptchaClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
@@ -75,18 +78,15 @@ import java.io.IOException
 import java.util.UUID
 
 class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
-
+    private lateinit var recaptchaClient: RecaptchaClient
     private lateinit var b: ActivityRegisterBinding
     private lateinit var fileResultLauncher: ActivityResultLauncher<Array<String>>
-
     private lateinit var guideSheet: BottomSheetDialogFragment
     private lateinit var verificationBottomSheet: BottomSheetDialogFragment
     private var isEmailVerified = false
     private var isPhoneVerified = false
-
     private var emailRecordId = ""
     private var phoneRecordId = ""
-
     private var profilePicUri: Uri? = null
     private var isPicUploaded: Boolean = false
 
@@ -104,11 +104,23 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         val wic = WindowInsetsControllerCompat(window, window.decorView)
         wic.isAppearanceLightStatusBars = true
         wic.isAppearanceLightNavigationBars = true
-
+//        initialiseRecaptchaClient()
         initViews()
         setUpLayout()
         setupListeners()
         retrieveSecurityQuestionsApi()
+    }
+
+    private fun initialiseRecaptchaClient(){
+        lifecycleScope.launch {
+            Recaptcha.getClient(application, "")
+                .onSuccess {client ->
+                    recaptchaClient = client
+                }
+                .onFailure {error ->
+                    "RecaptchaError".showLogE(error.message ?: "")
+                }
+        }
     }
 
     private fun setUpLayout() {
@@ -610,10 +622,20 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
-
     }
 
-    private suspend fun registerCustomer() {
+    private suspend fun executeRegisterFunction(){
+        recaptchaClient.execute(RecaptchaAction.SIGNUP)
+            .onSuccess { token ->
+                "RecaptchaToken".showLogE(token)
+                registerCustomer()
+            }
+            .onFailure { error ->
+                "RecaptchaError".showLogE(error.message ?: "")
+            }
+    }
+
+    private fun registerCustomer() {
         showButtonLoader(
             b.onboardRegistrationActivitySubmitButton,
             b.onboardRegistrationActivitySubmitButtonLoaderLottie

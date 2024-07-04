@@ -217,4 +217,7 @@ dependencies {
 
     //For Image conversion purpose
     implementation libs.androidx.exifinterface
+
+    //Google Recaptcha
+    implementation libs.recaptcha
 }
