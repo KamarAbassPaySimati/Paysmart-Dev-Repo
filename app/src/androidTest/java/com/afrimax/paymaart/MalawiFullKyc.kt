@@ -89,7 +89,7 @@ class MalawiFullKyc {
         Thread.sleep(3000)
     }
 
-    @Given("I enter the international address as {string}")
+    @Then("I enter the international address as {string}")
     fun iEnterTheInternationalAddress(street: String) {
         Espresso.onView(withId(R.id.onboardKycAddressActivityIntlStreetNameET)).perform(
             ViewActions.scrollTo(), ViewActions.typeText(street), ViewActions.closeSoftKeyboard()
