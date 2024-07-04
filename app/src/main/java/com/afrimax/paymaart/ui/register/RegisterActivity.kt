@@ -611,8 +611,8 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         if (isValid) {
-            val siteKey = BuildConfig.SITE_KEY
-            val secretKey = BuildConfig.SECRET_KEY
+//            val siteKey = BuildConfig.SITE_KEY
+//            val secretKey = BuildConfig.SECRET_KEY
 //            SafetyNet.getClient(this@RegisterActivity).verifyWithRecaptcha(siteKey)
 //                .addOnSuccessListener{ response ->
 //                    // Indicates communication with reCAPTCHA service was
