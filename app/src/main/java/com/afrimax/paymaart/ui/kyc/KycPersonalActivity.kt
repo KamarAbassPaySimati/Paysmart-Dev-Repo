@@ -52,6 +52,7 @@ import retrofit2.Response
 import java.util.Calendar
 import java.util.Date
 
+//Should have been KycYourInfoActivity
 class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
     private lateinit var b: ActivityKycPersonalBinding
     private lateinit var kycScope: String
