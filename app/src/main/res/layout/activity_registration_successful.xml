@@ -46,7 +46,7 @@
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="@string/welcome_to_paymaart"
-                android:textColor="@color/neutralGrey"
+                android:textColor="@color/neutralGreyPrimaryText"
                 android:textSize="24sp" />
 
             <TextView
@@ -58,7 +58,7 @@
                 android:layout_marginEnd="16dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="@string/welcome_to_paymaart_sub_text"
-                android:textColor="@color/neutralGrey"
+                android:textColor="@color/neutralGreyPrimaryText"
                 android:textSize="14sp" />
 
             <LinearLayout
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_regular"
                     android:text="@string/didn_t_receive_credentials"
-                    android:textColor="@color/neutralGrey"
+                    android:textColor="@color/neutralGreyPrimaryText"
                     android:textSize="16sp" />
 
                 <TextView
@@ -110,7 +110,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/inter_regular"
             android:text="@string/login_to_complete_your_kyc"
-            android:textColor="@color/neutralGrey"
+            android:textColor="@color/neutralGreyPrimaryText"
             android:textSize="14sp" />
 
         <androidx.appcompat.widget.AppCompatButton
