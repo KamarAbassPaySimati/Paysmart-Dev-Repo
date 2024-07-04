@@ -2,6 +2,7 @@ package com.afrimax.paymaart.ui.kyc
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -27,6 +28,9 @@ import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.GetUserKycDataResponse
 import com.afrimax.paymaart.data.model.KycSaveAddressDetailsRequest
 import com.afrimax.paymaart.data.model.KycUserData
+import com.afrimax.paymaart.data.model.SaveNewAddressDetailsSelfKycRequest
+import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
+import com.afrimax.paymaart.data.model.ViewUserData
 import com.afrimax.paymaart.databinding.ActivityOnboardKycAddressBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.util.Constants
@@ -47,28 +51,19 @@ import kotlin.coroutines.suspendCoroutine
 
 class KycAddressActivity : BaseActivity() {
     private lateinit var b: ActivityOnboardKycAddressBinding
-
     private lateinit var kycScope: String
+    private lateinit var viewScope: String
     private lateinit var placesClient: PlacesClient
-
     private lateinit var placesList: ArrayList<MalawiPlace>
     private lateinit var streetEditTextWatcher: TextWatcher
     private lateinit var townEditTextWatcher: TextWatcher
     private lateinit var districtEditTextWatcher: TextWatcher
-
     private lateinit var intlStreetEditTextWatcher: TextWatcher
-    private lateinit var intlTownEditTextWatcher: TextWatcher
-    private lateinit var intlDistrictEditTextWatcher: TextWatcher
-
     private lateinit var infoResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var nextScreenResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var nationResultLauncher: ActivityResultLauncher<Intent>
-
     private var shouldReloadDocs = true
-
-    private lateinit var paymaartId: String
-    private lateinit var onboardScope: String
-
+    private var sendEmail = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,8 +87,8 @@ class KycAddressActivity : BaseActivity() {
 
     private fun initViews() {
         kycScope = intent.getStringExtra(Constants.KYC_SCOPE) ?: ""
-        paymaartId = intent.getStringExtra(Constants.ONBOARD_USER_PAYMAART_ID) ?: ""
-        onboardScope = intent.getStringExtra(Constants.ONBOARD_SCOPE) ?: ""
+        viewScope = intent.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_FILL
+        sendEmail = intent.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
 
         Places.initialize(applicationContext, BuildConfig.PLACES_API_KEY)
         placesClient = Places.createClient(this)
@@ -104,8 +99,8 @@ class KycAddressActivity : BaseActivity() {
             override fun handleOnBackPressed() {
                 val callbackIntent = Intent()
                 callbackIntent.putExtra(Constants.KYC_SCOPE, kycScope)
-                callbackIntent.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
-                callbackIntent.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
+                callbackIntent.putExtra(Constants.VIEW_SCOPE, viewScope)
+                callbackIntent.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
                 setResult(RESULT_CANCELED, callbackIntent)
                 finish()
             }
@@ -123,8 +118,8 @@ class KycAddressActivity : BaseActivity() {
                 val data = result.data
                 if ((result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) && data != null) {
                     kycScope = data.getStringExtra(Constants.KYC_SCOPE) ?: ""
-                    paymaartId = intent.getStringExtra(Constants.ONBOARD_USER_PAYMAART_ID) ?: ""
-                    onboardScope = intent.getStringExtra(Constants.ONBOARD_SCOPE) ?: ""
+                    viewScope = data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_FILL
+                    sendEmail = data.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
                 }
             }
 
@@ -175,7 +170,30 @@ class KycAddressActivity : BaseActivity() {
                 b.onboardKycAddressActivityIntlContainer.visibility = View.VISIBLE
             }
         }
+        when (viewScope) {
+            Constants.VIEW_SCOPE_FILL -> {
+                b.onboardKycAddressActivityPB.max = 99
+                b.onboardKycAddressActivityPB.progress = 33
+                b.onboardKycAddressActivityProgressCountTV.text = getString(R.string.step1of3)
+            }
+
+            Constants.VIEW_SCOPE_EDIT -> {
+                b.onboardKycAddressActivityPB.max = 100
+                b.onboardKycAddressActivityPB.progress = 50
+                b.onboardKycAddressActivityProgressCountTV.text = getString(R.string.step2of4)
+            }
+
+            Constants.VIEW_SCOPE_UPDATE -> {
+                b.onboardKycAddressActivityPB.max = 100
+                b.onboardKycAddressActivityPB.progress = 50
+                b.onboardKycAddressActivityProgressCountTV.text = getString(R.string.step2of4)
+
+                //Hide skip button
+                b.onboardKycAddressActivitySkipButton.visibility = View.GONE
+            }
+        }
     }
+
 
     private fun setUpListeners() {
 
@@ -221,15 +239,23 @@ class KycAddressActivity : BaseActivity() {
 
         b.onboardKycAddressActivitySkipButton.setOnClickListener {
             val i = Intent(this@KycAddressActivity, KycIdentityActivity::class.java)
-            i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
             i.putExtra(Constants.KYC_SCOPE, kycScope)
-            i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
+            i.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
             nextScreenResultLauncher.launch(i)
         }
 
 
         b.onboardKycAddressActivitySaveAndContinueButton.setOnClickListener {
-            validateFieldsForSaveAndContinue()
+            if (viewScope == Constants.VIEW_SCOPE_UPDATE) {
+                //User can't edit address details if they are updating to full kyc, so save and continue work as skip
+                val i = Intent(this@KycAddressActivity, KycIdentityActivity::class.java)
+                i.putExtra(Constants.KYC_SCOPE, kycScope)
+                i.putExtra(Constants.VIEW_SCOPE, viewScope)
+                i.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
+                nextScreenResultLauncher.launch(i)
+            } else {
+                validateFieldsForSaveAndContinue()
+            }
         }
 
         setupEditTextFocusListeners()
@@ -1027,7 +1053,10 @@ class KycAddressActivity : BaseActivity() {
 
 
         if (isValid) {
-            saveCustomerAddressDetailsApi()
+            when (viewScope) {
+                Constants.VIEW_SCOPE_FILL -> saveCustomerAddressDetailsApi()
+                Constants.VIEW_SCOPE_EDIT -> updateCustomerAddressDetailsApi()
+            }
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
@@ -1234,27 +1263,15 @@ class KycAddressActivity : BaseActivity() {
             b.onboardKycAddressActivitySaveAndContinueButton,
             b.onboardKycAddressActivitySaveAndContinueButtonLoaderLottie
         )
-
         val poBoxNumber = b.onboardKycAddressActivityPOBoxET.text.toString()
         val houseName = b.onboardKycAddressActivityHouseNameET.text.toString()
         val streetName = b.onboardKycAddressActivityStreetNameET.text.toString()
         val landMark = b.onboardKycAddressActivityLandmarkET.text.toString()
         val townVillage = b.onboardKycAddressActivityTownET.text.toString()
         val district = b.onboardKycAddressActivityDistrictET.text.toString()
-
         //Additional fields
         val intlNationality = b.onboardKycAddressActivityIntlNationalityTV.text.toString().ifEmpty { null }
         val intlAddress = b.onboardKycAddressActivityIntlStreetNameET.text.toString().ifEmpty { null }
-        /**
-            val intlPostal = b.onboardKycAddressActivityIntlPostalET.text.toString().ifEmpty { null }
-            val intlHouseNumber =
-                b.onboardKycAddressActivityIntlHouseNameET.text.toString().ifEmpty { null }
-            val intlLandmark =
-                b.onboardKycAddressActivityIntlLandmarkET.text.toString().ifEmpty { null }
-            val intlTown = b.onboardKycAddressActivityIntlTownET.text.toString().ifEmpty { null }
-            val intlDistrict =
-                b.onboardKycAddressActivityIntlDistrictET.text.toString().ifEmpty { null }
-         */
 
         lifecycleScope.launch {
             val idToken = fetchIdToken()
@@ -1288,9 +1305,9 @@ class KycAddressActivity : BaseActivity() {
                                 this@KycAddressActivity,
                                 KycIdentityActivity::class.java
                             )
-                            i.putExtra(Constants.ONBOARD_USER_PAYMAART_ID, paymaartId)
                             i.putExtra(Constants.KYC_SCOPE, kycScope)
-                            i.putExtra(Constants.ONBOARD_SCOPE, onboardScope)
+                            i.putExtra(Constants.VIEW_SCOPE, viewScope)
+                            i.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
                             nextScreenResultLauncher.launch(i)
                         }
                     } else {
@@ -1321,12 +1338,102 @@ class KycAddressActivity : BaseActivity() {
         }
     }
 
+    private fun updateCustomerAddressDetailsApi() {
+        showButtonLoader(
+            b.onboardKycAddressActivitySaveAndContinueButton,
+            b.onboardKycAddressActivitySaveAndContinueButtonLoaderLottie
+        )
+
+        val poBoxNumber = b.onboardKycAddressActivityPOBoxET.text.toString()
+        val houseName = b.onboardKycAddressActivityHouseNameET.text.toString()
+        val streetName = b.onboardKycAddressActivityStreetNameET.text.toString()
+        val landMark = b.onboardKycAddressActivityLandmarkET.text.toString()
+        val townVillage = b.onboardKycAddressActivityTownET.text.toString()
+        val district = b.onboardKycAddressActivityDistrictET.text.toString()
+        //Additional fields
+        val intlNationality = b.onboardKycAddressActivityIntlNationalityTV.text.toString().ifEmpty { null }
+        val intlAddress = b.onboardKycAddressActivityIntlStreetNameET.text.toString().ifEmpty { null }
+
+
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            val saveNewAddressCall = ApiClient.apiService.saveNewAddressDetailsSelfKyc(
+                idToken, SaveNewAddressDetailsSelfKycRequest(
+                    po_box_no = poBoxNumber,
+                    house_number = houseName,
+                    street_name = streetName,
+                    landmark = landMark,
+                    town_village_ta = townVillage,
+                    district = district,
+                    citizen = intlNationality,
+                    intl_address = intlAddress,
+                    address_details_status = Constants.KYC_STATUS_COMPLETED,
+                    sent_email = sendEmail
+                )
+            )
+
+            saveNewAddressCall.enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
+                ) {
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        //Email already sent, so stop sending email again for further  by making sendEmail value false
+                        sendEmail = false
+                        runOnUiThread {
+                            hideButtonLoader(
+                                b.onboardKycAddressActivitySaveAndContinueButton,
+                                b.onboardKycAddressActivitySaveAndContinueButtonLoaderLottie,
+                                getString(R.string.save_and_continue)
+                            )
+                            val i = Intent(
+                                this@KycAddressActivity, KycIdentityActivity::class.java
+                            )
+                            i.putExtra(Constants.KYC_SCOPE, kycScope)
+                            i.putExtra(Constants.VIEW_SCOPE, viewScope)
+                            i.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
+                            nextScreenResultLauncher.launch(i)
+                        }
+                    } else {
+                        runOnUiThread {
+                            showToast(getString(R.string.default_error_toast))
+                            hideButtonLoader(
+                                b.onboardKycAddressActivitySaveAndContinueButton,
+                                b.onboardKycAddressActivitySaveAndContinueButtonLoaderLottie,
+                                getString(R.string.save_and_continue)
+                            )
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    runOnUiThread {
+                        showToast(getString(R.string.default_error_toast))
+                        hideButtonLoader(
+                            b.onboardKycAddressActivitySaveAndContinueButton,
+                            b.onboardKycAddressActivitySaveAndContinueButtonLoaderLottie,
+                            getString(R.string.save_and_continue)
+                        )
+                    }
+                }
+            })
+        }
+    }
+
+
     override fun onResume() {
         super.onResume()
+        when (viewScope) {
+            Constants.VIEW_SCOPE_FILL -> {
+                if (shouldReloadDocs) getCustomerKycDataApi()
+                else shouldReloadDocs = true
+            }
 
-//        Fetch Kyc Details
-        if (shouldReloadDocs) getCustomerKycDataApi()
-        else shouldReloadDocs = true
+            Constants.VIEW_SCOPE_EDIT, Constants.VIEW_SCOPE_UPDATE -> {
+                if (shouldReloadDocs) getCustomerLatestKycDataApi()
+                else shouldReloadDocs = true
+            }
+        }
     }
 
     private fun getCustomerKycDataApi() {
@@ -1361,6 +1468,36 @@ class KycAddressActivity : BaseActivity() {
         }
     }
 
+    private fun getCustomerLatestKycDataApi() {
+        //Clear all prefilled data
+        clearAllFields()
+        //Hide main UI
+        b.onboardKycAddressActivityLoaderLottie.visibility = View.VISIBLE
+        b.onboardKycAddressActivityContentBox.visibility = View.GONE
+
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            val getUserKycDataCall = ApiClient.apiService.getSelfKycUserData("Bearer $idToken")
+
+            getUserKycDataCall.enqueue(object : Callback<SelfKycDetailsResponse> {
+                override fun onResponse(
+                    call: Call<SelfKycDetailsResponse>, response: Response<SelfKycDetailsResponse>
+                ) {
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        populateLatestKycAddressFields(body.data)
+                    } else {
+                        runOnUiThread { showToast(getString(R.string.default_error_toast)) }
+                    }
+                }
+
+                override fun onFailure(call: Call<SelfKycDetailsResponse>, t: Throwable) {
+                    runOnUiThread { showToast(getString(R.string.default_error_toast)) }
+                }
+            })
+        }
+    }
+
     private fun populateKycAddressFields(data: KycUserData) {
         var isValid = true
 
@@ -1370,18 +1507,9 @@ class KycAddressActivity : BaseActivity() {
         val landmark = data.landmark ?: ""
         val townVillage = data.town_village_ta ?: ""
         val district = data.district ?: ""
-
         //Additional fields for Non malawi
         val intlNationality = data.citizen ?: ""
         val intlStreetName = data.intl_address ?: ""
-        /**
-            val intlPostal = data.intl_po_box_no ?: ""
-            val intlHouseName = data.intl_house_number ?: ""
-            val intlLandmark = data.intl_landmark ?: ""
-            val intlTown = data.intl_town_village_ta ?: ""
-            val intlDistrict = data.intl_district ?: ""
-         */
-
         val addressDetailsStatus = data.address_details_status ?: ""
 
         if (streetName.isEmpty() || townVillage.isEmpty() || district.isEmpty()) isValid = false
@@ -1394,10 +1522,6 @@ class KycAddressActivity : BaseActivity() {
             b.onboardKycAddressActivityIntlStreetNameET.removeTextChangedListener(
                 intlStreetEditTextWatcher
             )
-//            b.onboardKycAddressActivityIntlTownET.removeTextChangedListener(intlTownEditTextWatcher)
-//            b.onboardKycAddressActivityIntlDistrictET.removeTextChangedListener(
-//                intlDistrictEditTextWatcher
-//            )
 
             //Populate the fields
             b.onboardKycAddressActivityPOBoxET.setText(poBox)
@@ -1409,24 +1533,6 @@ class KycAddressActivity : BaseActivity() {
             //Populate Additional fields
             b.onboardKycAddressActivityIntlNationalityTV.text = intlNationality
             b.onboardKycAddressActivityIntlStreetNameET.setText(intlStreetName)
-            /**
-                b.onboardKycAddressActivityIntlPostalET.setText(intlPostal)
-                b.onboardKycAddressActivityIntlHouseNameET.setText(intlHouseName)
-                b.onboardKycAddressActivityIntlLandmarkET.setText(intlLandmark)
-                b.onboardKycAddressActivityIntlTownET.setText(intlTown)
-                b.onboardKycAddressActivityIntlDistrictET.setText(intlDistrict)
-             */
-
-            //Change background of following editTexts
-            /**
-            b.onboardKycAddressActivityIntlPostalET.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-            b.onboardKycAddressActivityIntlHouseNameET.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-            b.onboardKycAddressActivityIntlLandmarkET.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-             */
-
 
             //Re-register TextWatchers
             b.onboardKycAddressActivityStreetNameET.addTextChangedListener(streetEditTextWatcher)
@@ -1435,15 +1541,84 @@ class KycAddressActivity : BaseActivity() {
             b.onboardKycAddressActivityIntlStreetNameET.addTextChangedListener(
                 intlStreetEditTextWatcher
             )
-//            b.onboardKycAddressActivityIntlTownET.addTextChangedListener(intlTownEditTextWatcher)
-//            b.onboardKycAddressActivityIntlDistrictET.addTextChangedListener(
-//                intlDistrictEditTextWatcher
-//            )
         }
 
         b.onboardKycAddressActivitySV.scrollTo(0, 0)
         b.onboardKycAddressActivityLoaderLottie.visibility = View.GONE
         b.onboardKycAddressActivityContentBox.visibility = View.VISIBLE
+    }
+
+    private fun populateLatestKycAddressFields(data: ViewUserData) {
+        var isValid = true
+
+        val poBox = data.po_box_no ?: ""
+        val houseName = data.house_number ?: ""
+        val streetName = data.street_name ?: ""
+        val landmark = data.landmark ?: ""
+        val townVillage = data.town_village_ta ?: ""
+        val district = data.district ?: ""
+        //Additional fields for Non malawi
+        val intlNationality = data.citizen ?: ""
+        val intlStreetName = data.intl_address ?: ""
+        val addressDetailsStatus = data.address_details_status ?: ""
+        if (streetName.isEmpty() || townVillage.isEmpty() || district.isEmpty()) isValid = false
+        if (isValid && addressDetailsStatus == Constants.KYC_STATUS_COMPLETED) {
+            //De-register Text Watchers
+            b.onboardKycAddressActivityStreetNameET.removeTextChangedListener(streetEditTextWatcher)
+            b.onboardKycAddressActivityTownET.removeTextChangedListener(townEditTextWatcher)
+            b.onboardKycAddressActivityDistrictET.removeTextChangedListener(districtEditTextWatcher)
+            b.onboardKycAddressActivityIntlStreetNameET.removeTextChangedListener(
+                intlStreetEditTextWatcher
+            )
+            //Populate the fields
+            b.onboardKycAddressActivityPOBoxET.setText(poBox)
+            b.onboardKycAddressActivityHouseNameET.setText(houseName)
+            b.onboardKycAddressActivityStreetNameET.setText(streetName)
+            b.onboardKycAddressActivityLandmarkET.setText(landmark)
+            b.onboardKycAddressActivityTownET.setText(townVillage)
+            b.onboardKycAddressActivityDistrictET.setText(district)
+            //Populate Additional fields
+            b.onboardKycAddressActivityIntlNationalityTV.text = intlNationality
+            b.onboardKycAddressActivityIntlStreetNameET.setText(intlStreetName)
+
+            if (viewScope == Constants.VIEW_SCOPE_UPDATE) {
+                //Grey out fields
+                b.onboardKycAddressActivityPOBoxET.isEnabled = false
+                b.onboardKycAddressActivityPOBoxET.background =
+                    ContextCompat.getDrawable(this, R.color.defaultSelected)
+
+                b.onboardKycAddressActivityHouseNameET.isEnabled = false
+                b.onboardKycAddressActivityHouseNameET.background =
+                    ContextCompat.getDrawable(this, R.color.defaultSelected)
+
+                b.onboardKycAddressActivityStreetNameET.isEnabled = false
+                b.onboardKycAddressActivityStreetNameET.background =
+                    ContextCompat.getDrawable(this, R.color.defaultSelected)
+
+                b.onboardKycAddressActivityLandmarkET.isEnabled = false
+                b.onboardKycAddressActivityLandmarkET.background =
+                    ContextCompat.getDrawable(this, R.color.defaultSelected)
+
+                b.onboardKycAddressActivityTownET.isEnabled = false
+                b.onboardKycAddressActivityTownET.background =
+                    ContextCompat.getDrawable(this, R.color.defaultSelected)
+
+                b.onboardKycAddressActivityDistrictET.isEnabled = false
+                b.onboardKycAddressActivityDistrictET.background =
+                    ContextCompat.getDrawable(this, R.color.defaultSelected)
+            }
+
+            //Re-register TextWatchers
+            b.onboardKycAddressActivityStreetNameET.addTextChangedListener(streetEditTextWatcher)
+            b.onboardKycAddressActivityTownET.addTextChangedListener(townEditTextWatcher)
+            b.onboardKycAddressActivityDistrictET.addTextChangedListener(districtEditTextWatcher)
+            b.onboardKycAddressActivityIntlStreetNameET.addTextChangedListener(intlStreetEditTextWatcher)
+        }
+
+        b.onboardKycAddressActivitySV.scrollTo(0, 0)
+        b.onboardKycAddressActivityLoaderLottie.visibility = View.GONE
+        b.onboardKycAddressActivityContentBox.visibility = View.VISIBLE
+
     }
 
     private fun clearAllFields() {
@@ -1458,13 +1633,6 @@ class KycAddressActivity : BaseActivity() {
         //Clear additional fields - Non malawi
         b.onboardKycAddressActivityIntlNationalityTV.text = ""
         b.onboardKycAddressActivityIntlStreetNameET.setText("")
-        /**
-            b.onboardKycAddressActivityIntlPostalET.setText("")
-            b.onboardKycAddressActivityIntlHouseNameET.setText("")
-            b.onboardKycAddressActivityIntlLandmarkET.setText("")
-            b.onboardKycAddressActivityIntlTownET.setText("")
-            b.onboardKycAddressActivityIntlDistrictET.setText("")
-         */
 
 
         //Hide any warnings
@@ -1481,25 +1649,7 @@ class KycAddressActivity : BaseActivity() {
         //Hide any warnings in additional fields
         b.onboardKycAddressActivityIntlNationalityWarningTV.visibility = View.GONE
         b.onboardKycAddressActivityIntlStreetNameWarningTV.visibility = View.GONE
-        b.onboardKycAddressActivityIntlStreetNameET.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-        /**
-            b.onboardKycAddressActivityIntlPostalWarningTV.visibility = View.GONE
-            b.onboardKycAddressActivityIntlHouseNameWarningTV.visibility = View.GONE
-            b.onboardKycAddressActivityIntlLandmarkWarningTV.visibility = View.GONE
-            b.onboardKycAddressActivityIntlTownWarningTV.visibility = View.GONE
-            b.onboardKycAddressActivityIntlDistrictWarningTV.visibility = View.GONE
-            b.onboardKycAddressActivityIntlPostalET.background =
-                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-            b.onboardKycAddressActivityIntlHouseNameET.background =
-                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-            b.onboardKycAddressActivityIntlLandmarkET.background =
-                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-            b.onboardKycAddressActivityIntlTownET.background =
-                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-            b.onboardKycAddressActivityIntlDistrictET.background =
-                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-         */
+        b.onboardKycAddressActivityIntlStreetNameET.background = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
     }
 
     private fun clearAllFocusedFields() {
@@ -1525,28 +1675,6 @@ class KycAddressActivity : BaseActivity() {
         if (!b.onboardKycAddressActivityIntlStreetNameWarningTV.isVisible) b.onboardKycAddressActivityIntlStreetNameET.background =
             unfocusedDrawable
         else b.onboardKycAddressActivityIntlStreetNameET.background = errorDrawable
-
-        /**
-            if (!b.onboardKycAddressActivityIntlPostalWarningTV.isVisible) b.onboardKycAddressActivityIntlPostalET.background =
-            unfocusedDrawable
-            else b.onboardKycAddressActivityIntlPostalET.background = errorDrawable
-
-            if (!b.onboardKycAddressActivityIntlHouseNameWarningTV.isVisible) b.onboardKycAddressActivityIntlHouseNameET.background =
-                unfocusedDrawable
-            else b.onboardKycAddressActivityIntlHouseNameET.background = errorDrawable
-
-            if (!b.onboardKycAddressActivityIntlLandmarkWarningTV.isVisible) b.onboardKycAddressActivityIntlLandmarkET.background =
-                unfocusedDrawable
-            else b.onboardKycAddressActivityIntlLandmarkET.background = errorDrawable
-
-            if (!b.onboardKycAddressActivityIntlTownWarningTV.isVisible) b.onboardKycAddressActivityIntlTownET.background =
-                unfocusedDrawable
-            else b.onboardKycAddressActivityIntlTownET.background = errorDrawable
-
-            if (!b.onboardKycAddressActivityIntlDistrictWarningTV.isVisible) b.onboardKycAddressActivityIntlDistrictET.background =
-                unfocusedDrawable
-            else b.onboardKycAddressActivityIntlDistrictET.background = errorDrawable
-         */
     }
 
     private fun showButtonLoader(

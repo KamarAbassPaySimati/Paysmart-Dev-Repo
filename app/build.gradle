@@ -214,4 +214,7 @@ dependencies {
 
     //SDP library for uniform size of layout resources in all type of screens
     implementation libs.sdp.android
+
+    //For Image conversion purpose
+    implementation libs.androidx.exifinterface
 }

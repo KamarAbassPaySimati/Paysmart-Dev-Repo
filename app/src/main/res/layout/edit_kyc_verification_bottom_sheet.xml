@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/registrationVerificationSheet"
+    android:id="@+id/editKycVerificationSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
     android:padding="16dp"
-    app:backgroundTint="@android:color/transparent"
+    app:backgroundTint="@color/transparent"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <RelativeLayout
@@ -16,7 +16,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/registrationVerificationSheetHeadTV"
+            android:id="@+id/editKycVerificationSheetHeadTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -27,29 +27,29 @@
             tools:ignore="RelativeOverlap" />
 
         <ImageView
-            android:id="@+id/registrationVerificationSheetCloseButton"
+            android:id="@+id/editKycVerificationSheetCloseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:contentDescription="@string/close_button_data"
             android:src="@drawable/ic_close"
-            app:tint="@color/primaryColor" />
+            app:tint="@color/black"/>
 
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/registrationVerificationSheetSubTV"
+        android:id="@+id/editKycVerificationSheetSubTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/inter_regular"
         android:text="@string/email_verify_sub_text"
-        android:textColor="@color/successGreen"
+        android:textColor="@color/accentPositive"
         android:textSize="14sp" />
 
     <TextView
-        android:id="@+id/registrationVerificationSheetContentTV"
+        android:id="@+id/editKycVerificationSheetContentTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
@@ -62,7 +62,7 @@
         app:drawableEndCompat="@drawable/ic_edit" />
 
     <LinearLayout
-        android:id="@+id/registrationVerificationSheetCodeContainer"
+        android:id="@+id/editKycVerificationSheetCodeContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -77,21 +77,21 @@
             android:textSize="14sp" />
 
         <RelativeLayout
-            android:id="@+id/registrationVerificationSheetCodeBox"
+            android:id="@+id/editKycVerificationSheetCodeBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@drawable/edit_text_background">
+            android:background="@drawable/bg_edit_text_unfocused">
 
             <EditText
-                android:id="@+id/registrationVerificationSheetCodeET"
+                android:id="@+id/editKycVerificationSheetCodeET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/registrationVerificationSheetTimerTV"
+                android:layout_toStartOf="@+id/editKycVerificationSheetTimerTV"
                 android:autofillHints=""
-                android:background="@android:color/transparent"
+                android:background="@color/transparent"
                 android:fontFamily="@font/inter_regular"
                 android:hint="@string/otp_place_holder"
                 android:importantForAutofill="no"
@@ -99,11 +99,11 @@
                 android:maxLength="6"
                 android:padding="12dp"
                 android:textColor="@color/neutralGreyPrimaryText"
-                android:textColorHint="@color/grey2"
+                android:textColorHint="@color/editTextHint"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/registrationVerificationSheetTimerTV"
+                android:id="@+id/editKycVerificationSheetTimerTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -119,18 +119,59 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/registrationVerificationSheetWarningTV"
+            android:id="@+id/editKycVerificationSheetWarningTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/inter_medium"
             android:text="@string/invalid_otp"
-            android:textColor="@color/errorRed"
+            android:textColor="@color/accentNegative"
             android:textSize="14sp"
             android:visibility="gone"
             tools:visibility="visible" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/editKycVerificationSheetSecurityQuestionTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/inter_medium"
+        android:text="@string/security_question"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textSize="14sp" />
+
+    <EditText
+        android:id="@+id/editKycVerificationSheetSecurityQuestionET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@drawable/bg_edit_text_unfocused"
+        android:ellipsize="end"
+        android:fontFamily="@font/inter_regular"
+        android:hint="@string/enter_answer"
+        android:importantForAutofill="no"
+        android:inputType="textNoSuggestions"
+        android:maxLength="100"
+        android:padding="12dp"
+        android:textColor="@color/neutralGreyPrimaryText"
+        android:textColorHint="@color/editTextHint"
+        android:textSize="14sp"
+        tools:ignore="TextFields" />
+
+    <TextView
+        android:id="@+id/editKycVerificationSheetSecurityQuestionWarningTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inter_medium"
+        android:text="@string/required_field"
+        android:textColor="@color/accentNegative"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -138,7 +179,7 @@
         android:layout_marginTop="24dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/registrationVerificationSheetVerifyButton"
+            android:id="@+id/editKycVerificationSheetVerifyButton"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -150,7 +191,7 @@
             android:textSize="18sp" />
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/registrationVerificationSheetVerifyButtonLoaderLottie"
+            android:id="@+id/editKycVerificationSheetVerifyButtonLoaderLottie"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="center"
@@ -172,7 +213,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/registrationVerificationSheetBottomTextTV"
+            android:id="@+id/editKycVerificationSheetBottomTextTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter_regular"
@@ -181,7 +222,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/registrationVerificationSheetResendTV"
+            android:id="@+id/editKycVerificationSheetResendTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"

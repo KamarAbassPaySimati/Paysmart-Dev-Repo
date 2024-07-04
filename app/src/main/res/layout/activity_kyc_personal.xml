@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_medium"
                 android:includeFontPadding="false"
-                android:text="@string/personal_details"
+                android:text="@string/your_info"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
 
