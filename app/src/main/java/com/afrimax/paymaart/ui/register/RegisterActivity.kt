@@ -40,9 +40,12 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.RecaptchaApiClient
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
+import com.afrimax.paymaart.data.model.RecaptchaRequestBody
+import com.afrimax.paymaart.data.model.RecaptchaResponse
 import com.afrimax.paymaart.data.model.SecurityQuestionAnswerModel
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
@@ -59,12 +62,20 @@ import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.kotlin.core.Amplify
 import com.amplifyframework.storage.StorageException
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.safetynet.SafetyNet
+import com.google.android.gms.safetynet.SafetyNetApi
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -73,20 +84,17 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.UUID
+import java.util.concurrent.Executor
 
 class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
-
     private lateinit var b: ActivityRegisterBinding
     private lateinit var fileResultLauncher: ActivityResultLauncher<Array<String>>
-
     private lateinit var guideSheet: BottomSheetDialogFragment
     private lateinit var verificationBottomSheet: BottomSheetDialogFragment
     private var isEmailVerified = false
     private var isPhoneVerified = false
-
     private var emailRecordId = ""
     private var phoneRecordId = ""
-
     private var profilePicUri: Uri? = null
     private var isPicUploaded: Boolean = false
 
@@ -104,7 +112,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         val wic = WindowInsetsControllerCompat(window, window.decorView)
         wic.isAppearanceLightStatusBars = true
         wic.isAppearanceLightNavigationBars = true
-
         initViews()
         setUpLayout()
         setupListeners()
@@ -249,7 +256,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         b.onboardRegistrationActivityGuideButton.setOnClickListener {
-            guideSheet.show(supportFragmentManager, VerificationBottomSheet.TAG)
+            guideSheet.show(supportFragmentManager, GuideBottomSheet.TAG)
 
         }
 
@@ -604,16 +611,56 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         if (isValid) {
-            lifecycleScope.launch {
-                registerCustomer()
-            }
+//            val siteKey = BuildConfig.SITE_KEY
+//            val secretKey = BuildConfig.SECRET_KEY
+//            SafetyNet.getClient(this@RegisterActivity).verifyWithRecaptcha(siteKey)
+//                .addOnSuccessListener{ response ->
+//                    // Indicates communication with reCAPTCHA service was
+//                    // successful.
+//                    val userResponseToken = response.tokenResult ?: ""
+//                    "UserToken".showLogE(userResponseToken)
+//                    if (response.tokenResult?.isNotEmpty() == true) {
+//                        // Validate the user response token using the
+//                        val executeRecaptcha = RecaptchaApiClient.recaptchaApiService.verifyUserRecaptcha(
+//                            RecaptchaRequestBody(
+//                                secret = secretKey,
+//                                response = userResponseToken
+//                            )
+//                        )
+//                        executeRecaptcha.enqueue(object : Callback<RecaptchaResponse>{
+//                            override fun onResponse(
+//                                call: Call<RecaptchaResponse>,
+//                                response: Response<RecaptchaResponse>,
+//                            ) {
+//                                if (response.isSuccessful && response.body() != null){
+//                                    "RecaptchaResponse".showLogE(response.body() ?: "")
+//                                    registerCustomer()
+//                                }
+//                            }
+//
+//                            override fun onFailure(call: Call<RecaptchaResponse>, throwable: Throwable) {
+//                                TODO("Not yet implemented")
+//                            }
+//
+//                        })
+//                    }
+//                }
+//                .addOnFailureListener{ e ->
+//                    if (e is ApiException) {
+//                        "RecaptchaError".showLogE("Error 1: ${CommonStatusCodes.getStatusCodeString(e.statusCode)}")
+//                    } else {
+//                        "RecaptchaError".showLogE("Error 2: ${e.message}")
+//                    }
+//                }
+
+            registerCustomer()
+
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
-
     }
 
-    private suspend fun registerCustomer() {
+    private fun registerCustomer() {
         showButtonLoader(
             b.onboardRegistrationActivitySubmitButton,
             b.onboardRegistrationActivitySubmitButtonLoaderLottie
@@ -878,7 +925,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
     }
-    
+
 
     private fun sendOtp(type: String) {
         val firstName = b.onboardRegistrationActivityFirstNameET.text.toString()

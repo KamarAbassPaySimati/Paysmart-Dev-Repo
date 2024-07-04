@@ -124,6 +124,9 @@ interface ApiService {
     @POST("$KYC_UPDATE/update/infoDetails-customer-self")
     fun saveNewInfoDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveNewInfoDetailsSelfKycRequest): Call<DefaultResponse>
 
+    @POST("$KYC_UPDATE/update/convert-kyc-mobile-customer-self")
+    fun switchToFullKyc(@Header("Authorization") header: String): Call<DefaultResponse>
+
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
     fun getSharedSecret(@Body body: GetSharedSecretRequest, @Header("Authorization") header: String): Call<GetSharedSecretResponse>

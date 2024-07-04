@@ -80,10 +80,11 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         val nameList = accountName.uppercase().split(" ")
         val shortName = "${nameList[0][0]}${nameList[1][0]}${nameList[2][0]}"
         if (publicProfile && profilePicture.isNotEmpty()){
+            val profilePicUrl = BuildConfig.CDN_BASE_URL + profilePicture
             b.viewSelfKycActivityProfileIV.visibility = View.VISIBLE
             Glide
                 .with(this)
-                .load(profilePicture)
+                .load(profilePicUrl)
                 .into(b.viewSelfKycActivityProfileIV)
             b.viewSelfKycActivityShortNameTV.visibility = View.GONE
 
@@ -91,7 +92,6 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         b.viewSelfKycActivityShortNameTV.text = shortName
         b.viewSelfKycActivityNameTV.text = accountName
         b.viewSelfKycActivityPaymaartIdTV.text = paymaartId
-
         b.viewSelfKycActivityKycTypeTV.text = kycType
         setKycStatus()
 

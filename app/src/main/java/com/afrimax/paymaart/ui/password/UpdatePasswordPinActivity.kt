@@ -383,7 +383,7 @@ class UpdatePasswordPinActivity : BaseActivity() {
             isValid = false
         }
 
-        if (b.updatePasswordPinActivityNewPasswordET.text.toString() != b.updatePasswordPinActivityConfirmPasswordET.text.toString()) {
+        if (b.updatePasswordPinActivityNewPasswordET.text.toString() != b.updatePasswordPinActivityConfirmPasswordET.text.toString() && !b.updatePasswordPinActivityNewPasswordET.text.isNullOrEmpty()) {
             isValid = false
             b.updatePasswordPinActivityConfirmPasswordWarningTV.visibility = View.VISIBLE
             b.updatePasswordPinActivityConfirmPasswordWarningTV.text =
