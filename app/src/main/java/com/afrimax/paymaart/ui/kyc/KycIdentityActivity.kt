@@ -212,7 +212,7 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
             Constants.VIEW_SCOPE_EDIT -> {
                 b.onboardKycIdentityActivityPB.max = 100
                 b.onboardKycIdentityActivityPB.progress = 75
-                b.onboardKycIdentityActivityProgressCountTV.text = getString(R.string.step2of4)
+                b.onboardKycIdentityActivityProgressCountTV.text = getString(R.string.step3of4)
             }
 
             Constants.VIEW_SCOPE_UPDATE -> {
