@@ -672,9 +672,11 @@ class KycCaptureUploadActivity : BaseActivity() {
             val upload = Amplify.Storage.uploadInputStream(objectKey, stream)
             try {
                 val result = upload.result()
+                "Result".showLogE(result.key)
                 return result.key
             } catch (error: StorageException) {
                 //
+                "Result".showLogE(error)
             }
         }
         return ""

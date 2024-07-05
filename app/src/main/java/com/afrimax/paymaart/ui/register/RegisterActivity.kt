@@ -3,6 +3,9 @@ package com.afrimax.paymaart.ui.register
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
@@ -14,6 +17,7 @@ import android.text.TextPaint
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Base64
 import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
@@ -31,13 +35,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.RecaptchaApiClient
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
+import com.afrimax.paymaart.data.model.RecaptchaRequestBody
+import com.afrimax.paymaart.data.model.RecaptchaResponse
 import com.afrimax.paymaart.data.model.SecurityQuestionAnswerModel
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
@@ -54,33 +62,41 @@ import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.kotlin.core.Amplify
 import com.amplifyframework.storage.StorageException
 import com.bumptech.glide.Glide
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.safetynet.SafetyNet
+import com.google.android.gms.safetynet.SafetyNetApi
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.util.UUID
+import java.util.concurrent.Executor
 
 class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
-
     private lateinit var b: ActivityRegisterBinding
     private lateinit var fileResultLauncher: ActivityResultLauncher<Array<String>>
-
     private lateinit var guideSheet: BottomSheetDialogFragment
     private lateinit var verificationBottomSheet: BottomSheetDialogFragment
     private var isEmailVerified = false
     private var isPhoneVerified = false
-
     private var emailRecordId = ""
     private var phoneRecordId = ""
-
     private var profilePicUri: Uri? = null
+    private var isPicUploaded: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +112,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         val wic = WindowInsetsControllerCompat(window, window.decorView)
         wic.isAppearanceLightStatusBars = true
         wic.isAppearanceLightNavigationBars = true
-
         initViews()
         setUpLayout()
         setupListeners()
@@ -197,7 +212,10 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         fileResultLauncher =
             registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                 lifecycleScope.launch {
-                    populateSelectedFile(uri)
+                    if (uri != null) {
+                        isPicUploaded = true
+                        populateSelectedFile(uri)
+                    }
                 }
             }
     }
@@ -213,7 +231,16 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         b.onboardRegistrationActivityCameraIV.setOnClickListener {
-            launchFilePicker()
+            if (isPicUploaded){
+                profilePicUri = null
+                b.onboardRegistrationActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+                b.onboardRegistrationActivityProfileIV.apply {
+                    setImageDrawable(ContextCompat.getDrawable(this@RegisterActivity, R.drawable.ic_no_image))
+                    background = ContextCompat.getDrawable(this@RegisterActivity, R.drawable.dashed_outline_background)
+                }
+            }else{
+                launchFilePicker()
+            }
         }
 
         b.onboardRegistrationActivityEmailVerifyButton.setOnClickListener {
@@ -229,7 +256,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         b.onboardRegistrationActivityGuideButton.setOnClickListener {
-            guideSheet.show(supportFragmentManager, VerificationBottomSheet.TAG)
+            guideSheet.show(supportFragmentManager, GuideBottomSheet.TAG)
 
         }
 
@@ -584,24 +611,64 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         if (isValid) {
-            lifecycleScope.launch {
-                registerCustomer()
-            }
+//            val siteKey = BuildConfig.SITE_KEY
+//            val secretKey = BuildConfig.SECRET_KEY
+//            SafetyNet.getClient(this@RegisterActivity).verifyWithRecaptcha(siteKey)
+//                .addOnSuccessListener{ response ->
+//                    // Indicates communication with reCAPTCHA service was
+//                    // successful.
+//                    val userResponseToken = response.tokenResult ?: ""
+//                    "UserToken".showLogE(userResponseToken)
+//                    if (response.tokenResult?.isNotEmpty() == true) {
+//                        // Validate the user response token using the
+//                        val executeRecaptcha = RecaptchaApiClient.recaptchaApiService.verifyUserRecaptcha(
+//                            RecaptchaRequestBody(
+//                                secret = secretKey,
+//                                response = userResponseToken
+//                            )
+//                        )
+//                        executeRecaptcha.enqueue(object : Callback<RecaptchaResponse>{
+//                            override fun onResponse(
+//                                call: Call<RecaptchaResponse>,
+//                                response: Response<RecaptchaResponse>,
+//                            ) {
+//                                if (response.isSuccessful && response.body() != null){
+//                                    "RecaptchaResponse".showLogE(response.body() ?: "")
+//                                    registerCustomer()
+//                                }
+//                            }
+//
+//                            override fun onFailure(call: Call<RecaptchaResponse>, throwable: Throwable) {
+//                                TODO("Not yet implemented")
+//                            }
+//
+//                        })
+//                    }
+//                }
+//                .addOnFailureListener{ e ->
+//                    if (e is ApiException) {
+//                        "RecaptchaError".showLogE("Error 1: ${CommonStatusCodes.getStatusCodeString(e.statusCode)}")
+//                    } else {
+//                        "RecaptchaError".showLogE("Error 2: ${e.message}")
+//                    }
+//                }
+
+            registerCustomer()
+
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
-
     }
 
-    private suspend fun registerCustomer() {
+    private fun registerCustomer() {
         showButtonLoader(
             b.onboardRegistrationActivitySubmitButton,
             b.onboardRegistrationActivitySubmitButtonLoaderLottie
         )
 
         //If registering  a customer check for profile picture
-        val profilePic = if (profilePicUri != null) amplifyUpload(profilePicUri!!) else ""
-        "ProfilePic".showLogE(profilePic)
+//        val profilePic = if (profilePicUri != null) "$profilePicUri" else ""
+        val profilePic = ""
         val makeVisible = profilePic.isNotEmpty() && b.onboardRegistrationActivityMakeVisibleCB.isChecked
         val firstName = b.onboardRegistrationActivityFirstNameET.text.toString()
         val middleName = b.onboardRegistrationActivityMiddleNameET.text.toString()
@@ -858,7 +925,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
     }
-    
+
 
     private fun sendOtp(type: String) {
         val firstName = b.onboardRegistrationActivityFirstNameET.text.toString()
@@ -1177,27 +1244,83 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         )
     }
 
-    private suspend fun populateSelectedFile(uri: Uri?) {
-        if (uri != null) {
-            profilePicUri = uri
-            val stream = contentResolver.openInputStream(uri)
-
-            if (stream != null) {
-                withContext(Dispatchers.IO) {
-                    if (stream.available() < (10 * 1024 * 1024)) {
-                        runOnUiThread {
-                            Glide.with(this@RegisterActivity).load(uri)
-                                .placeholder(R.drawable.ic_no_image)
-                                .into(b.onboardRegistrationActivityProfileIV)
-                        }
-                    } else {
-                        runOnUiThread { showToast("Can't upload file with size greater than 10MB") }
+    private suspend fun populateSelectedFile(uri: Uri) {
+        if (isPicUploaded){
+            b.onboardRegistrationActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_delete))
+        }else{
+            b.onboardRegistrationActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+        }
+        profilePicUri = uri
+        val stream = contentResolver.openInputStream(uri)
+        if (stream != null) {
+            withContext(Dispatchers.IO) {
+                val bitmap = BitmapFactory.decodeStream(stream)
+                val rotatedBitmap = rotateBitmapIfNeeded(this@RegisterActivity, bitmap, uri)
+                val base64String = bitmapToBase64(rotatedBitmap)
+                val imageByteArray = base64ToByteArray(base64String)
+                val imageBitmap = byteArrayToBitmap(imageByteArray)
+                if (stream.available() < (10 * 1024 * 1024)) {
+                    runOnUiThread {
+                        Glide.with(this@RegisterActivity).load(profilePicUri)
+                            .placeholder(R.drawable.ic_no_image)
+                            .into(b.onboardRegistrationActivityProfileIV)
                     }
-                    stream.close()
+                } else {
+                    runOnUiThread { showToast("Can't upload file with size greater than 10MB") }
                 }
+                stream.close()
             }
         }
     }
+
+    private fun base64ToByteArray(base64String: String): ByteArray {
+        return Base64.decode(base64String, Base64.DEFAULT)
+    }
+
+    private fun byteArrayToBitmap(byteArray: ByteArray): Bitmap? {
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+    }
+
+    private fun bitmapToBase64(bitmap: Bitmap): String {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream) // 80 is the quality percentage
+        val byteArray = byteArrayOutputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
+    private fun rotateBitmapIfNeeded(context: Context, bitmap: Bitmap, uri: Uri): Bitmap {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val ei: ExifInterface
+        var orientation = ExifInterface.ORIENTATION_NORMAL
+        try {
+            inputStream?.let {
+                ei = ExifInterface(it)
+                orientation = ei.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_NORMAL
+                )
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            inputStream?.close()
+        }
+
+        return when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotateBitmap(bitmap, 90f)
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotateBitmap(bitmap, 180f)
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotateBitmap(bitmap, 270f)
+            else -> bitmap
+        }
+    }
+
+    private fun rotateBitmap(bitmap: Bitmap, degrees: Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(degrees)
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
+
+
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     private suspend fun amplifyUpload(uri: Uri): String {

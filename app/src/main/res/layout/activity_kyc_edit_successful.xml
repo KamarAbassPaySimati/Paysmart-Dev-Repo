@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/kycEditSuccessfulActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.kyc.KycEditSuccessfulActivity">
+
+    <RelativeLayout
+        android:id="@+id/kycEditSuccessfulActivityBackButtonBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/kycEditSuccessfulActivityBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back_button"
+            android:padding="16dp"
+            android:src="@drawable/ic_arrow_back" />
+
+
+        <TextView
+            android:id="@+id/kycYourPersonalDetailsActivityHeaderTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/kycEditSuccessfulActivityBackButton"
+            android:fontFamily="@font/inter_medium"
+            android:includeFontPadding="false"
+            android:text="@string/back"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/kycEditSuccessfulActivityBackButtonBox">
+
+        <RelativeLayout
+            android:id="@+id/kycEditSuccessfulActivityContentBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/kycEditSuccessfulActivitySuccessTextBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/accentPositive">
+
+                <TextView
+                    android:id="@+id/kycEditSuccessfulActivitySuccessTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:padding="16dp"
+                    android:text="@string/submission_successful"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </RelativeLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/kycEditSuccessfulActivityFinishButtonContainer"
+                android:layout_below="@+id/kycEditSuccessfulActivitySuccessTextBox"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <TextView
+                        android:id="@+id/kycEditSuccessfulActivityKycVerificationTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/kyc_verification"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/kycEditSuccessfulActivityKycVerificationSubTextTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/kyc_submit_text1"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/bg_edit_kyc_success"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:id="@+id/kycEditSuccessfulActivityDoneIV"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:background="@drawable/bg_kyc_progress_done"
+                            android:contentDescription="@string/content_des"
+                            android:padding="4dp"
+                            android:src="@drawable/ico_done_white"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/kycEditSuccessfulActivityKycTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginStart="12dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/kyc"
+                            android:textAllCaps="true"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/kycEditSuccessfulActivityDoneIV"
+                            app:layout_constraintStart_toEndOf="@+id/kycEditSuccessfulActivityDoneIV"
+                            app:layout_constraintTop_toTopOf="@+id/kycEditSuccessfulActivityDoneIV" />
+
+                        <TextView
+                            android:id="@+id/kycEditSuccessfulActivityKycYourPersonalDetailsTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/personal_details"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toEndOf="@+id/kycEditSuccessfulActivityDoneIV"
+                            app:layout_constraintTop_toBottomOf="@+id/kycEditSuccessfulActivityKycTV" />
+
+                        <TextView
+                            android:id="@+id/kycEditSuccessfulActivityKycYourAddressTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/your_address"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toEndOf="@+id/kycEditSuccessfulActivityDoneIV"
+                            app:layout_constraintTop_toBottomOf="@+id/kycEditSuccessfulActivityKycYourPersonalDetailsTV" />
+
+                        <TextView
+                            android:id="@+id/kycEditSuccessfulActivityKycYourIdentityTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/your_identity"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toEndOf="@+id/kycEditSuccessfulActivityDoneIV"
+                            app:layout_constraintTop_toBottomOf="@+id/kycEditSuccessfulActivityKycYourAddressTV" />
+
+                        <TextView
+                            android:id="@+id/kycEditSuccessfulActivityKycYourInfoTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/your_info"
+                            android:textColor="@color/neutralGrey"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toEndOf="@+id/kycEditSuccessfulActivityDoneIV"
+                            app:layout_constraintTop_toBottomOf="@+id/kycEditSuccessfulActivityKycYourIdentityTV" />
+
+                        <FrameLayout
+                            android:id="@+id/kycEditSuccessfulActivityKycRegistrationChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_chip_not_started"
+                            android:paddingStart="12dp"
+                            android:paddingTop="4dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="4dp"
+                            app:layout_constraintStart_toEndOf="@+id/kycEditSuccessfulActivityDoneIV"
+                            app:layout_constraintTop_toBottomOf="@+id/kycEditSuccessfulActivityKycYourInfoTV">
+
+                            <TextView
+                                android:id="@+id/kycEditSuccessfulActivityKycRegistrationChipTV"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/not_started"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </FrameLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <LinearLayout
+                android:id="@+id/kycEditSuccessfulActivityFinishButtonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/kycEditSuccessfulActivityFinishButton"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/primary_rounded_button_background"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_medium"
+                    android:maxLines="1"
+                    android:text="@string/finish"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/kycEditSuccessfulActivityCompleteKycTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:gravity="center"
+                    android:text="@string/complete_kyc_registration"
+                    android:textColor="@color/primaryColor"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/kycEditSuccessfulActivityLoaderLottie"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_loader" />
+
+    </FrameLayout>
+
+</RelativeLayout>

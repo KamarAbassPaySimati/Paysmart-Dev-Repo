@@ -1,6 +1,6 @@
 package com.afrimax.paymaart.data.model
 
-data class KycSavePersonalDetailRequest(
+data class SaveNewInfoDetailsSelfKycRequest(
     val gender: String,
     val dob: String,
     val occupation: String,
@@ -15,8 +15,6 @@ data class KycSavePersonalDetailRequest(
     val purpose_of_relation: String,
     val monthly_income: String,
     val monthly_withdrawal: String,
-    val bank_name: String?,
-    val account_number: String?,
-    val account_name: String?,
-    val info_details_status: String
+    val info_details_status: String,
+    val sent_email: Boolean
 )

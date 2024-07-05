@@ -341,7 +341,7 @@ class HomeActivity : BaseActivity() {
                 membershipType(MembershipType.GO.typeName, R.color.primeXMemberStrokeColor, R.drawable.prime_x_member_bg)
             }
         }
-        val balanceInt = homeScreenData.accountBalance.toInt()
+        val balanceInt = homeScreenData.accountBalance.toDouble()
         b.homeActivityProfileBalanceTV.text = formatNumber(balanceInt)
         val kycType = homeScreenData.kycType
         val citizen = homeScreenData.citizen
@@ -469,10 +469,10 @@ class HomeActivity : BaseActivity() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    private fun formatNumber(number: Int): String {
-        val decimalFormat = DecimalFormat("#,###")
+    private fun formatNumber(number: Double): String {
+        val decimalFormat = DecimalFormat("#,###.##")
 
-        return if (number == 0) {
+        return if (number == 0.00) {
             "0.00"
         } else {
             decimalFormat.format(number)

@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_medium"
                 android:includeFontPadding="false"
-                android:text="@string/address_details"
+                android:text="@string/your_address"
                 android:textColor="@color/black"
                 android:textSize="24sp" />
 
@@ -81,7 +81,7 @@
                 android:layout_below="@+id/onboardKycAddressActivityHeaderTV"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/inter_medium"
-                android:text="@string/next_identity_details"
+                android:text="@string/next_your_identity"
                 android:textColor="@color/neutralGrey"
                 android:textSize="14sp" />
 

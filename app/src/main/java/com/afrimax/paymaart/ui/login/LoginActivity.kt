@@ -744,13 +744,12 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
         val options =
             AWSCognitoAuthSignInOptions.builder().authFlowType(AuthFlowType.USER_SRP_AUTH).build()
-        "Result".showLogE(passCode)
         try {
             Amplify.Auth.signIn(userName, passCode, options, { result ->
                 runOnUiThread {
                     hideButtonLoader()
                 }
-                "Result".showLogE(result)
+                "Response".showLogE(result)
                 val nextStep = result.nextStep
                 when (nextStep.signInStep) {
                     AuthSignInStep.CONFIRM_SIGN_IN_WITH_TOTP_CODE -> {
