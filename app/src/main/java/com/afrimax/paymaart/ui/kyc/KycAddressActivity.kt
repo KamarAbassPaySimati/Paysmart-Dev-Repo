@@ -2,7 +2,6 @@ package com.afrimax.paymaart.ui.kyc
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Email
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View

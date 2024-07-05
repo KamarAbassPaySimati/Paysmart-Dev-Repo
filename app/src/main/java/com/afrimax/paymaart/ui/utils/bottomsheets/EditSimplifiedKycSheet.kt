@@ -42,7 +42,7 @@ class EditSimplifiedKycSheet: BottomSheetDialogFragment() {
 
         b.editSimplifiedKycSheetUpgradeButton.setOnClickListener {
             //api call
-//            saveSelfPreferenceApi()
+            saveSelfPreferenceApi()
 
         }
 
