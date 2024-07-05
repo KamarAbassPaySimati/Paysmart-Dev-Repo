@@ -3,8 +3,6 @@ package com.afrimax.paymaart.ui.viewkyc
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -18,9 +16,10 @@ import com.afrimax.paymaart.data.model.ViewUserData
 import com.afrimax.paymaart.databinding.ActivityViewKycDetailsBinding
 import com.afrimax.paymaart.databinding.ContentViewKycReasonForRejectionBinding
 import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.ui.kyc.KycCustomerPersonalDetailsActivity
 import com.afrimax.paymaart.ui.kyc.KycFullScreenPreviewActivity
-import com.afrimax.paymaart.ui.kyc.KycPersonalActivity
 import com.afrimax.paymaart.ui.kyc.KycProgressActivity
+import com.afrimax.paymaart.ui.utils.bottomsheets.EditSimplifiedKycSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.ViewKycPasswordSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.ViewKycPinSheet
 import com.afrimax.paymaart.ui.utils.interfaces.ViewSelfKycInterface
@@ -279,39 +278,39 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         }
 
         b.viewSelfKycActivityEditButton.setOnClickListener {
-//            onClickEdit()
+            onClickEdit()
         }
     }
 
-//    private fun onClickEdit() {
-//        //Check if kyc is malawi simplified and the status is completed
-//        if (b.viewSelfKycActivityKycTypeTV.text.toString() == getString(R.string.malawi_simplified_kyc_registration) && b.viewSelfKycActivityKycStatusTV.text.toString() == getString(
-//                R.string.completed
-//            )
-//        ) {
-//            //show bottom sheet to upgrade to full kyc
-//            EditSimplifiedKycSheet().show(supportFragmentManager, EditSimplifiedKycSheet.TAG)
-//        } else {
-//            //Continue with editing screen
-//            val i = Intent(this@ViewKycDetailsActivity, KycPersonalActivity::class.java)
-//            i.putExtra(Constants.VIEW_SCOPE, Constants.VIEW_SCOPE_EDIT)
-//            when (b.viewSelfKycActivityKycTypeTV.text.toString()) {
-//                getString(R.string.malawi_full_kyc_registration) -> i.putExtra(
-//                    Constants.KYC_SCOPE, Constants.KYC_MALAWI_FULL
-//                )
-//
-//                getString(R.string.malawi_simplified_kyc_registration) -> i.putExtra(
-//                    Constants.KYC_SCOPE, Constants.KYC_MALAWI_SIMPLIFIED
-//                )
-//
-//                getString(R.string.non_malawi_full_kyc_registration) -> i.putExtra(
-//                    Constants.KYC_SCOPE, Constants.KYC_NON_MALAWI
-//                )
-//            }
-//            startActivity(i)
-//            finish()
-//        }
-//    }
+    private fun onClickEdit() {
+        //Check if kyc is malawi simplified and the status is completed
+        if (b.viewSelfKycActivityKycTypeTV.text.toString() == getString(R.string.malawi_simplified_kyc_registration) && b.viewSelfKycActivityKycStatusTV.text.toString() == getString(
+                R.string.completed
+            )
+        ) {
+            //show bottom sheet to upgrade to full kyc
+            EditSimplifiedKycSheet().show(supportFragmentManager, EditSimplifiedKycSheet.TAG)
+        } else {
+            //Continue with editing screen
+            val i = Intent(this@ViewKycDetailsActivity, KycCustomerPersonalDetailsActivity::class.java)
+            i.putExtra(Constants.VIEW_SCOPE, Constants.VIEW_SCOPE_EDIT)
+            when (b.viewSelfKycActivityKycTypeTV.text.toString()) {
+                getString(R.string.malawi_full_kyc_registration) -> i.putExtra(
+                    Constants.KYC_SCOPE, Constants.KYC_MALAWI_FULL
+                )
+
+                getString(R.string.malawi_simplified_kyc_registration) -> i.putExtra(
+                    Constants.KYC_SCOPE, Constants.KYC_MALAWI_SIMPLIFIED
+                )
+
+                getString(R.string.non_malawi_full_kyc_registration) -> i.putExtra(
+                    Constants.KYC_SCOPE, Constants.KYC_NON_MALAWI
+                )
+            }
+            startActivity(i)
+            finish()
+        }
+    }
 
     private fun onClickIdDocFront() {
         val i = Intent(this, KycFullScreenPreviewActivity::class.java)
