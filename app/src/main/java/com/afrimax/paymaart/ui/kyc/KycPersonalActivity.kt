@@ -92,7 +92,7 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
 
     private fun initViews() {
         kycScope = intent.getStringExtra(Constants.KYC_SCOPE) ?: ""
-        viewScope = intent.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
+        viewScope = intent.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_FILL
         sendEmail = intent.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
 
         Places.initialize(applicationContext, BuildConfig.PLACES_API_KEY)
@@ -104,6 +104,8 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
             override fun handleOnBackPressed() {
                 val callbackIntent = Intent()
                 callbackIntent.putExtra(Constants.KYC_SCOPE, kycScope)
+                callbackIntent.putExtra(Constants.VIEW_SCOPE, viewScope)
+                callbackIntent.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
                 setResult(RESULT_CANCELED, callbackIntent)
                 finish()
             }
@@ -136,7 +138,7 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
                 val data = result.data
                 if ((result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) && data != null) {
                     kycScope = data.getStringExtra(Constants.KYC_SCOPE) ?: ""
-                    viewScope = data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
+                    viewScope = data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_FILL
                     sendEmail = data.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
                 }
             }
@@ -1780,20 +1782,16 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
 
         if (viewScope == Constants.VIEW_SCOPE_UPDATE) {
             //Grey out
-            b.onboardKycPersonalActivityOccupationTV.background =
-                ContextCompat.getDrawable(this, R.color.defaultSelected)
+            b.onboardKycPersonalActivityOccupationTV.background = ContextCompat.getDrawable(this, R.color.defaultSelected)
             b.onboardKycPersonalActivityOccupationTV.isEnabled = false
 
-            b.onboardKycPersonalActivityEmployerNameET.background =
-                ContextCompat.getDrawable(this, R.color.defaultSelected)
+            b.onboardKycPersonalActivityEmployerNameET.background = ContextCompat.getDrawable(this, R.color.defaultSelected)
             b.onboardKycPersonalActivityEmployerNameET.isEnabled = false
 
-            b.onboardKycPersonalActivityIndustrySectorTV.background =
-                ContextCompat.getDrawable(this, R.color.defaultSelected)
+            b.onboardKycPersonalActivityIndustrySectorTV.background = ContextCompat.getDrawable(this, R.color.defaultSelected)
             b.onboardKycPersonalActivityIndustrySectorTV.isEnabled = false
 
-            b.onboardKycPersonalActivityTownDistrictET.background =
-                ContextCompat.getDrawable(this, R.color.defaultSelected)
+            b.onboardKycPersonalActivityTownDistrictET.background = ContextCompat.getDrawable(this, R.color.defaultSelected)
             b.onboardKycPersonalActivityTownDistrictET.isEnabled = false
         }
     }

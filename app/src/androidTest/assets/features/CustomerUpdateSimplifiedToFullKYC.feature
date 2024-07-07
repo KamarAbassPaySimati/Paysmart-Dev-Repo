@@ -86,7 +86,7 @@ Background: register new user and navigate to kyc screen
   When I click on the finish button
   Then I should be redirected to membership plans screen
   Then I should read "Choose Prime, for totally free e-payments" above the membership banner
-  When I select back button
+  When I select back button in Membership Screen
   Then I should be redirected to home screen
   When I open menu and navigate to the KYC reg details
   And I click on the view "KYC details"

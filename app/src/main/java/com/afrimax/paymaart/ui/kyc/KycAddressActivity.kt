@@ -238,6 +238,7 @@ class KycAddressActivity : BaseActivity() {
 
         b.onboardKycAddressActivitySkipButton.setOnClickListener {
             val i = Intent(this@KycAddressActivity, KycIdentityActivity::class.java)
+            i.putExtra(Constants.VIEW_SCOPE, viewScope)
             i.putExtra(Constants.KYC_SCOPE, kycScope)
             i.putExtra(Constants.KYC_SEND_EMAIL, sendEmail)
             nextScreenResultLauncher.launch(i)

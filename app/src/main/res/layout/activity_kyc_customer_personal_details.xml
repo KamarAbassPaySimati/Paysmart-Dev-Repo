@@ -138,6 +138,86 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
+                        <LinearLayout
+                            android:id="@+id/kycYourPersonalDetailsActivityProfileContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/inter_medium"
+                                android:text="@string/profile_picture"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/inter_medium"
+                                android:text="@string/supported_file_types_two"
+                                android:textColor="@color/neutralGrey2"
+                                android:textSize="12sp" />
+
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp">
+
+                                <com.google.android.material.imageview.ShapeableImageView
+                                    android:id="@+id/kycYourPersonalDetailsActivityProfileIV"
+                                    android:layout_width="96dp"
+                                    app:shapeAppearanceOverlay="@style/profileImagePreview"
+                                    android:layout_height="0dp"
+                                    android:scaleType="centerCrop"
+                                    android:background="@drawable/dashed_outline_background"
+                                    android:contentDescription="@string/image_description"
+                                    android:src="@drawable/ic_no_image"
+                                    app:layout_constraintDimensionRatio="1:1"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <ImageView
+                                    android:id="@+id/kycYourPersonalDetailsActivityCameraIV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="-8dp"
+                                    android:layout_marginBottom="-8dp"
+                                    android:background="@drawable/circle_background"
+                                    android:contentDescription="@string/image_description"
+                                    android:padding="8dp"
+                                    android:src="@drawable/ic_camera"
+                                    app:layout_constraintBottom_toBottomOf="@+id/kycYourPersonalDetailsActivityProfileIV"
+                                    app:layout_constraintEnd_toEndOf="@+id/kycYourPersonalDetailsActivityProfileIV" />
+
+                                <CheckBox
+                                    android:id="@+id/kycYourPersonalDetailsActivityMakeVisibleCB"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    android:checked="false"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:gravity="center"
+                                    android:minWidth="0dp"
+                                    android:minHeight="0dp"
+                                    android:text="@string/make_visible"
+                                    android:textColor="@color/neutralGreyPrimaryText"
+                                    android:textSize="14sp"
+                                    app:buttonIconTint="@color/white"
+                                    app:buttonTint="@color/primaryColor"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/kycYourPersonalDetailsActivityProfileIV" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
