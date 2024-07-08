@@ -936,13 +936,13 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
         if (!b.onboardKycPersonalActivityMonthlyIncomeWarningTV.isVisible) {
             //Don't alter UI of Monthly income if kycScope is Simplified
             if (kycScope != Constants.KYC_MALAWI_SIMPLIFIED) b.onboardKycPersonalActivityMonthlyIncomeTV.background =
-                unfocusedDrawable
+                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
         } else b.onboardKycPersonalActivityMonthlyIncomeTV.background = errorDrawable
 
         if (!b.onboardKycPersonalActivityMonthlyWithdrawalWarningTV.isVisible) {
             //Don't alter UI of Monthly withdrawal if kycScope is Simplified
             if (kycScope != Constants.KYC_MALAWI_SIMPLIFIED) b.onboardKycPersonalActivityMonthlyWithdrawalTV.background =
-                unfocusedDrawable
+                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
         } else b.onboardKycPersonalActivityMonthlyWithdrawalTV.background = errorDrawable
 
         if (!b.onboardKycPersonalActivityBankNameWarningTV.isVisible) b.onboardKycPersonalActivityBankNameTV.background =
