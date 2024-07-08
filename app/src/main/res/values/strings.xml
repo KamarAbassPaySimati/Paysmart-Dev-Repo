@@ -542,4 +542,5 @@
     <string name="view_balance">View Balance</string>
     <string name="enter_your_password_to_view_your_wallet_balance">Enter your password to view your wallet balance</string>
     <string name="balance_placeholder">⬤⬤⬤⬤</string>
+    <string name="switch_to_full_kyc">Switch to Full KYC</string>
 </resources>

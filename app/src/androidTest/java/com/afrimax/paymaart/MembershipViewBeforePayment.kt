@@ -11,13 +11,13 @@ import org.junit.runner.RunWith
 class MembershipViewBeforePayment {
     @When("I click on pay to paymaart")
     fun iClickOnPayToPaymaart() {
-        Espresso.onView(ViewMatchers.withId(R.id.payToPaymaart))
+        Espresso.onView(ViewMatchers.withId(R.id.homeActivityPayPaymaartButton))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }
     @When("I click the back button in membership banner screen")
     fun iClickBackButton() {
-        Espresso.onView(ViewMatchers.withId(R.id.backButtonMembershipBannerView))
+        Espresso.onView(ViewMatchers.withId(R.id.membershipPlansBackButton))
             .perform(ViewActions.click())
         Thread.sleep(3000)
     }
