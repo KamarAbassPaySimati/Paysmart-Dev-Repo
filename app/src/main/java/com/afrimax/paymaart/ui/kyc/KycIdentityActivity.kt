@@ -23,6 +23,7 @@ import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.GetUserKycDataResponse
 import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycUserData
+import com.afrimax.paymaart.data.model.SaveIdentitySimplifiedToFullRequest
 import com.afrimax.paymaart.data.model.SaveNewIdentityDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
 import com.afrimax.paymaart.data.model.ViewUserData
@@ -746,7 +747,7 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
             when (viewScope) {
                 Constants.VIEW_SCOPE_FILL -> saveCustomerIdentityDetailsApi()
                 Constants.VIEW_SCOPE_EDIT -> saveCustomerNewIdentityDetailsApi()
-//                Constants.VIEW_SCOPE_UPDATE -> {}
+                Constants.VIEW_SCOPE_UPDATE -> saveSimplifiedToFullIdentityApi()
             }
 
         } else {
@@ -1266,6 +1267,80 @@ class KycIdentityActivity : BaseActivity(), KycYourIdentityInterface {
 
                 override fun onFailure(call: Call<SelfKycDetailsResponse>, t: Throwable) {
                     runOnUiThread { showToast(getString(R.string.default_error_toast)) }
+                }
+            })
+        }
+    }
+
+    private fun saveSimplifiedToFullIdentityApi() {
+        showButtonLoader(
+            b.onboardKycIdentityActivitySaveAndContinueButton,
+            b.onboardKycIdentityActivitySaveAndContinueButtonLoaderLottie
+        )
+
+        val idDocument = getSelectedIdDocument()
+        val idDocFront = getIdDocumentFront()
+        val idDocBack = getIdDocumentBack()
+        val verificationDoc = getSelectedVerificationDocument()
+        val verificationDocFront = getVerificationDocumentFront()
+        val verificationDocBack = getVerificationDocumentBack()
+        val selfie = getSelfie()
+
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+
+            val saveYourIdentityCall = ApiClient.apiService.saveIdentitySimplifiedToFull(
+                idToken, SaveIdentitySimplifiedToFullRequest(
+                    id_document = idDocument,
+                    id_document_front = idDocFront,
+                    id_document_back = idDocBack,
+                    verification_document = verificationDoc,
+                    verification_document_front = verificationDocFront,
+                    verification_document_back = verificationDocBack,
+                    selfie = selfie,
+                    id_details_status = Constants.KYC_STATUS_COMPLETED,
+                )
+            )
+            saveYourIdentityCall.enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
+                ) {
+
+                    hideButtonLoader(
+                        b.onboardKycIdentityActivitySaveAndContinueButton,
+                        b.onboardKycIdentityActivitySaveAndContinueButtonLoaderLottie,
+                        getString(R.string.save_and_continue)
+                    )
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+
+                        val i = Intent(
+                            this@KycIdentityActivity, KycPersonalActivity::class.java
+                        )
+                        i.putExtra(Constants.KYC_SCOPE, kycScope)
+                        i.putExtra(Constants.VIEW_SCOPE, viewScope)
+                        nextScreenResultLauncher.launch(i)
+
+                    } else {
+                        showToast(getString(R.string.default_error_toast))
+                        hideButtonLoader(
+                            b.onboardKycIdentityActivitySaveAndContinueButton,
+                            b.onboardKycIdentityActivitySaveAndContinueButtonLoaderLottie,
+                            getString(R.string.save_and_continue)
+                        )
+                    }
+                }
+                override fun onFailure(
+                    call: Call<DefaultResponse>, t: Throwable
+                ) {
+                    runOnUiThread {
+                        showToast(getString(R.string.default_error_toast))
+                        hideButtonLoader(
+                            b.onboardKycIdentityActivitySaveAndContinueButton,
+                            b.onboardKycIdentityActivitySaveAndContinueButtonLoaderLottie,
+                            getString(R.string.save_and_continue)
+                        )
+                    }
                 }
             })
         }

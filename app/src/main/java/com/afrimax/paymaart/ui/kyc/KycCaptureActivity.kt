@@ -84,6 +84,26 @@ class KycCaptureActivity : BaseActivity() {
                 else b.kycCaptureActivitySubTextTV.text = getString(R.string.passport_subtext)
             }
 
+            Constants.KYC_IDENTITY_ID_REFUGEE_ID -> {
+                b.kycCaptureActivityHeaderTV.text = getString(R.string.refugee_id)
+                b.kycCaptureActivitySubTextTV.text = getString(R.string.refugee_id_subtext)
+            }
+
+            Constants.KYC_IDENTITY_ID_ASYLUM_ID -> {
+                b.kycCaptureActivityHeaderTV.text = getString(R.string.asylum_id)
+                b.kycCaptureActivitySubTextTV.text = getString(R.string.asylum_id_subtext)
+            }
+
+            Constants.KYC_IDENTITY_ID_EMPLOYEE_ID -> {
+                b.kycCaptureActivityHeaderTV.text = getString(R.string.employee_id)
+                b.kycCaptureActivitySubTextTV.text = getString(R.string.employee_id_subtext)
+            }
+
+            Constants.KYC_IDENTITY_ID_STUDENT_ID -> {
+                b.kycCaptureActivityHeaderTV.text = getString(R.string.student_id)
+                b.kycCaptureActivitySubTextTV.text = getString(R.string.student_id_subtext)
+            }
+
             Constants.KYC_IDENTITY_ID_DRIVER_LICENSE, Constants.KYC_IDENTITY_VER_DRIVER_LICENSE -> {
                 b.kycCaptureActivityHeaderTV.text = getString(R.string.driver_s_licence)
                 b.kycCaptureActivitySubTextTV.text = getString(R.string.driver_license_subtext)
@@ -107,6 +127,13 @@ class KycCaptureActivity : BaseActivity() {
             Constants.KYC_IDENTITY_VER_INSTITUTION_LETTER -> {
                 b.kycCaptureActivityHeaderTV.text = getString(R.string.institution_letter)
                 b.kycCaptureActivitySubTextTV.text = getString(R.string.institution_letter_subtext)
+            }
+
+            Constants.KYC_IDENTITY_VER_RELIGIOUS_INSTITUTION_LETTER -> {
+                b.kycCaptureActivityHeaderTV.text =
+                    getString(R.string.religious_institution_district_commissioner_letter)
+                b.kycCaptureActivitySubTextTV.text =
+                    getString(R.string.religious_institution_letter_subtext)
             }
         }
     }

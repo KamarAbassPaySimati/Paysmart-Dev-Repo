@@ -79,7 +79,7 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         //populate views
         val nameList = accountName.uppercase().split(" ")
         val shortName = "${nameList[0][0]}${nameList[1][0]}${nameList[2][0]}"
-        if (publicProfile && profilePicture.isNotEmpty()){
+        if (profilePicture.isNotEmpty()){
             val profilePicUrl = BuildConfig.CDN_BASE_URL + profilePicture
             b.viewSelfKycActivityProfileIV.visibility = View.VISIBLE
             Glide
@@ -294,6 +294,8 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
             //Continue with editing screen
             val i = Intent(this@ViewKycDetailsActivity, KycCustomerPersonalDetailsActivity::class.java)
             i.putExtra(Constants.VIEW_SCOPE, Constants.VIEW_SCOPE_EDIT)
+            i.putExtra(Constants.PROFILE_PICTURE, profilePicture)
+            i.putExtra(Constants.PUBLIC_PROFILE, publicProfile)
             when (b.viewSelfKycActivityKycTypeTV.text.toString()) {
                 getString(R.string.malawi_full_kyc_registration) -> i.putExtra(
                     Constants.KYC_SCOPE, Constants.KYC_MALAWI_FULL
