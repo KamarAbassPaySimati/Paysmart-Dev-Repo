@@ -121,6 +121,9 @@ object Constants {
     const val OTP_QUESTION_ID = "otp_question_id"
     const val EDIT_SCOPE = "edit_scope"
     const val EDIT_SCOPE_SELF = "edit_scope_self"
+    const val VIEW_WALLET_SCOPE = "view_wallet_scope"
+    const val VIEW_WALLET_SIMPLE_SCOPE = "view_wallet_simple_scope"
+    const val VIEW_WALLET_DEDICATED_SCOPE = "view_wallet_dedicated_scope"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

@@ -36,6 +36,7 @@ import com.afrimax.paymaart.data.model.VerifyOtpForEditSelfKycRequest
 import com.afrimax.paymaart.data.model.VerifyOtpForEditSelfKycResponse
 import com.afrimax.paymaart.data.model.VerifyOtpRequestBody
 import com.afrimax.paymaart.data.model.VerifyOtpResponse
+import com.afrimax.paymaart.data.model.ViewWalletResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -134,6 +135,9 @@ interface ApiService {
 
     @POST("$KYC_UPDATE/update/simplifiedtofull-mobile-customer-self")
     fun saveInfoSimplifiedToFull(@Header("Authorization") header: String, @Body body: SaveInfoSimplifiedToFullRequest): Call<DefaultResponse>
+
+    @GET("$CUSTOMER_USER/view-wallet")
+    fun viewWallet(@Header("Authorization") header: String, @Query("password") password: String): Call<ViewWalletResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
