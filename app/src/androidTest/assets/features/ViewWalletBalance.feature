@@ -80,6 +80,9 @@ Feature: Paymaart- Customer Android- View Wallet Balance
     Then I should read a message stating KYC "In review"
     Then I make the user approved
     When I click on the finish button
+    Then I should be redirected to membership plans screen
+    Then I should read "Choose Prime, for totally free e-payments" above the membership banner
+    When I select back button in Membership Screen
     And I should be redirected to home screen
 
   Scenario: Agent viewing wallet balance

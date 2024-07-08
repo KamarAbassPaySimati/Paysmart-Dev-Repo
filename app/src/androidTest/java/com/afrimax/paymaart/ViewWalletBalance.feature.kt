@@ -14,7 +14,7 @@ class ViewWalletBalance {
 
     @When("I click on view wallet balance icon")
     fun clickViewIconForWalletBalance() {
-        Espresso.onView(ViewMatchers.withId(R.id.EyeButton))
+        Espresso.onView(ViewMatchers.withId(R.id.homeActivityEyeButton))
             .perform(ViewActions.click())
         Thread.sleep(3000)
     }
@@ -47,7 +47,7 @@ class ViewWalletBalance {
 
     @Then("I should see the wallet balance")
     fun seeWalletBalance() {
-        Espresso.onView(ViewMatchers.withId(R.id.homeActivityProfileBalance))
+        Espresso.onView(ViewMatchers.withId(R.id.homeActivityProfileBalanceTV))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 

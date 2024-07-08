@@ -146,6 +146,7 @@ class ViewWalletPasswordSheet : BottomSheetDialogFragment() {
                     )
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
+
                         sheetCallback.onClickViewBalance(viewWalletScope, body.data)
                         dismiss()
                     } else {

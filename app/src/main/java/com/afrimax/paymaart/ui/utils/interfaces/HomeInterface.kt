@@ -7,5 +7,5 @@ interface HomeInterface {
     fun onClickOnBoardAgent()
     fun onClickOnBoardMerchant()
     fun onClickOnBoardCustomers()
-    fun onClickViewBalance(viewWalletScope: String, data: WalletData)
+    fun onClickViewBalance(viewWalletScope: String, data: WalletData?)
 }

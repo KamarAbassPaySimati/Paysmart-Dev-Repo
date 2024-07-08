@@ -124,7 +124,6 @@ class ViewWalletPinSheet : BottomSheetDialogFragment() {
                 override fun onResponse(
                     call: Call<ViewWalletResponse>, response: Response<ViewWalletResponse>
                 ) {
-                    "Response".showLogE(response.body()!!)
                     hideButtonLoader(
                         b.viewWalletPinSheetViewButton,
                         b.viewWalletPinSheetViewButtonLoaderLottie,

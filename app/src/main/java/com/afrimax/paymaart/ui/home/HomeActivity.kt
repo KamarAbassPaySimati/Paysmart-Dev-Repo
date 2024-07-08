@@ -195,17 +195,19 @@ class HomeActivity : BaseActivity(), HomeInterface {
         }
     }
 
-    private fun showBalance(data: WalletData) {
-        b.homeActivityProfileBalanceTV.text =
-            if (data.accountBalance == null) getString(R.string._0_00)
-            else formatNumber(data.accountBalance.toDouble())
+    private fun showBalance(data: WalletData?) {
+        if (data != null){
+            b.homeActivityProfileBalanceTV.text =
+                if (data.accountBalance == null) getString(R.string._0_00)
+                else formatNumber(data.accountBalance.toDouble())
 
-        //Change icon
-        b.homeActivityEyeButton.setBackgroundResource(R.drawable.ico_eye_slash_white)
+            //Change icon
+            b.homeActivityEyeButton.setBackgroundResource(R.drawable.ico_eye_slash_white)
 
-        //Change click listener function
-        b.homeActivityEyeButton.setOnClickListener {
-            hideBalance()
+            //Change click listener function
+            b.homeActivityEyeButton.setOnClickListener {
+                hideBalance()
+            }
         }
     }
 
@@ -555,7 +557,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         TODO("Not yet implemented")
     }
 
-    override fun onClickViewBalance(viewWalletScope: String, data: WalletData) {
+    override fun onClickViewBalance(viewWalletScope: String, data: WalletData?) {
         showBalance(data)
     }
 }
