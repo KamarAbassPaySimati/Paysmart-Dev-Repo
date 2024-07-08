@@ -49,7 +49,7 @@ class CustomerUpdateSimplifiedToFullKYC {
         Thread.sleep(5000)
     }
 
-//    @When("I click on edit button for Kyc details screen")
+    //    @When("I click on edit button for Kyc details screen")
 //    fun iClickOnEditButton() {
 //        Espresso.onView(withId(R.id.editSimplifiedKycSheetEditButton)).perform(ViewActions.click())
 //        Thread.sleep(3000)
@@ -63,7 +63,7 @@ class CustomerUpdateSimplifiedToFullKYC {
     @When("I click on upgrade to full kyc button")
     fun iClickOnUpgradeToFullKYCButton(){
         Espresso.onView(withId(R.id.editSimplifiedKycSheetUpgradeButton)).perform(ViewActions.click())
-        Thread.sleep(3000)
+        Thread.sleep(5000)
     }
     @Then("I should see address details to be prefilled and disabled to edit")
     fun iShouldSeeAddressDetailsPrefilled(){
@@ -91,5 +91,34 @@ class CustomerUpdateSimplifiedToFullKYC {
                 ViewMatchers.withText("Malawi Full KYC Registration")
             )
         )
+    }
+
+    @Then("I should be redirected to customer KYC personal details screen")
+    fun redirectedToMembershipPlanScreen() {
+        Espresso.onView(ViewMatchers.withId(R.id.kycYourPersonalDetailsActivity))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        Thread.sleep(2000)
+    }
+
+    @When("I select back button in Membership Screen")
+    fun i_select_back_button_in_membership_screen( ) {
+        Espresso.onView(withId(R.id.membershipPlansBackButton)).perform(ViewActions.click())
+        Thread.sleep(3000)
+    }
+
+    @Then("I should read a message stating Submission Successful")
+    fun iShouldReadMessageStatingSubmissionSuccessful() {
+        Espresso.onView(ViewMatchers.withId(R.id.kycEditSuccessfulActivitySuccessTV)).check(
+            ViewAssertions.matches(
+                ViewMatchers.isDisplayed()
+            )
+        )
+    }
+
+    @When("I click on the finish button on Edit Successful Screen")
+    fun clickOnFinishButtonOnEditSuccessfulScreen() {
+        Espresso.onView(ViewMatchers.withId(R.id.kycEditSuccessfulActivityFinishButton))
+            .perform(ViewActions.click())
+        Thread.sleep(5000)
     }
 }
