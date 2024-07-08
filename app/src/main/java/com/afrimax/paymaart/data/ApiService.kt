@@ -17,6 +17,8 @@ import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
 import com.afrimax.paymaart.data.model.SaveBasicDetailsSelfKycRequest
+import com.afrimax.paymaart.data.model.SaveIdentitySimplifiedToFullRequest
+import com.afrimax.paymaart.data.model.SaveInfoSimplifiedToFullRequest
 import com.afrimax.paymaart.data.model.SaveNewAddressDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveNewIdentityDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveNewInfoDetailsSelfKycRequest
@@ -126,6 +128,12 @@ interface ApiService {
 
     @POST("$KYC_UPDATE/update/convert-kyc-mobile-customer-self")
     fun switchToFullKyc(@Header("Authorization") header: String): Call<DefaultResponse>
+
+    @POST("$KYC_UPDATE/update/simplifiedtofull-mobile-customer-self")
+    fun saveIdentitySimplifiedToFull(@Header("Authorization") header: String, @Body body: SaveIdentitySimplifiedToFullRequest): Call<DefaultResponse>
+
+    @POST("$KYC_UPDATE/update/simplifiedtofull-mobile-customer-self")
+    fun saveInfoSimplifiedToFull(@Header("Authorization") header: String, @Body body: SaveInfoSimplifiedToFullRequest): Call<DefaultResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
