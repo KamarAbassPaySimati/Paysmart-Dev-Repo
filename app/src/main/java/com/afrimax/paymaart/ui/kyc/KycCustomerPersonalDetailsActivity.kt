@@ -1,7 +1,11 @@
 package com.afrimax.paymaart.ui.kyc
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.text.Editable
 import android.text.InputFilter
 import android.text.Spanned
@@ -36,13 +40,22 @@ import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.EditKycVerificationSheet
 import com.afrimax.paymaart.ui.utils.interfaces.KycYourPersonalDetailsInterface
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
+import com.amplifyframework.kotlin.core.Amplify
+import com.amplifyframework.storage.StorageException
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.UUID
 
 
 class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetailsInterface {
@@ -57,7 +70,14 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     private var isEmailUpdated = false
     private var isPhoneUpdated = false
     private lateinit var nextScreenResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var fileResultLauncher: ActivityResultLauncher<Array<String>>
     private var sendEmail = true
+    private var profilePicUri: Uri? = null
+    private var isPicUploaded: Boolean = false
+    private var isProfilePicUpdated = false
+    private lateinit var profilePicUrl: String
+    private var publicProfile: Boolean = false
+    private var isPublicProfileUpdate: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +102,8 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     private fun initViews() {
         kycScope = intent.getStringExtra(Constants.KYC_SCOPE) ?: ""
         viewScope = intent.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
+        profilePicUrl = intent.getStringExtra(Constants.PROFILE_PICTURE) ?: ""
+        publicProfile = intent.getBooleanExtra(Constants.PUBLIC_PROFILE, false)
 
         if (BuildConfig.STAGE == Constants.STAGE_DEV || BuildConfig.STAGE == Constants.STAGE_QA) {
             //This is required for Indian phone number testing
@@ -137,6 +159,16 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                     sendEmail = data.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
                 }
             }
+
+        fileResultLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+                lifecycleScope.launch {
+                    if (uri != null) {
+                        isPicUploaded = true
+                        isProfilePicUpdated = true
+                        populateSelectedFile(uri)
+                    }
+                }
+            }
     }
 
     private fun setUpLayout() {
@@ -176,6 +208,19 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                 b.kycYourPersonalDetailsActivitySkipButton.visibility = View.GONE
             }
         }
+
+        if (profilePicUrl.isNotEmpty()) {
+            isPicUploaded = true
+            val picUrl = BuildConfig.CDN_BASE_URL + profilePicUrl
+            Glide
+                .with(this)
+                .load(picUrl)
+                .placeholder(R.drawable.ic_no_image)
+                .into(b.kycYourPersonalDetailsActivityProfileIV)
+            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_delete))
+        }
+        if (publicProfile)
+            b.kycYourPersonalDetailsActivityMakeVisibleCB.isChecked = true
     }
 
     private fun setUpListeners() {
@@ -231,7 +276,28 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                 validateFieldsForSubmit()
             }
         }
-
+        b.kycYourPersonalDetailsActivityProfileIV.setOnClickListener {
+            if (!isPicUploaded){
+                launchFilePicker()
+            }
+        }
+        b.kycYourPersonalDetailsActivityCameraIV.setOnClickListener {
+            if (isPicUploaded){
+                isPicUploaded = false
+                profilePicUri = null
+                isProfilePicUpdated = true //ProfilePic is update even when they are removed.
+                b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+                b.kycYourPersonalDetailsActivityProfileIV.apply {
+                    setImageDrawable(ContextCompat.getDrawable(this@KycCustomerPersonalDetailsActivity, R.drawable.ic_no_image))
+                    background = ContextCompat.getDrawable(this@KycCustomerPersonalDetailsActivity, R.drawable.dashed_outline_background)
+                }
+            }else{
+                launchFilePicker()
+            }
+        }
+        b.kycYourPersonalDetailsActivityMakeVisibleCB.setOnClickListener{
+            isPublicProfileUpdate = true
+        }
         setupEditTextFocusListeners()
         setUpEditTextChangeListeners()
         setUpLastNameEditTextFilters(b.kycYourPersonalDetailsActivityLastNameET)
@@ -416,7 +482,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         }
 
         if (isValid) {
-            if (isEmailUpdated || isPhoneUpdated) {
+            if (isEmailUpdated || isPhoneUpdated || isProfilePicUpdated || isPublicProfileUpdate) {
                 //Only call API if anything is changed
                 saveBasicDetailsApi()
             } else {
@@ -635,17 +701,19 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         val phone = b.kycYourPersonalDetailsActivityPhoneET.text.toString().replace(" ", "")
         val countryCode = getCountryCode()
 
-
         lifecycleScope.launch {
+            val picUrl = if (profilePicUri != null) amplifyUpload(profilePicUri!!) else ""
+            "Response".showLogE(picUrl)
             val idToken = fetchIdToken()
-
             val saveBasicDetailsCall = ApiClient.apiService.saveBasicDetailsSelfKyc(
                 idToken, SaveBasicDetailsSelfKycRequest(
                     email = if (isEmailUpdated) email else null,
                     phone_number = if (isPhoneUpdated) phone else null,
                     country_code = if (isPhoneUpdated) countryCode else null,
                     email_id = if (isEmailUpdated) emailRecordId else null,
-                    phone_number_id = if (isPhoneUpdated) phoneRecordId else null
+                    phone_number_id = if (isPhoneUpdated) phoneRecordId else null,
+                    profile_pic = if (isProfilePicUpdated) picUrl else null,
+                    public_profile = if (isPublicProfileUpdate) picUrl.isNotEmpty() || profilePicUrl.isNotEmpty() && b.kycYourPersonalDetailsActivityMakeVisibleCB.isChecked else null
                 )
             )
 
@@ -796,6 +864,80 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         actionButton.text = buttonText
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         loaderLottie.visibility = View.GONE
+    }
+
+    private fun launchFilePicker() {
+        fileResultLauncher.launch(
+            arrayOf(
+                "image/jpeg", "image/jpg", "image/png"
+            )
+        )
+    }
+
+    private suspend fun populateSelectedFile(uri: Uri?) {
+        if (isPicUploaded){
+            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_delete))
+        }else{
+            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+        }
+        if (uri != null) {
+            profilePicUri = uri
+            val stream = contentResolver.openInputStream(uri)
+            if (stream != null) {
+                withContext(Dispatchers.IO) {
+                    if (stream.available() < (10 * 1024 * 1024)) {
+                        runOnUiThread {
+                            Glide.with(this@KycCustomerPersonalDetailsActivity).load(uri)
+                                .placeholder(R.drawable.ic_no_image)
+                                .into(b.kycYourPersonalDetailsActivityProfileIV)
+                        }
+                    } else {
+                        runOnUiThread { showToast("Can't upload file with size greater than 10MB") }
+                    }
+                    stream.close()
+                }
+            }
+        }
+    }
+
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+    private suspend fun amplifyUpload(uri: Uri): String {
+        val paymaartId = retrievePaymaartId()
+        val stream = contentResolver.openInputStream(uri)
+
+        if (stream != null && paymaartId != null) {
+            val objectKey = "customer_profile/${UUID.randomUUID()}/${
+                getFileNameFromUri(
+                    this, uri
+                )
+            }"
+
+            val upload = Amplify.Storage.uploadInputStream(objectKey, stream)
+            try {
+                val result = upload.result()
+                "Result".showLogE(result.key)
+                return result.key
+            } catch (error: StorageException) {
+                //
+                "Result".showLogE(error)
+            }
+        }
+        stream?.close()
+        return ""
+    }
+
+    @SuppressLint("Range")
+    private fun getFileNameFromUri(context: Context, uri: Any): String {
+        if (uri is Uri) {
+            val fileName: String
+            val cursor = context.contentResolver.query(uri, null, null, null, null)
+            cursor?.moveToFirst()
+            fileName = cursor?.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+                ?: "PM_${System.currentTimeMillis()}.jpg"
+            cursor?.close()
+            return fileName
+        }
+        return ""
     }
 
     override fun onEmailVerified(recordId: String) {
