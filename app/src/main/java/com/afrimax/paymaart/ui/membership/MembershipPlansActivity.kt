@@ -1,6 +1,7 @@
 package com.afrimax.paymaart.ui.membership
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
@@ -21,6 +22,7 @@ import com.afrimax.paymaart.ui.home.MembershipType
 import com.afrimax.paymaart.ui.utils.adapters.MembershipPlanAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.MembershipPlansPurchaseBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.MembershipPlansInterface
+import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -127,7 +129,12 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    override fun onSubmitClicked(someData: String) {
-        "Response".showLogE(someData)
+    override fun onSubmitClicked(membershipValidityType: String,  autoRenewal: Boolean,membershipType: String) {
+        val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
+        intent.putExtra(Constants.MEMBERSHIP_VALIDITY_TYPE, membershipValidityType)
+        intent.putExtra(Constants.AUTO_RENEWAL, autoRenewal)
+        intent.putExtra(Constants.MEMBERSHIP_TYPE, membershipType)
+        startActivity(intent)
+        finish()
     }
 }

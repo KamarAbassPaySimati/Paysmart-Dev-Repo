@@ -21,6 +21,7 @@ class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipT
     private lateinit var binding: MembershipPlansPurchaseBottomSheetBinding
     private lateinit var sheetCallBack: MembershipPlansInterface
     private lateinit var renewalType: String
+    private var isAutoRenewal: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,7 +51,8 @@ class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipT
 
         binding.membershipPlansSubmitButton.setOnClickListener {
             dismiss()
-            sheetCallBack.onSubmitClicked(renewalType)
+            isAutoRenewal = binding.membershipPlansAutoRenewalSwitch.isChecked
+            sheetCallBack.onSubmitClicked(renewalType, isAutoRenewal, membershipType.type)
         }
 
     }

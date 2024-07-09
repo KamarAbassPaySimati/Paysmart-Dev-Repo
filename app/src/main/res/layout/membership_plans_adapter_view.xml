@@ -103,7 +103,7 @@
             android:textAlignment="center"
             android:gravity="center"
             android:fontFamily="@font/inter_medium"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="@color/neutralGreyPrimaryText"/>
 
     </LinearLayout>

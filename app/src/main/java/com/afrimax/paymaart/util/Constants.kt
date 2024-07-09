@@ -124,6 +124,9 @@ object Constants {
     const val VIEW_WALLET_SCOPE = "view_wallet_scope"
     const val VIEW_WALLET_SIMPLE_SCOPE = "view_wallet_simple_scope"
     const val VIEW_WALLET_DEDICATED_SCOPE = "view_wallet_dedicated_scope"
+    const val MEMBERSHIP_VALIDITY_TYPE = "membership_validity_type"
+    const val AUTO_RENEWAL = "auto_renewal"
+    const val MEMBERSHIP_TYPE = "membership_type"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"
