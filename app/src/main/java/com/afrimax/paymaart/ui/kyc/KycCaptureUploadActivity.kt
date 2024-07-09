@@ -47,6 +47,8 @@ class KycCaptureUploadActivity : BaseActivity() {
     private var currentDocSide = ""
     private var identityType = ""
     private lateinit var callbackIntent: Intent
+    private var frontUploadType: UploadType = UploadType.PHOTO
+    private var backUploadType: UploadType = UploadType.PHOTO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -219,16 +221,18 @@ class KycCaptureUploadActivity : BaseActivity() {
             //Add the same files to the callbackIntent to return the data to previous activity
             callbackIntent.putExtra(Constants.KYC_DOCUMENT_FRONT_URL, frontDocUrl)
             //The user already uploaded files, show those files
-            if (frontDocUrl.endsWith(".pdf")) loadPdf(
-                getString(R.string.front), frontDocUrl, true
-            )
-            else loadImage(getString(R.string.front), frontDocUrl, true)
+            if (frontDocUrl.endsWith(".pdf")) {
+                frontUploadType = UploadType.FILE
+                loadPdf(getString(R.string.front), frontDocUrl, true)
+            } else
+                loadImage(getString(R.string.front), frontDocUrl, true)
 
             if (backDocUrl != null) {
                 callbackIntent.putExtra(Constants.KYC_DOCUMENT_BACK_URL, backDocUrl)
-                if (backDocUrl.endsWith(".pdf")) loadPdf(
-                    getString(R.string.back), backDocUrl, true
-                )
+                if (backDocUrl.endsWith(".pdf")){
+                    backUploadType = UploadType.FILE
+                    loadPdf(getString(R.string.back), backDocUrl, true)
+                }
                 else loadImage(getString(R.string.back), backDocUrl, true)
             }
         }
@@ -464,11 +468,13 @@ class KycCaptureUploadActivity : BaseActivity() {
         b.kycCaptureUploadActivityFrontCaptureButton.setOnClickListener {
             currentCaptureSide = getString(R.string.front)
             checkPermissionsAndProceed()
+            frontUploadType = UploadType.PHOTO
         }
 
         b.kycCaptureUploadActivityBackCaptureButton.setOnClickListener {
             currentCaptureSide = getString(R.string.back)
             checkPermissionsAndProceed()
+            backUploadType = UploadType.PHOTO
         }
 
         b.kycCaptureUploadActivityFrontRemoveButton.setOnClickListener {
@@ -482,22 +488,30 @@ class KycCaptureUploadActivity : BaseActivity() {
         b.kycCaptureUploadActivityFrontReUploadButton.setOnClickListener {
             removeFrontImage()
             currentCaptureSide = getString(R.string.front)
-            checkPermissionsAndProceed()
+            if (frontUploadType == UploadType.PHOTO)
+                checkPermissionsAndProceed()
+            else
+                launchFilePicker()
         }
 
         b.kycCaptureUploadActivityBackReUploadButton.setOnClickListener {
             removeBackImage()
             currentCaptureSide = getString(R.string.back)
-            checkPermissionsAndProceed()
+            if (backUploadType == UploadType.PHOTO)
+                checkPermissionsAndProceed()
+            else
+                launchFilePicker()
         }
 
         b.kycCaptureUploadActivityFrontUploadButton.setOnClickListener {
             currentDocSide = getString(R.string.front)
             launchFilePicker()
+            frontUploadType = UploadType.FILE
         }
         b.kycCaptureUploadActivityBackUploadButton.setOnClickListener {
             currentDocSide = getString(R.string.back)
             launchFilePicker()
+            backUploadType = UploadType.FILE
         }
 
         b.kycCaptureUploadActivityFileFrontDeleteButton.setOnClickListener {
@@ -819,4 +833,9 @@ class KycCaptureUploadActivity : BaseActivity() {
         loaderLottie.visibility = View.GONE
 
     }
+}
+
+enum class UploadType{
+    PHOTO,
+    FILE
 }
