@@ -538,4 +538,9 @@
     <string name="edit_simplified_kyc">Edit Simplified KYC</string>
     <string name="kyc">kyc</string>
     <string name="next_your_identity">Next - Your Identity</string>
+    <string name="enter_your_pin_to_view_your_wallet_balance">Enter your PIN to view your wallet balance</string>
+    <string name="view_balance">View Balance</string>
+    <string name="enter_your_password_to_view_your_wallet_balance">Enter your password to view your wallet balance</string>
+    <string name="balance_placeholder">⬤⬤⬤⬤</string>
+    <string name="switch_to_full_kyc">Switch to Full KYC</string>
 </resources>

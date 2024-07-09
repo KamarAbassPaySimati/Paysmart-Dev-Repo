@@ -26,6 +26,7 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.HomeScreenData
 import com.afrimax.paymaart.data.model.HomeScreenResponse
+import com.afrimax.paymaart.data.model.WalletData
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
@@ -34,9 +35,12 @@ import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
+import com.afrimax.paymaart.ui.utils.bottomsheets.ViewKycPinSheet
+import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPasswordSheet
+import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPinSheet
+import com.afrimax.paymaart.ui.utils.interfaces.HomeInterface
 import com.afrimax.paymaart.ui.viewkyc.ViewKycDetailsActivity
 import com.afrimax.paymaart.util.Constants
-import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,7 +49,7 @@ import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.Date
 
-class HomeActivity : BaseActivity() {
+class HomeActivity : BaseActivity(), HomeInterface {
     private lateinit var b: ActivityHomeBinding
     private lateinit var homeScreenIconAdapter: HomeScreenIconAdapter
     private var rejectionReasons = ArrayList<String>()
@@ -96,7 +100,7 @@ class HomeActivity : BaseActivity() {
 
         b.homeActivityEyeButton.setOnClickListener {
             if (checkKycStatus()){
-                //
+                onClickEyeButton()
             }
         }
 
@@ -114,7 +118,7 @@ class HomeActivity : BaseActivity() {
 
         b.homeActivityPayPaymaartButton.setOnClickListener {
             if (checkKycStatus()){
-                //
+                startActivity(Intent(this, MembershipPlansActivity::class.java))
             }
         }
         b.homeActivityPayPersonButton.setOnClickListener {
@@ -167,6 +171,58 @@ class HomeActivity : BaseActivity() {
         b.homeActivityTransactionsRecyclerView.adapter = homeScreenIconAdapter
         b.homeActivityMerchantsRecyclerView.adapter = homeScreenIconAdapter
     }
+
+    private fun onClickEyeButton() {
+        val loginMode = retrieveLoginMode() ?: ""
+        when (loginMode) {
+            Constants.SELECTION_PIN -> {
+                ViewWalletPinSheet().apply {
+                    arguments = Bundle().apply {
+                        putString(Constants.VIEW_WALLET_SCOPE, Constants.VIEW_WALLET_SIMPLE_SCOPE)
+                    }
+                    isCancelable = false
+                }.show(supportFragmentManager, ViewKycPinSheet.TAG)
+            }
+
+            Constants.SELECTION_PASSWORD -> {
+                ViewWalletPasswordSheet().apply {
+                    arguments = Bundle().apply {
+                        putString(Constants.VIEW_WALLET_SCOPE, Constants.VIEW_WALLET_SIMPLE_SCOPE)
+                    }
+                    isCancelable = false
+                }.show(supportFragmentManager, ViewKycPinSheet.TAG)
+            }
+        }
+    }
+
+    private fun showBalance(data: WalletData?) {
+        if (data != null){
+            b.homeActivityProfileBalanceTV.text =
+                if (data.accountBalance == null) getString(R.string._0_00)
+                else formatNumber(data.accountBalance.toDouble())
+
+            //Change icon
+            b.homeActivityEyeButton.setBackgroundResource(R.drawable.ico_eye_slash_white)
+
+            //Change click listener function
+            b.homeActivityEyeButton.setOnClickListener {
+                hideBalance()
+            }
+        }
+    }
+
+    private fun hideBalance() {
+        b.homeActivityProfileBalanceTV.text = getString(R.string.balance_placeholder)
+
+        //Change icon
+        b.homeActivityEyeButton.setBackgroundResource(R.drawable.ico_eye_white)
+
+        //Change click listener function
+        b.homeActivityEyeButton.setOnClickListener {
+            onClickEyeButton()
+        }
+    }
+
 
     private fun setDrawerListeners() {
         b.homeActivityNavView.homeDrawerKycDetailsContainer.setOnClickListener {
@@ -341,8 +397,6 @@ class HomeActivity : BaseActivity() {
                 membershipType(MembershipType.GO.typeName, R.color.primeXMemberStrokeColor, R.drawable.prime_x_member_bg)
             }
         }
-        val balanceInt = homeScreenData.accountBalance.toDouble()
-        b.homeActivityProfileBalanceTV.text = formatNumber(balanceInt)
         val kycType = homeScreenData.kycType
         val citizen = homeScreenData.citizen
         val kycStatus = homeScreenData.kycStatus
@@ -470,7 +524,7 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun formatNumber(number: Double): String {
-        val decimalFormat = DecimalFormat("#,###.##")
+        val decimalFormat = DecimalFormat("#,###.00")
 
         return if (number == 0.00) {
             "0.00"
@@ -489,6 +543,22 @@ class HomeActivity : BaseActivity() {
         const val DRAWER_UPDATE_PASSWORD = 9
         const val DRAWER_DELETE_ACCOUNT = 10
         const val DRAWER_LOGOUT = 11
+    }
+
+    override fun onClickOnBoardAgent() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickOnBoardMerchant() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickOnBoardCustomers() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickViewBalance(viewWalletScope: String, data: WalletData?) {
+        showBalance(data)
     }
 }
 
