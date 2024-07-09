@@ -40,12 +40,9 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
-import com.afrimax.paymaart.data.RecaptchaApiClient
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
-import com.afrimax.paymaart.data.model.RecaptchaRequestBody
-import com.afrimax.paymaart.data.model.RecaptchaResponse
 import com.afrimax.paymaart.data.model.SecurityQuestionAnswerModel
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
@@ -62,20 +59,15 @@ import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.kotlin.core.Amplify
 import com.amplifyframework.storage.StorageException
 import com.bumptech.glide.Glide
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.android.gms.safetynet.SafetyNet
-import com.google.android.gms.safetynet.SafetyNetApi
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.recaptcha.Recaptcha
+import com.google.android.recaptcha.RecaptchaAction
+import com.google.android.recaptcha.RecaptchaClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -84,7 +76,6 @@ import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.UUID
-import java.util.concurrent.Executor
 
 class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     private lateinit var b: ActivityRegisterBinding
@@ -97,6 +88,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     private var phoneRecordId = ""
     private var profilePicUri: Uri? = null
     private var isPicUploaded: Boolean = false
+    private lateinit var recaptchaClient: RecaptchaClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,6 +108,20 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         setUpLayout()
         setupListeners()
         retrieveSecurityQuestionsApi()
+        initializeRecaptchaClient()
+    }
+
+    private fun initializeRecaptchaClient() {
+        lifecycleScope.launch {
+            Recaptcha.getClient(application, BuildConfig.SITE_KEY)
+                .onSuccess { client ->
+                    recaptchaClient = client
+                }
+                .onFailure { exception ->
+                    // Handle communication errors ...
+                    // See "Handle communication errors" section
+                }
+        }
     }
 
     private fun setUpLayout() {
@@ -611,26 +617,17 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         if (isValid) {
-//            val siteKey = BuildConfig.SITE_KEY
-//            val secretKey = BuildConfig.SECRET_KEY
-//            SafetyNet.getClient(this@RegisterActivity).verifyWithRecaptcha("6LeE2wgqAAAAAG0Gd8kXjYRgI-YlJfuYrLF6r8uV")
-//                .addOnSuccessListener{ response ->
-//                    // Indicates communication with reCAPTCHA service was
-//                    // successful.
-//                    val userResponseToken = response.tokenResult ?: ""
-//                    "UserToken".showLogE(userResponseToken)
-//                    registerCustomer()
-//                }
-//                .addOnFailureListener{ e ->
-//                    if (e is ApiException) {
-//                        "RecaptchaError".showLogE("Error 1: ${e.message}")
-//                    } else {
-//                        "RecaptchaError".showLogE("Error 2: ${e.message}")
-//                    }
-//                }
-
-            registerCustomer()
-
+            lifecycleScope.launch {
+                recaptchaClient
+                    .execute(RecaptchaAction.SIGNUP)
+                    .onSuccess { token ->
+//                        "Response".showLogE(token)
+                        registerCustomer()
+                    }
+                    .onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                    }
+            }
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
