@@ -555,4 +555,6 @@
     <string name="total_amount">Total Amount</string>
     <string name="txn_fee">"Txn Fee* "</string>
     <string name="vat_included">*VAT Included</string>
+    <string name="amount_formatted">%1$s MWK</string>
+    <string name="send_payment_subtext">Once confirmed, credits sent to Paymaart cannot be reversed.</string>
 </resources>

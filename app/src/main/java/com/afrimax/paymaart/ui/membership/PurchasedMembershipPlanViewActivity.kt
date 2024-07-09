@@ -10,6 +10,7 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityPurchasedMembershipPlanViewBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.home.MembershipType
+import com.afrimax.paymaart.ui.utils.bottomsheets.TotalAmountReceiptBottomSheet
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getDrawableExt
 
@@ -89,6 +90,11 @@ class PurchasedMembershipPlanViewActivity : BaseActivity() {
                 }
                 binding.purchasedMembershipPlanImageBg.background = this.getDrawableExt(R.drawable.ic_go_membership_card_bg)
             }
+        }
+
+        binding.purchasedMembershipPlansSubmitButton.setOnClickListener {
+            val totalAmountBottomSheet = TotalAmountReceiptBottomSheet()
+            totalAmountBottomSheet.show(supportFragmentManager, TotalAmountReceiptBottomSheet.TAG)
         }
     }
 
