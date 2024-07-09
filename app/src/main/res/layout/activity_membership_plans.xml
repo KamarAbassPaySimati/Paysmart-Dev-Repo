@@ -194,7 +194,7 @@
             android:layout_marginHorizontal="4dp">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buy_button_one"
+                android:id="@+id/buy_button_prime"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -215,7 +215,7 @@
             android:layout_marginHorizontal="4dp">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buy_button_two"
+                android:id="@+id/buy_button_prime_x"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -235,7 +235,6 @@
             android:layout_weight="2">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/buy_button_three"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"

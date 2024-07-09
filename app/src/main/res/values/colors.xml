@@ -53,4 +53,5 @@
     <color name="primeMembershipCardColor">#FFA56D</color>
     <color name="primeXMembershipCardColor">#F9E1A8</color>
     <color name="goMembershipCardColor">#FFD7B4</color>
+    <color name="primaryFontColor">#1F1F1F</color>
 </resources>

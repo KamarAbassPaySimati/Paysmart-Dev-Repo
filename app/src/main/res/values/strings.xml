@@ -543,4 +543,8 @@
     <string name="enter_your_password_to_view_your_wallet_balance">Enter your password to view your wallet balance</string>
     <string name="balance_placeholder">⬤⬤⬤⬤</string>
     <string name="switch_to_full_kyc">Switch to Full KYC</string>
+    <string name="select_your_preferred_membership_duration">Select your preferred membership duration</string>
+    <string name="thirty_days_for_300_mwk">30 days for 300.00 MWK</string>
+    <string name="ninety_one_days_for_850_mwk">91 days for 850.00 MWK</string>
+    <string name="auto_renewal">Auto-renewal?</string>
 </resources>

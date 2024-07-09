@@ -18,14 +18,17 @@
         android:theme="@style/Theme.Paymaart"
         tools:targetApi="31">
         <activity
+            android:name=".ui.membership.PurchasedMembershipPlanViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.kyc.KycEditSuccessfulActivity"
             android:exported="false"
             android:taskAffinity=".kyc" />
         <activity
             android:name=".ui.kyc.KycCustomerPersonalDetailsActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:taskAffinity=".kyc" />
+            android:taskAffinity=".kyc"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.viewkyc.ViewKycDetailsActivity"
             android:exported="false"

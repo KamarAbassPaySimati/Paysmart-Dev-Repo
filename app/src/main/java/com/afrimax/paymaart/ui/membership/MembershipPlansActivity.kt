@@ -17,14 +17,17 @@ import com.afrimax.paymaart.data.model.MembershipPlan
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
 import com.afrimax.paymaart.databinding.ActivityMembershipPlansBinding
 import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.ui.home.MembershipType
 import com.afrimax.paymaart.ui.utils.adapters.MembershipPlanAdapter
+import com.afrimax.paymaart.ui.utils.bottomsheets.MembershipPlansPurchaseBottomSheet
+import com.afrimax.paymaart.ui.utils.interfaces.MembershipPlansInterface
 import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MembershipPlansActivity : BaseActivity() {
+class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     private lateinit var binding: ActivityMembershipPlansBinding
     private lateinit var membershipPlanAdapter: MembershipPlanAdapter
     private var planList: MutableList<MembershipPlan> = mutableListOf()
@@ -50,6 +53,18 @@ class MembershipPlansActivity : BaseActivity() {
     private fun setUpView(){
         binding.membershipPlansBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.buyButtonPrime.setOnClickListener {
+            val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIME)
+            membershipPurchasePlansSheet.isCancelable = false
+            membershipPurchasePlansSheet.show(supportFragmentManager, MembershipPlansPurchaseBottomSheet.TAG)
+        }
+
+        binding.buyButtonPrimeX.setOnClickListener {
+            val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIMEX)
+            membershipPurchasePlansSheet.isCancelable = false
+            membershipPurchasePlansSheet.show(supportFragmentManager, MembershipPlansPurchaseBottomSheet.TAG)
         }
     }
 
@@ -110,5 +125,9 @@ class MembershipPlansActivity : BaseActivity() {
         binding.membershipPlansFooter.visibility = View.VISIBLE
         binding.membershipPlanLoaderLottie.visibility = View.GONE
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    override fun onSubmitClicked(someData: String) {
+        "Response".showLogE(someData)
     }
 }
