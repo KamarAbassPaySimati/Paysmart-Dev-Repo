@@ -37,6 +37,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
 import com.afrimax.paymaart.ui.viewkyc.ViewKycDetailsActivity
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.showLogE
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,6 +45,7 @@ import retrofit2.Response
 import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.Date
+import kotlin.coroutines.coroutineContext
 
 class HomeActivity : BaseActivity() {
     private lateinit var b: ActivityHomeBinding
@@ -69,7 +71,10 @@ class HomeActivity : BaseActivity() {
         wic.isAppearanceLightNavigationBars = true
         window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.highlightedLight)
-
+        lifecycleScope.launch {
+            "Response".showLogE(retrievePaymaartId() ?: "")
+            "Response".showLogE(fetchIdToken())
+        }
         initViews()
         setUpListeners()
         setDrawerListeners()
