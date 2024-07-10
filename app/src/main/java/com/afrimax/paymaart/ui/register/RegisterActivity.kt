@@ -613,41 +613,17 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         if (isValid) {
 //            val siteKey = BuildConfig.SITE_KEY
 //            val secretKey = BuildConfig.SECRET_KEY
-//            SafetyNet.getClient(this@RegisterActivity).verifyWithRecaptcha(siteKey)
+//            SafetyNet.getClient(this@RegisterActivity).verifyWithRecaptcha("6LeE2wgqAAAAAG0Gd8kXjYRgI-YlJfuYrLF6r8uV")
 //                .addOnSuccessListener{ response ->
 //                    // Indicates communication with reCAPTCHA service was
 //                    // successful.
 //                    val userResponseToken = response.tokenResult ?: ""
 //                    "UserToken".showLogE(userResponseToken)
-//                    if (response.tokenResult?.isNotEmpty() == true) {
-//                        // Validate the user response token using the
-//                        val executeRecaptcha = RecaptchaApiClient.recaptchaApiService.verifyUserRecaptcha(
-//                            RecaptchaRequestBody(
-//                                secret = secretKey,
-//                                response = userResponseToken
-//                            )
-//                        )
-//                        executeRecaptcha.enqueue(object : Callback<RecaptchaResponse>{
-//                            override fun onResponse(
-//                                call: Call<RecaptchaResponse>,
-//                                response: Response<RecaptchaResponse>,
-//                            ) {
-//                                if (response.isSuccessful && response.body() != null){
-//                                    "RecaptchaResponse".showLogE(response.body() ?: "")
-//                                    registerCustomer()
-//                                }
-//                            }
-//
-//                            override fun onFailure(call: Call<RecaptchaResponse>, throwable: Throwable) {
-//                                TODO("Not yet implemented")
-//                            }
-//
-//                        })
-//                    }
+//                    registerCustomer()
 //                }
 //                .addOnFailureListener{ e ->
 //                    if (e is ApiException) {
-//                        "RecaptchaError".showLogE("Error 1: ${CommonStatusCodes.getStatusCodeString(e.statusCode)}")
+//                        "RecaptchaError".showLogE("Error 1: ${e.message}")
 //                    } else {
 //                        "RecaptchaError".showLogE("Error 2: ${e.message}")
 //                    }
