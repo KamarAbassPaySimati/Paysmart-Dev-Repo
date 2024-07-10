@@ -118,7 +118,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityPayPaymaartButton.setOnClickListener {
             if (checkKycStatus()){
-                //
+                startActivity(Intent(this, MembershipPlansActivity::class.java))
             }
         }
         b.homeActivityPayPersonButton.setOnClickListener {
