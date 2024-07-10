@@ -3,10 +3,13 @@ package com.afrimax.paymaart.ui.utils.bottomsheets
 import android.app.ActionBar.LayoutParams
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.core.content.ContextCompat
@@ -46,13 +49,8 @@ class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipT
         }
 
         binding.membershipPlansSubmitButton.setOnClickListener {
-            dismiss()
-        }
-
-        binding.membershipPlansSubmitButton.setOnClickListener {
-            dismiss()
             isAutoRenewal = binding.membershipPlansAutoRenewalSwitch.isChecked
-            sheetCallBack.onSubmitClicked(renewalType, isAutoRenewal, membershipType.type)
+            onSubmitClicked(renewalType, isAutoRenewal, membershipType.type)
         }
 
     }
@@ -84,6 +82,35 @@ class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipT
             firstButton.isChecked = true
             renewalType = getString(renewalTypeList[0])
         }
+    }
+
+    private fun onSubmitClicked(membershipValidityType: String, autoRenewal: Boolean, membershipType: String){
+        showButtonLoader()
+        Handler(Looper.getMainLooper()).postDelayed({
+            sheetCallBack.onSubmitClicked(membershipValidityType, autoRenewal, membershipType)
+            hideButtonLoader()
+            dismiss()
+        }, 3000)
+
+    }
+
+    private fun showButtonLoader(){
+        binding.membershipPlansSubmitButtonLoaderLottie.visibility = View.VISIBLE
+        binding.membershipPlansSubmitButton.apply {
+            text = ""
+            isEnabled = false
+        }
+        isCancelable = false
+        binding.membershipPlansCloseButton.isEnabled = false
+    }
+
+    private fun hideButtonLoader(){
+        binding.membershipPlansSubmitButtonLoaderLottie.visibility = View.GONE
+        binding.membershipPlansSubmitButton.apply {
+            text = getString(R.string.submit)
+            isEnabled = true
+        }
+        binding.membershipPlansCloseButton.isEnabled = true
     }
 
     override fun onAttach(context: Context) {

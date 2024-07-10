@@ -1,26 +1,33 @@
 package com.afrimax.paymaart.ui.utils.bottomsheets
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.SendPaymentBottomSheetBinding
 import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.LoginPinTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+
 
 class SendPaymentBottomSheet : BottomSheetDialogFragment() {
     private lateinit var binding: SendPaymentBottomSheetBinding
-
+    private lateinit var sheetCallback: SendPaymentInterface
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         binding = SendPaymentBottomSheetBinding.inflate(inflater, container, false)
         setupView()
@@ -30,7 +37,7 @@ class SendPaymentBottomSheet : BottomSheetDialogFragment() {
     private fun setupView(){
         val parentActivity = activity as BaseActivity
         val loginMode = parentActivity.retrieveLoginMode()
-
+        binding.sendPaymentPin.transformationMethod = LoginPinTransformation()
         when (loginMode){
             Constants.SELECTION_PIN -> {
                 binding.sendPaymentPinContainer.visibility = View.VISIBLE
@@ -62,7 +69,7 @@ class SendPaymentBottomSheet : BottomSheetDialogFragment() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(
-                pinText: CharSequence?, index: Int, isBackSpace: Int, isNewDigit: Int
+                pinText: CharSequence?, index: Int, isBackSpace: Int, isNewDigit: Int,
             ) {
                 //Remove any error warning text while typing
                 if (binding.sendPaymentPin.text.toString().isEmpty()) {
@@ -127,7 +134,9 @@ class SendPaymentBottomSheet : BottomSheetDialogFragment() {
             binding.sendPaymentPinETWarning.text = getString(R.string.invalid_pin)
         }
 
-        if (isValid) { }
+        if (isValid) {
+            onConfirmClicked()
+        }
     }
 
     private fun validatePasswordField(){
@@ -144,7 +153,42 @@ class SendPaymentBottomSheet : BottomSheetDialogFragment() {
                 ContextCompat.getDrawable(requireContext(), R.drawable.bg_edit_text_error)
         }
 
-        if (isValid) { }
+        if (isValid) {
+            sheetCallback.onPaymentSuccess()
+        }
+    }
+
+    private fun onConfirmClicked() {
+        val activity = context as BaseActivity
+        showButtonLoader()
+        activity.hideKeyboard(view, requireContext())
+        Handler(Looper.getMainLooper()).postDelayed({
+            sheetCallback.onPaymentSuccess()
+            dismiss()
+            hideButtonLoader()
+        }, 3000)
+    }
+
+
+    private fun showButtonLoader() {
+        binding.sendPaymentConfirmLoaderLottie.visibility = View.VISIBLE
+        binding.sendPaymentConfirm.apply {
+            text = ""
+            isEnabled = false
+        }
+    }
+
+    private fun hideButtonLoader() {
+        binding.sendPaymentConfirmLoaderLottie.visibility = View.GONE
+        binding.sendPaymentConfirm.apply {
+            text = getString(R.string.confirm)
+            isEnabled = true
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        sheetCallback = context as SendPaymentInterface
     }
 
     companion object {

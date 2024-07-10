@@ -1,7 +1,9 @@
 package com.afrimax.paymaart.ui.membership
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -10,11 +12,13 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityPurchasedMembershipPlanViewBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.home.MembershipType
+import com.afrimax.paymaart.ui.payment.PaymentSuccessfulActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.TotalAmountReceiptBottomSheet
+import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getDrawableExt
 
-class PurchasedMembershipPlanViewActivity : BaseActivity() {
+class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface {
     private lateinit var binding: ActivityPurchasedMembershipPlanViewBinding
     private lateinit var membershipValidityType: String
     private lateinit var membershipType: String
@@ -96,6 +100,17 @@ class PurchasedMembershipPlanViewActivity : BaseActivity() {
             val totalAmountBottomSheet = TotalAmountReceiptBottomSheet()
             totalAmountBottomSheet.show(supportFragmentManager, TotalAmountReceiptBottomSheet.TAG)
         }
+    }
+
+    override fun onPaymentSuccess() {
+        val intent = Intent(this, PaymentSuccessfulActivity::class.java)
+        val sceneTransitions = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
+        startActivity(intent, sceneTransitions)
+        finishAfterTransition()
+    }
+
+    override fun onPaymentFailure() {
+        TODO("Not yet implemented")
     }
 
 }

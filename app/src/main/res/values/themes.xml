@@ -76,8 +76,8 @@
     </style>
 
     <style name="switch_theme" parent="Widget.Material3.CompoundButton.MaterialSwitch">
-        <item name="thumbTint">@color/white</item>
-        <item name="trackTint">@color/primaryColor</item>
+        <item name="thumbTint">@color/custom_thumb_tint_color</item>
+        <item name="trackTint">@color/custom_track_tint_color</item>
     </style>
 
 </resources>

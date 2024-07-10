@@ -545,18 +545,6 @@ class HomeActivity : BaseActivity(), HomeInterface {
         const val DRAWER_LOGOUT = 11
     }
 
-    override fun onClickOnBoardAgent() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onClickOnBoardMerchant() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onClickOnBoardCustomers() {
-        TODO("Not yet implemented")
-    }
-
     override fun onClickViewBalance(viewWalletScope: String, data: WalletData?) {
         showBalance(data)
     }
