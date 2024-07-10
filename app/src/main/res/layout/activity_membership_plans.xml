@@ -179,7 +179,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:layout_marginHorizontal="4dp">
+            android:layout_marginEnd="1dp">
 
             <View
                 android:layout_width="match_parent"
@@ -191,7 +191,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:layout_marginHorizontal="4dp">
+            android:layout_marginEnd="1dp"
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buy_button_prime"
@@ -203,7 +204,42 @@
                 android:text="@string/buy"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone"
+                android:layout_marginHorizontal="6dp"/>
+
+            <LinearLayout
+                android:id="@+id/buy_button_prime_switch_container"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/buy_button_prime_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:checked="false"
+                    android:thumbTint="@color/custom_thumb_tint_color_two"
+                    app:trackTint="@color/custom_track_tint_color"
+                    app:switchPadding="0dp"
+                    android:alpha=".5"
+                    android:layout_weight="1"
+                    android:scaleX=".8"
+                    android:scaleY=".8"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:text="@string/auto_renewal_two"
+                    android:textSize="8sp"
+                    android:layout_weight=".5"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -212,7 +248,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:layout_marginHorizontal="4dp">
+            android:layout_marginEnd="1dp"
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/buy_button_prime_x"
@@ -224,7 +261,41 @@
                 android:text="@string/buy"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="visible"
+                android:layout_marginHorizontal="6dp"/>
+
+            <LinearLayout
+                android:id="@+id/buy_button_prime_x_switch_container"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/buy_button_prime_x_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:checked="false"
+                    app:switchPadding="0dp"
+                    android:thumbTint="@color/custom_thumb_tint_color_two"
+                    app:trackTint="@color/custom_track_tint_color"
+                    android:layout_weight="1"
+                    android:scaleX=".8"
+                    android:scaleY=".8"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:text="@string/auto_renewal_two"
+                    android:textSize="8sp"
+                    android:layout_weight=".5"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    tools:ignore="SmallSp" />
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -232,7 +303,8 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2">
+            android:layout_weight="2"
+            android:layout_marginEnd="1dp">
 
             <androidx.appcompat.widget.AppCompatButton
                 style="?android:attr/borderlessButtonStyle"
@@ -243,7 +315,8 @@
                 android:text="@string/free"
                 android:textAllCaps="false"
                 android:textColor="@color/primaryColor"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:layout_marginHorizontal="6dp" />
 
         </LinearLayout>
 

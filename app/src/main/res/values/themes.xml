@@ -80,4 +80,9 @@
         <item name="trackTint">@color/custom_track_tint_color</item>
     </style>
 
+    <style name="switch_theme_two" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="thumbTint">@color/custom_thumb_tint_color_two</item>
+        <item name="trackTint">@color/custom_track_tint_color</item>
+    </style>
+
 </resources>
