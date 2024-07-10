@@ -160,7 +160,7 @@
                                 android:ellipsize="end"
                                 android:fontFamily="@font/inter_regular"
                                 android:maxLines="1"
-                                android:text="@string/_0_00"
+                                android:text="@string/balance_placeholder"
                                 android:textColor="@color/white"
                                 android:textSize="20sp" />
 

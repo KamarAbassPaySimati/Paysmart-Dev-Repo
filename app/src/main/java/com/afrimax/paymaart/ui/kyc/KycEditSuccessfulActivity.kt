@@ -71,7 +71,13 @@ class KycEditSuccessfulActivity : BaseActivity() {
     }
 
     private fun setUpLayout() {
-        //
+        if (viewScope == Constants.VIEW_SCOPE_UPDATE) {
+            b.kycEditSuccessfulActivityKycVerificationTV.text = getString(R.string.switch_to_full_kyc)
+            b.kycEditSuccessfulActivityKycYourIdentityTV
+                .setTextColor(ContextCompat.getColor(this, R.color.neutralGreyPrimaryText))
+            b.kycEditSuccessfulActivityKycYourInfoTV
+                .setTextColor(ContextCompat.getColor(this, R.color.neutralGreyPrimaryText))
+        }
     }
 
     private fun setUpListeners() {
