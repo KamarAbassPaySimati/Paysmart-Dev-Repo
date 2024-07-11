@@ -20,6 +20,7 @@ import com.afrimax.paymaart.databinding.ActivityMembershipPlansBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.home.MembershipType
 import com.afrimax.paymaart.ui.utils.adapters.MembershipPlanAdapter
+import com.afrimax.paymaart.ui.utils.bottomsheets.ConfirmAutoRenewalBottomSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.MembershipPlansPurchaseBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.MembershipPlansInterface
 import com.afrimax.paymaart.util.Constants
@@ -53,6 +54,8 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     }
 
     private fun setUpView(){
+
+
         binding.membershipPlansBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -70,9 +73,8 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         }
 
         binding.buyButtonPrimeSwitch.setOnClickListener {
-            val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIMEX)
-            membershipPurchasePlansSheet.isCancelable = false
-            membershipPurchasePlansSheet.show(supportFragmentManager, MembershipPlansPurchaseBottomSheet.TAG)
+            val confirmAutoRenewalBottomSheet = ConfirmAutoRenewalBottomSheet()
+            confirmAutoRenewalBottomSheet.show(supportFragmentManager, ConfirmAutoRenewalBottomSheet.TAG)
         }
     }
 
@@ -136,15 +138,24 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     }
 
     override fun onSubmitClicked(membershipValidityType: String,  autoRenewal: Boolean,membershipType: String) {
-//        val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
-//        intent.putExtra(Constants.MEMBERSHIP_VALIDITY_TYPE, membershipValidityType)
-//        intent.putExtra(Constants.AUTO_RENEWAL, autoRenewal)
-//        intent.putExtra(Constants.MEMBERSHIP_TYPE, membershipType)
-//        startActivity(intent)
-//        finish()
+        val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
+        intent.putExtra(Constants.MEMBERSHIP_VALIDITY_TYPE, membershipValidityType)
+        intent.putExtra(Constants.AUTO_RENEWAL, autoRenewal)
+        intent.putExtra(Constants.MEMBERSHIP_TYPE, membershipType)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onConfirm() {
+        val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    override fun onCancelClicked() {
         binding.buyButtonPrimeSwitch.apply {
             isChecked = false
-            alpha = 1f
+            alpha = .5f
         }
     }
 }

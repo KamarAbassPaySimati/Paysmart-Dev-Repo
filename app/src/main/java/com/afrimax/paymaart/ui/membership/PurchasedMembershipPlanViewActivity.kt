@@ -41,7 +41,7 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
     }
     private fun setUpView(){
         membershipValidityType = intent.getStringExtra(Constants.MEMBERSHIP_VALIDITY_TYPE) ?: ""
-        membershipType = intent.getStringExtra(Constants.MEMBERSHIP_TYPE) ?: ""
+        membershipType = intent.getStringExtra(Constants.MEMBERSHIP_TYPE) ?: MembershipType.GO.type
         autoRenewal = intent.getBooleanExtra(Constants.AUTO_RENEWAL, false)
 
         when (membershipType) {
