@@ -17,10 +17,12 @@ import androidx.core.content.res.ResourcesCompat
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.MembershipPlansPurchaseBottomSheetBinding
 import com.afrimax.paymaart.ui.home.MembershipType
+import com.afrimax.paymaart.ui.membership.MembershipPlanRenewalType
+import com.afrimax.paymaart.ui.membership.RenewalPlans
 import com.afrimax.paymaart.ui.utils.interfaces.MembershipPlansInterface
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipType): BottomSheetDialogFragment() {
+class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipType, private val planTypes: List<RenewalPlans>): BottomSheetDialogFragment() {
     private lateinit var binding: MembershipPlansPurchaseBottomSheetBinding
     private lateinit var sheetCallBack: MembershipPlansInterface
     private lateinit var renewalType: String
@@ -42,7 +44,7 @@ class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipT
             MembershipType.PRIMEX -> binding.membershipPlansMembershipType.text = getString(R.string.primeX)
             MembershipType.GO -> binding.membershipPlansMembershipType.text = getString(R.string.go)
         }
-        generateRadioButtonOptions(renewalTypeList)
+        generateRadioButtonOptions(planTypes)
 
         binding.membershipPlansCloseButton.setOnClickListener {
             dismiss()
@@ -55,32 +57,34 @@ class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipT
 
     }
 
-    private fun generateRadioButtonOptions(renewalTypeList: List<Int>){
+    private fun generateRadioButtonOptions(renewalTypeList: List<RenewalPlans>) {
         binding.membershipPlansRadioGroup.orientation = LinearLayout.VERTICAL
         val num = renewalTypeList.size - 1
         val fontStyle = ResourcesCompat.getFont(requireContext(), R.font.inter_regular)
-        val mLayoutParams: LinearLayout.LayoutParams = LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 1f)
+        val mLayoutParams: LinearLayout.LayoutParams =
+            LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1f)
         val buttonTint = ContextCompat.getColorStateList(requireContext(), R.color.primaryColor)
-        for (i in 0..num){
-            val radioButton= AppCompatRadioButton(requireContext())
+        for (i in 0..num) {
+            val radioButton = AppCompatRadioButton(requireContext())
             radioButton.apply {
                 buttonTintList = buttonTint
                 id = i
-                setText(renewalTypeList[i])
+                text = getString(R.string.renewal_message_formatted, renewalTypeList[i].planValidity, renewalTypeList[i].planPrice)
                 typeface = fontStyle
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 setPadding(0, 10, 0, 10)
-                setOnClickListener{view ->
-                    renewalType = getString(renewalTypeList[view.id])
+                setOnClickListener { view ->
+                    renewalType = renewalTypeList[view.id].planId
                 }
-                layoutParams = mLayoutParams
+                    layoutParams = mLayoutParams
+                }
+                binding.membershipPlansRadioGroup.addView(radioButton)
             }
-            binding.membershipPlansRadioGroup.addView(radioButton)
-        }
-        if (renewalTypeList.isNotEmpty()){
-            val firstButton = binding.membershipPlansRadioGroup.getChildAt(0) as AppCompatRadioButton
-            firstButton.isChecked = true
-            renewalType = getString(renewalTypeList[0])
+            if (renewalTypeList.isNotEmpty()) {
+                val firstButton =
+                    binding.membershipPlansRadioGroup.getChildAt(0) as AppCompatRadioButton
+                firstButton.isChecked = true
+                renewalType = renewalTypeList[0].planId
         }
     }
 

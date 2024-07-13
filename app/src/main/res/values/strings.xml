@@ -573,4 +573,5 @@
     <string name="confirm_auto_renewal_sub_text">On expiry, membership will revert to Go. Charges will apply to most e-payments. Keep Auto-renew to retain free e-payments.</string>
     <string name="renew_on_expiry">Renew on Expiry</string>
     <string name="activate_auto_renew_now">Activate Auto-renew</string>
+    <string name="renewal_message_formatted">%1$s days for %2$s MWK</string>
 </resources>

@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -24,7 +22,6 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ConfirmAutoRenewalBottomSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.MembershipPlansPurchaseBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.MembershipPlansInterface
 import com.afrimax.paymaart.util.Constants
-import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +31,9 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     private lateinit var binding: ActivityMembershipPlansBinding
     private lateinit var membershipPlanAdapter: MembershipPlanAdapter
     private var planList: MutableList<MembershipPlan> = mutableListOf()
+    private var planTypes: List<MembershipPlanRenewalType> = emptyList()
+    private var primePlanList: MutableList<RenewalPlans> = mutableListOf()
+    private var primeXPlanList: MutableList<RenewalPlans> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
@@ -61,13 +61,19 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         }
 
         binding.buyButtonPrime.setOnClickListener {
-            val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIME)
+            planTypes.forEachIndexed { index, plan ->
+                primePlanList.add(RenewalPlans(membershipType = MembershipType.PRIME.type,planId = "$index", planPrice = plan.primePrice, planValidity = plan.validDate))
+            }
+            val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIME, primePlanList)
             membershipPurchasePlansSheet.isCancelable = false
             membershipPurchasePlansSheet.show(supportFragmentManager, MembershipPlansPurchaseBottomSheet.TAG)
         }
 
         binding.buyButtonPrimeX.setOnClickListener {
-            val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIMEX)
+            planTypes.forEachIndexed { index, plan ->
+                primeXPlanList.add(RenewalPlans(membershipType = MembershipType.PRIMEX.type,planId = "$index", planPrice = plan.primeXPrice, planValidity = plan.validDate))
+            }
+            val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIMEX, primeXPlanList)
             membershipPurchasePlansSheet.isCancelable = false
             membershipPurchasePlansSheet.show(supportFragmentManager, MembershipPlansPurchaseBottomSheet.TAG)
         }
@@ -99,6 +105,7 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
                     hideLoader()
                     val body = response.body()
                     if (response.isSuccessful && body != null){
+                        planTypes = parsePlans(body.membershipPlans)
                         planList.addAll(body.membershipPlans)
                         binding.membershipPlansRecyclerView.adapter?.notifyDataSetChanged()
                     } else {
@@ -116,6 +123,25 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
                 }
             })
         }
+    }
+
+    private fun parsePlans(membershipPlans: List<MembershipPlan>): List<MembershipPlanRenewalType>{
+        val membershipPlanRenewalTypes: MutableList<MembershipPlanRenewalType> = mutableListOf()
+        membershipPlans.forEach { plan ->
+            plan.serviceBeneficiary?.let { serviceBeneficiary ->
+                if (serviceBeneficiary == Constants.MEMBERSHIP) {
+                    membershipPlanRenewalTypes.add(
+                        MembershipPlanRenewalType(
+                            validityDay = plan.subtitle,
+                            primePrice = plan.prime,
+                            primeXPrice = plan.primeX
+                        )
+                    )
+                }
+            }
+
+        }
+        return membershipPlanRenewalTypes
     }
 
     private fun showLoader() {

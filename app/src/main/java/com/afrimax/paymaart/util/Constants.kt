@@ -127,6 +127,7 @@ object Constants {
     const val MEMBERSHIP_VALIDITY_TYPE = "membership_validity_type"
     const val AUTO_RENEWAL = "auto_renewal"
     const val MEMBERSHIP_TYPE = "membership_type"
+    const val MEMBERSHIP = "Membership"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"
