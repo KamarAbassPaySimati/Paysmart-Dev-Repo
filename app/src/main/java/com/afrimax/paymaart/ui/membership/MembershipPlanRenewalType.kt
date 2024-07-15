@@ -4,6 +4,7 @@ data class MembershipPlanRenewalType (
     val validityDay: String?,
     val primePrice: String?,
     val primeXPrice: String?,
+    val referenceNumber: String,
     val validDate: String = getValidDate(validityDay)
 ){
     companion object{

@@ -29,6 +29,9 @@ import com.afrimax.paymaart.data.model.SendOtpForEditSelfKycRequest
 import com.afrimax.paymaart.data.model.SendOtpForEditSelfKycResponse
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
 import com.afrimax.paymaart.data.model.SendOtpResponse
+import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
+import com.afrimax.paymaart.data.model.SubscriptionDetailsResponse
+import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
 import com.afrimax.paymaart.data.model.UpdatePinOrPasswordRequest
 import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
 import com.afrimax.paymaart.data.model.VerifyForgotOtpResponse
@@ -47,6 +50,8 @@ import retrofit2.http.Query
 private const val CUSTOMER_USER = "customer-user"
 private const val BDD = "bdd"
 private const val KYC_UPDATE = "kyc-update"
+private const val PAYMAART = "paymaart"
+private const val CUSTOMER = "customer"
 interface ApiService {
 
     @GET("$CUSTOMER_USER/security-questions")
@@ -138,6 +143,12 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/view-wallet")
     fun viewWallet(@Header("Authorization") header: String, @Query("password") password: String): Call<ViewWalletResponse>
+
+    @POST("$PAYMAART/$CUSTOMER/subscription-details")
+    fun getSubscriptionDetails(@Header("Authorization") header: String, @Body body: SubscriptionDetailsRequestBody) : Call<SubscriptionDetailsResponse>
+
+    @POST("$PAYMAART/$CUSTOMER/subscription-payment")
+    fun subscriptionPayment(@Header("Authorization") header: String, @Body body: SubscriptionPaymentRequestBody): Call<Any>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

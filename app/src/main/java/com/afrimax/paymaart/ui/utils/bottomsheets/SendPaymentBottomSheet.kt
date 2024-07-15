@@ -12,18 +12,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
+import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
 import com.afrimax.paymaart.databinding.SendPaymentBottomSheetBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
+import com.afrimax.paymaart.util.AESCrypt
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.LoginPinTransformation
+import com.afrimax.paymaart.util.showLogE
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
-class SendPaymentBottomSheet : BottomSheetDialogFragment() {
+class SendPaymentBottomSheet(private val subscriptionDetailsRequestBody: SubscriptionDetailsRequestBody) : BottomSheetDialogFragment() {
     private lateinit var binding: SendPaymentBottomSheetBinding
     private lateinit var sheetCallback: SendPaymentInterface
+    private lateinit var parentActivity: BaseActivity
+    private lateinit var loginMode: String
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,8 +47,9 @@ class SendPaymentBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setupView(){
-        val parentActivity = activity as BaseActivity
-        val loginMode = parentActivity.retrieveLoginMode()
+        parentActivity = activity as BaseActivity
+        loginMode = parentActivity.retrieveLoginMode() ?: Constants.SELECTION_PIN
+        "Response".showLogE(subscriptionDetailsRequestBody)
         binding.sendPaymentPin.transformationMethod = LoginPinTransformation()
         when (loginMode){
             Constants.SELECTION_PIN -> {
@@ -135,7 +148,7 @@ class SendPaymentBottomSheet : BottomSheetDialogFragment() {
         }
 
         if (isValid) {
-            onConfirmClicked()
+            onConfirmClicked(binding.sendPaymentPin.text.toString())
         }
     }
 
@@ -154,20 +167,63 @@ class SendPaymentBottomSheet : BottomSheetDialogFragment() {
         }
 
         if (isValid) {
-            sheetCallback.onPaymentSuccess()
+            onConfirmClicked(binding.sendPaymentPassword.text.toString())
         }
     }
 
-    private fun onConfirmClicked() {
+    private fun onConfirmClicked(password: String) {
         val activity = context as BaseActivity
+        val credential = AESCrypt.encrypt(password)
         showButtonLoader()
-        activity.hideKeyboard(view, requireContext())
-        Handler(Looper.getMainLooper()).postDelayed({
-            sheetCallback.onPaymentSuccess()
-            dismiss()
-            hideButtonLoader()
-        }, 3000)
+        val subscriptionPaymentRequestBody = SubscriptionPaymentRequestBody(
+            referenceNumber = subscriptionDetailsRequestBody.referenceNumber,
+            subType = subscriptionDetailsRequestBody.subType,
+            credentials = credential
+        )
+
+        lifecycleScope.launch {
+            val idToken = activity.fetchIdToken()
+            val subscriptionHandler = ApiClient.apiService.subscriptionPayment(
+                idToken,
+                subscriptionPaymentRequestBody
+            )
+
+            subscriptionHandler.enqueue(object : Callback<Any> {
+                override fun onResponse(call: Call<Any>, response: Response<Any>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        sheetCallback.onPaymentSuccess()
+                        "Response Success".showLogE(response.body() ?: "")
+                    }else {
+                        "Response Error".showLogE(response.errorBody()?.string() ?: "")
+                        when (loginMode) {
+                           Constants.SELECTION_PIN -> {
+                               binding.sendPaymentPinETWarning.apply {
+                                   visibility = View.VISIBLE
+                                   text = getString(R.string.invalid_pin)
+                               }
+                           }
+                           Constants.SELECTION_PASSWORD -> {
+                               binding.sendPaymentPasswordETWarning.apply {
+                                   visibility = View.VISIBLE
+                                   text = getString(R.string.invalid_password)
+                               }
+                           }
+                       }
+                    }
+                    hideButtonLoader()
+                }
+
+                override fun onFailure(call: Call<Any>, throwable: Throwable) {
+                    activity.showToast(getString(R.string.default_error_toast))
+                    hideButtonLoader()
+                }
+
+            })
+        }
+
     }
+
+
 
 
     private fun showButtonLoader() {

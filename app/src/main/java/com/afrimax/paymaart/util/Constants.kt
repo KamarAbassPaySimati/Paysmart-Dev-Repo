@@ -128,6 +128,11 @@ object Constants {
     const val AUTO_RENEWAL = "auto_renewal"
     const val MEMBERSHIP_TYPE = "membership_type"
     const val MEMBERSHIP = "Membership"
+    const val MEMBERSHIP_MODEL = "membership_model"
+    const val DISPLAY_TYPE = "display_type"
+    const val HOME_SCREEN_BANNER = "home_screen_banner"
+    const val RENEWAL_TYPE = "renewal_type"
+    const val NEW_SUBSCRIPTION = "new_subscription"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

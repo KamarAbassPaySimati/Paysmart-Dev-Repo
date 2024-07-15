@@ -467,6 +467,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         if(membershipType == MembershipType.GO.type && kycStatus == Constants.KYC_STATUS_COMPLETED && bannerVisibility){
             val i = Intent(this, MembershipPlansActivity::class.java)
             i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            i.putExtra(Constants.DISPLAY_TYPE, Constants.HOME_SCREEN_BANNER)
             val options = ActivityOptions.makeSceneTransitionAnimation(this).toBundle()
             //Kept some delay before the transition
             Handler(Looper.getMainLooper()).postDelayed({
@@ -550,8 +551,8 @@ class HomeActivity : BaseActivity(), HomeInterface {
     }
 }
 
-enum class MembershipType(val type: String, val typeName: String){
-    GO("GO", "Go Member"),
-    PRIME("PRIME", "Prime Member"),
-    PRIMEX("PRIMEX", "PrimeX Member")
+enum class MembershipType(val type: String, val typeName: String, val displayName: String){
+    GO("GO", "Go Member", "Go"),
+    PRIME("PRIME", "Prime Member", "Prime"),
+    PRIMEX("PRIMEX", "PrimeX Member", "PrimeX")
 }

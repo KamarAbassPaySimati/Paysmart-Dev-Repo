@@ -548,7 +548,7 @@
     <string name="ninety_one_days_for_850_mwk">91 days for 850.00 MWK</string>
     <string name="auto_renewal">Auto-renewal?</string>
     <string name="auto_renewal_two">Auto Renewal</string>
-    <string name="membership_plan_formatted">%1$s | %2$s | %3$s</string>
+    <string name="membership_plan_formatted">%1$s days| %2$s | Auto Renewal %3$s</string>
     <string name="membership_plan_validity_formatted">Validity %1$s - %2$s</string>
     <string name="membership_type_formatted">%1$s Membership</string>
     <string name="send_payment">Send Payment</string>

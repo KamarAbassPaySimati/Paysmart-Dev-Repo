@@ -1,9 +1,9 @@
 package com.afrimax.paymaart.ui.utils.interfaces
 
-import com.afrimax.paymaart.ui.home.MembershipType
+import com.afrimax.paymaart.ui.membership.MembershipPlanModel
 
 interface MembershipPlansInterface {
-    fun onSubmitClicked(membershipValidityType: String, autoRenewal: Boolean, membershipType: String)
+    fun onSubmitClicked(membershipPlanModel: MembershipPlanModel)
     //For auto-renewal.
     fun onConfirm()
     fun onCancelClicked()

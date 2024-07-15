@@ -103,7 +103,8 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:visibility="gone">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -152,6 +153,7 @@
     </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/purchasedMembershipPlansSubmitButtonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

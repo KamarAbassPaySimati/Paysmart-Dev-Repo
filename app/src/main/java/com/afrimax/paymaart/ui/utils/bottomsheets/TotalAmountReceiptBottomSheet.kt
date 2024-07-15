@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.model.SubscriptionDetails
+import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.databinding.TotalAmountReceiptBottomSheetBinding
 import com.afrimax.paymaart.util.getFormattedAmount
+import com.afrimax.paymaart.util.showLogE
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class TotalAmountReceiptBottomSheet: BottomSheetDialogFragment() {
+class TotalAmountReceiptBottomSheet(private val subscriptionDetails: SubscriptionDetails, private val subscriptionDetailsRequestBody: SubscriptionDetailsRequestBody): BottomSheetDialogFragment() {
     private lateinit var binding: TotalAmountReceiptBottomSheetBinding
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -23,13 +25,13 @@ class TotalAmountReceiptBottomSheet: BottomSheetDialogFragment() {
     }
 
     private fun setupView(){
-        binding.totalAmountReceiptTotalAmount.text = getString(R.string.amount_formatted, getFormattedAmount("100".toDouble()))
-        binding.totalAmountReceiptTxnFee.text = getString(R.string.amount_formatted, getFormattedAmount("100".toDouble()))
-        binding.totalAmountReceiptVatIncluded.text = getString(R.string.amount_formatted, getFormattedAmount("0".toDouble()))
+        binding.totalAmountReceiptTotalAmount.text = getString(R.string.amount_formatted, getFormattedAmount(subscriptionDetails.totalAmount))
+        binding.totalAmountReceiptTxnFee.text = getString(R.string.amount_formatted, getFormattedAmount(subscriptionDetails.transactionFee))
+        binding.totalAmountReceiptVatIncluded.text = getString(R.string.amount_formatted, getFormattedAmount(subscriptionDetails.vat))
 
         binding.totalAmountReceiptProceed.setOnClickListener {
             dismiss()
-            val sendPaymentBottomSheet = SendPaymentBottomSheet()
+            val sendPaymentBottomSheet = SendPaymentBottomSheet(subscriptionDetailsRequestBody)
             sendPaymentBottomSheet.isCancelable = false
             sendPaymentBottomSheet.show(requireActivity().supportFragmentManager, SendPaymentBottomSheet.TAG)
 

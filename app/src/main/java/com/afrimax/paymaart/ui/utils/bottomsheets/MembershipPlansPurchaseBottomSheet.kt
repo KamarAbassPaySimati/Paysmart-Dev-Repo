@@ -9,7 +9,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatRadioButton
 import androidx.core.content.ContextCompat
@@ -17,16 +16,17 @@ import androidx.core.content.res.ResourcesCompat
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.MembershipPlansPurchaseBottomSheetBinding
 import com.afrimax.paymaart.ui.home.MembershipType
-import com.afrimax.paymaart.ui.membership.MembershipPlanRenewalType
+import com.afrimax.paymaart.ui.membership.MembershipPlanModel
+import com.afrimax.paymaart.ui.membership.PaymentType
 import com.afrimax.paymaart.ui.membership.RenewalPlans
 import com.afrimax.paymaart.ui.utils.interfaces.MembershipPlansInterface
+import com.afrimax.paymaart.util.showLogE
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipType, private val planTypes: List<RenewalPlans>): BottomSheetDialogFragment() {
     private lateinit var binding: MembershipPlansPurchaseBottomSheetBinding
     private lateinit var sheetCallBack: MembershipPlansInterface
-    private lateinit var renewalType: String
-    private var isAutoRenewal: Boolean = false
+    private lateinit var membershipPlanModel: MembershipPlanModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,7 +38,6 @@ class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipT
     }
 
     private fun setUpView(membershipType: MembershipType){
-        val renewalTypeList = listOf(R.string.thirty_days_for_300_mwk, R.string.ninety_one_days_for_850_mwk)
         when (membershipType) {
             MembershipType.PRIME -> binding.membershipPlansMembershipType.text = getString(R.string.prime)
             MembershipType.PRIMEX -> binding.membershipPlansMembershipType.text = getString(R.string.primeX)
@@ -51,8 +50,7 @@ class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipT
         }
 
         binding.membershipPlansSubmitButton.setOnClickListener {
-            isAutoRenewal = binding.membershipPlansAutoRenewalSwitch.isChecked
-            onSubmitClicked(renewalType, isAutoRenewal, membershipType.type)
+            onSubmitClicked()
         }
 
     }
@@ -74,29 +72,39 @@ class MembershipPlansPurchaseBottomSheet(private val membershipType: MembershipT
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 setPadding(0, 10, 0, 10)
                 setOnClickListener { view ->
-                    renewalType = renewalTypeList[view.id].planId
+                    membershipPlanModel = MembershipPlanModel(
+                        membershipType = renewalTypeList[view.id].membershipType,
+                        validity = renewalTypeList[view.id].planValidity,
+                        referenceNumber = renewalTypeList[view.id].referenceNumber,
+                        paymentType = PaymentType.PREPAID.type,
+                    )
                 }
                     layoutParams = mLayoutParams
                 }
-                binding.membershipPlansRadioGroup.addView(radioButton)
-            }
-            if (renewalTypeList.isNotEmpty()) {
-                val firstButton =
-                    binding.membershipPlansRadioGroup.getChildAt(0) as AppCompatRadioButton
-                firstButton.isChecked = true
-                renewalType = renewalTypeList[0].planId
+            binding.membershipPlansRadioGroup.addView(radioButton)
+        }
+        if (renewalTypeList.isNotEmpty()) {
+            val firstButton = binding.membershipPlansRadioGroup.getChildAt(0) as AppCompatRadioButton
+            firstButton.isChecked = true
+            membershipPlanModel = MembershipPlanModel(
+                membershipType = renewalTypeList[0].membershipType,
+                validity = renewalTypeList[0].planValidity,
+                referenceNumber = renewalTypeList[0].referenceNumber,
+                paymentType = PaymentType.PREPAID.type,
+            )
         }
     }
 
-    private fun onSubmitClicked(membershipValidityType: String, autoRenewal: Boolean, membershipType: String){
-        showButtonLoader()
+    private fun onSubmitClicked(){
+        dismiss()
         Handler(Looper.getMainLooper()).postDelayed({
-            sheetCallBack.onSubmitClicked(membershipValidityType, autoRenewal, membershipType)
-            hideButtonLoader()
-            dismiss()
-        }, 3000)
+            sheetCallBack.onSubmitClicked(membershipPlanModel.copy(renewalType = isAutoRenewal))
+        }, 250)
 
     }
+
+    private val isAutoRenewal: Boolean
+        get() = binding.membershipPlansAutoRenewalSwitch.isChecked
 
     private fun showButtonLoader(){
         binding.membershipPlansSubmitButtonLoaderLottie.visibility = View.VISIBLE

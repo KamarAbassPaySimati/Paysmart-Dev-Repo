@@ -117,6 +117,7 @@ class ViewWalletPinSheet : BottomSheetDialogFragment() {
             val activity = requireActivity() as HomeActivity
             val idToken = activity.fetchIdToken()
             val encryptedPin = AESCrypt.encrypt(b.viewWalletPinSheetET.text.toString())
+            "REsponse".showLogE(encryptedPin)
             val selfKycDetailsCall = ApiClient.apiService.viewWallet(idToken, encryptedPin)
 
             selfKycDetailsCall.enqueue(object : Callback<ViewWalletResponse> {

@@ -3,8 +3,12 @@ package com.afrimax.paymaart.ui.membership
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
+import android.transition.Slide
+import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.AccelerateInterpolator
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -22,6 +26,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ConfirmAutoRenewalBottomSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.MembershipPlansPurchaseBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.MembershipPlansInterface
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,8 +37,7 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     private lateinit var membershipPlanAdapter: MembershipPlanAdapter
     private var planList: MutableList<MembershipPlan> = mutableListOf()
     private var planTypes: List<MembershipPlanRenewalType> = emptyList()
-    private var primePlanList: MutableList<RenewalPlans> = mutableListOf()
-    private var primeXPlanList: MutableList<RenewalPlans> = mutableListOf()
+    private var displayType: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
@@ -54,15 +58,19 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     }
 
     private fun setUpView(){
+        displayType = intent.getStringExtra(Constants.DISPLAY_TYPE) ?: ""
 
-
+        if (displayType == Constants.HOME_SCREEN_BANNER) {
+            setEntryAnimation()
+        }
         binding.membershipPlansBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         binding.buyButtonPrime.setOnClickListener {
-            planTypes.forEachIndexed { index, plan ->
-                primePlanList.add(RenewalPlans(membershipType = MembershipType.PRIME.type,planId = "$index", planPrice = plan.primePrice, planValidity = plan.validDate))
+            val primePlanList: MutableList<RenewalPlans> = mutableListOf()
+            planTypes.forEach { plan ->
+                primePlanList.add(RenewalPlans(membershipType = MembershipType.PRIME.type,referenceNumber = plan.referenceNumber, planPrice = plan.primePrice, planValidity = plan.validDate))
             }
             val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIME, primePlanList)
             membershipPurchasePlansSheet.isCancelable = false
@@ -70,8 +78,9 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         }
 
         binding.buyButtonPrimeX.setOnClickListener {
-            planTypes.forEachIndexed { index, plan ->
-                primeXPlanList.add(RenewalPlans(membershipType = MembershipType.PRIMEX.type,planId = "$index", planPrice = plan.primeXPrice, planValidity = plan.validDate))
+            val primeXPlanList: MutableList<RenewalPlans> = mutableListOf()
+            planTypes.forEach { plan ->
+                primeXPlanList.add(RenewalPlans(membershipType = MembershipType.PRIMEX.type,referenceNumber = plan.referenceNumber, planPrice = plan.primeXPrice, planValidity = plan.validDate))
             }
             val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIMEX, primeXPlanList)
             membershipPurchasePlansSheet.isCancelable = false
@@ -134,7 +143,8 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
                         MembershipPlanRenewalType(
                             validityDay = plan.subtitle,
                             primePrice = plan.prime,
-                            primeXPrice = plan.primeX
+                            primeXPrice = plan.primeX,
+                            referenceNumber = plan.referenceNumber ?: ""
                         )
                     )
                 }
@@ -163,19 +173,25 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    override fun onSubmitClicked(membershipValidityType: String,  autoRenewal: Boolean,membershipType: String) {
+    private fun setEntryAnimation() {
+        val slide = Slide()
+        slide.slideEdge = Gravity.BOTTOM
+        slide.setDuration(200)
+        slide.setInterpolator(AccelerateInterpolator())
+        window.enterTransition = slide
+        window.returnTransition = slide
+    }
+
+    override fun onSubmitClicked(membershipPlanModel: MembershipPlanModel) {
         val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
-        intent.putExtra(Constants.MEMBERSHIP_VALIDITY_TYPE, membershipValidityType)
-        intent.putExtra(Constants.AUTO_RENEWAL, autoRenewal)
-        intent.putExtra(Constants.MEMBERSHIP_TYPE, membershipType)
+        intent.putExtra(Constants.MEMBERSHIP_MODEL, membershipPlanModel as Parcelable)
+        intent.putExtra(Constants.RENEWAL_TYPE, Constants.NEW_SUBSCRIPTION)
         startActivity(intent)
-        finish()
     }
 
     override fun onConfirm() {
         val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
         startActivity(intent)
-        finish()
     }
 
     override fun onCancelClicked() {

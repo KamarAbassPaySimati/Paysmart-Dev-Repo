@@ -24,7 +24,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.membership.PurchasedMembershipPlanViewActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:taskAffinity=".membership"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.kyc.KycEditSuccessfulActivity"
             android:exported="false"
@@ -52,7 +54,8 @@
         <activity
             android:name=".ui.membership.MembershipPlansActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:taskAffinity=""
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.delete.DeleteAccountActivity"
             android:exported="false"
