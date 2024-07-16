@@ -186,15 +186,15 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
 
         when (kycScope) {
             Constants.KYC_MALAWI_FULL -> {
-                b.kycYourPersonalDetailsActivityHeaderTV.text = getString(R.string.full_kyc)
+                b.kycYourPersonalDetailsActivityTitleTV.text = getString(R.string.full_kyc_reg)
             }
 
             Constants.KYC_MALAWI_SIMPLIFIED -> {
-                b.kycYourPersonalDetailsActivityHeaderTV.text = getString(R.string.simplified_kyc)
+                b.kycYourPersonalDetailsActivityTitleTV.text = getString(R.string.simplified_kyc)
             }
 
             Constants.KYC_NON_MALAWI -> {
-                b.kycYourPersonalDetailsActivityHeaderTV.text = getString(R.string.non_malawi_full_kyc)
+                b.kycYourPersonalDetailsActivityTitleTV.text = getString(R.string.non_malawi_full_kyc)
             }
         }
 

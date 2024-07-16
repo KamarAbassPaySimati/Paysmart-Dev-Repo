@@ -57,6 +57,8 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var isSettingsClicked: Boolean = false
     private var publicProfile: Boolean = false
     private var profilePicUrl: String = ""
+    private var mMembershipType: String = ""
+    private var mKycStatus: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -118,7 +120,9 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityPayPaymaartButton.setOnClickListener {
             if (checkKycStatus()){
-                startActivity(Intent(this, MembershipPlansActivity::class.java))
+                val intent = Intent(this, MembershipPlansActivity::class.java)
+                intent.putExtra(Constants.MEMBERSHIP_TYPE, mMembershipType)
+                startActivity(intent)
             }
         }
         b.homeActivityPayPersonButton.setOnClickListener {
@@ -401,7 +405,8 @@ class HomeActivity : BaseActivity(), HomeInterface {
         val citizen = homeScreenData.citizen
         val kycStatus = homeScreenData.kycStatus
         val completedStatus = homeScreenData.completed
-        val membershipType = homeScreenData.membership
+        mMembershipType = homeScreenData.membership
+        mKycStatus = homeScreenData.kycStatus
         profilePicUrl = homeScreenData.profilePic
         publicProfile = homeScreenData.publicProfile
         rejectionReasons = homeScreenData.rejectionReasons ?: ArrayList()
@@ -463,8 +468,13 @@ class HomeActivity : BaseActivity(), HomeInterface {
                     getString(R.string.non_malawi_full_kyc_registration)
             }
         }
+        showMembershipBanner()
+        hideLoader()
+    }
+
+    private fun showMembershipBanner() {
         val bannerVisibility = getBannerVisibility()
-        if(membershipType == MembershipType.GO.type && kycStatus == Constants.KYC_STATUS_COMPLETED && bannerVisibility){
+        if(mMembershipType == MembershipType.GO.type && mKycStatus == Constants.KYC_STATUS_COMPLETED && bannerVisibility){
             val i = Intent(this, MembershipPlansActivity::class.java)
             i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
             i.putExtra(Constants.DISPLAY_TYPE, Constants.HOME_SCREEN_BANNER)
@@ -476,7 +486,6 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
 
         }
-        hideLoader()
     }
 
     private fun checkKycStatus(): Boolean {

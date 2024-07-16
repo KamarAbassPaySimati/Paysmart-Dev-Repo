@@ -38,6 +38,7 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     private var planList: MutableList<MembershipPlan> = mutableListOf()
     private var planTypes: List<MembershipPlanRenewalType> = emptyList()
     private var displayType: String = ""
+    private var membershipType: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
@@ -59,7 +60,7 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
 
     private fun setUpView(){
         displayType = intent.getStringExtra(Constants.DISPLAY_TYPE) ?: ""
-
+        membershipType = intent.getStringExtra(Constants.MEMBERSHIP_TYPE) ?: ""
         if (displayType == Constants.HOME_SCREEN_BANNER) {
             setEntryAnimation()
         }
@@ -88,9 +89,11 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         }
 
         binding.buyButtonPrimeSwitch.setOnClickListener {
-            val confirmAutoRenewalBottomSheet = ConfirmAutoRenewalBottomSheet()
-            confirmAutoRenewalBottomSheet.show(supportFragmentManager, ConfirmAutoRenewalBottomSheet.TAG)
+//            val confirmAutoRenewalBottomSheet = ConfirmAutoRenewalBottomSheet()
+//            confirmAutoRenewalBottomSheet.show(supportFragmentManager, ConfirmAutoRenewalBottomSheet.TAG)
         }
+
+        setMembershipButtons()
     }
 
     private fun setUpRecyclerView(){
@@ -101,6 +104,26 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         }
 
         setMembershipBannerVisibility(false)
+    }
+
+    private fun setMembershipButtons() {
+        when(membershipType) {
+            MembershipType.PRIME.type -> {
+                binding.buyButtonPrime.visibility = View.GONE
+                binding.buyButtonPrimeSwitchContainer.visibility = View.VISIBLE
+                if (!binding.buyButtonPrimeSwitch.isChecked) {
+                    binding.buyButtonPrimeSwitch.alpha = .2f
+                }
+            }
+            MembershipType.PRIMEX.type -> {
+                binding.buyButtonPrimeX.visibility = View.GONE
+                binding.buyButtonPrimeXSwitchContainer.visibility = View.VISIBLE
+                if (!binding.buyButtonPrimeXSwitch.isChecked) {
+                    "Response".showLogE("Hello")
+                    binding.buyButtonPrimeXSwitch.alpha = .2f
+                }
+            }
+        }
     }
 
     private fun populateMemberShipPlan(){
