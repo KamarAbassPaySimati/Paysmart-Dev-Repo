@@ -57,7 +57,7 @@
                 android:fontFamily="@font/inter_medium"
                 android:includeFontPadding="false"
                 android:text="@string/personal_details"
-                android:textColor="@color/black"
+                android:textColor="@color/neutralGreyPrimaryText"
                 android:textSize="24sp" />
 
 

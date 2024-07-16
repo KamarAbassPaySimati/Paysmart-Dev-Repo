@@ -1,11 +1,14 @@
 package com.afrimax.paymaart.ui.membership
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
+import android.transition.Slide
+import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import android.view.animation.AccelerateInterpolator
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -17,17 +20,25 @@ import com.afrimax.paymaart.data.model.MembershipPlan
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
 import com.afrimax.paymaart.databinding.ActivityMembershipPlansBinding
 import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.ui.home.MembershipType
 import com.afrimax.paymaart.ui.utils.adapters.MembershipPlanAdapter
+import com.afrimax.paymaart.ui.utils.bottomsheets.ConfirmAutoRenewalBottomSheet
+import com.afrimax.paymaart.ui.utils.bottomsheets.MembershipPlansPurchaseBottomSheet
+import com.afrimax.paymaart.ui.utils.interfaces.MembershipPlansInterface
+import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MembershipPlansActivity : BaseActivity() {
+class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     private lateinit var binding: ActivityMembershipPlansBinding
     private lateinit var membershipPlanAdapter: MembershipPlanAdapter
     private var planList: MutableList<MembershipPlan> = mutableListOf()
+    private var planTypes: List<MembershipPlanRenewalType> = emptyList()
+    private var displayType: String = ""
+    private var membershipType: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
@@ -48,9 +59,41 @@ class MembershipPlansActivity : BaseActivity() {
     }
 
     private fun setUpView(){
+        displayType = intent.getStringExtra(Constants.DISPLAY_TYPE) ?: ""
+        membershipType = intent.getStringExtra(Constants.MEMBERSHIP_TYPE) ?: ""
+        if (displayType == Constants.HOME_SCREEN_BANNER) {
+            setEntryAnimation()
+        }
         binding.membershipPlansBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        binding.buyButtonPrime.setOnClickListener {
+            val primePlanList: MutableList<RenewalPlans> = mutableListOf()
+            planTypes.forEach { plan ->
+                primePlanList.add(RenewalPlans(membershipType = MembershipType.PRIME.type,referenceNumber = plan.referenceNumber, planPrice = plan.primePrice, planValidity = plan.validDate))
+            }
+            val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIME, primePlanList)
+            membershipPurchasePlansSheet.isCancelable = false
+            membershipPurchasePlansSheet.show(supportFragmentManager, MembershipPlansPurchaseBottomSheet.TAG)
+        }
+
+        binding.buyButtonPrimeX.setOnClickListener {
+            val primeXPlanList: MutableList<RenewalPlans> = mutableListOf()
+            planTypes.forEach { plan ->
+                primeXPlanList.add(RenewalPlans(membershipType = MembershipType.PRIMEX.type,referenceNumber = plan.referenceNumber, planPrice = plan.primeXPrice, planValidity = plan.validDate))
+            }
+            val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheet(MembershipType.PRIMEX, primeXPlanList)
+            membershipPurchasePlansSheet.isCancelable = false
+            membershipPurchasePlansSheet.show(supportFragmentManager, MembershipPlansPurchaseBottomSheet.TAG)
+        }
+
+        binding.buyButtonPrimeSwitch.setOnClickListener {
+//            val confirmAutoRenewalBottomSheet = ConfirmAutoRenewalBottomSheet()
+//            confirmAutoRenewalBottomSheet.show(supportFragmentManager, ConfirmAutoRenewalBottomSheet.TAG)
+        }
+
+        setMembershipButtons()
     }
 
     private fun setUpRecyclerView(){
@@ -61,6 +104,26 @@ class MembershipPlansActivity : BaseActivity() {
         }
 
         setMembershipBannerVisibility(false)
+    }
+
+    private fun setMembershipButtons() {
+        when(membershipType) {
+            MembershipType.PRIME.type -> {
+                binding.buyButtonPrime.visibility = View.GONE
+                binding.buyButtonPrimeSwitchContainer.visibility = View.VISIBLE
+                if (!binding.buyButtonPrimeSwitch.isChecked) {
+                    binding.buyButtonPrimeSwitch.alpha = .2f
+                }
+            }
+            MembershipType.PRIMEX.type -> {
+                binding.buyButtonPrimeX.visibility = View.GONE
+                binding.buyButtonPrimeXSwitchContainer.visibility = View.VISIBLE
+                if (!binding.buyButtonPrimeXSwitch.isChecked) {
+                    "Response".showLogE("Hello")
+                    binding.buyButtonPrimeXSwitch.alpha = .2f
+                }
+            }
+        }
     }
 
     private fun populateMemberShipPlan(){
@@ -74,6 +137,7 @@ class MembershipPlansActivity : BaseActivity() {
                     hideLoader()
                     val body = response.body()
                     if (response.isSuccessful && body != null){
+                        planTypes = parsePlans(body.membershipPlans)
                         planList.addAll(body.membershipPlans)
                         binding.membershipPlansRecyclerView.adapter?.notifyDataSetChanged()
                     } else {
@@ -93,6 +157,26 @@ class MembershipPlansActivity : BaseActivity() {
         }
     }
 
+    private fun parsePlans(membershipPlans: List<MembershipPlan>): List<MembershipPlanRenewalType>{
+        val membershipPlanRenewalTypes: MutableList<MembershipPlanRenewalType> = mutableListOf()
+        membershipPlans.forEach { plan ->
+            plan.serviceBeneficiary?.let { serviceBeneficiary ->
+                if (serviceBeneficiary == Constants.MEMBERSHIP) {
+                    membershipPlanRenewalTypes.add(
+                        MembershipPlanRenewalType(
+                            validityDay = plan.subtitle,
+                            primePrice = plan.prime,
+                            primeXPrice = plan.primeX,
+                            referenceNumber = plan.referenceNumber ?: ""
+                        )
+                    )
+                }
+            }
+
+        }
+        return membershipPlanRenewalTypes
+    }
+
     private fun showLoader() {
         binding.membershipPlansRecyclerView.visibility = View.GONE
         binding.membershipPlansHeader.visibility = View.GONE
@@ -110,5 +194,38 @@ class MembershipPlansActivity : BaseActivity() {
         binding.membershipPlansFooter.visibility = View.VISIBLE
         binding.membershipPlanLoaderLottie.visibility = View.GONE
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    private fun setEntryAnimation() {
+        val slide = Slide()
+        slide.slideEdge = Gravity.BOTTOM
+        slide.setDuration(200)
+        slide.setInterpolator(AccelerateInterpolator())
+        window.enterTransition = slide
+        window.returnTransition = slide
+    }
+
+    override fun onResume() {
+        super.onResume()
+        populateMemberShipPlan()
+    }
+
+    override fun onSubmitClicked(membershipPlanModel: MembershipPlanModel) {
+        val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
+        intent.putExtra(Constants.MEMBERSHIP_MODEL, membershipPlanModel as Parcelable)
+        intent.putExtra(Constants.RENEWAL_TYPE, Constants.NEW_SUBSCRIPTION)
+        startActivity(intent)
+    }
+
+    override fun onConfirm() {
+        val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun onCancelClicked() {
+        binding.buyButtonPrimeSwitch.apply {
+            isChecked = false
+            alpha = .5f
+        }
     }
 }

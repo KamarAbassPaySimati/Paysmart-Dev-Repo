@@ -79,4 +79,12 @@ open class BaseActivity: AppCompatActivity() {
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
+
+    fun hideKeyboard(view: View?, context: Context) {
+        //Hide keyboard functionality for BottomSheets
+        if (view != null) {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
 }
