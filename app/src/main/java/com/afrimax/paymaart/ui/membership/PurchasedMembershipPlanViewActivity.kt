@@ -3,6 +3,7 @@ package com.afrimax.paymaart.ui.membership
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import android.view.WindowManager
 import androidx.core.app.ActivityOptionsCompat
@@ -124,6 +125,8 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
         }
 
         binding.purchasedMembershipPlansSubmitButton.setOnClickListener {
+            //If user clicks on send payment after a failure then hide the error message
+            binding.purchasedMembershipPlanErrorTV.visibility = View.GONE
             onSendPaymentClicked(
                 SubscriptionDetailsRequestBody(
                     referenceNumber = referenceNumber,
@@ -209,15 +212,23 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
     private val dateFormat: SimpleDateFormat
         get() = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
 
-    override fun onPaymentSuccess() {
+    override fun onPaymentSuccess(successData: Any?) {
         val intent = Intent(this, PaymentSuccessfulActivity::class.java)
         val sceneTransitions = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
+        if (successData != null) {
+            intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData as Parcelable)
+        }
         startActivity(intent, sceneTransitions)
         finishAfterTransition()
     }
 
-    override fun onPaymentFailure() {
-        TODO("Not yet implemented")
+    override fun onPaymentFailure(message: String) {
+        binding.purchasedMembershipPlanErrorTV.apply {
+            visibility = View.VISIBLE
+            text = if (message == "Credential attempts exceeded") {
+                getString(R.string.unable_to_proceed)
+            }else { message }
+        }
     }
 
 }

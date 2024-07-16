@@ -21,6 +21,7 @@
         <activity
             android:name=".ui.payment.PaymentSuccessfulActivity"
             android:exported="false"
+            android:taskAffinity=".membership"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.membership.PurchasedMembershipPlanViewActivity"
@@ -54,7 +55,7 @@
         <activity
             android:name=".ui.membership.MembershipPlansActivity"
             android:exported="false"
-            android:taskAffinity=""
+            android:taskAffinity=".membership"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.delete.DeleteAccountActivity"

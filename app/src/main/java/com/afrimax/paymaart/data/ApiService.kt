@@ -32,6 +32,7 @@ import com.afrimax.paymaart.data.model.SendOtpResponse
 import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionDetailsResponse
 import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
+import com.afrimax.paymaart.data.model.SubscriptionPaymentSuccessfulResponse
 import com.afrimax.paymaart.data.model.UpdatePinOrPasswordRequest
 import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
 import com.afrimax.paymaart.data.model.VerifyForgotOtpResponse
@@ -148,7 +149,7 @@ interface ApiService {
     fun getSubscriptionDetails(@Header("Authorization") header: String, @Body body: SubscriptionDetailsRequestBody) : Call<SubscriptionDetailsResponse>
 
     @POST("$PAYMAART/$CUSTOMER/subscription-payment")
-    fun subscriptionPayment(@Header("Authorization") header: String, @Body body: SubscriptionPaymentRequestBody): Call<Any>
+    fun subscriptionPayment(@Header("Authorization") header: String, @Body body: SubscriptionPaymentRequestBody): Call<SubscriptionPaymentSuccessfulResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

@@ -563,7 +563,7 @@
     <string name="from">From</string>
     <string name="paymaart_name">Paymaart Name</string>
     <string name="to">To</string>
-    <string name="txn_value">Txn Value</string>
+    <string name="txn_value">Txn Value*</string>
     <string name="txn_id">Txn ID</string>
     <string name="date_time">Date, time</string>
     <string name="note">Note</string>
@@ -574,4 +574,8 @@
     <string name="renew_on_expiry">Renew on Expiry</string>
     <string name="activate_auto_renew_now">Activate Auto-renew</string>
     <string name="renewal_message_formatted">%1$s days for %2$s MWK</string>
+    <string name="membership">Membership</string>
+    <string name="formatted_membership_value">%1$s\n%2$s - %3$s</string>
+    <string name="unable_to_proceed">Unable to proceed due to multiple incorrect attempts.</string>
+    <string name="insufficient_funds">Insufficient funds</string>
 </resources>

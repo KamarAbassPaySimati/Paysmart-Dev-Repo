@@ -15,8 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
+import com.afrimax.paymaart.data.model.SubscriptionPaymentSuccessfulResponse
 import com.afrimax.paymaart.databinding.SendPaymentBottomSheetBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
@@ -25,6 +27,8 @@ import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.LoginPinTransformation
 import com.afrimax.paymaart.util.showLogE
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.gson.Gson
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,7 +53,6 @@ class SendPaymentBottomSheet(private val subscriptionDetailsRequestBody: Subscri
     private fun setupView(){
         parentActivity = activity as BaseActivity
         loginMode = parentActivity.retrieveLoginMode() ?: Constants.SELECTION_PIN
-        "Response".showLogE(subscriptionDetailsRequestBody)
         binding.sendPaymentPin.transformationMethod = LoginPinTransformation()
         when (loginMode){
             Constants.SELECTION_PIN -> {
@@ -188,33 +191,38 @@ class SendPaymentBottomSheet(private val subscriptionDetailsRequestBody: Subscri
                 subscriptionPaymentRequestBody
             )
 
-            subscriptionHandler.enqueue(object : Callback<Any> {
-                override fun onResponse(call: Call<Any>, response: Response<Any>) {
+            subscriptionHandler.enqueue(object : Callback<SubscriptionPaymentSuccessfulResponse> {
+                override fun onResponse(call: Call<SubscriptionPaymentSuccessfulResponse>, response: Response<SubscriptionPaymentSuccessfulResponse>) {
                     if (response.isSuccessful && response.body() != null) {
-                        sheetCallback.onPaymentSuccess()
-                        "Response Success".showLogE(response.body() ?: "")
+                        dismiss()
+                        sheetCallback.onPaymentSuccess(response.body()?.subscriptionPaymentDetails)
                     }else {
-                        "Response Error".showLogE(response.errorBody()?.string() ?: "")
-                        when (loginMode) {
-                           Constants.SELECTION_PIN -> {
-                               binding.sendPaymentPinETWarning.apply {
-                                   visibility = View.VISIBLE
-                                   text = getString(R.string.invalid_pin)
-                               }
-                           }
-                           Constants.SELECTION_PASSWORD -> {
-                               binding.sendPaymentPasswordETWarning.apply {
-                                   visibility = View.VISIBLE
-                                   text = getString(R.string.invalid_password)
-                               }
-                           }
-                       }
+                        val errorBody = Gson().fromJson(response.errorBody()?.string(), DefaultResponse::class.java)
+                        if (errorBody.message == "Invalid Credential") {
+                            when (loginMode) {
+                                Constants.SELECTION_PIN -> {
+                                    binding.sendPaymentPinETWarning.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.invalid_pin)
+                                    }
+                                }
+                                Constants.SELECTION_PASSWORD -> {
+                                    binding.sendPaymentPasswordETWarning.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.invalid_password)
+                                    }
+                                }
+                            }
+                        }else{
+                            displayError(errorBody.message)
+                        }
                     }
                     hideButtonLoader()
                 }
 
-                override fun onFailure(call: Call<Any>, throwable: Throwable) {
+                override fun onFailure(call: Call<SubscriptionPaymentSuccessfulResponse>, throwable: Throwable) {
                     activity.showToast(getString(R.string.default_error_toast))
+//                    displayError("")
                     hideButtonLoader()
                 }
 
@@ -223,8 +231,11 @@ class SendPaymentBottomSheet(private val subscriptionDetailsRequestBody: Subscri
 
     }
 
-
-
+    private fun displayError(message: String){
+        //A quick fix.
+        dismiss()
+        sheetCallback.onPaymentFailure(message)
+    }
 
     private fun showButtonLoader() {
         binding.sendPaymentConfirmLoaderLottie.visibility = View.VISIBLE

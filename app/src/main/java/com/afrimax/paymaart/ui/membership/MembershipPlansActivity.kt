@@ -182,6 +182,11 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         window.returnTransition = slide
     }
 
+    override fun onResume() {
+        super.onResume()
+        populateMemberShipPlan()
+    }
+
     override fun onSubmitClicked(membershipPlanModel: MembershipPlanModel) {
         val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
         intent.putExtra(Constants.MEMBERSHIP_MODEL, membershipPlanModel as Parcelable)

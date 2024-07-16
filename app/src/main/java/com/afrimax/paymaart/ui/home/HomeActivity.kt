@@ -391,10 +391,10 @@ class HomeActivity : BaseActivity(), HomeInterface {
                 membershipType(MembershipType.GO.typeName, R.color.goMemberStrokeColor, R.drawable.go_member_bg)
             }
             MembershipType.PRIME.type -> {
-                membershipType(MembershipType.GO.typeName, R.color.primeMemberStrokeColor, R.drawable.prime_member_bg)
+                membershipType(MembershipType.PRIME.typeName, R.color.primeMemberStrokeColor, R.drawable.prime_member_bg)
             }
             MembershipType.PRIMEX.type -> {
-                membershipType(MembershipType.GO.typeName, R.color.primeXMemberStrokeColor, R.drawable.prime_x_member_bg)
+                membershipType(MembershipType.PRIMEX.typeName, R.color.primeXMemberStrokeColor, R.drawable.prime_x_member_bg)
             }
         }
         val kycType = homeScreenData.kycType

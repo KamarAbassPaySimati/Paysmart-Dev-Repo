@@ -133,6 +133,7 @@ object Constants {
     const val HOME_SCREEN_BANNER = "home_screen_banner"
     const val RENEWAL_TYPE = "renewal_type"
     const val NEW_SUBSCRIPTION = "new_subscription"
+    const val SUCCESS_PAYMENT_DATA = "success_payment_data"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

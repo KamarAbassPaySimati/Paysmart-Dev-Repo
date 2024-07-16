@@ -101,9 +101,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="2"
-                    tools:visibility="visible">
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/paymentSuccessfulPaymaartName"
@@ -133,9 +131,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="2"
-                    tools:visibility="visible">
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/paymentSuccessfulPaymaartId"
@@ -174,9 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="2"
-                    tools:visibility="visible">
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/paymentSuccessfulToPaymaartName"
@@ -206,9 +200,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="2"
-                    tools:visibility="visible">
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/paymentSuccessfulToPaymaartId"
@@ -283,9 +275,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="2"
-                    tools:visibility="visible">
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/paymentSuccessfulTxn"
@@ -315,9 +305,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="2"
-                    tools:visibility="visible">
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/paymentSuccessfulTxnFee"
@@ -347,9 +335,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="2"
-                    tools:visibility="visible">
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/paymentSuccessfulVat"
@@ -379,9 +365,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="2"
-                    tools:visibility="visible">
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/paymentSuccessfulTxnId"
@@ -411,9 +395,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:weightSum="2"
-                    tools:visibility="visible">
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/paymentSuccessfulTxnDateTime"
