@@ -57,6 +57,8 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var isSettingsClicked: Boolean = false
     private var publicProfile: Boolean = false
     private var profilePicUrl: String = ""
+    private var mMembershipType: String = ""
+    private var mKycStatus: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -118,7 +120,9 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityPayPaymaartButton.setOnClickListener {
             if (checkKycStatus()){
-                startActivity(Intent(this, MembershipPlansActivity::class.java))
+                val intent = Intent(this, MembershipPlansActivity::class.java)
+                intent.putExtra(Constants.MEMBERSHIP_TYPE, mMembershipType)
+                startActivity(intent)
             }
         }
         b.homeActivityPayPersonButton.setOnClickListener {
@@ -391,17 +395,18 @@ class HomeActivity : BaseActivity(), HomeInterface {
                 membershipType(MembershipType.GO.typeName, R.color.goMemberStrokeColor, R.drawable.go_member_bg)
             }
             MembershipType.PRIME.type -> {
-                membershipType(MembershipType.GO.typeName, R.color.primeMemberStrokeColor, R.drawable.prime_member_bg)
+                membershipType(MembershipType.PRIME.typeName, R.color.primeMemberStrokeColor, R.drawable.prime_member_bg)
             }
             MembershipType.PRIMEX.type -> {
-                membershipType(MembershipType.GO.typeName, R.color.primeXMemberStrokeColor, R.drawable.prime_x_member_bg)
+                membershipType(MembershipType.PRIMEX.typeName, R.color.primeXMemberStrokeColor, R.drawable.prime_x_member_bg)
             }
         }
         val kycType = homeScreenData.kycType
         val citizen = homeScreenData.citizen
         val kycStatus = homeScreenData.kycStatus
         val completedStatus = homeScreenData.completed
-        val membershipType = homeScreenData.membership
+        mMembershipType = homeScreenData.membership
+        mKycStatus = homeScreenData.kycStatus
         profilePicUrl = homeScreenData.profilePic
         publicProfile = homeScreenData.publicProfile
         rejectionReasons = homeScreenData.rejectionReasons ?: ArrayList()
@@ -463,10 +468,16 @@ class HomeActivity : BaseActivity(), HomeInterface {
                     getString(R.string.non_malawi_full_kyc_registration)
             }
         }
+        showMembershipBanner()
+        hideLoader()
+    }
+
+    private fun showMembershipBanner() {
         val bannerVisibility = getBannerVisibility()
-        if(membershipType == MembershipType.GO.type && kycStatus == Constants.KYC_STATUS_COMPLETED && bannerVisibility){
+        if(mMembershipType == MembershipType.GO.type && mKycStatus == Constants.KYC_STATUS_COMPLETED && bannerVisibility){
             val i = Intent(this, MembershipPlansActivity::class.java)
             i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            i.putExtra(Constants.DISPLAY_TYPE, Constants.HOME_SCREEN_BANNER)
             val options = ActivityOptions.makeSceneTransitionAnimation(this).toBundle()
             //Kept some delay before the transition
             Handler(Looper.getMainLooper()).postDelayed({
@@ -475,7 +486,6 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
 
         }
-        hideLoader()
     }
 
     private fun checkKycStatus(): Boolean {
@@ -545,25 +555,13 @@ class HomeActivity : BaseActivity(), HomeInterface {
         const val DRAWER_LOGOUT = 11
     }
 
-    override fun onClickOnBoardAgent() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onClickOnBoardMerchant() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onClickOnBoardCustomers() {
-        TODO("Not yet implemented")
-    }
-
     override fun onClickViewBalance(viewWalletScope: String, data: WalletData?) {
         showBalance(data)
     }
 }
 
-enum class MembershipType(val type: String, val typeName: String){
-    GO("GO", "Go Member"),
-    PRIME("PRIME", "Prime Member"),
-    PRIMEX("PRIMEX", "PrimeX Member")
+enum class MembershipType(val type: String, val typeName: String, val displayName: String){
+    GO("GO", "Go Member", "Go"),
+    PRIME("PRIME", "Prime Member", "Prime"),
+    PRIMEX("PRIMEX", "PrimeX Member", "PrimeX")
 }
