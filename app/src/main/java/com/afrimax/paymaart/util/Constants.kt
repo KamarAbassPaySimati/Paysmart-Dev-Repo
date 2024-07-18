@@ -139,6 +139,7 @@ object Constants {
     const val RESEND_OTP = "resend_otp"
     const val RESET = "reset"
     const val AUTO_RENEWAL_OFF = "auto_renewal_off"
+    const val MEMBERSHIP_PLANS = "membership_plans"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

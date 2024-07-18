@@ -2,6 +2,7 @@ package com.afrimax.paymaart.ui.membership
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.transition.Slide
@@ -34,6 +35,10 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.Duration
+import java.time.Instant
+import java.util.Date
+import java.util.concurrent.TimeUnit
 
 class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     private lateinit var binding: ActivityMembershipPlansBinding
@@ -44,6 +49,7 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     private var membershipType: String = ""
     private var initialPrimeSwitchPosition: Boolean = false
     private var initialPrimeXSwitchPosition: Boolean = false
+    private lateinit var membershipPlanModel: MembershipPlanModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMembershipPlansBinding.inflate(layoutInflater)
@@ -92,23 +98,47 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         }
 
         binding.buyButtonPrimeSwitch.setOnCheckedChangeListener { button, isChecked ->
+            button.alpha = 1f
             button.setOnClickListener {
                 if (!isChecked) {
                     val confirmAutoRenewalBottomSheet = ConfirmAutoRenewalBottomSheet(MembershipType.PRIME, false)
                     confirmAutoRenewalBottomSheet.isCancelable = false
                     confirmAutoRenewalBottomSheet.show(supportFragmentManager, ConfirmAutoRenewalBottomSheet.TAG)
                 }else {
+                    val primePlanList: MutableList<RenewalPlans> = mutableListOf()
+                    planTypes.forEach { plan ->
+                        primePlanList.add(RenewalPlans(membershipType = MembershipType.PRIME.type,referenceNumber = plan.referenceNumber, planPrice = plan.primePrice, planValidity = plan.validDate))
+                    }
                     val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
+                    intent.putParcelableArrayListExtra(Constants.MEMBERSHIP_PLANS, ArrayList(primePlanList))
+                    intent.putExtra(Constants.MEMBERSHIP_MODEL, membershipPlanModel as Parcelable)
                     intent.putExtra(Constants.RENEWAL_TYPE, Constants.AUTO_RENEWAL_OFF)
                     startActivity(intent)
                 }
             }
         }
 
-
+        binding.buyButtonPrimeXSwitch.setOnCheckedChangeListener { button, isChecked ->
+            if (button.isChecked) button.alpha = 1f
+            button.setOnClickListener {
+                if (!isChecked) {
+                    val confirmAutoRenewalBottomSheet = ConfirmAutoRenewalBottomSheet(MembershipType.PRIMEX, false)
+                    confirmAutoRenewalBottomSheet.isCancelable = false
+                    confirmAutoRenewalBottomSheet.show(supportFragmentManager, ConfirmAutoRenewalBottomSheet.TAG)
+                }else {
+                    val primeXPlanList: MutableList<RenewalPlans> = mutableListOf()
+                    planTypes.forEach { plan ->
+                        primeXPlanList.add(RenewalPlans(membershipType = MembershipType.PRIMEX.type,referenceNumber = plan.referenceNumber, planPrice = plan.primeXPrice, planValidity = plan.validDate))
+                    }
+                    val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
+                    intent.putParcelableArrayListExtra(Constants.MEMBERSHIP_PLANS, ArrayList(primeXPlanList))
+                    intent.putExtra(Constants.MEMBERSHIP_MODEL, membershipPlanModel as Parcelable)
+                    intent.putExtra(Constants.RENEWAL_TYPE, Constants.AUTO_RENEWAL_OFF)
+                    startActivity(intent)
+                }
+            }
+        }
     }
-
-
 
     private fun setUpRecyclerView(){
         membershipPlanAdapter = MembershipPlanAdapter(planList)
@@ -146,6 +176,13 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
                     initialPrimeXSwitchPosition = userData.autoRenew
                 }
             }
+            membershipPlanModel = MembershipPlanModel(
+                membershipType = userData.membership,
+                validity = getValidity(userData.membershipStart, userData.membershipExpiry),
+                paymentType = PaymentType.PREPAID.type,
+                renewalType = userData.autoRenew,
+                referenceNumber = ""
+            )
         }
     }
 
@@ -199,6 +236,22 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
 
         }
         return membershipPlanRenewalTypes
+    }
+
+    private fun getValidity(startDate: Long, expiryDate: Long): String{
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val instant1 = Instant.ofEpochSecond(startDate)
+            val instant2 = Instant.ofEpochSecond(expiryDate)
+            val duration = Duration.between(instant1, instant2)
+            duration.toDays().toString()
+        }else {
+            val timestamp1 = startDate * 1000
+            val timestamp2 = expiryDate * 1000
+            val date1 = Date(timestamp1)
+            val date2 = Date(timestamp2)
+            val diffInMillies = date2.time - date1.time
+            TimeUnit.MILLISECONDS.toDays(diffInMillies).toString()
+        }
     }
 
     private fun showLoader() {
