@@ -11,6 +11,8 @@ data class MembershipPlansResponse(
 )
 
 data class MembershipPlan(
+    @SerializedName("ref_no")
+    val referenceNumber: String?,
     @SerializedName("go")
     val go: String?,
     @SerializedName("prime")

@@ -35,7 +35,7 @@
             android:layout_toEndOf="@+id/kycCaptureActivityBackButtonIV"
             android:fontFamily="@font/inter_medium"
             android:text="@string/back"
-            android:textColor="@color/black"
+            android:textColor="@color/neutralGreyPrimaryText"
             android:textSize="18sp" />
 
         <ImageView
