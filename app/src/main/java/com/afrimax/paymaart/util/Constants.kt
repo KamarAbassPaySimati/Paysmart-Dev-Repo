@@ -134,6 +134,11 @@ object Constants {
     const val RENEWAL_TYPE = "renewal_type"
     const val NEW_SUBSCRIPTION = "new_subscription"
     const val SUCCESS_PAYMENT_DATA = "success_payment_data"
+    const val VERIFY_OTP = "verify_otp"
+    const val SEND_OTP = "send_otp"
+    const val RESEND_OTP = "resend_otp"
+    const val RESET = "reset"
+    const val AUTO_RENEWAL_OFF = "auto_renewal_off"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

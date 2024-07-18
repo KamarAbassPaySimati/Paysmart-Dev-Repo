@@ -181,7 +181,8 @@ class SendPaymentBottomSheet(private val subscriptionDetailsRequestBody: Subscri
         val subscriptionPaymentRequestBody = SubscriptionPaymentRequestBody(
             referenceNumber = subscriptionDetailsRequestBody.referenceNumber,
             subType = subscriptionDetailsRequestBody.subType,
-            credentials = credential
+            credentials = credential,
+            autoRenew = subscriptionDetailsRequestBody.autoRenew
         )
 
         lifecycleScope.launch {

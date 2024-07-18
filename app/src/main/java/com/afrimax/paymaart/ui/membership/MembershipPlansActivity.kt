@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
+import android.widget.Switch
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -18,6 +19,7 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.MembershipPlan
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
+import com.afrimax.paymaart.data.model.MembershipUserData
 import com.afrimax.paymaart.databinding.ActivityMembershipPlansBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.home.MembershipType
@@ -27,6 +29,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.MembershipPlansPurchaseBottomS
 import com.afrimax.paymaart.ui.utils.interfaces.MembershipPlansInterface
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.showLogE
+import com.google.android.material.materialswitch.MaterialSwitch
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,9 +42,10 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
     private var planTypes: List<MembershipPlanRenewalType> = emptyList()
     private var displayType: String = ""
     private var membershipType: String = ""
+    private var initialPrimeSwitchPosition: Boolean = false
+    private var initialPrimeXSwitchPosition: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
         binding = ActivityMembershipPlansBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.activityMembershipPlan)) { v, insets ->
@@ -55,7 +59,6 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         wic.isAppearanceLightNavigationBars = true
         setUpView()
         setUpRecyclerView()
-        populateMemberShipPlan()
     }
 
     private fun setUpView(){
@@ -88,13 +91,24 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
             membershipPurchasePlansSheet.show(supportFragmentManager, MembershipPlansPurchaseBottomSheet.TAG)
         }
 
-        binding.buyButtonPrimeSwitch.setOnClickListener {
-//            val confirmAutoRenewalBottomSheet = ConfirmAutoRenewalBottomSheet()
-//            confirmAutoRenewalBottomSheet.show(supportFragmentManager, ConfirmAutoRenewalBottomSheet.TAG)
+        binding.buyButtonPrimeSwitch.setOnCheckedChangeListener { button, isChecked ->
+            button.setOnClickListener {
+                if (!isChecked) {
+                    val confirmAutoRenewalBottomSheet = ConfirmAutoRenewalBottomSheet(MembershipType.PRIME, false)
+                    confirmAutoRenewalBottomSheet.isCancelable = false
+                    confirmAutoRenewalBottomSheet.show(supportFragmentManager, ConfirmAutoRenewalBottomSheet.TAG)
+                }else {
+                    val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
+                    intent.putExtra(Constants.RENEWAL_TYPE, Constants.AUTO_RENEWAL_OFF)
+                    startActivity(intent)
+                }
+            }
         }
 
-        setMembershipButtons()
+
     }
+
+
 
     private fun setUpRecyclerView(){
         membershipPlanAdapter = MembershipPlanAdapter(planList)
@@ -106,21 +120,30 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         setMembershipBannerVisibility(false)
     }
 
-    private fun setMembershipButtons() {
-        when(membershipType) {
-            MembershipType.PRIME.type -> {
-                binding.buyButtonPrime.visibility = View.GONE
-                binding.buyButtonPrimeSwitchContainer.visibility = View.VISIBLE
-                if (!binding.buyButtonPrimeSwitch.isChecked) {
-                    binding.buyButtonPrimeSwitch.alpha = .2f
+    private fun setMembershipButtons(userData: MembershipUserData?) {
+        if ( userData != null ){
+            when(userData.membership) {
+                MembershipType.PRIME.type -> {
+                    binding.buyButtonPrime.visibility = View.GONE
+                    binding.buyButtonPrimeSwitchContainer.visibility = View.VISIBLE
+                    if (userData.autoRenew) {
+                        binding.buyButtonPrimeSwitch.isChecked = true
+                    }else{
+                        binding.buyButtonPrimeSwitch.isChecked = false
+                        binding.buyButtonPrimeSwitch.alpha = .2f
+                    }
+                    initialPrimeSwitchPosition = userData.autoRenew
                 }
-            }
-            MembershipType.PRIMEX.type -> {
-                binding.buyButtonPrimeX.visibility = View.GONE
-                binding.buyButtonPrimeXSwitchContainer.visibility = View.VISIBLE
-                if (!binding.buyButtonPrimeXSwitch.isChecked) {
-                    "Response".showLogE("Hello")
-                    binding.buyButtonPrimeXSwitch.alpha = .2f
+                MembershipType.PRIMEX.type -> {
+                    binding.buyButtonPrimeX.visibility = View.GONE
+                    binding.buyButtonPrimeXSwitchContainer.visibility = View.VISIBLE
+                    if (userData.autoRenew) {
+                        binding.buyButtonPrimeXSwitch.isChecked = true
+                    }else{
+                        binding.buyButtonPrimeXSwitch.isChecked = false
+                        binding.buyButtonPrimeXSwitch.alpha = .2f
+                    }
+                    initialPrimeXSwitchPosition = userData.autoRenew
                 }
             }
         }
@@ -138,6 +161,7 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
                     val body = response.body()
                     if (response.isSuccessful && body != null){
                         planTypes = parsePlans(body.membershipPlans)
+                        setMembershipButtons(body.userData)
                         planList.addAll(body.membershipPlans)
                         binding.membershipPlansRecyclerView.adapter?.notifyDataSetChanged()
                     } else {
@@ -217,15 +241,19 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
         startActivity(intent)
     }
 
-    override fun onConfirm() {
-        val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
-        startActivity(intent)
+    override fun onConfirm(membershipType: MembershipType) {
+        populateMemberShipPlan()
     }
 
-    override fun onCancelClicked() {
-        binding.buyButtonPrimeSwitch.apply {
-            isChecked = false
-            alpha = .5f
+    override fun onCancelClicked(membershipType: MembershipType) {
+        when( membershipType ) {
+            MembershipType.PRIME -> {
+                binding.buyButtonPrimeSwitch.isChecked = initialPrimeSwitchPosition
+            }
+            MembershipType.PRIMEX -> {
+                binding.buyButtonPrimeXSwitch.isChecked = initialPrimeSwitchPosition
+            }
+            else -> {}
         }
     }
 }

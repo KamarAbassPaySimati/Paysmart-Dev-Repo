@@ -13,4 +13,6 @@ data class SubscriptionPaymentRequestBody(
     val subType: String?,
     @SerializedName("credential")
     val credentials: String?,
+    @SerializedName("auto_renew")
+    val autoRenew: Boolean
 )

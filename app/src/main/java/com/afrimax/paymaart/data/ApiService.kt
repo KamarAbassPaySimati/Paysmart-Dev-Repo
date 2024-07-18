@@ -33,6 +33,7 @@ import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionDetailsResponse
 import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentSuccessfulResponse
+import com.afrimax.paymaart.data.model.UpdateAutoRenewalRequestBody
 import com.afrimax.paymaart.data.model.UpdatePinOrPasswordRequest
 import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
 import com.afrimax.paymaart.data.model.VerifyForgotOtpResponse
@@ -45,6 +46,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -150,6 +152,9 @@ interface ApiService {
 
     @POST("$PAYMAART/$CUSTOMER/subscription-payment")
     fun subscriptionPayment(@Header("Authorization") header: String, @Body body: SubscriptionPaymentRequestBody): Call<SubscriptionPaymentSuccessfulResponse>
+
+    @PATCH("$PAYMAART/$CUSTOMER/update-auto-renew")
+    fun updateAutoRenewal(@Header("Authorization") header: String, @Body body: UpdateAutoRenewalRequestBody): Call<Unit>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
