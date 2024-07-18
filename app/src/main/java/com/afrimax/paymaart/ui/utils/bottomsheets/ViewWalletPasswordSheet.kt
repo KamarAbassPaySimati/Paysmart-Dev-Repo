@@ -131,7 +131,7 @@ class ViewWalletPasswordSheet : BottomSheetDialogFragment() {
         lifecycleScope.launch {
             val activity = requireActivity() as HomeActivity
             val idToken = activity.fetchIdToken()
-
+            activity.hideKeyboard(view, requireContext())
             val encryptedPassword = AESCrypt.encrypt(b.viewWalletPasswordSheetET.text.toString())
             val selfKycDetailsCall = ApiClient.apiService.viewWallet(idToken, encryptedPassword)
 

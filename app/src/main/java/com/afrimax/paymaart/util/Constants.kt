@@ -124,6 +124,16 @@ object Constants {
     const val VIEW_WALLET_SCOPE = "view_wallet_scope"
     const val VIEW_WALLET_SIMPLE_SCOPE = "view_wallet_simple_scope"
     const val VIEW_WALLET_DEDICATED_SCOPE = "view_wallet_dedicated_scope"
+    const val MEMBERSHIP_VALIDITY_TYPE = "membership_validity_type"
+    const val AUTO_RENEWAL = "auto_renewal"
+    const val MEMBERSHIP_TYPE = "membership_type"
+    const val MEMBERSHIP = "Membership"
+    const val MEMBERSHIP_MODEL = "membership_model"
+    const val DISPLAY_TYPE = "display_type"
+    const val HOME_SCREEN_BANNER = "home_screen_banner"
+    const val RENEWAL_TYPE = "renewal_type"
+    const val NEW_SUBSCRIPTION = "new_subscription"
+    const val SUCCESS_PAYMENT_DATA = "success_payment_data"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

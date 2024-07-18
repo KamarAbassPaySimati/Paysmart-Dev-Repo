@@ -1,0 +1,169 @@
+package com.afrimax.paymaart.ui.payment
+
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Bundle
+import android.os.Parcelable
+import android.transition.Slide
+import android.view.Gravity
+import android.view.View
+import android.view.animation.AccelerateInterpolator
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import com.afrimax.paymaart.BuildConfig
+import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.model.SubscriptionPaymentDetails
+import com.afrimax.paymaart.databinding.ActivityPaymentSuccessfulBinding
+import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.formatEpochTime
+import com.afrimax.paymaart.util.formatEpochTimeTwo
+import com.afrimax.paymaart.util.getFormattedAmount
+import com.afrimax.paymaart.util.showLogE
+import java.io.File
+import java.io.FileOutputStream
+
+class PaymentSuccessfulActivity : BaseActivity() {
+    private lateinit var binding: ActivityPaymentSuccessfulBinding
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityPaymentSuccessfulBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.paymentSuccessfulActivity)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        val wic = WindowInsetsControllerCompat(window, window.decorView)
+        wic.isAppearanceLightStatusBars = true
+        wic.isAppearanceLightNavigationBars = true
+        window.statusBarColor = ContextCompat.getColor(this, R.color.offWhite)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.offWhite)
+        setAnimation()
+        setupView()
+    }
+
+    private fun setupView(){
+        when (val data = intent.parcelable<Parcelable>(Constants.SUCCESS_PAYMENT_DATA)) {
+            is SubscriptionPaymentDetails -> {
+                val model = CommonViewModel(
+                    fromName = data.senderName,
+                    fromId = data.senderId,
+                    toName = data.receiverName,
+                    toId = data.receiverId,
+                    transactionAmount = data.transactionAmount,
+                    transactionFees = data.transactionFee,
+                    vat = data.vat,
+                    transactionId = data.transactionId,
+                    dateTime = data.createdAt
+                )
+                setCommonView(model)
+                binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                binding.paymentSuccessfulMembership.text = getString(R.string.membership)
+                binding.paymentSuccessfulMembershipValue
+                    .text = getString(R.string.formatted_membership_value, data.membership, formatEpochTimeTwo(data.startDate), formatEpochTimeTwo(data.endDate))
+            }
+        }
+        binding.paymentSuccessfulSharePayment.setOnClickListener {
+            shareReceipt()
+        }
+        binding.paymentSuccessfulCloseButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                finishAffinity()
+            }
+        })
+    }
+
+    private fun setCommonView(model: CommonViewModel) {
+        binding.paymentSuccessfulPaymaartNameValue.text = model.fromName
+        binding.paymentSuccessfulPaymaartIdValue.text = model.fromId
+        binding.paymentSuccessfulToPaymaartNameValue.text = model.toName
+        binding.paymentSuccessfulToPaymaartIdValue.text = model.toId
+        binding.paymentSuccessfulTxnValue.text = getString(R.string.amount_formatted, getFormattedAmount(model.transactionAmount))
+        binding.paymentSuccessfulTxnFeeValue.text = getString(R.string.amount_formatted, getFormattedAmount(model.transactionFees))
+        binding.paymentSuccessfulVatValue.text = getString(R.string.amount_formatted, getFormattedAmount(model.vat))
+        binding.paymentSuccessfulTxnIdValue.text = model.transactionId
+        binding.paymentSuccessfulTxnDateTimeValue.text = formatEpochTime(model.dateTime)
+    }
+
+    private fun shareReceipt() {
+        val bitmap = getBitmapFromView(
+            binding.paymentSuccessfulScrollView,
+            binding.paymentSuccessfulScrollView.getChildAt(0).height,
+            binding.paymentSuccessfulScrollView.getChildAt(0).width
+        )
+
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_STREAM, getImageToShare(bitmap))
+            putExtra(Intent.EXTRA_TEXT, "")
+            putExtra(Intent.EXTRA_SUBJECT, "")
+            type = "image/png"
+        }
+
+        startActivity(Intent.createChooser(intent, "Share Via"))
+    }
+
+    private fun getBitmapFromView(view: View, height: Int, width: Int): Bitmap {
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        val bgDrawable: Drawable? = view.background
+        if (bgDrawable != null) bgDrawable.draw(canvas)
+        else canvas.drawColor(Color.WHITE)
+        view.draw(canvas)
+        return bitmap
+    }
+
+    private fun getImageToShare(bitmap: Bitmap): Uri? {
+        val imageFolder = File(cacheDir, "images")
+        var uri: Uri? = null
+        try {
+            imageFolder.mkdirs()
+            val file = File(imageFolder, "payment_receipt.png")
+            val outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, outputStream)
+            outputStream.flush()
+            outputStream.close()
+            uri =
+                FileProvider.getUriForFile(this, "${BuildConfig.APPLICATION_ID}.fileprovider", file)
+        } catch (e: Exception) {
+            //
+        }
+        return uri
+    }
+
+    private fun setAnimation() {
+        val slide = Slide()
+        slide.slideEdge = Gravity.BOTTOM
+        slide.setDuration(300)
+        slide.setInterpolator(AccelerateInterpolator())
+
+        window.enterTransition = slide
+        window.returnTransition = slide
+    }
+}
+
+data class CommonViewModel(
+    val fromName: String?,
+    val fromId: String?,
+    val toName: String?,
+    val toId: String?,
+    val transactionAmount: Double?,
+    val transactionFees: Double?,
+    val vat: Double?,
+    val transactionId: String?,
+    val dateTime: Long,
+)
