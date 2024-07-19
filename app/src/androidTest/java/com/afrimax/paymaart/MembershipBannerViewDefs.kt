@@ -43,6 +43,7 @@ class MembershipBannerViewDefs {
 
     @Then("I should be redirected to membership plans screen")
     fun redirectedToMembershipPlanScreen() {
+        Thread.sleep(5000)
         Espresso.onView(ViewMatchers.withId(R.id.activityMembershipPlan))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Thread.sleep(2000)

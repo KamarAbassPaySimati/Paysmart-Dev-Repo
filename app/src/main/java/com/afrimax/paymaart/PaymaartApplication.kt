@@ -2,6 +2,8 @@ package com.afrimax.paymaart
 
 import android.app.Application
 import com.afrimax.paymaart.util.AmplifyConfigCreator
+import com.afrimax.paymaart.util.RecaptchaManager
+import com.afrimax.paymaart.util.showLogE
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
 import com.amplifyframework.core.Amplify
@@ -20,5 +22,6 @@ class PaymaartApplication: Application() {
         } catch (e: AmplifyException) {
             //
         }
+        RecaptchaManager.initialise(this)
     }
 }

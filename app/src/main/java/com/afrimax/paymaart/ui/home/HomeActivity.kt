@@ -41,6 +41,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPinSheet
 import com.afrimax.paymaart.ui.utils.interfaces.HomeInterface
 import com.afrimax.paymaart.ui.viewkyc.ViewKycDetailsActivity
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.getFormattedAmount
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -79,7 +80,6 @@ class HomeActivity : BaseActivity(), HomeInterface {
         initViews()
         setUpListeners()
         setDrawerListeners()
-        getHomeScreenDataApi()
     }
 
     private fun initViews() {
@@ -201,9 +201,9 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
     private fun showBalance(data: WalletData?) {
         if (data != null){
-            b.homeActivityProfileBalanceTV.text =
-                if (data.accountBalance == null) getString(R.string._0_00)
-                else formatNumber(data.accountBalance.toDouble())
+            b.homeActivityProfileBalanceTV.text = getFormattedAmount(data.accountBalance)
+//                if (data.accountBalance == null) getString(R.string._0_00)
+//                else formatNumber(data.accountBalance.toDouble())
 
             //Change icon
             b.homeActivityEyeButton.setBackgroundResource(R.drawable.ico_eye_slash_white)
