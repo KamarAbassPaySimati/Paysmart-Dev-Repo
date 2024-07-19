@@ -20,16 +20,16 @@ class EnableDisableAutoRenew {
     fun iClickToggleButton(enableDisable: String) {
         when(enableDisable){
             "disable"->{
-                onView(withId(R.id.toggleButton))
+                onView(withId(R.id.buy_button_prime_switch))
                     .perform(ViewActions.click())
-                Thread.sleep(5000)
+                Thread.sleep(3000)
 //                onView(ViewMatchers.withId(R.id.toggleButton))
 //                    .check(ViewAssertions.matches(isNotChecked()))
             }
             "enable"->{
-                onView(withId(R.id.toggleButton))
+                onView(withId(R.id.buy_button_prime_switch))
                     .perform(ViewActions.click())
-                Thread.sleep(5000)
+                Thread.sleep(3000)
 //                onView(ViewMatchers.withId(R.id.toggleButton))
 //                    .check(ViewAssertions.matches(isChecked()))
             }
@@ -39,7 +39,7 @@ class EnableDisableAutoRenew {
     @When("I click on close icon for Transaction Details screen")
     fun clickingOnCloseIcon(){
 
-        onView(withId(R.id.closeIconTransactionDetailsScreen))
+        onView(withId(R.id.paymentSuccessfulCloseButton))
             .perform(ViewActions.click())
         Thread.sleep(5000)
 
@@ -47,34 +47,34 @@ class EnableDisableAutoRenew {
 
     @Then("I should see a pop up asking confirm auto renewal off")
     fun iShouldSeePopUP() {
-        onView(withId(R.id.popUpConfirmingAutoRenewOff))
+        onView(withId(R.id.confirmAutoRenewalBottomSheet))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Thread.sleep(5000)
     }
 
     @When("I click on confirm button for auto renewal off")
     fun clickOnConfirmForAutoRenewOff(){
-        onView(withId(R.id.autoRenewConfirmationButton))
+        onView(withId(R.id.confirmAutoRenewalConfirmButton))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }
 
     @Then("I should see toggle button getting disabled")
     fun iShouldSeeToggleButtonGettingDisabled() {
-        onView(ViewMatchers.withId(R.id.toggleButton))
+        onView(ViewMatchers.withId(R.id.buy_button_prime_switch))
             .check(ViewAssertions.matches(isNotChecked()))
     }
 
     @Then("I should see toggle button getting enabled")
     fun iShouldSeeToggleButtonGettingEnabled() {
-        onView(ViewMatchers.withId(R.id.toggleButton))
+        onView(ViewMatchers.withId(R.id.buy_button_prime_switch))
             .check(ViewAssertions.matches(isChecked()))
     }
 
     @Then("I should be redirected to auto renewal options screen")
     fun redirectToRenewalOptions(){
 
-        onView(withId(R.id.renewalOptionsScreen))
+        onView(withId(R.id.purchasedMembershipPlanView))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Thread.sleep(2000)
     }
@@ -83,12 +83,12 @@ class EnableDisableAutoRenew {
     fun clickOnRenewalOption(option: String){
         when(option){
             "Renew on Expiry"->{
-                onView(withId(R.id.renewOnExpiry))
+                onView(withId(R.id.purchasedMembershipPlanRenewOnExpButton))
                     .perform(ViewActions.click())
                 Thread.sleep(5000)
             }
             "Activate Auto-renew"->{
-                onView(withId(R.id.activateAutoRenew))
+                onView(withId(R.id.purchasedMembershipActivateRenewNowButton))
                     .perform(ViewActions.click())
                 Thread.sleep(5000)
             }
