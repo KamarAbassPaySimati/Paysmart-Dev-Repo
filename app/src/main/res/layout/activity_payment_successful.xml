@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/paymentSuccessfulActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.payment.PaymentSuccessfulActivity">
+
+    <RelativeLayout
+        android:id="@+id/paymentSuccessfulTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/paymentSuccessfulCloseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="@string/close_button_data"
+            android:padding="16dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/black"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/paymentSuccessfulStatusContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/paymentSuccessfulTopBar"
+        android:background="@color/accentPositive">
+
+        <TextView
+            android:id="@+id/paymentSuccessfulStatusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:drawablePadding="12dp"
+            android:fontFamily="@font/inter_regular"
+            android:padding="16dp"
+            android:text="@string/payment_successful"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:drawableStartCompat="@drawable/ico_payment_success" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/paymentSuccessfulScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/paymentSuccessfulButtonContainer"
+        android:layout_below="@+id/paymentSuccessfulStatusContainer"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/paymaart"
+                android:src="@drawable/image_paymaart_logo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/thank_you_for_using_paymaart"
+                android:textColor="@color/neutralGrey"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_payment_success_card"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="@string/from"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulPaymaartNameContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulPaymaartName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/paymaart_name"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulPaymaartNameValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/paymaart_name"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulPaymaartIdContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulPaymaartId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/paymaart_id"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulPaymaartIdValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/paymaart_id"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="@string/to"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulToPaymaartNameContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulToPaymaartName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/paymaart_name"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulToPaymaartNameValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/paymaart_name"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulToPaymaartIdContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulToPaymaartId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/paymaart_id"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulToPaymaartIdValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/paymaart_id"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulToPhoneNumberContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulToPhoneNumber"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/phone_number"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulToPhoneNumberValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/phone_number"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/bg_payment_success_card"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulTxnValueContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulTxn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_semibold"
+                        android:text="@string/txn_value"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulTxnValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_semibold"
+                        android:text="@string/txn_value"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulTxnFeeContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulTxnFee"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/txn_fee"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulTxnFeeValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/txn_fee"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulVatContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulVat"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/vat_included"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulVatValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/vat_included"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulTxnIdContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulTxnId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/txn_id"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulTxnIdValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/txn_id"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulTxnDateTimeContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulTxnDateTime"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/date_time"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulTxnDateTimeValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/date_time"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/paymentSuccessfulMembershipContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulMembership"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/note"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/paymentSuccessfulMembershipValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:lineHeight="@dimen/_24sdp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/note"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textSize="14sp"
+                        tools:targetApi="p" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/paymentSuccessfulButtonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/paymentSuccessfulFlagPayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_payment_status_button"
+            android:contentDescription="@string/flag_payment_data"
+            android:padding="16dp"
+            android:src="@drawable/ico_flag_primary" />
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/paymentSuccessfulSharePayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:background="@drawable/bg_payment_status_button"
+            android:contentDescription="@string/share_payment"
+            android:padding="16dp"
+            android:src="@drawable/ico_share_primary" />
+
+    </LinearLayout>
+
+</RelativeLayout>

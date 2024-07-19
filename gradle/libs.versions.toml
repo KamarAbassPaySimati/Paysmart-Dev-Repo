@@ -76,9 +76,6 @@ org-jacoco-core = { module = "org.jacoco:org.jacoco.core", version.ref = "orgJac
 pdf-viewer = { module = "io.github.afreakyelf:Pdf-Viewer", version.ref = "pdfViewer" }
 pinedittextfield = { module = "com.github.poovamraj:PinEditTextField", version.ref = "pinedittextfieldVersion" }
 places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
-play-services-base = { module = "com.google.android.gms:play-services-base", version.ref = "playServicesBase" }
-play-services-recaptcha = { module = "com.google.android.gms:play-services-recaptcha", version.ref = "playServicesRecaptcha" }
-play-services-safetynet = { module = "com.google.android.gms:play-services-safetynet", version.ref = "playServicesSafetynet" }
 poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 recaptcha = { module = "com.google.android.recaptcha:recaptcha", version.ref = "googleRecaptcha" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
