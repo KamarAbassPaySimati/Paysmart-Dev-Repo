@@ -148,6 +148,7 @@ object Constants {
     const val CUSTOMER_ID = "payment_id"
     const val PAYMENT_TXN_FEE = "payment_txn_fee"
     const val PAYMENT_VAT = "payment_vat"
+    const val PREF_KEY_FCM_TOKEN = "pref_key_fcm_token"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

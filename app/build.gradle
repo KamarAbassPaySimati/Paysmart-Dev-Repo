@@ -83,6 +83,10 @@ android {
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
             buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
+            buildConfigField("String", "FIREBASE_APP_ID", "\"${env.FIREBASE_APP_ID.value}\"")
+            buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
+            buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
         }
 
         qa{
@@ -99,6 +103,10 @@ android {
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
             buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
+            buildConfigField("String", "FIREBASE_APP_ID", "\"${env.FIREBASE_APP_ID.value}\"")
+            buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
+            buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
         }
 
         preprod{
@@ -115,6 +123,10 @@ android {
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
             buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
+            buildConfigField("String", "FIREBASE_APP_ID", "\"${env.FIREBASE_APP_ID.value}\"")
+            buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
+            buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
         }
 
         production{
@@ -130,6 +142,10 @@ android {
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
             buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
+            buildConfigField("String", "FIREBASE_APP_ID", "\"${env.FIREBASE_APP_ID.value}\"")
+            buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
+            buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
         }
     }
 
@@ -151,6 +167,8 @@ dependencies {
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.lifecycle.livedata.ktx
     implementation libs.androidx.fragment.ktx
+    implementation libs.firebase.messaging
+    implementation libs.androidx.lifecycle.process
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core

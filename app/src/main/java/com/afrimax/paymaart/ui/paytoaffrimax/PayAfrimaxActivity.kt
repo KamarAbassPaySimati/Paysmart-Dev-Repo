@@ -278,11 +278,16 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
                     getString(R.string.minimum_amount_is_1_mwk)
             }
 
-            mainDigits.length > 7 || decimalDigits.length > 2 -> {
+            amount.toDouble() > 576000.00 -> {
                 isValid = false
                 b.payAfrimaxActivityPaymentErrorBox.visibility = View.VISIBLE
                 b.payAfrimaxActivityPaymentErrorTV.text = getString(R.string.invalid_amount)
             }
+//            mainDigits.length > 7 || decimalDigits.length > 2 -> {
+//                isValid = false
+//                b.payAfrimaxActivityPaymentErrorBox.visibility = View.VISIBLE
+//                b.payAfrimaxActivityPaymentErrorTV.text = getString(R.string.invalid_amount)
+//            }
 
         }
 
