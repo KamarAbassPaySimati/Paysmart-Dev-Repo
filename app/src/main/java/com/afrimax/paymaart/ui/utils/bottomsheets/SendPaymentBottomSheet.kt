@@ -16,7 +16,9 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.DefaultResponse
+import com.afrimax.paymaart.data.model.PayToAfrimaxErrorResponse
 import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
+import com.afrimax.paymaart.data.model.PayToAfrimaxResponse
 import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentSuccessfulResponse
@@ -160,7 +162,7 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
         if (isValid) {
             when(data) {
                 is SubscriptionDetailsRequestBody -> onConfirmClickedPayPaymaart(binding.sendPaymentPin.text.toString(), data)
-                is PayToAfrimaxRequestBody -> onConfirmClickedPayAfrimax(binding.sendPaymentPassword.text.toString(), data)
+                is PayToAfrimaxRequestBody -> onConfirmClickedPayAfrimax(binding.sendPaymentPin.text.toString(), data)
             }
         }
     }
@@ -235,9 +237,9 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
                 }
 
                 override fun onFailure(call: Call<SubscriptionPaymentSuccessfulResponse>, throwable: Throwable) {
+                    hideButtonLoader()
                     activity.showToast(getString(R.string.default_error_toast))
 //                    displayError("")
-                    hideButtonLoader()
                 }
 
             })
@@ -245,9 +247,56 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
     }
 
     private fun onConfirmClickedPayAfrimax(password: String, data: PayToAfrimaxRequestBody) {
+        val activity = requireContext() as BaseActivity
         val encryptedPassword = AESCrypt.encrypt(password)
+        "response Encrypted".showLogE(encryptedPassword)
         val newRequestBody = data.copy(password = encryptedPassword)
-        "Response".showLogE(newRequestBody)
+        showButtonLoader()
+        lifecycleScope.launch {
+            val idToken = activity.fetchIdToken()
+            val payToAfrimaxHandler = ApiClient.apiService.payToAfrimax(
+                idToken,
+                newRequestBody
+            )
+
+            payToAfrimaxHandler.enqueue(object : Callback<PayToAfrimaxResponse> {
+                override fun onResponse(call: Call<PayToAfrimaxResponse>, response: Response<PayToAfrimaxResponse>) {
+                    if (response.isSuccessful && response.body() != null){
+                        dismiss()
+                        "Response Succ".showLogE(response.body()?.payAfrimaxResponse ?: "")
+                        sheetCallback.onPaymentSuccess(response.body()?.payAfrimaxResponse)
+                    }else {
+                        val errorBody = Gson().fromJson(response.errorBody()?.string(), PayToAfrimaxErrorResponse::class.java)
+                        if (errorBody.message == "Invalid password") {
+                            when (loginMode) {
+                                Constants.SELECTION_PIN -> {
+                                    binding.sendPaymentPinETWarning.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.invalid_pin)
+                                    }
+                                }
+                                Constants.SELECTION_PASSWORD -> {
+                                    binding.sendPaymentPasswordETWarning.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.invalid_password)
+                                    }
+                                }
+                            }
+                        }else{
+                            displayError(errorBody.message)
+                        }
+                    }
+                    hideButtonLoader()
+                }
+
+                override fun onFailure(call: Call<PayToAfrimaxResponse>, throwable: Throwable) {
+                    hideButtonLoader()
+                    activity.showToast(getString(R.string.default_error_toast))
+                }
+
+            })
+        }
+
     }
 
     private fun displayError(message: String){

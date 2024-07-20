@@ -5,7 +5,11 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class PayToAfrimaxResponse(
-    val message: String, val data: PayAfrimaxResponse, val status: Boolean, val time: String
+    val message: String,
+    @SerializedName("data")
+    val payAfrimaxResponse: PayAfrimaxResponse,
+    val status: Boolean,
+    val time: String,
 )
 
 data class PayAfrimaxResponse(
@@ -95,4 +99,17 @@ data class PayToAfrimaxRequestBody(
     val paymaartId: String,
     @SerializedName("paymaart_name")
     val paymaartName: String
+)
+
+data class PayToAfrimaxErrorResponse(
+    @SerializedName("error")
+    val error: String,
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("status")
+    val status: Boolean,
+    @SerializedName("status_code")
+    val statusCode: Int,
+    @SerializedName("time")
+    val time: String
 )

@@ -1,11 +1,14 @@
 package com.afrimax.paymaart.ui.paytoaffrimax
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,6 +24,7 @@ import com.afrimax.paymaart.data.model.GetAfrimaxPlansResponse
 import com.afrimax.paymaart.databinding.ActivityPayAfrimaxBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlanModel
+import com.afrimax.paymaart.ui.payment.PaymentSuccessfulActivity
 import com.afrimax.paymaart.ui.utils.adapters.ChoosePlanAdapter
 import com.afrimax.paymaart.ui.utils.adapters.decoration.RecyclerViewDecoration
 import com.afrimax.paymaart.ui.utils.bottomsheets.SendPaymentBottomSheet
@@ -72,8 +76,8 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
     }
 
     private fun setUpLayout() {
-        b.payAfrimaxActivityShortNameTV.text = getInitials(userName)
-        b.payAfrimaxActivityNameTV.text = userName
+        b.payAfrimaxActivityShortNameTV.text = getInitials(afrimaxName)
+        b.payAfrimaxActivityNameTV.text = afrimaxName
         b.payAfrimaxActivityAfrimaxIdTV.text = afrimaxId
     }
 
@@ -284,7 +288,6 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
 
         if (isValid) {
             //Valid amount
-            "Response".showLogE(amount)
             hideKeyboard(this@PayAfrimaxActivity)
             TotalReceiptSheet().apply {
                 arguments = Bundle().apply {
@@ -294,7 +297,7 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
                     putString(Constants.AFRIMAX_ID, afrimaxId)
                     putString(Constants.AFRIMAX_NAME, afrimaxName)
                     putString(Constants.CUSTOMER_NAME, customerName)
-                    putString(Constants.CUSTOMER_ID, customerId)
+                    putString(Constants.CUSTOMER_ID, customerId.uppercase())
                 }
             }.show(supportFragmentManager, TotalReceiptSheet.TAG)
         }
@@ -463,15 +466,24 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
 
     private fun getInitials(name: String): String {
         if (name.isEmpty()) return ""
-        return name.split(" ")[0]
+        return name.split(" ")
+            .mapNotNull { it.firstOrNull()?.uppercase() }
+            .joinToString(" ")
     }
 
     override fun onPaymentSuccess(successData: Any?) {
-        TODO("Not yet implemented")
+        val intent = Intent(this, PaymentSuccessfulActivity::class.java)
+        val sceneTransitions = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
+        if (successData != null) {
+            intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData as Parcelable)
+        }
+        startActivity(intent, sceneTransitions)
+        finishAfterTransition()
     }
 
     override fun onPaymentFailure(message: String) {
-        TODO("Not yet implemented")
+        b.payAfrimaxActivityPaymentErrorBox.visibility = View.VISIBLE
+        b.payAfrimaxActivityPaymentErrorTV.text = message
     }
 
     override fun onSubmitClicked(membershipPlanModel: MembershipPlanModel) {}

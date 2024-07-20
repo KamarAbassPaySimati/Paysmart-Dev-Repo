@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.model.PayAfrimaxResponse
 import com.afrimax.paymaart.data.model.SubscriptionPaymentDetails
 import com.afrimax.paymaart.databinding.ActivityPaymentSuccessfulBinding
 import com.afrimax.paymaart.ui.BaseActivity
@@ -72,6 +73,24 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 binding.paymentSuccessfulMembership.text = getString(R.string.membership)
                 binding.paymentSuccessfulMembershipValue
                     .text = getString(R.string.formatted_membership_value, data.membership, formatEpochTimeTwo(data.startDate), formatEpochTimeTwo(data.endDate))
+            }
+            is PayAfrimaxResponse -> {
+                val model = CommonViewModel(
+                    fromName = data.fromName,
+                    fromId = data.fromPaymaartId,
+                    toName = data.toName,
+                    toId = data.toPaymaartId,
+                    transactionAmount = data.transactionAmount,
+                    transactionFees = data.tax.toDouble(),
+                    vat = data.vat.toDouble(),
+                    transactionId = data.transactionId,
+                    dateTime = data.dateTime
+                )
+                setCommonView(model)
+                binding.paymentSuccessfulToAfrimaxNameContainer.visibility = View.VISIBLE
+                binding.paymentSuccessfulToAfrimaxIdContainer.visibility = View.VISIBLE
+                binding.paymentSuccessfulToAfrimaxNameValue.text = data.afrimaxName
+                binding.paymentSuccessfulToAfrimaxIdValue.text = data.afrimaxId
             }
         }
         binding.paymentSuccessfulSharePayment.setOnClickListener {

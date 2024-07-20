@@ -17,6 +17,8 @@ import com.afrimax.paymaart.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
+import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
+import com.afrimax.paymaart.data.model.PayToAfrimaxResponse
 import com.afrimax.paymaart.data.model.SaveBasicDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveIdentitySimplifiedToFullRequest
 import com.afrimax.paymaart.data.model.SaveInfoSimplifiedToFullRequest
@@ -165,6 +167,9 @@ interface ApiService {
 
     @GET("$AFRIMAX/cmr/plans")
     fun getAfrimaxPlans(@Header("Authorization") header: String, @Query("page") page: Int): Call<GetAfrimaxPlansResponse>
+
+    @POST("$AFRIMAX/cmr/payment")
+    fun payToAfrimax(@Header("Authorization") header: String, @Body body: PayToAfrimaxRequestBody): Call<PayToAfrimaxResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

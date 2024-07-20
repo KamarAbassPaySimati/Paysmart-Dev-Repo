@@ -9,6 +9,7 @@ import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paymaart.databinding.TotalAmountReceiptBottomSheetBinding
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getFormattedAmount
+import com.afrimax.paymaart.util.showLogE
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class TotalReceiptSheet : BottomSheetDialogFragment() {
@@ -31,9 +32,11 @@ class TotalReceiptSheet : BottomSheetDialogFragment() {
         customerName = requireArguments().getString(Constants.CUSTOMER_NAME) ?: ""
         customerId = requireArguments().getString(Constants.CUSTOMER_ID) ?: ""
 
-        b.totalAmountReceiptTotalAmount.text = getFormattedAmount(getString(R.string.amount_formatted, amount))
-        b.totalAmountReceiptTxnFee.text = getFormattedAmount(getString(R.string.amount_formatted, txnFee))
-        b.totalAmountReceiptVatIncluded.text = getFormattedAmount(getString(R.string.amount_formatted, vat))
+        b.totalAmountReceiptTotalAmount.text = getString(R.string.amount_formatted, getFormattedAmount(amount))
+        b.totalAmountReceiptTxnFee.text = getString(R.string.amount_formatted, getFormattedAmount(txnFee))
+        b.totalAmountReceiptVatIncluded.text = getString(R.string.amount_formatted, getFormattedAmount(vat))
+
+        "Response Here".showLogE(amount)
 
 
         initViews()
