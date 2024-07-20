@@ -26,12 +26,14 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.HomeScreenData
 import com.afrimax.paymaart.data.model.HomeScreenResponse
+import com.afrimax.paymaart.data.model.ValidateAfrimaxIdResponse
 import com.afrimax.paymaart.data.model.WalletData
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
+import com.afrimax.paymaart.ui.paytoaffrimax.ValidateAfrimaxIdActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
@@ -41,6 +43,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPinSheet
 import com.afrimax.paymaart.ui.utils.interfaces.HomeInterface
 import com.afrimax.paymaart.ui.viewkyc.ViewKycDetailsActivity
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.getFormattedAmount
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -59,6 +62,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var profilePicUrl: String = ""
     private var mMembershipType: String = ""
     private var mKycStatus: String = ""
+    private var customerName: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -79,7 +83,6 @@ class HomeActivity : BaseActivity(), HomeInterface {
         initViews()
         setUpListeners()
         setDrawerListeners()
-        getHomeScreenDataApi()
     }
 
     private fun initViews() {
@@ -108,7 +111,9 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityPayAfrimaxButton.setOnClickListener {
             if (checkKycStatus()){
-                //
+                val intent = Intent(this, ValidateAfrimaxIdActivity::class.java)
+                intent.putExtra(Constants.CUSTOMER_NAME, customerName)
+                startActivity(intent)
             }
         }
 
@@ -201,9 +206,9 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
     private fun showBalance(data: WalletData?) {
         if (data != null){
-            b.homeActivityProfileBalanceTV.text =
-                if (data.accountBalance == null) getString(R.string._0_00)
-                else formatNumber(data.accountBalance.toDouble())
+            b.homeActivityProfileBalanceTV.text = getFormattedAmount(data.accountBalance)
+//                if (data.accountBalance == null) getString(R.string._0_00)
+//                else formatNumber(data.accountBalance.toDouble())
 
             //Change icon
             b.homeActivityEyeButton.setBackgroundResource(R.drawable.ico_eye_slash_white)
@@ -410,7 +415,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         profilePicUrl = homeScreenData.profilePic
         publicProfile = homeScreenData.publicProfile
         rejectionReasons = homeScreenData.rejectionReasons ?: ArrayList()
-
+        customerName = homeScreenData.fullName
         when {
             (kycStatus == null) -> {
                 b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.not_started)

@@ -55,5 +55,5 @@
     <color name="goMembershipCardColor">#FFD7B4</color>
     <color name="primaryFontColor">#1F1F1F</color>
     <color name="primeMembershipGrey">#808080</color>
-
+    <color name="disabledGreyColor">#777C88</color>
 </resources>

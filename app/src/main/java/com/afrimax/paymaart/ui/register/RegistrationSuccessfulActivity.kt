@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.DefaultResponse
@@ -15,8 +16,13 @@ import com.afrimax.paymaart.data.model.ResendCredentialsRequest
 import com.afrimax.paymaart.databinding.ActivityRegistrationSuccessfulBinding
 import com.afrimax.paymaart.ui.login.LoginActivity
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.RecaptchaManager
+import com.afrimax.paymaart.util.showLogE
+import com.google.android.recaptcha.RecaptchaAction
+import com.google.android.recaptcha.RecaptchaClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,6 +30,7 @@ import retrofit2.Response
 class RegistrationSuccessfulActivity : AppCompatActivity() {
     private lateinit var b: ActivityRegistrationSuccessfulBinding
     private var resendCount = 0
+    private lateinit var recaptchaClient: RecaptchaClient
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
@@ -39,11 +46,19 @@ class RegistrationSuccessfulActivity : AppCompatActivity() {
         wic.isAppearanceLightStatusBars = true
         wic.isAppearanceLightNavigationBars = true
         window.statusBarColor = ContextCompat.getColor(this, R.color.successGreen)
-
+        recaptchaClient = RecaptchaManager.getClient()!!
         val email = intent.getStringExtra(Constants.INTENT_DATA_EMAIL) ?: ""
 
         b.registrationVerificationSheetResendTV.setOnClickListener {
-            resendCredentialsApi(email)
+            lifecycleScope.launch {
+                recaptchaClient
+                    .execute(RecaptchaAction.custom(""))
+                    .onSuccess {
+                        resendCredentialsApi(email)
+                    }.onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                    }
+            }
             resendCount++
             if (resendCount >= 3) {
                 b.registrationVerificationSheetResendTV.isEnabled = false
