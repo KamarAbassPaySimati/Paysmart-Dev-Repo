@@ -26,12 +26,14 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.HomeScreenData
 import com.afrimax.paymaart.data.model.HomeScreenResponse
+import com.afrimax.paymaart.data.model.ValidateAfrimaxIdResponse
 import com.afrimax.paymaart.data.model.WalletData
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
+import com.afrimax.paymaart.ui.paytoaffrimax.ValidateAfrimaxIdActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
@@ -60,6 +62,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var profilePicUrl: String = ""
     private var mMembershipType: String = ""
     private var mKycStatus: String = ""
+    private var customerName: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -108,7 +111,9 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityPayAfrimaxButton.setOnClickListener {
             if (checkKycStatus()){
-                //
+                val intent = Intent(this, ValidateAfrimaxIdActivity::class.java)
+                intent.putExtra(Constants.CUSTOMER_NAME, customerName)
+                startActivity(intent)
             }
         }
 
@@ -410,7 +415,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         profilePicUrl = homeScreenData.profilePic
         publicProfile = homeScreenData.publicProfile
         rejectionReasons = homeScreenData.rejectionReasons ?: ArrayList()
-
+        customerName = homeScreenData.fullName
         when {
             (kycStatus == null) -> {
                 b.homeActivityNavView.homeDrawerKycStatusTV.text = getString(R.string.not_started)
