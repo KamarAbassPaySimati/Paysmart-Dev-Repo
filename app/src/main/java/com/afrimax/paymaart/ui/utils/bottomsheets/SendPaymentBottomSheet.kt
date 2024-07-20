@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.DefaultResponse
+import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentSuccessfulResponse
@@ -35,7 +36,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class SendPaymentBottomSheet(private val subscriptionDetailsRequestBody: SubscriptionDetailsRequestBody) : BottomSheetDialogFragment() {
+class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment() {
     private lateinit var binding: SendPaymentBottomSheetBinding
     private lateinit var sheetCallback: SendPaymentInterface
     private lateinit var parentActivity: BaseActivity
@@ -64,6 +65,12 @@ class SendPaymentBottomSheet(private val subscriptionDetailsRequestBody: Subscri
                 binding.sendPaymentPinContainer.visibility = View.GONE
                 binding.sendPaymentPasswordContainer.visibility = View.VISIBLE
             }
+        }
+
+        binding.sendPaymentSubText.text = when (data) {
+            is SubscriptionDetailsRequestBody -> getString(R.string.send_payment_subtext)
+            is PayToAfrimaxRequestBody -> getString(R.string.send_payment_subtext_pay_afrimax)
+            else -> ""
         }
 
         binding.sendPaymentClose.setOnClickListener {
@@ -151,7 +158,10 @@ class SendPaymentBottomSheet(private val subscriptionDetailsRequestBody: Subscri
         }
 
         if (isValid) {
-            onConfirmClicked(binding.sendPaymentPin.text.toString())
+            when(data) {
+                is SubscriptionDetailsRequestBody -> onConfirmClickedPayPaymaart(binding.sendPaymentPin.text.toString(), data)
+                is PayToAfrimaxRequestBody -> onConfirmClickedPayAfrimax(binding.sendPaymentPassword.text.toString(), data)
+            }
         }
     }
 
@@ -170,19 +180,22 @@ class SendPaymentBottomSheet(private val subscriptionDetailsRequestBody: Subscri
         }
 
         if (isValid) {
-            onConfirmClicked(binding.sendPaymentPassword.text.toString())
+            when(data) {
+                is SubscriptionDetailsRequestBody -> onConfirmClickedPayPaymaart(binding.sendPaymentPassword.text.toString(), data)
+                is PayToAfrimaxRequestBody -> onConfirmClickedPayAfrimax(binding.sendPaymentPassword.text.toString(), data)
+            }
         }
     }
 
-    private fun onConfirmClicked(password: String) {
+    private fun onConfirmClickedPayPaymaart(password: String, data: SubscriptionDetailsRequestBody) {
         val activity = context as BaseActivity
         val credential = AESCrypt.encrypt(password)
         showButtonLoader()
         val subscriptionPaymentRequestBody = SubscriptionPaymentRequestBody(
-            referenceNumber = subscriptionDetailsRequestBody.referenceNumber,
-            subType = subscriptionDetailsRequestBody.subType,
+            referenceNumber = data.referenceNumber,
+            subType = data.subType,
             credentials = credential,
-            autoRenew = subscriptionDetailsRequestBody.autoRenew
+            autoRenew = data.autoRenew
         )
 
         lifecycleScope.launch {
@@ -229,7 +242,12 @@ class SendPaymentBottomSheet(private val subscriptionDetailsRequestBody: Subscri
 
             })
         }
+    }
 
+    private fun onConfirmClickedPayAfrimax(password: String, data: PayToAfrimaxRequestBody) {
+        val encryptedPassword = AESCrypt.encrypt(password)
+        val newRequestBody = data.copy(password = encryptedPassword)
+        "Response".showLogE(newRequestBody)
     }
 
     private fun displayError(message: String){

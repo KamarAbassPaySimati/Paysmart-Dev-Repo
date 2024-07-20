@@ -140,6 +140,14 @@ object Constants {
     const val RESET = "reset"
     const val AUTO_RENEWAL_OFF = "auto_renewal_off"
     const val MEMBERSHIP_PLANS = "membership_plans"
+    const val PAYMENT_TYPE = "payment_type"
+    const val AFRIMAX_ID = "afrimax_id"
+    const val AFRIMAX_NAME = "afrimax_name"
+    const val CUSTOMER_NAME = "customer_name"
+    const val PAYMENT_AMOUNT = "payment_amount"
+    const val CUSTOMER_ID = "payment_id"
+    const val PAYMENT_TXN_FEE = "payment_txn_fee"
+    const val PAYMENT_VAT = "payment_vat"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"
