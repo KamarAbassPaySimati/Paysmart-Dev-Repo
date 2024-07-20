@@ -11,6 +11,7 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import com.afrimax.paymaart.ui.utils.adapters.ChoosePlanAdapter
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
@@ -82,7 +83,7 @@ class PayAfrimax {
             }
 
             "Login Pin" -> {
-                Espresso.onView(withId(R.id.payAfrimaxSheetPinETWarningTV)).check(
+                Espresso.onView(withId(R.id.sendPaymentPinETWarning)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -116,20 +117,20 @@ class PayAfrimax {
 
     @Then("I should be redirected to send payment screen")
     fun redirectingToSendPaymentScreen() {
-        Espresso.onView(ViewMatchers.withId(R.id.payAfrimaxActivity))
+        Espresso.onView(withId(R.id.payAfrimaxActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @When("I click on Send Payment button for pay to afrimax")
     fun clickingOnSendPaymentButton() {
-        Espresso.onView(ViewMatchers.withId(R.id.payAfrimaxActivitySendPaymentButton))
+        Espresso.onView(withId(R.id.payAfrimaxActivitySendPaymentButton))
             .perform(ViewActions.click())
         Thread.sleep(3000)
     }
 
     @When("I enter amount as {string} for pay to afrimax")
     fun enterAmount(amount: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.payAfrimaxActivityAmountET)).perform(
+        Espresso.onView(withId(R.id.payAfrimaxActivityAmountET)).perform(
             ViewActions.replaceText(""),
             ViewActions.typeText(amount),
             ViewActions.closeSoftKeyboard()
@@ -138,53 +139,53 @@ class PayAfrimax {
 
     @When("I enter login PIN {string} for payment")
     fun enterLoginPin(pin: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.payAfrimaxSheetPinET)).perform(
+        Espresso.onView(withId(R.id.sendPaymentPin)).perform(
             ViewActions.replaceText(""), ViewActions.typeText(pin), ViewActions.closeSoftKeyboard()
         )
     }
 
     @Then("I should see a popup for proceeding payment for pay to afrimax")
     fun popupForProceedingPayment() {
-        Espresso.onView(ViewMatchers.withId(R.id.totalReceiptSheet))
+        Espresso.onView(withId(R.id.totalAmountReceiptProceed))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @Then("I should be asked for the login pin for payment")
     fun askingForLoginPin() {
-        Espresso.onView(ViewMatchers.withId(R.id.payAfrimaxSheet))
+        Espresso.onView(withId(R.id.sendPaymentPin))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @When("I click on proceed button for payment")
     fun clickingOnProceedButtonForPayment() {
-        Espresso.onView(ViewMatchers.withId(R.id.totalReceiptSheetProceedButton))
+        Espresso.onView(withId(R.id.totalAmountReceiptProceed))
             .perform(ViewActions.click())
         Thread.sleep(3000)
     }
 
     @When("I click on the confirm button for login pin")
     fun clickingOnConfirmButtonForLogin() {
-        Espresso.onView(ViewMatchers.withId(R.id.payAfrimaxSheetConfirmButton))
+        Espresso.onView(withId(R.id.sendPaymentConfirm))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }
 
     @When("I should read a message stating {string} for payment")
     fun paymentSuccessful(message: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.paymentStatusActivityStatusTV))
+        Espresso.onView(withId(R.id.paymentSuccessfulStatusText))
             .check(ViewAssertions.matches(ViewMatchers.withText(message)))
     }
 
     @When("I select Choose Plan tab")
     fun selectingCustomerTab() {
-        Espresso.onView(ViewMatchers.withId(R.id.payAfrimaxActivityChoosePlanTV))
+        Espresso.onView(withId(R.id.payAfrimaxActivityChoosePlanTV))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }
 
     @When("I click on first plan in list")
     fun clickingOnFirstPlan() {
-        Espresso.onView(ViewMatchers.withId(R.id.payAfrimaxActivityRV)).perform(
+        Espresso.onView(withId(R.id.payAfrimaxActivityRV)).perform(
             RecyclerViewActions.actionOnItemAtPosition<ChoosePlanAdapter.ChoosePlanViewHolder>(
                 0, ViewActions.click()
             )

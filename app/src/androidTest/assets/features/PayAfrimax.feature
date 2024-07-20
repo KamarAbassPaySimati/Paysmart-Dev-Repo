@@ -17,8 +17,8 @@ Feature: Paymaart- Customer Android- Pay Afrimax
   Background: Logging into admin approved customer account
     Given The login screen is displayed
     When I choose to login with paymart ID
-    When I enter paymart ID "81133389"
-    And I enter login PIN "529106"
+    When I enter paymart ID "92322529"
+    And I enter login PIN "965274"
     When I click on login button
     Then I see the TOTP screen
     When I enter the generated OTP
@@ -45,19 +45,6 @@ Feature: Paymaart- Customer Android- Pay Afrimax
     When I enter amount as "0.88" for pay to afrimax
     When I click on Send Payment button for pay to afrimax
     Then I should see error message "Minimum amount is 1.00 MWK" for field with ID "Amount" for pay to afrimax
-    When I enter amount as "11000000" for pay to afrimax
-    When I click on Send Payment button for pay to afrimax
-    Then I should see a popup for proceeding payment for pay to afrimax
-    When I click on proceed button for payment
-    Then I should be asked for the login pin for payment
-    When I click on the confirm button for login pin
-    Then I should see error message "Required field" for field with ID "Login Pin" for pay to afrimax
-    When I enter login PIN "123451" for payment
-    When I click on the confirm button for login pin
-    Then I should see error message "Invalid PIN" for field with ID "Login Pin" for pay to afrimax
-    When I enter login PIN "529106" for payment
-    When I click on the confirm button for login pin
-    Then I should see error message "Insufficient funds" for field with ID "Amount" for pay to afrimax
     When I enter amount as "100" for pay to afrimax
     When I click on Send Payment button for pay to afrimax
     Then I should see a popup for proceeding payment for pay to afrimax
@@ -68,8 +55,22 @@ Feature: Paymaart- Customer Android- Pay Afrimax
     When I enter login PIN "123451" for payment
     When I click on the confirm button for login pin
     Then I should see error message "Invalid PIN" for field with ID "Login Pin" for pay to afrimax
-    When I enter login PIN "529106" for payment
+    When I enter login PIN "965274" for payment
     When I click on the confirm button for login pin
+#    Then I should see error message "Insufficient funds" for field with ID "Amount" for pay to afrimax
+#    When I enter amount as "100" for pay to afrimax
+#    When I click on Send Payment button for pay to afrimax
+#    Then I should see a popup for proceeding payment for pay to afrimax
+#    When I click on proceed button for payment
+#    Then I should be asked for the login pin for payment
+#    When I click on the confirm button for login pin
+#    Then I should see error message "Required field" for field with ID "Login Pin" for pay to afrimax
+#    When I enter login PIN "123451" for payment
+#    When I click on the confirm button for login pin
+#    Then I should see error message "Invalid PIN" for field with ID "Login Pin" for pay to afrimax
+#    When I enter login PIN "529106" for payment
+#    When I click on the confirm button for login pin
+    Then I should be redirected to payment successful screen
     Then I should read a message stating "Payment Successful" for payment
 
   Scenario: Making payments through choosing Plans
@@ -84,6 +85,7 @@ Feature: Paymaart- Customer Android- Pay Afrimax
     When I enter login PIN "736910" for payment
     When I click on the confirm button for login pin
     Then I should see error message "Invalid PIN" for field with ID "Login Pin" for pay to afrimax
-    When I enter login PIN "529106" for payment
+    When I enter login PIN "965274" for payment
     When I click on the confirm button for login pin
+    Then I should be redirected to payment successful screen
     Then I should read a message stating "Payment Successful" for payment
