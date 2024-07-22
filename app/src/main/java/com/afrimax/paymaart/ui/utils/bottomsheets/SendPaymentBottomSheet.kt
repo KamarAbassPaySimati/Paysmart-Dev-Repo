@@ -263,7 +263,6 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
                 override fun onResponse(call: Call<PayToAfrimaxResponse>, response: Response<PayToAfrimaxResponse>) {
                     if (response.isSuccessful && response.body() != null){
                         dismiss()
-                        "Response Succ".showLogE(response.body()?.payAfrimaxResponse ?: "")
                         sheetCallback.onPaymentSuccess(response.body()?.payAfrimaxResponse)
                     }else {
                         val errorBody = Gson().fromJson(response.errorBody()?.string(), PayToAfrimaxErrorResponse::class.java)

@@ -232,7 +232,6 @@ class KycNationalityActivity : BaseActivity() {
             "Luxembourger",
             "Macedonian",
             "Malagasy",
-            "Malawian",
             "Malaysian",
             "Maldivan",
             "Malian",

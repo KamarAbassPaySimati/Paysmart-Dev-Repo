@@ -36,9 +36,6 @@ class TotalReceiptSheet : BottomSheetDialogFragment() {
         b.totalAmountReceiptTxnFee.text = getString(R.string.amount_formatted, getFormattedAmount(txnFee))
         b.totalAmountReceiptVatIncluded.text = getString(R.string.amount_formatted, getFormattedAmount(vat))
 
-        "Response Here".showLogE(amount)
-
-
         initViews()
         setUpListeners()
 
