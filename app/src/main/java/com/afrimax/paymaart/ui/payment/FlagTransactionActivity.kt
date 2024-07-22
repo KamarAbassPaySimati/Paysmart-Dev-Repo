@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -18,7 +16,7 @@ import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.FlagTransactionRequest
 import com.afrimax.paymaart.databinding.ActivityFlagTransactionBinding
 import com.afrimax.paymaart.ui.BaseActivity
-import com.afrimax.paymaart.ui.utils.interfaces.FlaggingSuccessSheet
+import com.afrimax.paymaart.ui.utils.bottomsheets.FlaggingSuccessSheet
 import com.afrimax.paymaart.util.Constants
 import com.airbnb.lottie.LottieAnimationView
 import kotlinx.coroutines.launch

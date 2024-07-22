@@ -46,7 +46,6 @@ class MembershipBannerViewDefs {
         Thread.sleep(5000)
         Espresso.onView(ViewMatchers.withId(R.id.activityMembershipPlan))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Thread.sleep(2000)
     }
 
     @Then("I should read {string} above the membership banner")

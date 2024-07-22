@@ -565,7 +565,7 @@
     <string name="to">To</string>
     <string name="txn_value">Txn Value*</string>
     <string name="txn_id">Txn ID</string>
-    <string name="date_time">Date, time</string>
+    <string name="date_time">Date, time (CAT)</string>
     <string name="note">Note</string>
     <string name="flag_payment_data">Flag Payment</string>
     <string name="share_payment">Share payment</string>

@@ -93,14 +93,16 @@ class PaymentSuccessfulActivity : BaseActivity() {
                     dateTime = data.dateTime
                 )
                 setCommonView(model)
+                transactionId = data.transactionId
                 binding.paymentSuccessfulToAfrimaxNameContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulToAfrimaxIdContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulToAfrimaxNameValue.text = data.afrimaxName
                 binding.paymentSuccessfulToAfrimaxIdValue.text = data.afrimaxId
-                binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
-                binding.paymentSuccessfulMembership.text = getString(R.string.plan)
-                binding.paymentSuccessfulMembershipValue.text = data.plan
-                transactionId = data.transactionId ?: ""
+                if (!data.plan.isNullOrEmpty()) {
+                    binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                    binding.paymentSuccessfulMembership.text = getString(R.string.plan)
+                    binding.paymentSuccessfulMembershipValue.text = data.plan
+                }
             }
         }
 

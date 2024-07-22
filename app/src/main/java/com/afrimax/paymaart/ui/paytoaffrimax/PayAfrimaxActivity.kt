@@ -473,11 +473,12 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
     }
 
     override fun onPaymentSuccess(successData: Any?) {
+        val newPlan = selectedPlan?.let { it.serviceName[0] } ?: ""
         val intent = Intent(this, PaymentSuccessfulActivity::class.java)
         val sceneTransitions = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
         if (successData != null) {
             when (successData) {
-                is PayAfrimaxResponse -> intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData.copy(plan = selectedPlan!!.serviceName[0]) as Parcelable)
+                is PayAfrimaxResponse -> intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData.copy(plan = newPlan) as Parcelable)
                 else -> intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData as Parcelable)
             }
         }

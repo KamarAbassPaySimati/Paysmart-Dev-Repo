@@ -18,7 +18,7 @@
         android:fontFamily="@font/inter_semibold"
         android:text="@string/total"
         android:textColor="@color/primaryColor"
-        android:textSize="20sp"
+        android:textSize="24sp"
         tools:ignore="RelativeOverlap" />
 
     <LinearLayout
