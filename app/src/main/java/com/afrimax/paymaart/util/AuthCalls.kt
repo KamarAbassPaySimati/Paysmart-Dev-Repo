@@ -1,7 +1,9 @@
 package com.afrimax.paymaart.util
 
 import android.content.Context
+import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.DefaultResponse
+import com.afrimax.paymaart.data.model.FcmTokenRequest
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
 import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult
 import com.amplifyframework.core.Amplify
@@ -29,44 +31,44 @@ class AuthCalls {
      * It is invoked every time a user logs in and in the overridden onNewToken() method.*/
     suspend fun storeFcmTokenApi(idToken: String, fcmToken: String): Boolean {
         return suspendCoroutine { continuation ->
-//            val storeFcmTokenCall = ApiClient.apiService.storeFcmToken(
-//                idToken, FcmTokenRequest(
-//                    notificationId = fcmToken
-//                )
-//            )
-//            storeFcmTokenCall.enqueue(object : Callback<DefaultResponse> {
-//                override fun onResponse(
-//                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
-//                ) {
-//                    continuation.resume(response.isSuccessful)
-//                }
-//
-//                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-//                    continuation.resume(false)
-//                }
-//            })
+            val storeFcmTokenCall = ApiClient.apiService.storeFcmToken(
+                idToken, FcmTokenRequest(
+                    notificationId = fcmToken
+                )
+            )
+            storeFcmTokenCall.enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
+                ) {
+                    continuation.resume(response.isSuccessful)
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    continuation.resume(false)
+                }
+            })
         }
     }
 
     /**This function deletes any previous FCM tokens from the backend database to prevent unnecessary storage consumption.*/
     suspend fun deleteFcmTokenApi(idToken: String, fcmToken: String): Boolean {
         return suspendCoroutine { continuation ->
-//            val storeFcmTokenCall = ApiClient.apiService.deleteFcmToken(
-//                idToken, FcmTokenRequest(
-//                    notificationId = fcmToken
-//                )
-//            )
-//            storeFcmTokenCall.enqueue(object : Callback<DefaultResponse> {
-//                override fun onResponse(
-//                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
-//                ) {
-//                    continuation.resume(response.isSuccessful)
-//                }
-//
-//                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
-//                    continuation.resume(false)
-//                }
-//            })
+            val storeFcmTokenCall = ApiClient.apiService.deleteFcmToken(
+                idToken, FcmTokenRequest(
+                    notificationId = fcmToken
+                )
+            )
+            storeFcmTokenCall.enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
+                ) {
+                    continuation.resume(response.isSuccessful)
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    continuation.resume(false)
+                }
+            })
         }
     }
 

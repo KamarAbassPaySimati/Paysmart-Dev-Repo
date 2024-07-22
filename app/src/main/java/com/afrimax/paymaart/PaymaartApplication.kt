@@ -79,8 +79,6 @@ class PaymaartApplication: Application() {
                     //Fetch fcm token using Firebase sdk
                     val fcmToken = fetchFcmToken()
 
-                    "Response".showLogE(fcmToken)
-
                     //Store the fcm token in backend
                     authCalls.storeFcmTokenApi(idToken, fcmToken)
 

@@ -19,10 +19,14 @@ import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.ui.splash.SplashScreenActivity
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 
-class MessagingService : FirebaseMessagingService() {
+class MessagingService(
+    private val authCalls: AuthCalls = AuthCalls(),
+    private val prefsManager: PrefsManager = PrefsManager()
+) : FirebaseMessagingService() {
 
     /**The handleIntent() method is invoked for both foreground and background push notifications.
      * It converts the incoming intent into a NotificationData model to extract the notification data,
@@ -43,21 +47,21 @@ class MessagingService : FirebaseMessagingService() {
 
         with(ProcessLifecycleOwner.get()) {
             lifecycleScope.launch {
-                val idToken = AuthCalls().fetchIdToken()
+                val idToken = authCalls.fetchIdToken()
 
                 //Fetch recent fcm token from local storage
-                val recentFcmToken = PrefsManager().retrieveFcmToken(this@MessagingService)
+                val recentFcmToken = prefsManager.retrieveFcmToken(this@MessagingService)
 
                 //Call API to delete recent fcm token from backend
-                if (idToken != null && recentFcmToken != null) AuthCalls().deleteFcmTokenApi(
+                if (idToken != null && recentFcmToken != null) authCalls.deleteFcmTokenApi(
                     idToken, recentFcmToken
                 )
 
                 //Store the new token in the backend
-                if (idToken != null) AuthCalls().storeFcmTokenApi(idToken, token)
+                if (idToken != null) authCalls.storeFcmTokenApi(idToken, token)
 
                 //Store latest fcm token in local storage
-                PrefsManager().storeFcmToken(this@MessagingService, token)
+                prefsManager.storeFcmToken(this@MessagingService, token)
             }
         }
     }
@@ -68,7 +72,7 @@ class MessagingService : FirebaseMessagingService() {
             lifecycleScope.launch {
                 when (action) {
                     ACTION_LOGOUT -> {
-                        AuthCalls().initiateLogout(this@MessagingService)
+                        authCalls.initiateLogout(this@MessagingService)
 
                         val i = applicationContext.packageManager.getLaunchIntentForPackage(
                             applicationContext.packageName
@@ -88,6 +92,7 @@ class MessagingService : FirebaseMessagingService() {
      * Subsequently, the channel is not recreated. Each time the function is called,
      * it builds and displays the notification.*/
     private fun showNotification(data: Intent) {
+        "ResponseNotify".showLogE(Gson().toJson(data))
         //Create the channel first | This only happens once when the app is first booting
         createNotificationChannel()
 
