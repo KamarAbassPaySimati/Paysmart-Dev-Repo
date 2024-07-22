@@ -14,6 +14,8 @@ import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -36,6 +38,9 @@ import java.io.FileOutputStream
 
 class PaymentSuccessfulActivity : BaseActivity() {
     private lateinit var binding: ActivityPaymentSuccessfulBinding
+    private lateinit var nextScreenResultLauncher: ActivityResultLauncher<Intent>
+    private var transactionId: String = ""
+    private var isFlagged: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPaymentSuccessfulBinding.inflate(layoutInflater)
@@ -73,6 +78,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 binding.paymentSuccessfulMembership.text = getString(R.string.membership)
                 binding.paymentSuccessfulMembershipValue
                     .text = getString(R.string.formatted_membership_value, data.membership, formatEpochTimeTwo(data.startDate), formatEpochTimeTwo(data.endDate))
+                transactionId = data.transactionId ?: ""
             }
             is PayAfrimaxResponse -> {
                 val model = CommonViewModel(
@@ -87,12 +93,35 @@ class PaymentSuccessfulActivity : BaseActivity() {
                     dateTime = data.dateTime
                 )
                 setCommonView(model)
+                transactionId = data.transactionId
                 binding.paymentSuccessfulToAfrimaxNameContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulToAfrimaxIdContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulToAfrimaxNameValue.text = data.afrimaxName
                 binding.paymentSuccessfulToAfrimaxIdValue.text = data.afrimaxId
+                if (!data.plan.isNullOrEmpty()) {
+                    binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                    binding.paymentSuccessfulMembership.text = getString(R.string.plan)
+                    binding.paymentSuccessfulMembershipValue.text = data.plan
+                }
             }
         }
+
+        nextScreenResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val data = result.data
+            if ((result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) && data != null) {
+                isFlagged = data.getBooleanExtra(Constants.FLAGGED_STATUS, false)
+                if (isFlagged) makeTransactionFlagged()
+            }
+        }
+
+        binding.paymentSuccessfulFlagPayment.setOnClickListener {
+            nextScreenResultLauncher.launch(Intent(
+                this@PaymentSuccessfulActivity, FlagTransactionActivity::class.java
+            ).apply {
+                putExtra(Constants.TRANSACTION_ID, transactionId)
+            })
+        }
+
         binding.paymentSuccessfulSharePayment.setOnClickListener {
             shareReceipt()
         }
@@ -117,6 +146,14 @@ class PaymentSuccessfulActivity : BaseActivity() {
         binding.paymentSuccessfulVatValue.text = getString(R.string.amount_formatted, getFormattedAmount(model.vat))
         binding.paymentSuccessfulTxnIdValue.text = model.transactionId
         binding.paymentSuccessfulTxnDateTimeValue.text = formatEpochTime(model.dateTime)
+    }
+
+    private fun makeTransactionFlagged() {
+        binding.paymentSuccessfulFlagPayment
+            .background = ContextCompat.getDrawable(this, R.drawable.bg_payment_status_button_filled)
+        binding.paymentSuccessfulFlagPayment.setOnClickListener {
+            showToast("This transaction is already flagged")
+        }
     }
 
     private fun shareReceipt() {
@@ -169,7 +206,6 @@ class PaymentSuccessfulActivity : BaseActivity() {
         slide.slideEdge = Gravity.BOTTOM
         slide.setDuration(300)
         slide.setInterpolator(AccelerateInterpolator())
-
         window.enterTransition = slide
         window.returnTransition = slide
     }

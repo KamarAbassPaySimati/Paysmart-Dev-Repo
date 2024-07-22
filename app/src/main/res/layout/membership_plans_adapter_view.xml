@@ -47,7 +47,7 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:layout_marginEnd="1dp"
-        android:background="@color/primeMembershipCardColor"
+        android:background="@color/primeMembershipCardColorTwo"
         android:gravity="center"
         android:orientation="vertical">
 

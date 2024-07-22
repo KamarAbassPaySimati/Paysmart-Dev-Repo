@@ -1,7 +1,10 @@
 package com.afrimax.paymaart.ui.home
 
+import android.Manifest
 import android.app.ActivityOptions
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +14,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
@@ -63,6 +68,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var mMembershipType: String = ""
     private var mKycStatus: String = ""
     private var customerName: String = ""
+    private lateinit var notificationPermissionCheckLauncher: ActivityResultLauncher<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -83,6 +89,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         initViews()
         setUpListeners()
         setDrawerListeners()
+        askNotificationPermission()
     }
 
     private fun initViews() {
@@ -95,6 +102,8 @@ class HomeActivity : BaseActivity(), HomeInterface {
                 else finish()
             }
         })
+
+        notificationPermissionCheckLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
     }
 
     private fun setUpListeners() {
@@ -351,6 +360,21 @@ class HomeActivity : BaseActivity(), HomeInterface {
             b.homeActivityNavView.apply {
                 homeDrawerSettingsDiv.visibility = View.GONE
                 homeDrawerSettingsHiddenContainer.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                // FCM SDK (and your app) can post notifications.
+            } else {
+                // Directly ask for the permission
+                notificationPermissionCheckLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
     }

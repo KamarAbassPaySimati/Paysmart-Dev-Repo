@@ -565,7 +565,7 @@
     <string name="to">To</string>
     <string name="txn_value">Txn Value*</string>
     <string name="txn_id">Txn ID</string>
-    <string name="date_time">Date, time</string>
+    <string name="date_time">Date, time (CAT)</string>
     <string name="note">Note</string>
     <string name="flag_payment_data">Flag Payment</string>
     <string name="share_payment">Share payment</string>
@@ -594,4 +594,26 @@
     <string name="invalid_amount">Invalid amount</string>
     <string name="please_choose_a_plan">Please a choose a plan</string>
     <string name="send_payment_subtext_pay_afrimax">Once confirmed, credits sent to Afrimax cannot be reversed.</string>
+    <string name="flag_transaction">Flag Transaction</string>
+    <string name="select_all_applicable">Select all applicable</string>
+    <string name="flag_transaction_reason_1a">Transaction failure due to security measures</string>
+    <string name="flag_transaction_reason_1b">Inadequate communication about declined payments</string>
+    <string name="flag_transaction_reason_1c">System errors and outages</string>
+    <string name="flag_reason1"><![CDATA[Transaction & System Failures]]></string>
+    <string name="flag_reason2"><![CDATA[Policy Clarity & Customer Support]]></string>
+    <string name="flag_reason3"><![CDATA[Service Quality & Marketing Accuracy]]></string>
+    <string name="flag_transaction_reason_2a">Lack of acceptable payment options</string>
+    <string name="flag_transaction_reason_2b">Unclear terms and conditions regarding returns or chargebacks</string>
+    <string name="flag_transaction_reason_2c">Recurring billing complications</string>
+    <string name="flag_transaction_reason_3a">Privacy breach incidents</string>
+    <string name="flag_transaction_reason_3b">Discrepancies between advertisements and purchased products</string>
+    <string name="flag_transaction_reason_4a">Password threats and phishing attacks</string>
+    <string name="flag_transaction_reason_4b">Insufficient privacy protection practices</string>
+    <string name="flag_transaction_reason_4c">Refund denials or delays</string>
+    <string name="flag_reason4">User Experience Challenges</string>
+    <string name="transaction_flagged_successfully">Transaction flagged successfully</string>
+    <string name="empty_string" />
+    <string name="done">Done</string>
+    <string name="flagging_success_subtext">Our team will review the transaction shortly. Thank you for bringing this to our attention.</string>
+    <string name="plan">Plan</string>
 </resources>

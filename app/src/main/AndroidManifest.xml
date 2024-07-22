@@ -18,8 +18,13 @@
         android:theme="@style/Theme.Paymaart"
         tools:ignore="DiscouragedApi,LockedOrientationActivity"
         tools:targetApi="31">
-        <!--  For the below two activities task affinity is set to .membership
-        because the final activity payment successful activity has .membership as task affinity      -->
+        <activity
+            android:name=".ui.payment.FlagTransactionActivity"
+            android:exported="false" />
+        <!--
+          For the below two activities task affinity is set to .membership
+        because the final activity payment successful activity has .membership as task affinity
+        -->
         <activity
             android:name=".ui.paytoaffrimax.PayAfrimaxActivity"
             android:exported="false"
@@ -186,6 +191,14 @@
             android:name=".MainActivity"
             android:exported="false" />
 
+        <service
+            android:name=".util.MessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -195,6 +208,16 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />
         </provider>
+
+        <provider
+            android:name="com.google.firebase.provider.FirebaseInitProvider"
+            android:authorities="${applicationId}.firebaseinitprovider"
+            tools:node="remove" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="paymaart_agent_notification_channel_id" />
+
     </application>
 
 </manifest>
