@@ -21,6 +21,7 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.AfrimaxPlan
 import com.afrimax.paymaart.data.model.GetAfrimaxPlansResponse
+import com.afrimax.paymaart.data.model.PayAfrimaxResponse
 import com.afrimax.paymaart.databinding.ActivityPayAfrimaxBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlanModel
@@ -477,10 +478,14 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
     }
 
     override fun onPaymentSuccess(successData: Any?) {
+        val newPlan = selectedPlan?.let { it.serviceName[0] } ?: ""
         val intent = Intent(this, PaymentSuccessfulActivity::class.java)
         val sceneTransitions = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
         if (successData != null) {
-            intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData as Parcelable)
+            when (successData) {
+                is PayAfrimaxResponse -> intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData.copy(plan = newPlan) as Parcelable)
+                else -> intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData as Parcelable)
+            }
         }
         startActivity(intent, sceneTransitions)
         finishAfterTransition()

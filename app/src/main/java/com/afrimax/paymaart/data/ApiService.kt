@@ -5,6 +5,7 @@ import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.DeleteAccountReqRequest
+import com.afrimax.paymaart.data.model.FlagTransactionRequest
 import com.afrimax.paymaart.data.model.GetAfrimaxPlansResponse
 import com.afrimax.paymaart.data.model.GetInstitutesResponse
 import com.afrimax.paymaart.data.model.GetSharedSecretRequest
@@ -170,6 +171,9 @@ interface ApiService {
 
     @POST("$AFRIMAX/cmr/payment")
     fun payToAfrimax(@Header("Authorization") header: String, @Body body: PayToAfrimaxRequestBody): Call<PayToAfrimaxResponse>
+
+    @POST("flag-transaction/flag-transaction-customer")
+    fun flagTransaction(@Header("Authorization") header: String, @Body body: FlagTransactionRequest): Call<DefaultResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
