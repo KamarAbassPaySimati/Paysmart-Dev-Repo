@@ -336,7 +336,7 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                         dismiss()
                     } else {
                         val errorBody = Gson().fromJson(response.errorBody()?.string(), DefaultResponse::class.java)
-                        if (errorBody.message == "Invalid Credential") {
+                        if (errorBody.message == "Incorrect password") {
                             when (loginMode) {
                                 Constants.SELECTION_PIN -> {
                                     binding.sendPaymentPinETWarning.apply {

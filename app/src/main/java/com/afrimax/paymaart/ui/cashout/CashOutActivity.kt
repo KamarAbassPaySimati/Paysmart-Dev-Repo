@@ -11,8 +11,11 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.IndividualSearchUserData
+import com.afrimax.paymaart.data.model.TransactionDetailsResponse
 import com.afrimax.paymaart.databinding.ActivityCashOutBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlanModel
@@ -21,6 +24,10 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.TotalReceiptSheet
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getInitials
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CashOutActivity : BaseActivity(), SendPaymentInterface {
     private lateinit var b: ActivityCashOutBinding
@@ -158,16 +165,64 @@ class CashOutActivity : BaseActivity(), SendPaymentInterface {
         if (isValid) {
             //Valid amount
             hideKeyboard(this@CashOutActivity)
-            val cashOutModel = CashOutModel(
-                transactionFee = "0",
-                vat = "0",
-                amount = amount,
-                receiverPaymaartId = userData.paymaartId
-            )
-            val totalReceiptSheet = TotalReceiptSheet(cashOutModel)
-            totalReceiptSheet.show(supportFragmentManager, totalReceiptSheet.tag)
+            fetchTransactionDetails(amount)
         }
     }
+
+    private fun fetchTransactionDetails(amount: String){
+        showLoader()
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            lifecycleScope.launch {
+                val transactionDetailsHandler = ApiClient.apiService.getTransactionDetails(
+                    idToken,
+                    amount
+                )
+                transactionDetailsHandler.enqueue(object: Callback<TransactionDetailsResponse>{
+                    override fun onResponse(
+                        call: Call<TransactionDetailsResponse>,
+                        response: Response<TransactionDetailsResponse>,
+                    ) {
+                        if (response.isSuccessful && response.body() != null){
+                            val data = response.body()!!.transactionDetails
+                            val cashOutModel = CashOutModel(
+                                transactionFee = data.grossTransactionFee.toString(),
+                                vat = data.vatAmount.toString(),
+                                amount = amount,
+                                receiverPaymaartId = userData.paymaartId,
+                                displayAmount = "${amount.toInt() + data.grossTransactionFee}"
+                            )
+                            val totalReceiptSheet = TotalReceiptSheet(cashOutModel)
+                            totalReceiptSheet.show(supportFragmentManager, totalReceiptSheet.tag)
+                        }
+                        hideLoader()
+                    }
+
+                    override fun onFailure(call: Call<TransactionDetailsResponse>, throwable: Throwable) {
+                        showToast(getString(R.string.default_error_toast))
+                    }
+
+                })
+            }
+        }
+    }
+
+    private fun showLoader(){
+        b.selfCashOutActivityCompleteCashOutLoaderLottie.visibility = View.VISIBLE
+        b.selfCashOutActivityCompleteCashOutButton.apply {
+            isEnabled = false
+            text = getString(R.string.empty_string)
+        }
+    }
+
+    private fun hideLoader() {
+        b.selfCashOutActivityCompleteCashOutLoaderLottie.visibility = View.GONE
+        b.selfCashOutActivityCompleteCashOutButton.apply {
+            isEnabled = true
+            text = getString(R.string.complete_cash_out)
+        }
+    }
+
 
     override fun onPaymentSuccess(successData: Any?) {
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@CashOutActivity).toBundle()

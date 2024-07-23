@@ -11,6 +11,7 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import com.afrimax.paymaart.ui.utils.adapters.SearchUsersAdapter
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
 import io.cucumber.junit.Cucumber
@@ -42,20 +43,20 @@ class CashOutRequest {
 
     @When("I click on the cash-out button")
     fun clickCashOutButton() {
-        Espresso.onView(withId(R.id.cashOutButton)).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.homeActivityCashOutButton)).perform(ViewActions.click())
         Thread.sleep(7000)
     }
 
     @Then("I should be redirected to recent cash-out screen")
     fun redirectedToRecentCashOutScreen() {
-        Espresso.onView(withId(R.id.recentCashOut))
+        Espresso.onView(withId(R.id.selfCashOutSearchActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         Thread.sleep(5000)
     }
 
     @When("I search for agent with {string} for requesting cash-out")
     fun searchAgent(searchInput: String) {
-        Espresso.onView(withId(R.id.cashOutSearchUsers)).perform(
+        Espresso.onView(withId(R.id.selfCashOutSearchActivitySearchET)).perform(
             ViewActions.replaceText(searchInput), ViewActions.closeSoftKeyboard()
         )
         Thread.sleep(5000)
@@ -63,14 +64,15 @@ class CashOutRequest {
 
     @Then("I should read a message stating {string} for requesting cash-out")
     fun viewMessage(message: String) {
-        Espresso.onView(withId(R.id.paymentSearchAgentsFragmentNoDataFound)).check(
+        Espresso.onView(withId(R.id.selfCashOutSearchActivityNoDataFoundTitleTV)).check(
             ViewAssertions.matches(ViewMatchers.withText(message))
         )
     }
 
+
     @Then("I should see a list of Agents for requesting cash-out")
     fun seeListOfAgents() {
-        Espresso.onView(withId(R.id.paymentSearchAgents)).check(
+        Espresso.onView(withId(R.id.selfCashOutSearchActivityRV)).check(
             ViewAssertions.matches(
                 ViewMatchers.isDisplayed()
             )
@@ -79,7 +81,7 @@ class CashOutRequest {
 
     @When("I click on first agent profile in list for requesting cash-out")
     fun clickFirstCustomer() {
-        Espresso.onView(ViewMatchers.withId(R.id.CashOutSearch)).perform(
+        Espresso.onView(withId(R.id.selfCashOutSearchActivityRV)).perform(
             RecyclerViewActions.actionOnItemAtPosition<SearchUsersAdapter.SearchUsersViewHolder>(
                 0, ViewActions.click()
             )
@@ -89,13 +91,13 @@ class CashOutRequest {
 
     @Then("I should be redirected to complete cash-out screen")
     fun redirectingToCashOutPage() {
-        Espresso.onView(ViewMatchers.withId(R.id.CashOutActivity))
+        Espresso.onView(withId(R.id.selfCashOutActivity))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @When("I click on the complete cash-out button")
     fun clickCompleteCashOutButton() {
-        Espresso.onView(ViewMatchers.withId(R.id.CashOutActivityCompleteCashOutButton))
+        Espresso.onView(withId(R.id.selfCashOutActivityCompleteCashOutButton))
             .perform(ViewActions.click())
         Thread.sleep(3000)
     }
@@ -104,7 +106,7 @@ class CashOutRequest {
     fun checkErrorMessageIsDisplayed(errorMessage: String, fieldID: String) {
         when (fieldID) {
             "Amount" -> {
-                Espresso.onView(ViewMatchers.withId(R.id.CashOutActivityPaymentErrorTV)).check(
+                Espresso.onView(withId(R.id.selfCashOutActivityPaymentErrorTV)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -112,7 +114,7 @@ class CashOutRequest {
             }
 
             "PIN" -> {
-                Espresso.onView(ViewMatchers.withId(R.id.CashOutSheetPinETWarningTV)).check(
+                Espresso.onView(withId(R.id.sendPaymentPinETWarning)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -123,7 +125,7 @@ class CashOutRequest {
 
     @When("I enter amount as {string} for requesting cash-out")
     fun enterAmount(amount: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.CashOutActivityAmountET)).perform(
+        Espresso.onView(withId(R.id.selfCashOutActivityAmountET)).perform(
             ViewActions.replaceText(""),
             ViewActions.typeText(amount),
             ViewActions.closeSoftKeyboard()
@@ -132,40 +134,40 @@ class CashOutRequest {
 
     @Then("I should see a popup for proceeding cash-out")
     fun popupForProceedingCAshOut() {
-        Espresso.onView(ViewMatchers.withId(R.id.totalReceiptSheet))
+        Espresso.onView(withId(R.id.totalAmountReceiptBottomSheet))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @When("I click on proceed cash-out button")
     fun clickProceedCashOutButton() {
-        Espresso.onView(ViewMatchers.withId(R.id.totalReceiptSheetProceedButton))
+        Espresso.onView(withId(R.id.totalAmountReceiptProceed))
             .perform(ViewActions.click())
         Thread.sleep(3000)
     }
 
     @Then("I should be asked for authorisation pin for requesting cash-out")
     fun askingForAuthorisationPin() {
-        Espresso.onView(ViewMatchers.withId(R.id.CashOutSheet))
+        Espresso.onView(withId(R.id.sendPaymentBottomSheet))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
     @Then("I enter authorisation PIN {string} for requesting cash-out")
     fun enterAuthorisationPIN(pin: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.CashOutSheetPinET)).perform(
+        Espresso.onView(withId(R.id.sendPaymentPin)).perform(
             ViewActions.replaceText(""), ViewActions.typeText(pin), ViewActions.closeSoftKeyboard()
         )
     }
 
     @When("I click on confirm button for requesting cash-out")
     fun clickConfirmCashOutButton() {
-        Espresso.onView(ViewMatchers.withId(R.id.cashOutSheetConfirmButton))
+        Espresso.onView(withId(R.id.sendPaymentConfirm))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }
 
     @When("I should read a message stating {string} after cash out")
     fun paymentStatus(message: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.paymentStatusActivityStatusTV))
+        Espresso.onView(withId(R.id.selfCashOutSearchActivityNoDataFoundSubtextTV))
             .check(ViewAssertions.matches(ViewMatchers.withText(message)))
     }
 

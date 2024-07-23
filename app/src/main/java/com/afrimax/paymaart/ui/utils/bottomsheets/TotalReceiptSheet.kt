@@ -32,7 +32,7 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                 vat = model.vat
             }
             is CashOutModel ->{
-                amount = model.amount
+                amount = model.displayAmount
                 txnFee = model.transactionFee
                 vat = model.vat
             }

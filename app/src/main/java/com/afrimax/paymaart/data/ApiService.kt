@@ -41,6 +41,7 @@ import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionDetailsResponse
 import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentSuccessfulResponse
+import com.afrimax.paymaart.data.model.TransactionDetailsResponse
 import com.afrimax.paymaart.data.model.UpdateAutoRenewalRequestBody
 import com.afrimax.paymaart.data.model.UpdatePinOrPasswordRequest
 import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
@@ -191,6 +192,9 @@ interface ApiService {
 
     @POST("$CASHIN_CASHOUT/request-cashout-customer")
     fun cashOut(@Header("Authorization") header: String, @Body body: CashOutRequestBody): Call<CashOutApiResponse>
+
+    @GET("$CASHIN_CASHOUT/calc-fee")
+    fun getTransactionDetails(@Header("Authorization") header: String, @Query("amount") amount: String): Call<TransactionDetailsResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
