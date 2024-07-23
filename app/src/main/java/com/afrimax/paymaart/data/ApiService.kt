@@ -5,6 +5,7 @@ import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.DeleteAccountReqRequest
+import com.afrimax.paymaart.data.model.GetAfrimaxPlansResponse
 import com.afrimax.paymaart.data.model.GetInstitutesResponse
 import com.afrimax.paymaart.data.model.GetSharedSecretRequest
 import com.afrimax.paymaart.data.model.GetSharedSecretResponse
@@ -16,6 +17,8 @@ import com.afrimax.paymaart.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
+import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
+import com.afrimax.paymaart.data.model.PayToAfrimaxResponse
 import com.afrimax.paymaart.data.model.SaveBasicDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveIdentitySimplifiedToFullRequest
 import com.afrimax.paymaart.data.model.SaveInfoSimplifiedToFullRequest
@@ -36,6 +39,7 @@ import com.afrimax.paymaart.data.model.SubscriptionPaymentSuccessfulResponse
 import com.afrimax.paymaart.data.model.UpdateAutoRenewalRequestBody
 import com.afrimax.paymaart.data.model.UpdatePinOrPasswordRequest
 import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
+import com.afrimax.paymaart.data.model.ValidateAfrimaxIdResponse
 import com.afrimax.paymaart.data.model.VerifyForgotOtpResponse
 import com.afrimax.paymaart.data.model.VerifyOtpForEditSelfKycRequest
 import com.afrimax.paymaart.data.model.VerifyOtpForEditSelfKycResponse
@@ -48,6 +52,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 private const val CUSTOMER_USER = "customer-user"
@@ -55,6 +60,7 @@ private const val BDD = "bdd"
 private const val KYC_UPDATE = "kyc-update"
 private const val PAYMAART = "paymaart"
 private const val CUSTOMER = "customer"
+private const val AFRIMAX = "afrimax"
 interface ApiService {
 
     @GET("$CUSTOMER_USER/security-questions")
@@ -155,6 +161,15 @@ interface ApiService {
 
     @PATCH("$PAYMAART/$CUSTOMER/update-auto-renew")
     fun updateAutoRenewal(@Header("Authorization") header: String, @Body body: UpdateAutoRenewalRequestBody): Call<Unit>
+
+    @GET("$AFRIMAX/cmr/customer/{id}")
+    fun validateAfrimaxId(@Header("Authorization") header: String, @Path("id") afrimaxId: Number): Call<ValidateAfrimaxIdResponse>
+
+    @GET("$AFRIMAX/cmr/plans")
+    fun getAfrimaxPlans(@Header("Authorization") header: String, @Query("page") page: Int): Call<GetAfrimaxPlansResponse>
+
+    @POST("$AFRIMAX/cmr/payment")
+    fun payToAfrimax(@Header("Authorization") header: String, @Body body: PayToAfrimaxRequestBody): Call<PayToAfrimaxResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
