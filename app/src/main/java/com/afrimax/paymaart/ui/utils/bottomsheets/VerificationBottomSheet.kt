@@ -1,6 +1,7 @@
 package com.afrimax.paymaart.ui.utils.bottomsheets
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -11,6 +12,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
+import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.SendOtpRequestBody
@@ -21,9 +24,14 @@ import com.afrimax.paymaart.databinding.VerificationBottomSheetBinding
 import com.afrimax.paymaart.ui.utils.interfaces.VerificationBottomSheetInterface
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getStringExt
+import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.recaptcha.Recaptcha
+import com.google.android.recaptcha.RecaptchaAction
+import com.google.android.recaptcha.RecaptchaClient
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,19 +41,17 @@ import java.util.Locale
 import java.util.TimeZone
 
 
-class VerificationBottomSheet : BottomSheetDialogFragment() {
+class VerificationBottomSheet(private val recaptchaClient: RecaptchaClient) : BottomSheetDialogFragment() {
 
     private lateinit var binding: VerificationBottomSheetBinding
     private lateinit var sheetCallback: VerificationBottomSheetInterface
     private var resendCount = 0
     private var token = ""
-
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = VerificationBottomSheetBinding.inflate(inflater, container, false)
-
         val firstName = requireArguments().getString(Constants.OTP_FIRST_NAME) ?: ""
         val middleName = requireArguments().getString(Constants.OTP_MIDDLE_NAME) ?: ""
         val lastName = requireArguments().getString(Constants.OTP_LAST_NAME) ?: ""
@@ -81,27 +87,51 @@ class VerificationBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding.registrationVerificationSheetVerifyButton.setOnClickListener {
-            verifyOtpApi(type, token)
+            showButtonLoader(
+                binding.registrationVerificationSheetVerifyButton,
+                binding.registrationVerificationSheetVerifyButtonLoaderLottie
+            )
+            lifecycleScope.launch {
+                recaptchaClient
+                    .execute(RecaptchaAction.custom(Constants.VERIFY_OTP))
+                    .onSuccess { _ ->
+                        verifyOtpApi(type, token)
+                    }
+                    .onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                        Toast.makeText(
+                            requireContext(), getString(R.string.default_error_toast), Toast.LENGTH_LONG
+                        ).show()
+                    }
+            }
+
         }
 
         binding.registrationVerificationSheetResendTV.setOnClickListener {
-            resendOtpApi(firstName, middleName, lastName, type, value, countryCode)
             startTimer()
+            lifecycleScope.launch {
+                recaptchaClient
+                    .execute(RecaptchaAction.custom(Constants.VERIFY_OTP))
+                    .onSuccess { _ ->
+                        resendOtpApi(firstName, middleName, lastName, type, value, countryCode)
+                    }
+                    .onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                        Toast.makeText(
+                            requireContext(), getString(R.string.default_error_toast), Toast.LENGTH_LONG
+                        ).show()
+                    }
+            }
             binding.registrationVerificationSheetResendTV.isEnabled = false
         }
 
         configureCodeEditTextFocusListeners(binding.registrationVerificationSheetCodeET)
         startTimer()
-
         return binding.root
     }
 
     private fun verifyOtpApi(type: String, token: String) {
         if (validateOtp()) {
-            showButtonLoader(
-                binding.registrationVerificationSheetVerifyButton,
-                binding.registrationVerificationSheetVerifyButtonLoaderLottie
-            )
             val otp = binding.registrationVerificationSheetCodeET.text.toString()
             val verifyOtpCall = ApiClient.apiService.verifyOtp(VerifyOtpRequestBody(otp, token))
             verifyOtpCall.enqueue(object : Callback<VerifyOtpResponse> {

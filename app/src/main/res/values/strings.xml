@@ -546,8 +546,8 @@
     <string name="select_your_preferred_membership_duration">Select your preferred membership duration</string>
     <string name="thirty_days_for_300_mwk">30 days for 300.00 MWK</string>
     <string name="ninety_one_days_for_850_mwk">91 days for 850.00 MWK</string>
-    <string name="auto_renewal">Auto-renewal?</string>
-    <string name="auto_renewal_two">Auto Renewal</string>
+    <string name="auto_renewal">Auto-renew?</string>
+    <string name="auto_renewal_two">Auto Renew</string>
     <string name="membership_plan_formatted">%1$s days| %2$s | Auto Renewal %3$s</string>
     <string name="membership_plan_validity_formatted">Validity %1$s - %2$s</string>
     <string name="membership_type_formatted">%1$s Membership</string>
@@ -571,11 +571,11 @@
     <string name="share_payment">Share payment</string>
     <string name="confirm_auto_renewal_off">Confirm Auto Renewal OFF</string>
     <string name="confirm_auto_renewal_sub_text">On expiry, membership will revert to Go. Charges will apply to most e-payments. Keep Auto-renew to retain free e-payments.</string>
-    <string name="renew_on_expiry">Renew on Expiry</string>
+    <string name="renew_on_expiry">Renew Once</string>
     <string name="activate_auto_renew_now">Activate Auto-renew</string>
     <string name="renewal_message_formatted">%1$s days for %2$s MWK</string>
     <string name="membership">Membership</string>
-    <string name="formatted_membership_value">%1$s\n%2$s - %3$s</string>
+    <string name="formatted_membership_value">%1$s days\n%2$s - %3$s</string>
     <string name="unable_to_proceed">Unable to proceed due to multiple incorrect attempts.</string>
     <string name="insufficient_funds">Insufficient funds</string>
     <string name="full_kyc_reg">Full KYC Reg</string>

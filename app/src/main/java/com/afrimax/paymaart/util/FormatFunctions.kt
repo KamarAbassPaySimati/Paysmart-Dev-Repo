@@ -5,46 +5,68 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-fun getFormattedAmount(amount: Double?): String{
-    if (amount == null) {
-        return "0.00"
+private val DECIMAL_FORMAT_LONG = DecimalFormat("#,###.00")
+private val DECIMAL_FORMAT_SHORT = DecimalFormat("0.00")
+/**
+    fun getFormattedAmount(amount: Double?): String{
+        if (amount == null) {
+            return "0.00"
+        }
+        return if (amount < 1000.00) {
+            DECIMAL_FORMAT_SHORT.format(amount)
+        } else {
+            DECIMAL_FORMAT_LONG.format(amount)
+        }
     }
-    return if (amount < 1000.00) {
-        decimalFormatSmall.format(amount)
+
+    fun getFormattedAmount(amount: Int?): String{
+        if (amount == null) {
+            return "0.00"
+        }
+        val newAmount = amount.toDouble()
+        return if (newAmount < 1000) {
+            DECIMAL_FORMAT_SHORT.format(amount)
+        } else {
+            DECIMAL_FORMAT_LONG.format(amount)
+        }
+    }
+
+    fun getFormattedAmount(amount: String?): String{
+        if (amount == null) {
+            return "0.00"
+        }
+        val newAmount = amount.toDouble()
+        return if (newAmount < 1000) {
+            DECIMAL_FORMAT_SHORT.format(amount)
+        } else {
+            DECIMAL_FORMAT_LONG.format(amount)
+        }
+    }
+
+ */
+
+fun <T> getFormattedAmount(amount: T?): String {
+    if (amount == null) return "0.00"
+
+    val newAmount: Double = when (amount) {
+        is Double -> amount
+        is Int -> amount.toDouble()
+        is String -> amount.toDoubleOrNull() ?: 0.00
+        else -> 0.00
+    }
+
+    return if (newAmount < 1000) {
+        DECIMAL_FORMAT_SHORT.format(newAmount)
     } else {
-        decimalFormatLarge.format(amount)
+        DECIMAL_FORMAT_LONG.format(newAmount)
     }
 }
 
-fun getFormattedAmount(amount: Int?): String{
-    if (amount == null) {
-        return "0.00"
-    }
-    val newAmount = amount.toDouble()
-    return if (newAmount < 1000) {
-        decimalFormatSmall.format(amount)
-    } else {
-        decimalFormatLarge.format(amount)
-    }
-}
-
-fun getFormattedAmount(amount: String?): String{
-    if (amount == null) {
-        return "0.00"
-    }
-    val newAmount = amount.toDouble()
-    return if (newAmount < 1000) {
-        decimalFormatSmall.format(amount)
-    } else {
-        decimalFormatLarge.format(amount)
-    }
-}
 
 fun formatEpochTime(timestamp: Long?) : String {
     if (timestamp == null) {
         return "-"
     }
-    val dateFormat = dateFormat
     val date = Date(timestamp * 1000)
     return dateFormat.format(date)
 }
@@ -53,16 +75,9 @@ fun formatEpochTimeTwo(timestamp: Long?) : String {
     if (timestamp == null) {
         return "-"
     }
-    val dateFormat = dateFormatTwo
     val date = Date(timestamp * 1000)
-    return dateFormat.format(date)
+    return dateFormatTwo.format(date)
 }
-
-val decimalFormatLarge: DecimalFormat
-    get() = DecimalFormat("#,###.00")
-
-val decimalFormatSmall: DecimalFormat
-    get() = DecimalFormat("0.00")
 
 val dateFormat: SimpleDateFormat
     get() = SimpleDateFormat("dd MMM yyyy, HH:mm 'hours'", Locale.getDefault())

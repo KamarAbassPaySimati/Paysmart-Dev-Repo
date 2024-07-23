@@ -444,10 +444,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:lineHeight="@dimen/_24sdp"
                         android:fontFamily="@font/inter_regular"
                         android:text="@string/note"
                         android:textColor="@color/neutralGreyPrimaryText"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        tools:targetApi="p" />
 
                 </LinearLayout>
 
