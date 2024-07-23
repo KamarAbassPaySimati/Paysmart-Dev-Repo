@@ -27,6 +27,7 @@ import com.afrimax.paymaart.data.model.SaveInfoSimplifiedToFullRequest
 import com.afrimax.paymaart.data.model.SaveNewAddressDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveNewIdentityDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveNewInfoDetailsSelfKycRequest
+import com.afrimax.paymaart.data.model.SearchUsersDataResponse
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
 import com.afrimax.paymaart.data.model.SendForgotOtpResponse
@@ -181,6 +182,9 @@ interface ApiService {
 
     @POST("$CUSTOMER_USER/delete-notification-id")
     fun deleteFcmToken(@Header("Authorization") header: String, @Body body: FcmTokenRequest): Call<DefaultResponse>
+
+    @GET("cashin-cashout/search-cashout-agent")
+    fun getAgentsForSelfCashOut(@Header("Authorization") header: String, @Query("page") page: Int, @Query("search") search: String?): Call<SearchUsersDataResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

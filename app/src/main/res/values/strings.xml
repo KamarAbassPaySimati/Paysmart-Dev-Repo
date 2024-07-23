@@ -585,7 +585,7 @@
     <string name="afrimax_name">Afrimax Name</string>
     <string name="afrimax_id_note">Note: If Afrimax name is incorrect, please re-enter your Afrimax ID</string>
     <string name="re_enter">Re-enter</string>
-    <string name="invalid_afrimax_id">Invalid Afrimax Id</string>
+    <string name="invalid_afrimax_id">Invalid Afrimax ID</string>
     <string name="enter_amount">Enter Amount</string>
     <string name="choose_plan">Choose Plan</string>
     <string name="amount">" Amount"</string>
@@ -616,4 +616,10 @@
     <string name="done">Done</string>
     <string name="flagging_success_subtext">Our team will review the transaction shortly. Thank you for bringing this to our attention.</string>
     <string name="plan">Plan</string>
+    <string name="agent_id_or_name">Agent ID or name</string>
+    <string name="no_data_found_subtext">Try adjusting your search to find what you’re looking for</string>
+    <string name="no_data_found">No Data Found</string>
+    <string name="recent_cash_out">Recent cash-out</string>
+    <string name="no_cash_out_yet">No Cash-out Yet</string>
+    <string name="no_cash_out_yet_subtext">You have no cash-out at the moment.</string>
 </resources>
