@@ -54,6 +54,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.VerificationBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.VerificationBottomSheetInterface
 import com.afrimax.paymaart.ui.webview.WebViewActivity
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.RecaptchaManager
 import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.kotlin.core.Amplify
@@ -88,7 +89,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     private var phoneRecordId = ""
     private var profilePicUri: Uri? = null
     private var isPicUploaded: Boolean = false
-    private lateinit var recaptchaClient: RecaptchaClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,21 +108,10 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         setUpLayout()
         setupListeners()
         retrieveSecurityQuestionsApi()
-        initializeRecaptchaClient()
     }
 
-    private fun initializeRecaptchaClient() {
-        lifecycleScope.launch {
-            Recaptcha.getClient(application, BuildConfig.SITE_KEY)
-                .onSuccess { client ->
-                    recaptchaClient = client
-                }
-                .onFailure { exception ->
-                    // Handle communication errors ...
-                    // See "Handle communication errors" section
-                }
-        }
-    }
+    val recaptchaClient: RecaptchaClient
+        get() = RecaptchaManager.getClient()!!
 
     private fun setUpLayout() {
 
@@ -617,15 +606,16 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         if (isValid) {
+            showButtonLoader(b.onboardRegistrationActivitySubmitButton, b.onboardRegistrationActivitySubmitButtonLoaderLottie)
             lifecycleScope.launch {
                 recaptchaClient
                     .execute(RecaptchaAction.SIGNUP)
-                    .onSuccess { token ->
-//                        "Response".showLogE(token)
+                    .onSuccess { _ ->
                         registerCustomer()
                     }
                     .onFailure { exception ->
                         "Response".showLogE(exception.message ?: "")
+                        showToast(getString(R.string.default_error_toast))
                     }
             }
         } else {
@@ -634,10 +624,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     }
 
     private fun registerCustomer() {
-        showButtonLoader(
-            b.onboardRegistrationActivitySubmitButton,
-            b.onboardRegistrationActivitySubmitButtonLoaderLottie
-        )
 
         //If registering  a customer check for profile picture
 //        val profilePic = if (profilePicUri != null) "$profilePicUri" else ""
@@ -837,7 +823,17 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         if (isValid) {
-            sendOtp(Constants.OTP_EMAIL_TYPE)
+            lifecycleScope.launch {
+                recaptchaClient
+                    .execute(RecaptchaAction.SIGNUP)
+                    .onSuccess { token ->
+                        sendOtp(Constants.OTP_EMAIL_TYPE)
+                    }
+                    .onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                        showToast(getString(R.string.default_error_toast))
+                    }
+            }
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
@@ -893,7 +889,17 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         if (isValid) {
-            sendOtp(Constants.OTP_SMS_TYPE)
+            lifecycleScope.launch {
+                recaptchaClient
+                    .execute(RecaptchaAction.SIGNUP)
+                    .onSuccess { token ->
+                        sendOtp(Constants.OTP_SMS_TYPE)
+                    }
+                    .onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                        showToast(getString(R.string.default_error_toast))
+                    }
+            }
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
@@ -939,7 +945,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
                         runOnUiThread {
-                            verificationBottomSheet = VerificationBottomSheet()
+                            verificationBottomSheet = VerificationBottomSheet(recaptchaClient)
                             verificationBottomSheet.isCancelable = false
                             val bundle = Bundle()
                             when (type) {

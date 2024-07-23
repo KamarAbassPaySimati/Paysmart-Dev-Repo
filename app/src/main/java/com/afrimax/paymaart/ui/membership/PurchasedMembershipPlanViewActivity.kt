@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -17,10 +18,13 @@ import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.ApiService
 import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionDetailsResponse
+import com.afrimax.paymaart.data.model.UpdateAutoRenewalRequestBody
 import com.afrimax.paymaart.databinding.ActivityPurchasedMembershipPlanViewBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.home.MembershipType
 import com.afrimax.paymaart.ui.payment.PaymentSuccessfulActivity
+import com.afrimax.paymaart.ui.utils.bottomsheets.MembershipPlansPurchaseBottomSheet
+import com.afrimax.paymaart.ui.utils.bottomsheets.MembershipPlansPurchaseBottomSheetOnRenewal
 import com.afrimax.paymaart.ui.utils.bottomsheets.TotalAmountReceiptBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
@@ -41,6 +45,7 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
     private lateinit var binding: ActivityPurchasedMembershipPlanViewBinding
     private var membershipPlan: MembershipPlanModel? = null
     private lateinit var renewalType: String
+    private var membershipPlanTypes: ArrayList<RenewalPlans>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPurchasedMembershipPlanViewBinding.inflate(layoutInflater)
@@ -60,13 +65,14 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
     private fun setUpView(){
         membershipPlan = intent.parcelable<MembershipPlanModel>(Constants.MEMBERSHIP_MODEL)
         renewalType = intent.getStringExtra(Constants.RENEWAL_TYPE) ?: ""
+        membershipPlanTypes = intent.getParcelableArrayListExtra(Constants.MEMBERSHIP_PLANS)
         val membershipType = membershipPlan?.membershipType
         val autoRenewal = if (membershipPlan?.renewalType == true) { "On" } else "Off"
         val validity = membershipPlan?.validity
         val paymentType = membershipPlan?.paymentType
-        val referenceNumber = membershipPlan?.referenceNumber
         val startDate = getStartDate()
         val endDate = getEndDate(startDate, validity)
+        val membershipTypeNew = if (membershipPlan?.membershipType == MembershipType.PRIME.type) MembershipType.PRIME else MembershipType.PRIMEX
         when (membershipType) {
             MembershipType.PRIME.type -> {
                 val primeColor = getColor(R.color.primeMembershipGrey)
@@ -122,6 +128,9 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
         if (renewalType == Constants.NEW_SUBSCRIPTION) {
             binding.purchasedMembershipPlansSubmitButtonContainer.visibility = View.VISIBLE
             binding.purchasedMembershipPlanRenewContainer.visibility = View.GONE
+        }else{
+            binding.purchasedMembershipPlansSubmitButtonContainer.visibility = View.GONE
+            binding.purchasedMembershipPlanRenewContainer.visibility = View.VISIBLE
         }
 
         binding.purchasedMembershipPlansSubmitButton.setOnClickListener {
@@ -129,17 +138,40 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
             binding.purchasedMembershipPlanErrorTV.visibility = View.GONE
             onSendPaymentClicked(
                 SubscriptionDetailsRequestBody(
-                    referenceNumber = referenceNumber,
-                    subType = membershipType?.lowercase(),
-                    autoRenew = membershipPlan?.renewalType == true
+                    referenceNumber = getReferenceNumber,
+                    subType = getSubType.lowercase(),
+                    autoRenew = getAutoRenew
                 )
             )
+        }
+
+        binding.purchasedMembershipPlanRenewOnExpButton.setOnClickListener {
+            if (membershipPlanTypes != null) {
+                val membershipPlansList = membershipPlanTypes?.toMutableList() ?: emptyList()
+                val membershipPurchasePlansSheet = MembershipPlansPurchaseBottomSheetOnRenewal(membershipTypeNew, membershipPlansList)
+                membershipPurchasePlansSheet.isCancelable = false
+                membershipPurchasePlansSheet.show(supportFragmentManager, MembershipPlansPurchaseBottomSheet.TAG)
+            }
+        }
+
+        binding.purchasedMembershipActivateRenewNowButton.setOnClickListener {
+            onActivateAutoRenew()
         }
 
         binding.addBankActivityBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
     }
+
+    private val getReferenceNumber: String
+        get() = membershipPlan?.referenceNumber ?: ""
+
+    private val getSubType: String
+        get() = membershipPlan?.membershipType ?: ""
+
+    private val getAutoRenew: Boolean
+        get() = membershipPlan?.renewalType == true
+
 
     private fun onSendPaymentClicked(subscriptionDetailsRequestBody: SubscriptionDetailsRequestBody) {
         showButtonLoader()
@@ -171,6 +203,31 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
         }
     }
 
+    private fun onActivateAutoRenew() {
+        showLoader()
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            val autoRenewalHandler = ApiClient.apiService.updateAutoRenewal(idToken, UpdateAutoRenewalRequestBody(autoRenew = true))
+
+            autoRenewalHandler.enqueue(object : Callback<Unit>{
+                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                    if (response.isSuccessful){
+                        finish()
+                    }else{
+                        showToast(getString(R.string.default_error_toast))
+                    }
+                    hideLoader()
+                }
+
+                override fun onFailure(call: Call<Unit>, throwable: Throwable) {
+                    hideLoader()
+                    showToast(getString(R.string.default_error_toast))
+                }
+            })
+
+        }
+    }
+
     private fun showButtonLoader() {
         binding.purchasedMembershipPlansSubmitButton.apply {
             text = ""
@@ -189,6 +246,27 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
             isEnabled = true
         }
         binding.purchasedMembershipPlansSubmitButtonLoaderLottie.visibility = View.GONE
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    private fun showLoader() {
+        binding.purchasedMembershipActivateRenewNowButtonLottieLoader.visibility = View.VISIBLE
+        binding.purchasedMembershipActivateRenewNowButton.apply {
+            text = ""
+            isEnabled = false
+        }
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+    }
+
+    private fun hideLoader() {
+        binding.purchasedMembershipActivateRenewNowButtonLottieLoader.visibility = View.GONE
+        binding.purchasedMembershipActivateRenewNowButton.apply {
+            text = getString(R.string.activate_auto_renew_now)
+            isEnabled = true
+        }
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
@@ -229,6 +307,12 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
                 getString(R.string.unable_to_proceed)
             }else { message }
         }
+    }
+
+    override fun onSubmitClicked(membershipPlanModel: MembershipPlanModel) {
+        membershipPlan = membershipPlanModel
+        binding.purchasedMembershipPlansSubmitButtonContainer.visibility = View.VISIBLE
+        binding.purchasedMembershipPlanRenewContainer.visibility = View.GONE
     }
 
 }

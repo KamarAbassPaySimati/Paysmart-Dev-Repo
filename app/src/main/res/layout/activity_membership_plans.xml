@@ -225,7 +225,6 @@
                     android:thumbTint="@color/custom_thumb_tint_color_two"
                     app:trackTint="@color/custom_track_tint_color"
                     app:switchPadding="0dp"
-                    android:alpha=".5"
                     android:layout_weight="1"
                     android:scaleX=".8"
                     android:scaleY=".8"

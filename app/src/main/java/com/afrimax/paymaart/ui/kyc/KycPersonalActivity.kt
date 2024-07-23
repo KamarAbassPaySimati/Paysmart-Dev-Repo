@@ -1573,9 +1573,19 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
                 true
         }
         if (viewScope == Constants.VIEW_SCOPE_UPDATE) {
-            b.onboardKycPersonalActivityGenderMaleRB.isEnabled = false
-            b.onboardKycPersonalActivityGenderFemaleRB.isEnabled = false
-            b.onboardKycPersonalActivityGenderUndisclosedRB.isEnabled = false
+            val color = ContextCompat.getColorStateList(this@KycPersonalActivity, R.color.disabledGreyColor)
+            b.onboardKycPersonalActivityGenderMaleRB.apply {
+                isEnabled = false
+                buttonTintList = color
+            }
+            b.onboardKycPersonalActivityGenderFemaleRB.apply {
+                isEnabled = false
+                buttonTintList = color
+            }
+            b.onboardKycPersonalActivityGenderUndisclosedRB.apply {
+                isEnabled = false
+                buttonTintList = color
+            }
         }
     }
 
@@ -1809,10 +1819,23 @@ class KycPersonalActivity : BaseActivity(), KycYourInfoInterface {
         }
 
         if (viewScope == Constants.VIEW_SCOPE_UPDATE) {
-            b.onboardKycPersonalActivityBusinessRelationShip1CB.isEnabled = false
-            b.onboardKycPersonalActivityBusinessRelationShip2CB.isEnabled = false
-            b.onboardKycPersonalActivityBusinessRelationShip3CB.isEnabled = false
-            b.onboardKycPersonalActivityBusinessRelationShip4CB.isEnabled = false
+            val color = ContextCompat.getColorStateList(this@KycPersonalActivity, R.color.disabledGreyColor)
+            b.onboardKycPersonalActivityBusinessRelationShip1CB.apply {
+                isEnabled = false
+                buttonTintList = color
+            }
+            b.onboardKycPersonalActivityBusinessRelationShip2CB.apply {
+                isEnabled = false
+                buttonTintList = color
+            }
+            b.onboardKycPersonalActivityBusinessRelationShip3CB.apply {
+                isEnabled = false
+                buttonTintList = color
+            }
+            b.onboardKycPersonalActivityBusinessRelationShip4CB.apply {
+                isEnabled = false
+                buttonTintList = color
+            }
         }
     }
 

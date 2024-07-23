@@ -25,6 +25,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.DefaultResponse
@@ -39,10 +40,15 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.PinGuideBottomSheet
 import com.afrimax.paymaart.util.AESCrypt
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.LoginPinTransformation
+import com.afrimax.paymaart.util.RecaptchaManager
+import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.recaptcha.RecaptchaAction
+import com.google.android.recaptcha.RecaptchaClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,9 +61,8 @@ import java.util.regex.Pattern
 class ForgotPasswordPinActivity : BaseActivity() {
     private lateinit var b: ActivityForgotPasswordPinBinding
     private lateinit var forgotCredentialType: String
-
     private lateinit var countDownTimer: CountDownTimer
-
+    private lateinit var recaptchaClient: RecaptchaClient
     private var paymaartId = ""
     private var encryptedOtp = ""
     private var securityQuestionId = ""
@@ -73,7 +78,7 @@ class ForgotPasswordPinActivity : BaseActivity() {
         val wic = WindowInsetsControllerCompat(window, window.decorView)
         wic.isAppearanceLightStatusBars = true
         wic.isAppearanceLightNavigationBars = true
-
+        recaptchaClient = RecaptchaManager.getClient()!!
         forgotCredentialType = intent.getStringExtra(Constants.FORGOT_CREDENTIAL_TYPE)
             ?: Constants.FORGOT_CREDENTIAL_PIN
 
@@ -196,31 +201,58 @@ class ForgotPasswordPinActivity : BaseActivity() {
     private fun onClickResendOtp() {
         b.forgotPasswordPinActivityOtpResendTV.isEnabled = false
         countDownTimer.start()
-        resendOtpApi()
+        lifecycleScope.launch {
+            recaptchaClient
+                .execute(RecaptchaAction.custom(Constants.RESEND_OTP))
+                .onSuccess {
+                    resendOtpApi()
+                }.onFailure {exception ->
+                    "Response".showLogE(exception.message ?: "")
+                    showToast(getString(R.string.default_error_toast))
+                }
+        }
     }
 
     private fun onClickReset() {
-        when (forgotCredentialType) {
-            Constants.FORGOT_CREDENTIAL_PIN -> {
-                if (validatePin()) {
-                    hideKeyboard(this)
-                    updatePinApi()
-                }
-            }
+        hideKeyboard(this)
+        lifecycleScope.launch {
+            recaptchaClient
+                .execute(RecaptchaAction.custom(Constants.RESET))
+                .onSuccess {
+                    when (forgotCredentialType) {
+                        Constants.FORGOT_CREDENTIAL_PIN -> {
+                            if (validatePin()) {
 
-            Constants.FORGOT_CREDENTIAL_PASSWORD -> {
-                if (validatePassword()) {
-                    hideKeyboard(this)
-                    updatePasswordApi()
+                                updatePinApi()
+                            }
+                        }
+
+                        Constants.FORGOT_CREDENTIAL_PASSWORD -> {
+                            if (validatePassword()) {
+                                updatePasswordApi()
+                            }
+                        }
+                    }
+                }.onFailure { exception ->
+                    "Response".showLogE(exception.message ?: "")
+                    showToast(getString(R.string.default_error_toast))
                 }
-            }
         }
     }
 
     private fun onClickVerify() {
         if (validateOtp()) {
             hideKeyboard(this)
-            verifyForgotOtpApi()
+            lifecycleScope.launch {
+                recaptchaClient
+                    .execute(RecaptchaAction.custom(Constants.VERIFY_OTP))
+                    .onSuccess {
+                        verifyForgotOtpApi()
+                    }.onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                        showToast(getString(R.string.default_error_toast))
+                    }
+            }
         }
     }
 
@@ -230,7 +262,17 @@ class ForgotPasswordPinActivity : BaseActivity() {
             )
         ) {
             hideKeyboard(this)
-            sendOtpApi()
+            showButtonLoader(b.forgotPasswordPinActivityProceedButton, b.forgotPasswordPinActivityProceedButtonLoaderLottie)
+            lifecycleScope.launch {
+                recaptchaClient
+                    .execute(RecaptchaAction.custom(Constants.SEND_OTP))
+                    .onSuccess { _ ->
+                        sendOtpApi()
+                    }.onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                        showToast(getString(R.string.default_error_toast))
+                    }
+            }
         }
     }
 
@@ -895,10 +937,6 @@ class ForgotPasswordPinActivity : BaseActivity() {
 
     private fun sendOtpApi() {
         email = b.forgotPasswordPinActivityEmailET.text.toString()
-        showButtonLoader(
-            b.forgotPasswordPinActivityProceedButton,
-            b.forgotPasswordPinActivityProceedButtonLoaderLottie
-        )
         val sendForgotOtpCall =
             if (forgotCredentialType == Constants.FORGOT_CREDENTIAL_PIN) ApiClient.apiService.sendForgotOtp(
                 b.forgotPasswordPinActivityEmailET.text.toString(), PIN
