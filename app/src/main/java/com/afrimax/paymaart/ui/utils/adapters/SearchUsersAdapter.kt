@@ -2,11 +2,14 @@ package com.afrimax.paymaart.ui.utils.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import com.afrimax.paymaart.data.model.IndividualSearchUserData
 import com.afrimax.paymaart.databinding.CardPagerLoaderBinding
 import com.afrimax.paymaart.databinding.SearchCustomersAdapterViewBinding
+import com.afrimax.paymaart.ui.cashout.CashOutSearchActivity
 
 class SearchUsersAdapter(
     private val context: Context, private val userList: ArrayList<IndividualSearchUserData>
@@ -56,11 +59,16 @@ class SearchUsersAdapter(
             holder.cardUserSearchNameTV.text = userData.name
             holder.cardUserSearchResultPaymaartIdTV.text = userData.paymaartId
 
-            val formattedNumber = StringBuilder(userData.phoneNumber)
-            formattedNumber.insert(2, ' ')
-            formattedNumber.insert(6, ' ')
-            val phone = "${userData.countryCode} $formattedNumber"
-            holder.cardUserSearchResultPhoneTV.text = phone
+           when (context) {
+               is CashOutSearchActivity -> {holder.cardUserSearchResultPhoneTV.visibility = View.GONE}
+               else -> {
+                   val formattedNumber = StringBuilder(userData.phoneNumber)
+                   formattedNumber.insert(2, ' ')
+                   formattedNumber.insert(6, ' ')
+                   val phone = "${userData.countryCode} $formattedNumber"
+                   holder.cardUserSearchResultPhoneTV.text = phone
+               }
+           }
 
             val nameList = userData.name.uppercase().split(" ")
             val shortName = "${nameList[0][0]}${nameList[1][0]}${nameList[2][0]}"

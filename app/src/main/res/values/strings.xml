@@ -622,4 +622,9 @@
     <string name="recent_cash_out">Recent cash-out</string>
     <string name="no_cash_out_yet">No Cash-out Yet</string>
     <string name="no_cash_out_yet_subtext">You have no cash-out at the moment.</string>
+    <string name="add_a_note">Add a note</string>
+    <string name="complete_cash_out">Complete Cash-out</string>
+    <string name="enter_your_pin_to_make_secure_payment">Enter your PIN to make a secure payment</string>
+    <string name="enter_your_password_to_make_secure_payment">Enter your Password to make a secure payment</string>
+    <string name="balance">Balance</string>
 </resources>

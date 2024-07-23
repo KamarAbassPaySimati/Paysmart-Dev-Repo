@@ -1,175 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/selfCashOutSearchActivity"
+    android:id="@+id/selfCashOutActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
     tools:context=".ui.cashout.CashOutActivity">
 
-  <LinearLayout
-      android:id="@+id/selfCashOutSearchActivityTopSection"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@color/primaryColor"
-      android:orientation="vertical">
-
     <RelativeLayout
-        android:id="@+id/selfCashOutSearchActivityTopBar"
+        android:id="@+id/selfCashOutActivityTopBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
 
-      <ImageView
-          android:id="@+id/selfCashOutSearchActivityBackButton"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:contentDescription="@string/back_button_data"
-          android:padding="16dp"
-          android:src="@drawable/ico_arrow_back_white" />
+        <ImageView
+            android:id="@+id/selfCashOutActivityBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back_button"
+            android:padding="16dp"
+            android:src="@drawable/ic_arrow_back" />
 
-      <TextView
-          android:id="@+id/selfCashOutSearchActivityHeaderTV"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_toEndOf="@+id/selfCashOutSearchActivityBackButton"
-          android:fontFamily="@font/inter_medium"
-          android:includeFontPadding="false"
-          android:text="@string/cash_out"
-          android:textColor="@color/white"
-          android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/selfCashOutActivityBackButton"
+            android:fontFamily="@font/inter_medium"
+            android:includeFontPadding="false"
+            android:text="@string/back"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="16sp" />
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_search_edit_text">
-
-      <EditText
-          android:id="@+id/selfCashOutSearchActivitySearchET"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_alignParentStart="true"
-          android:layout_toStartOf="@+id/selfCashOutSearchActivitySearchClearIV"
-          android:autofillHints=""
-          android:background="@color/transparent"
-          android:drawableEnd="@drawable/ico_search_neutral_grey"
-          android:ellipsize="end"
-          android:fontFamily="@font/inter_regular"
-          android:hint="@string/agent_id_or_name"
-          android:inputType="textNoSuggestions"
-          android:maxLines="1"
-          android:padding="12dp"
-          android:textColor="@color/black"
-          android:textColorHint="@color/neutralGrey"
-          android:textSize="14sp" />
-
-      <ImageView
-          android:id="@+id/selfCashOutSearchActivitySearchClearIV"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentEnd="true"
-          android:layout_centerVertical="true"
-          android:contentDescription="@string/close_button_data"
-          android:padding="12dp"
-          android:src="@drawable/ico_close_black"
-          android:visibility="gone"
-          tools:visibility="visible" />
-
-    </RelativeLayout>
-
-  </LinearLayout>
-
-  <FrameLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/selfCashOutSearchActivityNoDataFoundContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-      <ImageView
-          android:id="@+id/selfCashOutSearchActivityNoDataFoundIV"
-          android:layout_width="150dp"
-          android:layout_height="150dp"
-          android:contentDescription="@string/no_data_found_image_data"
-          android:scaleType="fitCenter"
-          android:src="@drawable/ico_no_data_found" />
-
-      <TextView
-          android:id="@+id/selfCashOutSearchActivityNoDataFoundTitleTV"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="32dp"
-          android:layout_marginTop="32dp"
-          android:layout_marginEnd="32dp"
-          android:fontFamily="@font/inter_regular"
-          android:text="@string/no_data_found"
-          android:textAlignment="center"
-          android:textColor="@color/neutralGreyPrimaryText"
-          android:textSize="20sp" />
-
-      <TextView
-          android:id="@+id/selfCashOutSearchActivityNoDataFoundSubtextTV"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginStart="32dp"
-          android:layout_marginTop="8dp"
-          android:layout_marginEnd="32dp"
-          android:fontFamily="@font/inter_regular"
-          android:text="@string/no_data_found_subtext"
-          android:textAlignment="center"
-          android:textColor="@color/neutralGrey"
-          android:textSize="14sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/selfCashOutSearchActivityContentBox"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_above="@+id/selfCashOutActivityCompleteCashOutButton"
+        android:layout_below="@+id/selfCashOutActivityTopBar"
+        android:scrollbars="none">
 
-      <TextView
-          android:id="@+id/selfCashOutSearchActivityRecentCashOutTV"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:fontFamily="@font/inter_regular"
-          android:padding="16dp"
-          android:text="@string/recent_cash_out"
-          android:textColor="@color/neutralGrey"
-          android:textSize="14sp"
-          android:visibility="gone"
-          tools:visibility="visible" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/selfCashOutSearchActivityRV"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/selfCashOutActivityProfileContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_kyc_profile">
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/selfCashOutActivityShortNameTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="@string/mwk"
+                    android:textColor="@color/primaryColor"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/selfCashOutSearchActivityLoaderLottie"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:visibility="visible"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/lottie_loader" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-  </FrameLayout>
+            <TextView
+                android:id="@+id/selfCashOutActivityNameTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/account_name"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/selfCashOutActivityPaymaartIdTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/paymaart_id"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:id="@+id/selfCashOutActivityPaymentErrorBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/error_bg"
+                android:visibility="invisible"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/selfCashOutActivityPaymentErrorTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
+                    android:text="@string/insufficient_funds"
+                    android:textAlignment="center"
+                    android:textColor="@color/accentNegative"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="36dp"
+                android:layout_marginTop="40dp"
+                android:gravity="start"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="@string/amount"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="16sp" />
+
+                <RelativeLayout
+                    android:id="@+id/payAfrimaxActivityAmountBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_payment_box">
+
+                    <EditText
+                        android:id="@+id/selfCashOutActivityAmountET"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:autofillHints=""
+                        android:background="@color/transparent"
+                        android:fontFamily="@font/inter_semibold"
+                        android:hint="@string/_0_00"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:padding="16dp"
+                        android:textColor="@color/neutralGreyPrimaryText"
+                        android:textColorHint="@color/editTextHint"
+                        android:textSize="32sp" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/selfCashOutActivityCompleteCashOutButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:background="@drawable/primary_rounded_button_background"
+        android:fontFamily="@font/inter_medium"
+        android:text="@string/complete_cash_out"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+</RelativeLayout>

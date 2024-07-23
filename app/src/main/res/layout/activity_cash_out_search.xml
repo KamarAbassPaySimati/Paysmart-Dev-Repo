@@ -151,9 +151,7 @@
                 android:padding="16dp"
                 android:text="@string/recent_cash_out"
                 android:textColor="@color/neutralGrey"
-                android:textSize="14sp"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                android:textSize="14sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/selfCashOutSearchActivityRV"

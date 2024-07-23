@@ -1,6 +1,8 @@
 package com.afrimax.paymaart.data
 
 import com.afrimax.paymaart.data.model.ApproveUserRequest
+import com.afrimax.paymaart.data.model.CashOutApiResponse
+import com.afrimax.paymaart.data.model.CashOutRequestBody
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
@@ -64,6 +66,7 @@ private const val KYC_UPDATE = "kyc-update"
 private const val PAYMAART = "paymaart"
 private const val CUSTOMER = "customer"
 private const val AFRIMAX = "afrimax"
+private const val CASHIN_CASHOUT = "cashin-cashout"
 interface ApiService {
 
     @GET("$CUSTOMER_USER/security-questions")
@@ -183,8 +186,11 @@ interface ApiService {
     @POST("$CUSTOMER_USER/delete-notification-id")
     fun deleteFcmToken(@Header("Authorization") header: String, @Body body: FcmTokenRequest): Call<DefaultResponse>
 
-    @GET("cashin-cashout/search-cashout-agent")
+    @GET("$CASHIN_CASHOUT/search-cashout-customer")
     fun getAgentsForSelfCashOut(@Header("Authorization") header: String, @Query("page") page: Int, @Query("search") search: String?): Call<SearchUsersDataResponse>
+
+    @POST("$CASHIN_CASHOUT/request-cashout-customer")
+    fun cashOut(@Header("Authorization") header: String, @Body body: CashOutRequestBody): Call<CashOutApiResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

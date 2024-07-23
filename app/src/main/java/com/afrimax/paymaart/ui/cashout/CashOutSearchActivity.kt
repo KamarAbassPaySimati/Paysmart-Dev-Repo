@@ -226,12 +226,6 @@ class CashOutSearchActivity : BaseActivity() {
 
         search = searchString
         pageValue = body.nextPage
-        //Set title if not searching
-        if (searchString.isNullOrEmpty()) b.selfCashOutSearchActivityRecentCashOutTV.visibility =
-            View.VISIBLE
-        else b.selfCashOutSearchActivityRecentCashOutTV.visibility = View.GONE
-
-
         userList.clear()
         userList.addAll(body.data)
         if (body.nextPage != null) {

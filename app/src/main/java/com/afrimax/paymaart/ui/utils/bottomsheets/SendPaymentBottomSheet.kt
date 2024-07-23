@@ -15,6 +15,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.CashOutApiResponse
+import com.afrimax.paymaart.data.model.CashOutRequestBody
 import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.PayToAfrimaxErrorResponse
 import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
@@ -24,6 +26,7 @@ import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentSuccessfulResponse
 import com.afrimax.paymaart.databinding.SendPaymentBottomSheetBinding
 import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.ui.cashout.CashOutModel
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.AESCrypt
 import com.afrimax.paymaart.util.Constants
@@ -31,14 +34,16 @@ import com.afrimax.paymaart.util.LoginPinTransformation
 import com.afrimax.paymaart.util.showLogE
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
 
-class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment() {
+class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogFragment() {
     private lateinit var binding: SendPaymentBottomSheetBinding
     private lateinit var sheetCallback: SendPaymentInterface
     private lateinit var parentActivity: BaseActivity
@@ -72,7 +77,18 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
         binding.sendPaymentSubText.text = when (data) {
             is SubscriptionDetailsRequestBody -> getString(R.string.send_payment_subtext)
             is PayToAfrimaxRequestBody -> getString(R.string.send_payment_subtext_pay_afrimax)
+            is CashOutRequestBody -> {
+                when (loginMode) {
+                    Constants.SELECTION_PIN -> getString(R.string.enter_your_pin_to_make_secure_payment)
+                    Constants.SELECTION_PASSWORD -> getString(R.string.enter_your_password_to_make_secure_payment)
+                    else -> ""
+                }
+            }
             else -> ""
+        }
+
+        if (data is CashOutRequestBody) {
+            binding.sendPaymentSheetTitle.text = getString(R.string.cash_out)
         }
 
         binding.sendPaymentClose.setOnClickListener {
@@ -123,7 +139,6 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
                     binding.sendPaymentPasswordToggle.visibility = View.GONE
                 } else {
                     binding.sendPaymentPasswordETWarning.visibility = View.GONE
-
                     binding.sendPaymentPasswordBox.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_edit_text_focused)
                     binding.sendPaymentPasswordToggle.visibility = View.VISIBLE
                 }
@@ -163,6 +178,7 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
             when(data) {
                 is SubscriptionDetailsRequestBody -> onConfirmClickedPayPaymaart(binding.sendPaymentPin.text.toString(), data)
                 is PayToAfrimaxRequestBody -> onConfirmClickedPayAfrimax(binding.sendPaymentPin.text.toString(), data)
+                is CashOutRequestBody -> onConfirmClickedCashOut(binding.sendPaymentPin.text.toString(), data)
             }
         }
     }
@@ -185,6 +201,7 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
             when(data) {
                 is SubscriptionDetailsRequestBody -> onConfirmClickedPayPaymaart(binding.sendPaymentPassword.text.toString(), data)
                 is PayToAfrimaxRequestBody -> onConfirmClickedPayAfrimax(binding.sendPaymentPassword.text.toString(), data)
+                is CashOutRequestBody -> onConfirmClickedCashOut(binding.sendPaymentPassword.text.toString(), data)
             }
         }
     }
@@ -239,9 +256,7 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
                 override fun onFailure(call: Call<SubscriptionPaymentSuccessfulResponse>, throwable: Throwable) {
                     hideButtonLoader()
                     activity.showToast(getString(R.string.default_error_toast))
-//                    displayError("")
                 }
-
             })
         }
     }
@@ -249,7 +264,6 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
     private fun onConfirmClickedPayAfrimax(password: String, data: PayToAfrimaxRequestBody) {
         val activity = requireContext() as BaseActivity
         val encryptedPassword = AESCrypt.encrypt(password)
-        "response Encrypted".showLogE(encryptedPassword)
         val newRequestBody = data.copy(password = encryptedPassword)
         showButtonLoader()
         lifecycleScope.launch {
@@ -295,7 +309,62 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
 
             })
         }
+    }
 
+    private fun onConfirmClickedCashOut(password: String, data: CashOutRequestBody) {
+        val activity = requireContext() as BaseActivity
+        val encryptedPassword = AESCrypt.encrypt(password)
+        val newRequestBody = data.copy(password = encryptedPassword)
+        activity.hideKeyboard(view, requireContext())
+        showButtonLoader()
+        lifecycleScope.launch {
+            val idToken = activity.fetchIdToken()
+            val selfCashOutCall = ApiClient.apiService.cashOut(
+                idToken,
+                newRequestBody
+            )
+
+            selfCashOutCall.enqueue(object : Callback<CashOutApiResponse>{
+                override fun onResponse(
+                    call: Call<CashOutApiResponse>,
+                    response: Response<CashOutApiResponse>,
+                ) {
+                    hideButtonLoader()
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        sheetCallback.onPaymentSuccess(body.cashOutResponse)
+                        dismiss()
+                    } else {
+                        val errorBody = Gson().fromJson(response.errorBody()?.string(), DefaultResponse::class.java)
+                        if (errorBody.message == "Invalid Credential") {
+                            when (loginMode) {
+                                Constants.SELECTION_PIN -> {
+                                    binding.sendPaymentPinETWarning.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.invalid_pin)
+                                    }
+                                }
+                                Constants.SELECTION_PASSWORD -> {
+                                    binding.sendPaymentPasswordETWarning.apply {
+                                        visibility = View.VISIBLE
+                                        text = getString(R.string.invalid_password)
+                                    }
+                                }
+                            }
+                        }else{
+                            displayError(errorBody.message)
+                        }
+
+                    }
+                }
+
+                override fun onFailure(p0: Call<CashOutApiResponse>, p1: Throwable) {
+                    hideButtonLoader()
+                    activity.showToast(getString(R.string.default_error_toast))
+                }
+
+            })
+        }
     }
 
     private fun displayError(message: String){
@@ -307,7 +376,7 @@ class SendPaymentBottomSheet(private val data: Any) : BottomSheetDialogFragment(
     private fun showButtonLoader() {
         binding.sendPaymentConfirmLoaderLottie.visibility = View.VISIBLE
         binding.sendPaymentConfirm.apply {
-            text = ""
+            text = getString(R.string.empty_string)
             isEnabled = false
         }
     }

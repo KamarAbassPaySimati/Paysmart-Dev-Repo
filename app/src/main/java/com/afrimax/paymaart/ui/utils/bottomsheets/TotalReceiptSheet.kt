@@ -5,33 +5,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.model.CashOutRequestBody
 import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paymaart.databinding.TotalAmountReceiptBottomSheetBinding
+import com.afrimax.paymaart.ui.cashout.CashOutModel
+import com.afrimax.paymaart.ui.paytoaffrimax.PayAfrimaxModel
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getFormattedAmount
 import com.afrimax.paymaart.util.showLogE
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class TotalReceiptSheet : BottomSheetDialogFragment() {
+class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
     private lateinit var b: TotalAmountReceiptBottomSheetBinding
-    private lateinit var amount: String
-    private lateinit var afrimaxId: String
-    private lateinit var afrimaxName: String
-    private lateinit var customerName: String
-    private lateinit var customerId: String
+    private var amount: String = "0.0"
+    private var txnFee: String = "0.0"
+    private var vat: String = "0.0"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         b = TotalAmountReceiptBottomSheetBinding.inflate(inflater, container, false)
-        amount = requireArguments().getString(Constants.PAYMENT_AMOUNT) ?: ""
-        val txnFee = requireArguments().getString(Constants.PAYMENT_TXN_FEE) ?: ""
-        val vat = requireArguments().getString(Constants.PAYMENT_VAT) ?: ""
-        afrimaxId = requireArguments().getString(Constants.AFRIMAX_ID) ?: ""
-        afrimaxName = requireArguments().getString(Constants.AFRIMAX_NAME) ?: ""
-        customerName = requireArguments().getString(Constants.CUSTOMER_NAME) ?: ""
-        customerId = requireArguments().getString(Constants.CUSTOMER_ID) ?: ""
-
+        when(model) {
+            is PayAfrimaxModel -> {
+                amount = model.amount
+                txnFee = model.txnFee
+                vat = model.vat
+            }
+            is CashOutModel ->{
+                amount = model.amount
+                txnFee = model.transactionFee
+                vat = model.vat
+            }
+        }
         b.totalAmountReceiptTotalAmount.text = getString(R.string.amount_formatted, getFormattedAmount(amount))
         b.totalAmountReceiptTxnFee.text = getString(R.string.amount_formatted, getFormattedAmount(txnFee))
         b.totalAmountReceiptVatIncluded.text = getString(R.string.amount_formatted, getFormattedAmount(vat))
@@ -59,15 +64,27 @@ class TotalReceiptSheet : BottomSheetDialogFragment() {
     }
 
     private fun onClickProceed() {
-        val payToAfrimax = PayToAfrimaxRequestBody(
-            amount = amount.toDouble(),
-            customerName = afrimaxName,
-            customerId = afrimaxId.toInt(),
-            password = "",
-            paymaartId =  customerId,
-            paymaartName = customerName
-        )
-        val sendPaymentBottomSheet = SendPaymentBottomSheet(payToAfrimax)
+        var sendPaymentBottomSheet = SendPaymentBottomSheet()
+        when(model) {
+            is PayAfrimaxModel -> {
+                val payToAfrimax = PayToAfrimaxRequestBody(
+                    amount = model.amount.toDouble(),
+                    customerName = model.afrimaxName,
+                    customerId = model.afrimaxId.toInt(),
+                    password = "",
+                    paymaartId =  model.customerName,
+                    paymaartName = model.customerName
+                )
+                sendPaymentBottomSheet = SendPaymentBottomSheet(payToAfrimax)
+            }
+            is CashOutModel ->{
+                val cashOutModel = CashOutRequestBody(
+                    requestedTo = model.receiverPaymaartId,
+                    transactionAmount = model.amount
+                )
+                sendPaymentBottomSheet = SendPaymentBottomSheet(cashOutModel)
+            }
+        }
         dismiss()
         sendPaymentBottomSheet.isCancelable = false
         sendPaymentBottomSheet.show(requireActivity().supportFragmentManager, SendPaymentBottomSheet.TAG)
