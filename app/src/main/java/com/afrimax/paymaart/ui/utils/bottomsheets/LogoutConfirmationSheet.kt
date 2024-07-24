@@ -7,23 +7,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.LogoutConfirmationSheetBinding
+import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.intro.IntroActivity
+import com.afrimax.paymaart.util.AuthCalls
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.PrefsManager
 import com.amplifyframework.core.Amplify
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.coroutines.launch
 
 class LogoutConfirmationSheet: BottomSheetDialogFragment() {
     private lateinit var b: LogoutConfirmationSheetBinding
-
+    private lateinit var authCalls: AuthCalls
+    private lateinit var prefsManager: PrefsManager
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         b = LogoutConfirmationSheetBinding.inflate(inflater, container, false)
-
         setUpListeners()
-
+        authCalls = AuthCalls()
         return b.root
     }
 
@@ -36,25 +41,27 @@ class LogoutConfirmationSheet: BottomSheetDialogFragment() {
         b.logoutConfirmationSheetConfirmButton.setOnClickListener {
             onClickLogout()
         }
-
-
     }
 
     private fun onClickLogout() {
-        isCancelable = false
-        b.logoutConfirmationSheetConfirmButton.isEnabled = false
-        b.logoutConfirmationSheetConfirmButton.text = ""
-        b.logoutConfirmationSheetConfirmButtonLoaderLottie.visibility = View.VISIBLE
-        Amplify.Auth.signOut {
-            clearPrefs()
-            requireActivity().runOnUiThread {
-                isCancelable = true
-                b.logoutConfirmationSheetConfirmButton.isEnabled = true
-                b.logoutConfirmationSheetConfirmButton.text = getString(R.string.confirm)
-                b.logoutConfirmationSheetConfirmButtonLoaderLottie.visibility = View.GONE
-                dismiss()
-                requireActivity().finishAffinity()
-                startActivity(Intent(requireActivity(), IntroActivity::class.java))
+        val parentActivity = requireActivity() as BaseActivity
+        parentActivity.lifecycleScope.launch {
+            isCancelable = false
+            b.logoutConfirmationSheetConfirmButton.isEnabled = false
+            b.logoutConfirmationSheetConfirmButton.text = ""
+            b.logoutConfirmationSheetConfirmButtonLoaderLottie.visibility = View.VISIBLE
+            authCalls.initiateLogout(parentActivity)
+            Amplify.Auth.signOut {
+                clearPrefs()
+                requireActivity().runOnUiThread {
+                    isCancelable = true
+                    b.logoutConfirmationSheetConfirmButton.isEnabled = true
+                    b.logoutConfirmationSheetConfirmButton.text = getString(R.string.confirm)
+                    b.logoutConfirmationSheetConfirmButtonLoaderLottie.visibility = View.GONE
+                    dismiss()
+                    requireActivity().finishAffinity()
+                    startActivity(Intent(requireActivity(), IntroActivity::class.java))
+                }
             }
         }
     }
