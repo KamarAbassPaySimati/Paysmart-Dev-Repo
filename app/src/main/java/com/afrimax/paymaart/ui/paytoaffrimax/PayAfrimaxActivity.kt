@@ -21,6 +21,7 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.AfrimaxPlan
 import com.afrimax.paymaart.data.model.GetAfrimaxPlansResponse
+import com.afrimax.paymaart.data.model.PayAfrimaxResponse
 import com.afrimax.paymaart.databinding.ActivityPayAfrimaxBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlanModel
@@ -278,11 +279,16 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
                     getString(R.string.minimum_amount_is_1_mwk)
             }
 
-            mainDigits.length > 7 || decimalDigits.length > 2 -> {
+            amount.toDouble() > 576000.00 -> {
                 isValid = false
                 b.payAfrimaxActivityPaymentErrorBox.visibility = View.VISIBLE
                 b.payAfrimaxActivityPaymentErrorTV.text = getString(R.string.invalid_amount)
             }
+//            mainDigits.length > 7 || decimalDigits.length > 2 -> {
+//                isValid = false
+//                b.payAfrimaxActivityPaymentErrorBox.visibility = View.VISIBLE
+//                b.payAfrimaxActivityPaymentErrorTV.text = getString(R.string.invalid_amount)
+//            }
 
         }
 
@@ -472,10 +478,14 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
     }
 
     override fun onPaymentSuccess(successData: Any?) {
+        val newPlan = selectedPlan?.let { it.serviceName[0] } ?: ""
         val intent = Intent(this, PaymentSuccessfulActivity::class.java)
         val sceneTransitions = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
         if (successData != null) {
-            intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData as Parcelable)
+            when (successData) {
+                is PayAfrimaxResponse -> intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData.copy(plan = newPlan) as Parcelable)
+                else -> intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData as Parcelable)
+            }
         }
         startActivity(intent, sceneTransitions)
         finishAfterTransition()
