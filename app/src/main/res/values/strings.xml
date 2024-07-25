@@ -628,4 +628,5 @@
     <string name="enter_your_password_to_make_secure_payment">Enter your Password to make a secure payment</string>
     <string name="balance">Balance</string>
     <string name="cash_out_successful">Cash-out Successful</string>
+    <string name="cash_out_requested">Cash-out Requested</string>
 </resources>

@@ -119,7 +119,8 @@ class PaymentSuccessfulActivity : BaseActivity() {
                     dateTime = data.dateTime
                 )
                 setCommonView(model)
-                binding.paymentSuccessfulStatusText.text = getString(R.string.cash_out_successful)
+                binding.paymentSuccessfulStatusText.text = getString(R.string.cash_out_requested)
+                binding.paymentSuccessfulStatusContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.paymentScreenOrange))
                 binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulMembership.text = getString(R.string.balance)
                 binding.paymentSuccessfulMembershipValue
