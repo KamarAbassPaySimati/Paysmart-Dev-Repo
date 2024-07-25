@@ -107,8 +107,10 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
                 }else {
                     val primePlanList: MutableList<RenewalPlans> = mutableListOf()
                     planTypes.forEach { plan ->
+                        "ResponsePrimeReference".showLogE(plan.referenceNumber)
                         primePlanList.add(RenewalPlans(membershipType = MembershipType.PRIME.type,referenceNumber = plan.referenceNumber, planPrice = plan.primePrice, planValidity = plan.validDate))
                     }
+                    "Response".showLogE(membershipPlanModel)
                     val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
                     intent.putParcelableArrayListExtra(Constants.MEMBERSHIP_PLANS, ArrayList(primePlanList))
                     intent.putExtra(Constants.MEMBERSHIP_MODEL, membershipPlanModel as Parcelable)
@@ -130,6 +132,7 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
                     planTypes.forEach { plan ->
                         primeXPlanList.add(RenewalPlans(membershipType = MembershipType.PRIMEX.type,referenceNumber = plan.referenceNumber, planPrice = plan.primeXPrice, planValidity = plan.validDate))
                     }
+                    "Response".showLogE(primeXPlanList)
                     val intent = Intent(this, PurchasedMembershipPlanViewActivity::class.java)
                     intent.putParcelableArrayListExtra(Constants.MEMBERSHIP_PLANS, ArrayList(primeXPlanList))
                     intent.putExtra(Constants.MEMBERSHIP_MODEL, membershipPlanModel as Parcelable)
@@ -181,7 +184,7 @@ class MembershipPlansActivity : BaseActivity(), MembershipPlansInterface {
                 validity = getValidity(userData.membershipStart, userData.membershipExpiry),
                 paymentType = PaymentType.PREPAID.type,
                 renewalType = userData.autoRenew,
-                referenceNumber = ""
+                referenceNumber = userData.membershipId
             )
         }
     }
