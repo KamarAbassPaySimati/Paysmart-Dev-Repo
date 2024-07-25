@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.ApiService
+import com.afrimax.paymaart.data.model.SubscriptionDetails
 import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionDetailsResponse
 import com.afrimax.paymaart.data.model.UpdateAutoRenewalRequestBody
@@ -60,18 +61,32 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
         wic.isAppearanceLightNavigationBars = true
         window.statusBarColor = ContextCompat.getColor(this, R.color.offWhite)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.offWhite)
-        setUpView()
+        initViews()
+        getSubscriptionDetailsApi()
     }
-    private fun setUpView(){
+
+    private fun initViews() {
         membershipPlan = intent.parcelable<MembershipPlanModel>(Constants.MEMBERSHIP_MODEL)
         renewalType = intent.getStringExtra(Constants.RENEWAL_TYPE) ?: ""
         membershipPlanTypes = intent.getParcelableArrayListExtra(Constants.MEMBERSHIP_PLANS)
+    }
+
+    private val getReferenceNumber: String
+        get() = membershipPlan?.referenceNumber ?: ""
+
+    private val getSubType: String
+        get() = membershipPlan?.membershipType ?: ""
+
+    private val getAutoRenew: Boolean
+        get() = membershipPlan?.renewalType == true
+
+    private fun setUpView(subscriptionDetails: SubscriptionDetails){
         val membershipType = membershipPlan?.membershipType
         val autoRenewal = if (membershipPlan?.renewalType == true) { "On" } else "Off"
         val validity = membershipPlan?.validity
         val paymentType = membershipPlan?.paymentType
-        val startDate = getStartDate()
-        val endDate = getEndDate(startDate, validity)
+        val startDate = getDate(subscriptionDetails.membershipStart)
+        val endDate = getDate(subscriptionDetails.membershipExpiry)
         val membershipTypeNew = if (membershipPlan?.membershipType == MembershipType.PRIME.type) MembershipType.PRIME else MembershipType.PRIMEX
         when (membershipType) {
             MembershipType.PRIME.type -> {
@@ -136,13 +151,7 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
         binding.purchasedMembershipPlansSubmitButton.setOnClickListener {
             //If user clicks on send payment after a failure then hide the error message
             binding.purchasedMembershipPlanErrorTV.visibility = View.GONE
-            onSendPaymentClicked(
-                SubscriptionDetailsRequestBody(
-                    referenceNumber = getReferenceNumber,
-                    subType = getSubType.lowercase(),
-                    autoRenew = getAutoRenew
-                )
-            )
+            onSendPaymentClicked(subscriptionDetails)
         }
 
         binding.purchasedMembershipPlanRenewOnExpButton.setOnClickListener {
@@ -154,6 +163,9 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
             }
         }
 
+        binding.purchasedMembershipPlanViewContentBox.visibility = View.VISIBLE
+        binding.purchasedMembershipPlanLoaderLottie.visibility = View.GONE
+
         binding.purchasedMembershipActivateRenewNowButton.setOnClickListener {
             onActivateAutoRenew()
         }
@@ -163,44 +175,48 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
         }
     }
 
-    private val getReferenceNumber: String
-        get() = membershipPlan?.referenceNumber ?: ""
-
-    private val getSubType: String
-        get() = membershipPlan?.membershipType ?: ""
-
-    private val getAutoRenew: Boolean
-        get() = membershipPlan?.renewalType == true
-
-
-    private fun onSendPaymentClicked(subscriptionDetailsRequestBody: SubscriptionDetailsRequestBody) {
-        showButtonLoader()
+    private fun getSubscriptionDetailsApi() {
+        binding.purchasedMembershipPlanViewContentBox.visibility = View.GONE
+        binding.purchasedMembershipPlanLoaderLottie.visibility = View.VISIBLE
         lifecycleScope.launch {
             val idToken = fetchIdToken()
-            val subscriptionDetails = ApiClient.apiService.getSubscriptionDetails(idToken, subscriptionDetailsRequestBody)
+
+            val subscriptionDetails = ApiClient.apiService.getSubscriptionDetails(
+                idToken, SubscriptionDetailsRequestBody(
+                    referenceNumber = getReferenceNumber,
+                    subType = getSubType.lowercase(),
+                    autoRenew = getAutoRenew
+                )
+            )
 
             subscriptionDetails.enqueue(object : Callback<SubscriptionDetailsResponse> {
-                override fun onResponse(call: Call<SubscriptionDetailsResponse>, response: Response<SubscriptionDetailsResponse>, ) {
-                    if (response.isSuccessful && response.body() != null) {
-                        val totalAmountBottomSheet = TotalAmountReceiptBottomSheet(response.body()!!.subscriptionDetails, subscriptionDetailsRequestBody)
-                        totalAmountBottomSheet.show(supportFragmentManager, TotalAmountReceiptBottomSheet.TAG)
-                    }else{
-                        runOnUiThread {
-                            showToast(getString(R.string.default_error_toast))
-                        }
-                    }
-                    hideButtonLoader()
+                override fun onResponse(
+                    call: Call<SubscriptionDetailsResponse>,
+                    response: Response<SubscriptionDetailsResponse>
+                ) {
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) setUpView(body.subscriptionDetails)
+                    else showToast(getString(R.string.default_error_toast))
+
                 }
 
-                override fun onFailure(p0: Call<SubscriptionDetailsResponse>, p1: Throwable) {
-                    hideButtonLoader()
-                    runOnUiThread {
-                        showToast(getString(R.string.default_error_toast))
-                    }
+                override fun onFailure(call: Call<SubscriptionDetailsResponse>, t: Throwable) {
+                    showToast(getString(R.string.default_error_toast))
                 }
 
             })
         }
+    }
+
+
+    private fun onSendPaymentClicked(subscriptionDetails: SubscriptionDetails) {
+        val subscriptionDetailsRequestBody = SubscriptionDetailsRequestBody(
+            referenceNumber = getReferenceNumber,
+            subType = getSubType.lowercase(),
+            autoRenew = getAutoRenew
+        )
+        val totalAmountReceiptBottomSheet =TotalAmountReceiptBottomSheet(subscriptionDetails, subscriptionDetailsRequestBody)
+        totalAmountReceiptBottomSheet.show(supportFragmentManager, TotalAmountReceiptBottomSheet.TAG)
     }
 
     private fun onActivateAutoRenew() {
@@ -230,7 +246,7 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
 
     private fun showButtonLoader() {
         binding.purchasedMembershipPlansSubmitButton.apply {
-            text = ""
+            text = getString(R.string.empty_string)
             isEnabled = false
         }
         binding.purchasedMembershipPlansSubmitButtonLoaderLottie.visibility = View.VISIBLE
@@ -252,7 +268,7 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
     private fun showLoader() {
         binding.purchasedMembershipActivateRenewNowButtonLottieLoader.visibility = View.VISIBLE
         binding.purchasedMembershipActivateRenewNowButton.apply {
-            text = ""
+            text = getString(R.string.empty_string)
             isEnabled = false
         }
         window.setFlags(
@@ -270,21 +286,30 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    private fun getStartDate(): String {
-        val currentDate = Date()
-        val dateFormat = dateFormat
-        return dateFormat.format(currentDate)
-    }
+    /**
+        private fun getStartDate(): String {
+            val currentDate = Date()
+            val dateFormat = dateFormat
+            return dateFormat.format(currentDate)
+        }
 
-    private fun getEndDate(startDate: String, validity: String?): String{
-        if (validity.isNullOrEmpty())
-            return ""
+        private fun getEndDate(startDate: String, validity: String?): String{
+            if (validity.isNullOrEmpty())
+                return ""
+            val dateFormat = dateFormat
+            val calendar = Calendar.getInstance()
+            calendar.time = dateFormat.parse(startDate)!!
+            calendar.add(Calendar.DAY_OF_YEAR, validity.toInt())
+            val futureDate = calendar.time
+            return dateFormat.format(futureDate)
+        }
+     */
+
+    private fun getDate(timeStamp: Long): String{
+        val newTimeStamp = timeStamp * 1000
+        val date = Date(newTimeStamp)
         val dateFormat = dateFormat
-        val calendar = Calendar.getInstance()
-        calendar.time = dateFormat.parse(startDate)!!
-        calendar.add(Calendar.DAY_OF_YEAR, validity.toInt())
-        val futureDate = calendar.time
-        return dateFormat.format(futureDate)
+        return dateFormat.format(date)
     }
 
     private val dateFormat: SimpleDateFormat
@@ -311,8 +336,8 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
 
     override fun onSubmitClicked(membershipPlanModel: MembershipPlanModel) {
         membershipPlan = membershipPlanModel
-        binding.purchasedMembershipPlansSubmitButtonContainer.visibility = View.VISIBLE
-        binding.purchasedMembershipPlanRenewContainer.visibility = View.GONE
+        renewalType = Constants.NEW_SUBSCRIPTION
+        getSubscriptionDetailsApi()
     }
 
 }

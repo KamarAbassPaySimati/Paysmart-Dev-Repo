@@ -14,7 +14,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="@dimen/_350sdp"
             android:background="@drawable/image_intro_background"/>
 
     </LinearLayout>
@@ -37,37 +37,33 @@
         android:layout_height="wrap_content"
         android:src="@drawable/image_paymaart_logo"
         android:contentDescription="@string/image_description"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias=".5"/>
+        app:layout_constraintStart_toStartOf="@id/register_button"
+        app:layout_constraintEnd_toEndOf="@id/register_button"
+        app:layout_constraintBottom_toTopOf="@id/register_button"
+        android:layout_marginBottom="58dp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/register_button"
         style="@style/primary_solid_button"
         android:text="@string/register"
         android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/paymaart_logo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0"
-        android:layout_marginTop="58dp"/>
+        app:layout_constraintStart_toStartOf="@id/login_button"
+        app:layout_constraintEnd_toEndOf="@id/login_button"
+        app:layout_constraintBottom_toTopOf="@id/login_button"
+        android:layout_marginBottom="24dp"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login_button"
         style="@style/primary_outlined_button"
         android:text="@string/login"
         android:textAllCaps="false"
-        app:layout_constraintTop_toBottomOf="@id/register_button"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/version_info"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0"
-        android:layout_marginTop="24dp"/>
+        android:layout_marginBottom="80dp"/>
 
     <LinearLayout
+        android:id="@+id/version_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

@@ -152,6 +152,7 @@ object Constants {
     const val FLAGGED_STATUS = "flagged_status"
     const val PREF_KEY_FCM_TOKEN = "pref_key_fcm_token"
     const val USER_DATA = "user_data"
+    const val ACTION = "action"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"
