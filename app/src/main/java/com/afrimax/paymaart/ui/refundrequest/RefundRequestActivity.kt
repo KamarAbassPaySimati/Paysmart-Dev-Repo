@@ -14,6 +14,7 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityRefundRequestBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.adapters.RefundRequestAdapter
+import com.afrimax.paymaart.ui.utils.bottomsheets.FilterParameterBottom
 import com.afrimax.paymaart.ui.utils.bottomsheets.SortParameterBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.RefundRequestSortFilterInterface
 import com.afrimax.paymaart.util.showLogE
@@ -47,14 +48,19 @@ class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
             val sortParameterBottomSheet = SortParameterBottomSheet(sortParameter)
             sortParameterBottomSheet.show(supportFragmentManager, SortParameterBottomSheet.TAG)
         }
+
+        binding.refundRequestActivityFilterButton.setOnClickListener {
+            val filterParameterBottomSheet = FilterParameterBottom()
+            filterParameterBottomSheet.show(supportFragmentManager, FilterParameterBottom.TAG)
+        }
     }
 
     override fun onSortParameterSelected(type: Int) {
         "Response".showLogE(type)
     }
 
-    override fun onFilterParameterSelected(type: String) {
-
+    override fun onFilterParameterSelected(types: List<String>) {
+        "Response".showLogE(types)
     }
 }
 

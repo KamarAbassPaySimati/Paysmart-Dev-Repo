@@ -632,4 +632,8 @@
     <string name="rejected">Rejected</string>
     <string name="refunded">Refunded</string>
     <string name="sort">Sort</string>
+    <string name="filter">Filter</string>
+    <string name="transaction_type">Transaction Type</string>
+    <string name="clear_all">Clear All</string>
+    <string name="apply">Apply</string>
 </resources>
