@@ -629,4 +629,6 @@
     <string name="balance">Balance</string>
     <string name="cash_out_successful">Cash-out Successful</string>
     <string name="cash_out_requested">Cash-out Requested</string>
+    <string name="rejected">Rejected</string>
+    <string name="refunded">Refunded</string>
 </resources>
