@@ -45,7 +45,7 @@
         android:layout_marginTop="18dp"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/inter_medium"
-        android:text="@string/select_your_preferred_membership_duration"
+        android:text="@string/select_your_preferred_membership_validity"
         android:textColor="@color/neutralGrey"
         android:textSize="14sp" />
 

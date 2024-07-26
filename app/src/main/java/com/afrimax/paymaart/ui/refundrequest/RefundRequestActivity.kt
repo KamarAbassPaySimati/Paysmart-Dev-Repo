@@ -14,10 +14,12 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityRefundRequestBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.adapters.RefundRequestAdapter
+import com.afrimax.paymaart.ui.utils.bottomsheets.SortParameterBottomSheet
+import com.afrimax.paymaart.ui.utils.interfaces.RefundRequestSortFilterInterface
+import com.afrimax.paymaart.util.showLogE
 
-class RefundRequestActivity : BaseActivity() {
+class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
     private lateinit var binding: ActivityRefundRequestBinding
-    private var refundRequestList: List<RefundModel> = emptyList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRefundRequestBinding.inflate(layoutInflater)
@@ -40,6 +42,19 @@ class RefundRequestActivity : BaseActivity() {
             layoutManager = LinearLayoutManager(this@RefundRequestActivity, LinearLayoutManager.VERTICAL, false)
             adapter = refundRequestAdapter
         }
+
+        binding.refundRequestActivitySortButton.setOnClickListener {
+            val sortParameterBottomSheet = SortParameterBottomSheet(sortParameter)
+            sortParameterBottomSheet.show(supportFragmentManager, SortParameterBottomSheet.TAG)
+        }
+    }
+
+    override fun onSortParameterSelected(type: Int) {
+        "Response".showLogE(type)
+    }
+
+    override fun onFilterParameterSelected(type: String) {
+
     }
 }
 
@@ -67,3 +82,17 @@ fun getSampleRefundData(): List<RefundModel> {
         RefundModel("https://media.vanityfair.com/photos/629e56c32347921cee05b4aa/4:3/w_1776,h_1332,c_limit/andrew-garfield-lgm.jpg", "Jack Turner", "$35.00", "PM12354", "2024-07-11", "pending", "TXN10010")
     )
 }
+
+private val sortParameter: List<SortParameter>
+    get() = listOf(
+        SortParameter(0, "Today"),
+        SortParameter(1, "Yesterday"),
+        SortParameter(7, "Last 7 days"),
+        SortParameter(30, "Last 30 days"),
+        SortParameter(60, "Last 60 days")
+    )
+
+data class SortParameter(
+    val id: Int,
+    val name: String
+)
