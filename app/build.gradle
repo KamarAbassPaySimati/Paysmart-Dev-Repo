@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id "jacoco"
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 tasks.register('jacocoTestReport', JacocoReport) {
@@ -241,8 +243,13 @@ dependencies {
     implementation libs.androidx.exifinterface
 
     //Google Recaptcha
-//    implementation libs.play.services.safetynet
-//    implementation libs.play.services.base
-//    implementation libs.play.services.recaptcha
     implementation libs.recaptcha
+
+    // Import the BoM for the Firebase platform
+    implementation(platform(libs.firebase.bom))
+
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 }
