@@ -102,4 +102,3 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 dotenv = { id = "co.uzzu.dotenv.gradle", version.ref = "dotenv" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseVersion" }
-google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServicesVersion" }
