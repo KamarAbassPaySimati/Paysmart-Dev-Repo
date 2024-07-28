@@ -72,7 +72,7 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                     customerName = model.afrimaxName,
                     customerId = model.afrimaxId.toInt(),
                     password = "",
-                    paymaartId =  model.customerName,
+                    paymaartId =  model.customerId,
                     paymaartName = model.customerName
                 )
                 sendPaymentBottomSheet = SendPaymentBottomSheet(payToAfrimax)

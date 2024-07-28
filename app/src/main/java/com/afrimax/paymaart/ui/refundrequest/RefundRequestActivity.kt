@@ -3,6 +3,8 @@ package com.afrimax.paymaart.ui.refundrequest
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
+import android.view.WindowManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -11,6 +13,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.RefundRequest
+import com.afrimax.paymaart.data.model.RefundRequestResponse
 import com.afrimax.paymaart.databinding.ActivityRefundRequestBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.adapters.RefundRequestAdapter
@@ -18,9 +23,27 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.FilterParameterBottom
 import com.afrimax.paymaart.ui.utils.bottomsheets.SortParameterBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.RefundRequestSortFilterInterface
 import com.afrimax.paymaart.util.showLogE
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
     private lateinit var binding: ActivityRefundRequestBinding
+    private lateinit var refundList: MutableList<RefundRequest>
+    private var isSortSelected = false
+    private var isFilterSelected = false
+    private var isPaginating = false
+    private var page: Int = 1
+    private var sortParameter: Int? = null
+    private var selectedId: Int = -1
+    private var filterParameters:String? = null
+    private val job = Job()
+    private val scope = CoroutineScope(Dispatchers.Main + job)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRefundRequestBinding.inflate(layoutInflater)
@@ -35,17 +58,19 @@ class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
         wic.isAppearanceLightNavigationBars = true
         window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
         setupInitialView()
+        getRefundRequests()
     }
 
     private fun setupInitialView() {
-        val refundRequestAdapter = RefundRequestAdapter(getSampleRefundData())
+        refundList = mutableListOf()
+        val refundRequestAdapter = RefundRequestAdapter(refundList)
         binding.refundRequestRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@RefundRequestActivity, LinearLayoutManager.VERTICAL, false)
             adapter = refundRequestAdapter
         }
 
         binding.refundRequestActivitySortButton.setOnClickListener {
-            val sortParameterBottomSheet = SortParameterBottomSheet(sortParameter)
+            val sortParameterBottomSheet = SortParameterBottomSheet(sortParameters, selectedId)
             sortParameterBottomSheet.show(supportFragmentManager, SortParameterBottomSheet.TAG)
         }
 
@@ -55,41 +80,75 @@ class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
         }
     }
 
+    private fun getRefundRequests() {
+        showLoader()
+        scope.launch {
+            val idToken = fetchIdToken()
+            val requestRefundHandler = ApiClient.apiService.getRefundRequests(
+                header = idToken,
+                page = page,
+                status = filterParameters,
+                time = sortParameter,
+            )
+
+            requestRefundHandler.enqueue(object : Callback<RefundRequestResponse> {
+                override fun onResponse(call: Call<RefundRequestResponse>, response: Response<RefundRequestResponse>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val refundRequest = response.body()!!
+                        if (refundRequest.refundRequest.isNotEmpty()) {
+                            refundList.addAll(response.body()!!.refundRequest)
+                            binding.refundRequestRecyclerView.adapter?.notifyItemChanged(0, refundList.size)
+                            binding.refundRequestRecyclerView.visibility = View.VISIBLE
+                            binding.refundRequestNoDataFoundContainer.visibility = View.GONE
+                        }else{
+                            binding.refundRequestRecyclerView.visibility = View.GONE
+                            binding.refundRequestNoDataFoundContainer.visibility = View.VISIBLE
+                            if(isSortSelected || isFilterSelected){
+                                binding.refundRequestNoDataFoundTitle.text = getString(R.string.no_data_found)
+                                binding.refundRequestNoDataFoundSubtext.text = if (isSortSelected) getString(R.string.no_data_found_subtext_refund) else getString(R.string.no_data_found_subtext_refund_two)
+                            }
+                        }
+                    }
+                    hideLoader()
+                }
+                override fun onFailure(call: Call<RefundRequestResponse>, throwable: Throwable) {
+                    hideLoader()
+                    showToast(getString(R.string.default_error_toast))
+                }
+            })
+        }
+    }
+
+    private fun showLoader() {
+        binding.refundRequestLoaderLottie.visibility = View.VISIBLE
+        binding.refundRequestActivityContainer.visibility = View.GONE
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+    }
+
+    private fun hideLoader() {
+        binding.refundRequestLoaderLottie.visibility = View.GONE
+        binding.refundRequestActivityContainer.visibility = View.VISIBLE
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
     override fun onSortParameterSelected(type: Int) {
-        "Response".showLogE(type)
+        isSortSelected = true
+        sortParameter = sortParameters[type].id
+        selectedId = type
+        if (refundList.isNotEmpty()) binding.refundRequestRecyclerView.smoothScrollToPosition(0)
+        refundList.clear()
+        getRefundRequests()
     }
 
     override fun onFilterParameterSelected(types: List<String>) {
-        "Response".showLogE(types)
+        isFilterSelected = true
     }
 }
 
-data class RefundModel(
-    val profilePic: String?,
-    val name: String,
-    val amount: String,
-    val paymaartId: String,
-    val date: String,
-    val status: String,
-    val transactionId: String
-)
-
-fun getSampleRefundData(): List<RefundModel> {
-    return listOf(
-        RefundModel("https://media.vanityfair.com/photos/629e56c32347921cee05b4aa/4:3/w_1776,h_1332,c_limit/andrew-garfield-lgm.jpg", "Alice Johnson", "$120.50", "PM12345", "2024-07-20", "pending", "TXN10001"),
-        RefundModel("", "Bob Smith", "$75.00", "PM12346", "2024-07-19", "pending", "TXN10002"),
-        RefundModel("", "Carol White", "$200.00", "PM12347", "2024-07-18", "rejected", "TXN10003"),
-        RefundModel("", "David Brown", "$50.25", "PM12348", "2024-07-17", "pending", "TXN10004"),
-        RefundModel("", "Eva Green", "$99.99", "PM12349", "2024-07-16", "rejected", "TXN10005"),
-        RefundModel("", "Frank Harris", "$150.75", "PM12350", "2024-07-15", "refunded", "TXN10006"),
-        RefundModel("https://media.vanityfair.com/photos/629e56c32347921cee05b4aa/4:3/w_1776,h_1332,c_limit/andrew-garfield-lgm.jpg", "Grace Lee", "$60.00", "PM12351", "2024-07-14", "refunded", "TXN10007"),
-        RefundModel("", "Henry Clark", "$250.30", "PM12352", "2024-07-13", "pending", "TXN10008"),
-        RefundModel("", "Ivy Walker", "$80.45", "PM12353", "2024-07-12", "rejected", "TXN10009"),
-        RefundModel("https://media.vanityfair.com/photos/629e56c32347921cee05b4aa/4:3/w_1776,h_1332,c_limit/andrew-garfield-lgm.jpg", "Jack Turner", "$35.00", "PM12354", "2024-07-11", "pending", "TXN10010")
-    )
-}
-
-private val sortParameter: List<SortParameter>
+private val sortParameters: List<SortParameter>
     get() = listOf(
         SortParameter(0, "Today"),
         SortParameter(1, "Yesterday"),
@@ -99,6 +158,11 @@ private val sortParameter: List<SortParameter>
     )
 
 data class SortParameter(
+    val id: Int,
+    val name: String
+)
+
+data class FilterParameter(
     val id: Int,
     val name: String
 )

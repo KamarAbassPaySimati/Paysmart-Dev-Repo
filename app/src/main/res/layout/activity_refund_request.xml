@@ -61,6 +61,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/refundRequestActivityContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/refundRequestActivityTopBar">
@@ -95,7 +96,7 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
                 android:fontFamily="@font/inter_regular"
-                android:text="@string/no_data_found"
+                android:text="@string/no_refund_request_yet"
                 android:textAlignment="center"
                 android:textColor="@color/neutralGreyPrimaryText"
                 android:textSize="20sp" />
@@ -108,7 +109,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="32dp"
                 android:fontFamily="@font/inter_regular"
-                android:text="@string/no_data_found_subtext"
+                android:text="@string/no_refund_request_yet_subtext"
                 android:textAlignment="center"
                 android:textColor="@color/neutralGrey"
                 android:textSize="14sp" />
@@ -116,5 +117,16 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/refundRequestLoaderLottie"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/lottie_loader"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

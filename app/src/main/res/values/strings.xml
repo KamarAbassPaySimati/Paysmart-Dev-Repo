@@ -636,4 +636,8 @@
     <string name="transaction_type">Transaction Type</string>
     <string name="clear_all">Clear All</string>
     <string name="apply">Apply</string>
+    <string name="no_data_found_subtext_refund">Try adjusting your sort to find what you’re looking for</string>
+    <string name="no_data_found_subtext_refund_two">Try adjusting your filter to find what you’re looking for</string>
+    <string name="no_refund_request_yet">No Refund Request Yet</string>
+    <string name="no_refund_request_yet_subtext">You have no refund request at the moment.</string>
 </resources>

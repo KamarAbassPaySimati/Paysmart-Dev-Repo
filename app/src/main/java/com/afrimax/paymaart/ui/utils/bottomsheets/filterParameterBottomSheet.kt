@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.afrimax.paymaart.databinding.FilterParameterBottomSheetBinding
+import com.afrimax.paymaart.ui.refundrequest.FilterParameter
 import com.afrimax.paymaart.ui.utils.interfaces.RefundRequestSortFilterInterface
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class FilterParameterBottom: BottomSheetDialogFragment() {
+class FilterParameterBottom(private val filterList: List<FilterParameter>): BottomSheetDialogFragment() {
     private lateinit var binding: FilterParameterBottomSheetBinding
     private lateinit var sheetCallback: RefundRequestSortFilterInterface
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -19,11 +20,11 @@ class FilterParameterBottom: BottomSheetDialogFragment() {
     }
 
     private fun setupView() {
-        val parameterList = mutableListOf<String>()
+        val parameterList = mutableListOf<FilterParameter>()
         binding.filterParameterApplyButton.setOnClickListener {
-            if (binding.filterParameterRefundedCheckbox.isChecked) parameterList.add("refunded")
-            if (binding.filterParameterPendingCheckbox.isChecked) parameterList.add("pending")
-            if (binding.filterParameterRejectedCheckbox.isChecked) parameterList.add("rejected")
+            if (binding.filterParameterRefundedCheckbox.isChecked) parameterList.add(FilterParameter(0, "refunded"))
+            if (binding.filterParameterPendingCheckbox.isChecked) parameterList.add(FilterParameter(0, "pending"))
+            if (binding.filterParameterRejectedCheckbox.isChecked) parameterList.add(FilterParameter(0, "rejected"))
             dismiss()
             sheetCallback.onFilterParameterSelected(parameterList)
         }
@@ -33,6 +34,9 @@ class FilterParameterBottom: BottomSheetDialogFragment() {
             binding.filterParameterPendingCheckbox.isChecked = false
             binding.filterParameterRejectedCheckbox.isChecked = false
         }
+        if (filterList[0].id) binding.filterParameterRefundedCheckbox.isChecked = true
+        if (filterList[0].id) binding.filterParameterRefundedCheckbox.isChecked = true
+        if (filterList[0].id) binding.filterParameterRefundedCheckbox.isChecked = true
     }
 
     override fun onAttach(context: Context) {

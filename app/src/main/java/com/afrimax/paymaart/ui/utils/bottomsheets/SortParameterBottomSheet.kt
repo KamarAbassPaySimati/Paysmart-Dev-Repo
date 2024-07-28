@@ -15,7 +15,7 @@ import com.afrimax.paymaart.ui.refundrequest.SortParameter
 import com.afrimax.paymaart.ui.utils.interfaces.RefundRequestSortFilterInterface
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class SortParameterBottomSheet(private val sortParameters: List<SortParameter>) : BottomSheetDialogFragment() {
+class SortParameterBottomSheet(private val sortParameters: List<SortParameter>, private val selectedId: Int) : BottomSheetDialogFragment() {
     private lateinit var binding: SortParamterBottomSheetBinding
     private lateinit var sheetCallback: RefundRequestSortFilterInterface
     private lateinit var radioGroup: RadioGroup
@@ -38,12 +38,13 @@ class SortParameterBottomSheet(private val sortParameters: List<SortParameter>) 
             val radioButton = view.findViewById<AppCompatRadioButton>(R.id.customRadioButton)
             textView.text = sortParameters[i].name
             radioButton.id = i
-            radioButton.setOnClickListener {
+            view.setOnClickListener {
                 dismiss()
-                sheetCallback.onSortParameterSelected(sortParameters[i].id)
+                sheetCallback.onSortParameterSelected(i)
             }
             radioGroup.addView(view)
         }
+        if (selectedId >= 0) { radioGroup.check(selectedId) }
     }
 
     override fun onAttach(context: Context) {
