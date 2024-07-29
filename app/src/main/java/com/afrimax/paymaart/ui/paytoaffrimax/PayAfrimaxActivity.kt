@@ -324,7 +324,8 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
                 afrimaxId = afrimaxId,
                 afrimaxName = afrimaxName,
                 customerName = customerName,
-                customerId = customerId.uppercase()
+                customerId = customerId.uppercase(),
+                planName = selectedPlan!!.serviceName[0]
             )
             val totalReceiptSheet = TotalReceiptSheet(payAfrimaxModel)
             totalReceiptSheet.show(supportFragmentManager, TotalReceiptSheet.TAG)

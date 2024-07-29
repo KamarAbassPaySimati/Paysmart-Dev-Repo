@@ -17,5 +17,7 @@ data class TransactionDetails(
     @SerializedName("netTransactionFee")
     val netTransactionFee: Double,
     @SerializedName("vatAmount")
-    val vatAmount: Double
+    val vatAmount: Double,
+    @SerializedName("total")
+    val totalAmount: String,
 )
