@@ -8,10 +8,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.ViewUserData
 import com.afrimax.paymaart.databinding.ActivityViewKycDetailsBinding
 import com.afrimax.paymaart.databinding.ContentViewKycReasonForRejectionBinding
@@ -24,8 +27,13 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ViewKycPasswordSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.ViewKycPinSheet
 import com.afrimax.paymaart.ui.utils.interfaces.ViewSelfKycInterface
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.showLogE
 import com.bumptech.glide.Glide
 import jp.wasabeef.blurry.Blurry
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.Calendar
 import java.util.Date
 
@@ -37,7 +45,8 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
     private lateinit var profilePicture: String
     private var publicProfile: Boolean = false
     private var isBlurred = false
-
+    private var isContainerBlurred = false
+    private var isUpgradeContainerBlurred = false
     private var idFrontKey = ""
     private var idBackKey = ""
     private var verFrontKey = ""
@@ -193,6 +202,10 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
                 )
                 b.viewSelfKycActivityKycStatusTV.background =
                     ContextCompat.getDrawable(this, R.drawable.bg_home_drawer_kyc_completed)
+                b.viewSelfKycActivityEditButton.visibility = View.GONE
+                if (kycType == getString(R.string.malawi_simplified_kyc_registration)) {
+                    b.viewSelfKycActivityUpgradeButtonContainer.visibility = View.VISIBLE
+                }
             }
         }
     }
@@ -280,37 +293,64 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         b.viewSelfKycActivityEditButton.setOnClickListener {
             onClickEdit()
         }
+        b.viewSelfKycActivityUpgradeButton.setOnClickListener {
+            upgradeToFullKyc()
+        }
     }
 
     private fun onClickEdit() {
-        //Check if kyc is malawi simplified and the status is completed
-        if (b.viewSelfKycActivityKycTypeTV.text.toString() == getString(R.string.malawi_simplified_kyc_registration) && b.viewSelfKycActivityKycStatusTV.text.toString() == getString(
-                R.string.completed
+        val i = Intent(this@ViewKycDetailsActivity, KycCustomerPersonalDetailsActivity::class.java)
+        i.putExtra(Constants.VIEW_SCOPE, Constants.VIEW_SCOPE_EDIT)
+        i.putExtra(Constants.PROFILE_PICTURE, profilePicture)
+        i.putExtra(Constants.PUBLIC_PROFILE, publicProfile)
+        when (b.viewSelfKycActivityKycTypeTV.text.toString()) {
+            getString(R.string.malawi_full_kyc_registration) -> i.putExtra(
+                Constants.KYC_SCOPE, Constants.KYC_MALAWI_FULL
             )
-        ) {
-            //show bottom sheet to upgrade to full kyc
-            EditSimplifiedKycSheet().show(supportFragmentManager, EditSimplifiedKycSheet.TAG)
-        } else {
-            //Continue with editing screen
-            val i = Intent(this@ViewKycDetailsActivity, KycCustomerPersonalDetailsActivity::class.java)
-            i.putExtra(Constants.VIEW_SCOPE, Constants.VIEW_SCOPE_EDIT)
-            i.putExtra(Constants.PROFILE_PICTURE, profilePicture)
-            i.putExtra(Constants.PUBLIC_PROFILE, publicProfile)
-            when (b.viewSelfKycActivityKycTypeTV.text.toString()) {
-                getString(R.string.malawi_full_kyc_registration) -> i.putExtra(
-                    Constants.KYC_SCOPE, Constants.KYC_MALAWI_FULL
-                )
 
-                getString(R.string.malawi_simplified_kyc_registration) -> i.putExtra(
-                    Constants.KYC_SCOPE, Constants.KYC_MALAWI_SIMPLIFIED
-                )
+            getString(R.string.malawi_simplified_kyc_registration) -> i.putExtra(
+                Constants.KYC_SCOPE, Constants.KYC_MALAWI_SIMPLIFIED
+            )
 
-                getString(R.string.non_malawi_full_kyc_registration) -> i.putExtra(
-                    Constants.KYC_SCOPE, Constants.KYC_NON_MALAWI
-                )
-            }
-            startActivity(i)
-            finish()
+            getString(R.string.non_malawi_full_kyc_registration) -> i.putExtra(
+                Constants.KYC_SCOPE, Constants.KYC_NON_MALAWI
+            )
+        }
+        startActivity(i)
+        finish()
+    }
+
+    private fun upgradeToFullKyc() {
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+
+            val switchToFullApiCall = ApiClient.apiService.switchToFullKyc(idToken)
+
+            switchToFullApiCall.enqueue(object : Callback<DefaultResponse> {
+                override fun onResponse(
+                    call: Call<DefaultResponse>, response: Response<DefaultResponse>
+                ) {
+
+                    val body = response.body()
+                    if (body != null && response.isSuccessful) {
+                        val i = Intent(this@ViewKycDetailsActivity, KycCustomerPersonalDetailsActivity::class.java)
+                        i.putExtra(Constants.KYC_SCOPE, Constants.KYC_MALAWI_FULL)
+                        i.putExtra(Constants.VIEW_SCOPE, Constants.VIEW_SCOPE_UPDATE)
+                        i.putExtra(Constants.PROFILE_PICTURE, profilePicture)
+                        i.putExtra(Constants.PUBLIC_PROFILE, publicProfile)
+                        startActivity(i)
+                        finish()
+                    } else {
+                        showToast(getString(R.string.default_error_toast))
+                    }
+                }
+
+                override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
+                    showToast(getString(R.string.default_error_toast))
+                }
+
+
+            })
         }
     }
 
@@ -526,12 +566,33 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus && kycStatus != getString(R.string.not_started) && !isBlurred) {
-            Blurry.with(this).radius(12).sampling(3)
+            Blurry
+                .with(this)
+                .radius(12)
+                .sampling(3)
                 .capture(b.viewSelfKycActivityKycDetailsContainer)
                 .into(b.viewSelfKycActivityBlur1IV)
-            Blurry.with(this).radius(12).sampling(3).capture(b.viewSelfKycActivityBottomBar)
-                .into(b.viewSelfKycActivityBlur2IV)
             isBlurred = true
+        }
+
+        if (hasFocus && kycStatus != Constants.COMPLETED && !isContainerBlurred) {
+            Blurry
+                .with(this)
+                .radius(12)
+                .sampling(3)
+                .capture(b.viewSelfKycActivityBottomBar)
+                .into(b.viewSelfKycActivityBlur2IV)
+            isContainerBlurred = true
+        }
+
+        if (hasFocus && kycStatus == Constants.COMPLETED && kycType == getString(R.string.malawi_simplified_kyc_registration) && !isUpgradeContainerBlurred){
+            Blurry
+                .with(this)
+                .radius(2)
+                .sampling(5)
+                .capture(b.viewSelfKycActivityBottomBar)
+                .into(b.viewSelfKycActivityBlur2IV)
+            isUpgradeContainerBlurred = false
         }
     }
 

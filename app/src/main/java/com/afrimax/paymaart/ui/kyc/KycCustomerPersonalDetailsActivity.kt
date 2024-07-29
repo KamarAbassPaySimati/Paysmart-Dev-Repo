@@ -283,14 +283,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         }
         b.kycYourPersonalDetailsActivityCameraIV.setOnClickListener {
             if (isPicUploaded){
-                isPicUploaded = false
-                profilePicUri = null
-                isProfilePicUpdated = true //ProfilePic is update even when they are removed.
-                b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
-                b.kycYourPersonalDetailsActivityProfileIV.apply {
-                    setImageDrawable(ContextCompat.getDrawable(this@KycCustomerPersonalDetailsActivity, R.drawable.ic_no_image))
-                    background = ContextCompat.getDrawable(this@KycCustomerPersonalDetailsActivity, R.drawable.dashed_outline_background)
-                }
+                populateProfilePicture()
             }else{
                 launchFilePicker()
             }
@@ -302,6 +295,17 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         setUpEditTextChangeListeners()
         setUpLastNameEditTextFilters(b.kycYourPersonalDetailsActivityLastNameET)
         setUpEmailEditTextFilters(b.kycYourPersonalDetailsActivityEmailET)
+    }
+
+    private fun populateProfilePicture() {
+        isPicUploaded = false
+        profilePicUri = null
+        isProfilePicUpdated = true //ProfilePic is update even when they are removed.
+        b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+        b.kycYourPersonalDetailsActivityProfileIV.apply {
+            setImageDrawable(ContextCompat.getDrawable(this@KycCustomerPersonalDetailsActivity, R.drawable.ic_no_image))
+            background = ContextCompat.getDrawable(this@KycCustomerPersonalDetailsActivity, R.drawable.dashed_outline_background)
+        }
     }
 
 
