@@ -1,17 +1,14 @@
 package com.afrimax.paymaart.ui.refundrequest
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.view.WindowManager
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.RefundRequest
@@ -19,13 +16,17 @@ import com.afrimax.paymaart.data.model.RefundRequestResponse
 import com.afrimax.paymaart.databinding.ActivityRefundRequestBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.adapters.RefundRequestAdapter
+import com.afrimax.paymaart.ui.utils.adapters.decoration.RecyclerViewLastItemDecoration
 import com.afrimax.paymaart.ui.utils.bottomsheets.FilterParameterBottom
 import com.afrimax.paymaart.ui.utils.bottomsheets.SortParameterBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.RefundRequestSortFilterInterface
+import com.afrimax.paymaart.util.RecyclerViewType
 import com.afrimax.paymaart.util.showLogE
+import com.afrimax.paymaart.util.toDp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,8 +40,10 @@ class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
     private var isPaginating = false
     private var page: Int = 1
     private var sortParameter: Int? = null
-    private var selectedId: Int = -1
+    private var selectedId: Int = 4
     private var filterParameters:String? = null
+    private var selectedFilterParameters: List<FilterParameter> = emptyList()
+    private var paginationEnd: Boolean = false
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)
 
@@ -63,10 +66,26 @@ class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
 
     private fun setupInitialView() {
         refundList = mutableListOf()
-        val refundRequestAdapter = RefundRequestAdapter(refundList)
+        val bottomPadding = this.toDp(32)
+        val refundRequestAdapter = RefundRequestAdapter(this, refundList)
         binding.refundRequestRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@RefundRequestActivity, LinearLayoutManager.VERTICAL, false)
             adapter = refundRequestAdapter
+            addItemDecoration(RecyclerViewLastItemDecoration(bottomPadding))
+        }
+
+        binding.refundRequestRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE && !isPaginating) {
+                    isPaginating = true
+                    if (!paginationEnd) { getRefundRequestsPaginatedResult() }
+                }
+            }
+        })
+
+        binding.refundRequestActivityBackButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.refundRequestActivitySortButton.setOnClickListener {
@@ -75,7 +94,7 @@ class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
         }
 
         binding.refundRequestActivityFilterButton.setOnClickListener {
-            val filterParameterBottomSheet = FilterParameterBottom()
+            val filterParameterBottomSheet = FilterParameterBottom(selectedFilterParameters)
             filterParameterBottomSheet.show(supportFragmentManager, FilterParameterBottom.TAG)
         }
     }
@@ -95,9 +114,15 @@ class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
                 override fun onResponse(call: Call<RefundRequestResponse>, response: Response<RefundRequestResponse>) {
                     if (response.isSuccessful && response.body() != null) {
                         val refundRequest = response.body()!!
+                        paginationEnd = refundRequest.nextPage == null
                         if (refundRequest.refundRequest.isNotEmpty()) {
                             refundList.addAll(response.body()!!.refundRequest)
-                            binding.refundRequestRecyclerView.adapter?.notifyItemChanged(0, refundList.size)
+                            if (!paginationEnd) {
+                                page++
+                                refundList.add(RefundRequest(viewType = RecyclerViewType.LOADER))
+                            }
+                            //This api is called everytime when the whole screen is refreshed.
+                            binding.refundRequestRecyclerView.adapter?.notifyItemInserted(0)
                             binding.refundRequestRecyclerView.visibility = View.VISIBLE
                             binding.refundRequestNoDataFoundContainer.visibility = View.GONE
                         }else{
@@ -114,6 +139,51 @@ class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
                 override fun onFailure(call: Call<RefundRequestResponse>, throwable: Throwable) {
                     hideLoader()
                     showToast(getString(R.string.default_error_toast))
+                }
+            })
+        }
+    }
+
+    private fun getRefundRequestsPaginatedResult() {
+        scope.launch {
+            val idToken = fetchIdToken()
+            val requestRefundHandler = ApiClient.apiService.getRefundRequests(
+                header = idToken,
+                page = page,
+                status = filterParameters,
+                time = sortParameter,
+            )
+
+            requestRefundHandler.enqueue(object : Callback<RefundRequestResponse> {
+                override fun onResponse(call: Call<RefundRequestResponse>, response: Response<RefundRequestResponse>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val refundRequest = response.body()!!
+                        paginationEnd = refundRequest.nextPage == null
+                        if (refundRequest.refundRequest.isNotEmpty()) {
+                            val initialListSize = refundList.size
+                            //remove the loader added at the beginning
+                            refundList.removeAt(refundList.size - 1)
+                            //add the new response to the list
+                            refundList.addAll(response.body()!!.refundRequest)
+                            if (!paginationEnd) {
+                                //Check whether there is page
+                                page++
+                                refundList.add(RefundRequest(viewType = RecyclerViewType.LOADER))
+                            }
+                            val updatePosition = refundList.size - initialListSize
+                            if (updatePosition == 0) {
+                                binding.refundRequestRecyclerView.adapter?.notifyItemChanged(refundList.size - 1)
+                            }else {
+                                binding.refundRequestRecyclerView.adapter?.notifyItemRangeChanged(initialListSize - 1, refundList.size - initialListSize)
+                            }
+                        }
+                    }
+                    isPaginating = false
+                }
+                override fun onFailure(call: Call<RefundRequestResponse>, throwable: Throwable) {
+                    hideLoader()
+                    showToast(getString(R.string.default_error_toast))
+                    isPaginating = false
                 }
             })
         }
@@ -138,13 +208,29 @@ class RefundRequestActivity : BaseActivity(), RefundRequestSortFilterInterface {
         isSortSelected = true
         sortParameter = sortParameters[type].id
         selectedId = type
-        if (refundList.isNotEmpty()) binding.refundRequestRecyclerView.smoothScrollToPosition(0)
+        if (refundList.isNotEmpty()) binding.refundRequestRecyclerView.scrollToPosition(0)
         refundList.clear()
+        binding.refundRequestRecyclerView.adapter?.notifyDataSetChanged()
+        page = 1
+        isPaginating = false
         getRefundRequests()
     }
 
-    override fun onFilterParameterSelected(types: List<String>) {
+    override fun onFilterParameterSelected(types: List<FilterParameter>) {
         isFilterSelected = true
+        selectedFilterParameters = types
+        filterParameters = types.filter { it.isSelected }.joinToString(separator = ",") { it.name }
+        if (refundList.isNotEmpty()) binding.refundRequestRecyclerView.scrollToPosition(0)
+        refundList.clear()
+        binding.refundRequestRecyclerView.adapter?.notifyDataSetChanged()
+        page = 1
+        isPaginating = false
+        getRefundRequests()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
     }
 }
 
@@ -163,6 +249,6 @@ data class SortParameter(
 )
 
 data class FilterParameter(
-    val id: Int,
+    val isSelected: Boolean = false,
     val name: String
 )

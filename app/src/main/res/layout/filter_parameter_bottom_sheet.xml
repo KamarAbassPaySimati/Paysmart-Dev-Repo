@@ -63,7 +63,7 @@
                     android:layout_weight="1"/>
 
                 <CheckBox
-                    android:id="@+id/filterParameterPendingCheckbox"
+                    android:id="@+id/filterParameterRefundedCheckbox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:buttonIconTint="@color/white"
@@ -87,7 +87,7 @@
                     android:layout_weight="1"/>
 
                 <CheckBox
-                    android:id="@+id/filterParameterRefundedCheckbox"
+                    android:id="@+id/filterParameterPendingCheckbox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:buttonIconTint="@color/white"

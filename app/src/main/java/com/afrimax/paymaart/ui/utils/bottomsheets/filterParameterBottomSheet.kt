@@ -22,9 +22,9 @@ class FilterParameterBottom(private val filterList: List<FilterParameter>): Bott
     private fun setupView() {
         val parameterList = mutableListOf<FilterParameter>()
         binding.filterParameterApplyButton.setOnClickListener {
-            if (binding.filterParameterRefundedCheckbox.isChecked) parameterList.add(FilterParameter(0, "refunded"))
-            if (binding.filterParameterPendingCheckbox.isChecked) parameterList.add(FilterParameter(0, "pending"))
-            if (binding.filterParameterRejectedCheckbox.isChecked) parameterList.add(FilterParameter(0, "rejected"))
+            if (binding.filterParameterRefundedCheckbox.isChecked) parameterList.add(FilterParameter(true, "refunded"))
+            if (binding.filterParameterPendingCheckbox.isChecked) parameterList.add(FilterParameter(true, "pending"))
+            if (binding.filterParameterRejectedCheckbox.isChecked) parameterList.add(FilterParameter(true, "rejected"))
             dismiss()
             sheetCallback.onFilterParameterSelected(parameterList)
         }
@@ -34,9 +34,13 @@ class FilterParameterBottom(private val filterList: List<FilterParameter>): Bott
             binding.filterParameterPendingCheckbox.isChecked = false
             binding.filterParameterRejectedCheckbox.isChecked = false
         }
-        if (filterList[0].id) binding.filterParameterRefundedCheckbox.isChecked = true
-        if (filterList[0].id) binding.filterParameterRefundedCheckbox.isChecked = true
-        if (filterList[0].id) binding.filterParameterRefundedCheckbox.isChecked = true
+        filterList.forEach { filterParameter ->
+            when (filterParameter.name) {
+                "refunded" -> binding.filterParameterRefundedCheckbox.isChecked = filterParameter.isSelected
+                "pending" -> binding.filterParameterPendingCheckbox.isChecked = filterParameter.isSelected
+                "rejected" -> binding.filterParameterRejectedCheckbox.isChecked = filterParameter.isSelected
+            }
+        }
     }
 
     override fun onAttach(context: Context) {

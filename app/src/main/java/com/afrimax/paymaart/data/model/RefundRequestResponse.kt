@@ -1,5 +1,6 @@
 package com.afrimax.paymaart.data.model
 
+import com.afrimax.paymaart.util.RecyclerViewType
 import com.google.gson.annotations.SerializedName
 
 data class RefundRequestResponse(
@@ -10,9 +11,9 @@ data class RefundRequestResponse(
     @SerializedName("limit")
     val limit: Int,
     @SerializedName("nextPage")
-    val nextPage: Any,
+    val nextPage: Int?,
     @SerializedName("previousPage")
-    val previousPage: Any,
+    val previousPage: Int?,
     @SerializedName("success_status")
     val successStatus: Boolean,
     @SerializedName("totalPages")
@@ -23,19 +24,20 @@ data class RefundRequestResponse(
 
 data class RefundRequest(
     @SerializedName("receiver_name")
-    val receiverName: String,
+    val receiverName: String? = "",
     @SerializedName("receiver_id")
-    val receiverId: String,
+    val receiverId: String? = "",
     @SerializedName("amount")
-    val amount: String,
+    val amount: String = "",
     @SerializedName("created_at")
-    val createdAt: String,
+    val createdAt: String? = "",
     @SerializedName("status")
-    val status: String,
+    val status: String? = "",
     @SerializedName("transaction_id")
-    val transactionId: String,
+    val transactionId: String? = "",
     @SerializedName("transaction_type")
-    val transactionType: String,
+    val transactionType: String? = "",
     @SerializedName("profile_pic")
-    val profilePic: String? = null
+    val profilePic: String? = null,
+    val viewType: RecyclerViewType = RecyclerViewType.ACTUAL_VIEW_ITEM
 )
