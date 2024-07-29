@@ -49,6 +49,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPasswordSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPinSheet
 import com.afrimax.paymaart.ui.utils.interfaces.HomeInterface
 import com.afrimax.paymaart.ui.viewkyc.ViewKycDetailsActivity
+import com.afrimax.paymaart.ui.webview.WebViewActivity
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getFormattedAmount
 import kotlinx.coroutines.launch
@@ -278,6 +279,21 @@ class HomeActivity : BaseActivity(), HomeInterface {
             dest = DRAWER_REFUND_REQUEST
             b.homeActivity.closeDrawer(GravityCompat.END)
         }
+
+        b.homeActivityNavView.homeDrawerPrivacyPolicyTV.setOnClickListener {
+            dest = DRAWER_PRIVACY_POLICY
+            b.homeActivity.closeDrawer(GravityCompat.END)
+        }
+
+        b.homeActivityNavView.homeDrawerToSTV.setOnClickListener {
+            dest =  DRAWER_TERMS_AND_CONDITIONS
+            b.homeActivity.closeDrawer(GravityCompat.END)
+        }
+
+        b.homeActivityNavView.homeDrawerAboutUsTV.setOnClickListener {
+            dest = DRAWER_ABOUT_US
+            b.homeActivity.closeDrawer(GravityCompat.END)
+        }
         setDrawerClosedListener()
     }
 
@@ -321,6 +337,22 @@ class HomeActivity : BaseActivity(), HomeInterface {
                     DRAWER_REFUND_REQUEST -> {
                         startActivity(Intent(this@HomeActivity, RefundRequestActivity::class.java))
                     }
+                    DRAWER_PRIVACY_POLICY -> {
+                        val intent = Intent(this@HomeActivity, WebViewActivity::class.java)
+                        intent.putExtra(Constants.TYPE, Constants.PRIVACY_POLICY_TYPE)
+                        startActivity(intent)
+                    }
+                    DRAWER_TERMS_AND_CONDITIONS -> {
+                        val intent = Intent(this@HomeActivity, WebViewActivity::class.java)
+                        intent.putExtra(Constants.TYPE, Constants.TERMS_AND_CONDITIONS_TYPE)
+                        startActivity(intent)
+                    }
+                    DRAWER_ABOUT_US -> {
+                        val intent = Intent(this@HomeActivity, WebViewActivity::class.java)
+                        intent.putExtra(Constants.TYPE, Constants.ABOUT_US_TYPE)
+                        startActivity(intent)
+                    }
+
                 }
                 dest = 0
                 isSettingsClicked = false
@@ -586,6 +618,9 @@ class HomeActivity : BaseActivity(), HomeInterface {
         const val DRAWER_DELETE_ACCOUNT = 10
         const val DRAWER_LOGOUT = 11
         const val DRAWER_REFUND_REQUEST = 12
+        const val DRAWER_PRIVACY_POLICY = 13
+        const val DRAWER_TERMS_AND_CONDITIONS = 14
+        const val DRAWER_ABOUT_US = 15
     }
 
     override fun onClickViewBalance(viewWalletScope: String, data: WalletData?) {
