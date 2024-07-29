@@ -40,6 +40,7 @@ import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
 import com.afrimax.paymaart.ui.paytoaffrimax.ValidateAfrimaxIdActivity
+import com.afrimax.paymaart.ui.refundrequest.RefundRequestActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
@@ -272,6 +273,11 @@ class HomeActivity : BaseActivity(), HomeInterface {
             dest = DRAWER_LOGOUT
             b.homeActivity.closeDrawer(GravityCompat.END)
         }
+
+        b.homeActivityNavView.homeDrawerRefundRequestTV.setOnClickListener {
+            dest = DRAWER_REFUND_REQUEST
+            b.homeActivity.closeDrawer(GravityCompat.END)
+        }
         setDrawerClosedListener()
     }
 
@@ -310,6 +316,10 @@ class HomeActivity : BaseActivity(), HomeInterface {
                     DRAWER_LOGOUT -> {
                         val logoutSheet = LogoutConfirmationSheet()
                         logoutSheet.show(supportFragmentManager, LogoutConfirmationSheet.TAG)
+                    }
+
+                    DRAWER_REFUND_REQUEST -> {
+                        startActivity(Intent(this@HomeActivity, RefundRequestActivity::class.java))
                     }
                 }
                 dest = 0
@@ -565,16 +575,6 @@ class HomeActivity : BaseActivity(), HomeInterface {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    private fun formatNumber(number: Double): String {
-        val decimalFormat = DecimalFormat("#,###.00")
-
-        return if (number == 0.00) {
-            "0.00"
-        } else {
-            decimalFormat.format(number)
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         getHomeScreenDataApi()
@@ -585,6 +585,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         const val DRAWER_UPDATE_PASSWORD = 9
         const val DRAWER_DELETE_ACCOUNT = 10
         const val DRAWER_LOGOUT = 11
+        const val DRAWER_REFUND_REQUEST = 12
     }
 
     override fun onClickViewBalance(viewWalletScope: String, data: WalletData?) {

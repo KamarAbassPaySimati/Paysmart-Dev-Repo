@@ -49,6 +49,11 @@
         <item name="cornerSize">16dp</item>
     </style>
 
+    <style name="profileImagePreviewSmall" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">6dp</item>
+    </style>
+
     <style name="EditKycVerificationSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item> <!-- This is important -->
         <item name="android:statusBarColor">@color/transparent</item>

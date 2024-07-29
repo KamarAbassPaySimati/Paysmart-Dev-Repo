@@ -14,7 +14,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_350sdp"
+            android:layout_height="@dimen/_300sdp"
             android:background="@drawable/image_intro_background"/>
 
     </LinearLayout>
@@ -75,7 +75,8 @@
             android:layout_height="wrap_content"
             android:paddingVertical="9dp"
             android:text="@string/app_version"
-            android:textColor="@color/onPrimaryLight"/>
+            android:textColor="@color/onPrimaryLight"
+            style="@style/body_text_style"/>
 
     </LinearLayout>
 

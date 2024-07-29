@@ -58,4 +58,9 @@
     <color name="primeMembershipGrey">#808080</color>
     <color name="disabledGreyColor">#777C88</color>
     <color name="paymentScreenOrange">#FFA500</color>
+    <color name="pendingCardTextColor">#67389A</color>
+    <color name="pendingCardBackgroundColor">#F0ECFF</color>
+    <color name="refundedCardTextColor">#13B681</color>
+    <color name="refundedCardBackgroundColor">#ECFDF5</color>
+
 </resources>
