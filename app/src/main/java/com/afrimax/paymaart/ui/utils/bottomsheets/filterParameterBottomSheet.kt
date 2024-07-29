@@ -22,7 +22,7 @@ class FilterParameterBottom(private val filterList: List<FilterParameter>): Bott
     private fun setupView() {
         val parameterList = mutableListOf<FilterParameter>()
         binding.filterParameterApplyButton.setOnClickListener {
-            if (binding.filterParameterRefundedCheckbox.isChecked) parameterList.add(FilterParameter(true, "refunded"))
+            if (binding.filterParameterRefundedCheckbox.isChecked) parameterList.add(FilterParameter(true, "approved"))
             if (binding.filterParameterPendingCheckbox.isChecked) parameterList.add(FilterParameter(true, "pending"))
             if (binding.filterParameterRejectedCheckbox.isChecked) parameterList.add(FilterParameter(true, "rejected"))
             dismiss()

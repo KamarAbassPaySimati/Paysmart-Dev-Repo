@@ -8,20 +8,15 @@ Feature: Paymaart- Customer Android- Refund Payment Status
   3.The user should be able to filter the refund payments list by status
 
   Background: I navigate to home screen
-    Given I am in main interface screen
+    Given The login screen is displayed
+    When I choose to login with paymart ID
+    When I enter paymart ID "92322529"
+    And I enter login PIN "965274"
     When I click on login button
-    Then I should be redirected to login screen
-    When I choose to login with paymaart id
-    When I enter the paymaart id as "CMR81133389"
-    When I enter the PIN as "529106"
-    When I click on login button
-    Then I should see the 2FA screen
-    When I copy the key and proceed
     Then I see the TOTP screen
     When I enter the generated OTP
     Then I should be redirected to home screen
-    When I open menu and navigate to the KYC reg details
-    When I click on refund request option
+    When I open menu and click on refund payment button
     Then I should be redirected to refund request screen
 
   Scenario Outline: Sort refund request according to date
