@@ -5,7 +5,7 @@
     <string name="image_description">Image Description</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
-    <string name="app_version">version 0.1</string>
+    <string name="app_version">Version 0.1</string>
     <string name="registration">Registration</string>
     <string name="next_kyc_registration">Next - KYC Registration</string>
     <string name="one_of_two">1 of 2</string>
@@ -53,7 +53,7 @@
     <string name="otp_place_holder">_ _ _ _ _ _</string>
     <string name="sample_time">10:00</string>
     <string name="invalid_otp">Invalid OTP</string>
-    <string name="didn_t_receive_otp">Didn\'t Receive OTP</string>
+    <string name="didn_t_receive_otp">Didn\'t Receive OTP?</string>
     <string name="resend">Resend</string>
     <string name="phone_verification">Phone Verification</string>
     <string name="phone_verify_sub_text">Check your phone for a verification OTP. The OTP will be active for 10 minutes.</string>
