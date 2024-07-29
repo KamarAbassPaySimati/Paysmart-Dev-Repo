@@ -1,6 +1,7 @@
 package com.afrimax.paymaart.util
 
 import android.Manifest
+import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -10,6 +11,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -17,9 +19,10 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.ui.home.HomeActivity
+import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.splash.SplashScreenActivity
 import com.google.firebase.messaging.FirebaseMessagingService
-import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 
@@ -73,15 +76,14 @@ class MessagingService(
                 when (action) {
                     ACTION_LOGOUT -> {
                         authCalls.initiateLogout(this@MessagingService)
-
-                        val i = applicationContext.packageManager.getLaunchIntentForPackage(
-                            applicationContext.packageName
-                        )
-
+                        val i = applicationContext
+                            .packageManager
+                            .getLaunchIntentForPackage(applicationContext.packageName)
                         applicationContext.startActivity(
-                            Intent.makeRestartActivityTask(i!!.component).apply {
-                                    setPackage(applicationContext.packageName)
-                                })
+                            Intent
+                                .makeRestartActivityTask(i!!.component)
+                                .apply { setPackage(applicationContext.packageName) }
+                        )
                     }
                 }
             }
@@ -92,19 +94,31 @@ class MessagingService(
      * Subsequently, the channel is not recreated. Each time the function is called,
      * it builds and displays the notification.*/
     private fun showNotification(data: Intent) {
-        "ResponseNotify".showLogE(Gson().toJson(data))
         //Create the channel first | This only happens once when the app is first booting
         createNotificationChannel()
 
-        val i = Intent(this, SplashScreenActivity::class.java)
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        val pendingIntentMain = PendingIntent.getActivity(
-            this, 0, i, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        val action =  data.getStringExtra(ACTION).toString()
+        val targetActivity: Class<out AppCompatActivity> = when (action) {
+            NotificationNavigation.MEMBERSHIP_PLANS.screenName -> MembershipPlansActivity::class.java
+            else -> SplashScreenActivity::class.java
+        }
+        val intent = if (isAppInForeground()) {
+            Intent(this, targetActivity).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            }
+        }else{
+            Intent(this, SplashScreenActivity::class.java).apply {
+                putExtra(Constants.ACTION, action)
+            }
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
-
         val title = data.getStringExtra(TITLE)
         val body = data.getStringExtra(BODY)
-
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
             setSmallIcon(R.drawable.ico_notification)
@@ -112,11 +126,10 @@ class MessagingService(
             setContentText(body)
             setAutoCancel(true)
             setSound(defaultSoundUri)
-            setContentIntent(pendingIntentMain)
+            setContentIntent(pendingIntent)
             setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
             setGroup(GROUP_KEY)
         }
-
 
         if (ActivityCompat.checkSelfPermission(
                 this@MessagingService, Manifest.permission.POST_NOTIFICATIONS
@@ -125,7 +138,6 @@ class MessagingService(
             notify(getUniqueNotificationId(), notificationBuilder.build())
             notify(GROUP_KEY.hashCode(), buildGroupSummaryNotification())
         }
-
     }
 
     /**A notification channel is required in the latest versions of Android.
@@ -162,6 +174,21 @@ class MessagingService(
         return System.currentTimeMillis().toInt() + 111
     }
 
+    private fun isAppInForeground(): Boolean {
+        val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val appProcesses = activityManager.runningAppProcesses
+        if (appProcesses != null) {
+            val packageName = packageName
+            for (appProcess in appProcesses) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+                    && appProcess.processName == packageName) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     companion object {
         const val CHANNEL_PAYMENT = "Payment Notifications"
         const val GROUP_KEY = "${BuildConfig.APPLICATION_ID}_group"
@@ -176,4 +203,8 @@ class MessagingService(
         //payload_values
         const val ACTION_LOGOUT = "logout"
     }
+}
+
+enum class NotificationNavigation(val screenName: String){
+    MEMBERSHIP_PLANS("membership"),
 }

@@ -24,6 +24,8 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.data.model.CashOutApiResponse
+import com.afrimax.paymaart.data.model.CashOutResponse
 import com.afrimax.paymaart.data.model.PayAfrimaxResponse
 import com.afrimax.paymaart.data.model.SubscriptionPaymentDetails
 import com.afrimax.paymaart.databinding.ActivityPaymentSuccessfulBinding
@@ -103,6 +105,27 @@ class PaymentSuccessfulActivity : BaseActivity() {
                     binding.paymentSuccessfulMembership.text = getString(R.string.plan)
                     binding.paymentSuccessfulMembershipValue.text = data.plan
                 }
+            }
+            is CashOutResponse -> {
+                val model = CommonViewModel(
+                    fromName = data.fromName,
+                    fromId = data.fromPaymaartId,
+                    toName = data.toName,
+                    toId = data.toPaymaartId,
+                    transactionAmount = data.transactionAmount?.toDouble(),
+                    transactionFees = data.tax.toDouble(),
+                    vat = data.vat.toDouble(),
+                    transactionId = data.transactionId,
+                    dateTime = data.dateTime
+                )
+                setCommonView(model)
+                binding.paymentSuccessfulStatusText.text = getString(R.string.cash_out_requested)
+                binding.paymentSuccessfulStatusContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.paymentScreenOrange))
+                binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                binding.paymentSuccessfulMembership.text = getString(R.string.balance)
+                binding.paymentSuccessfulMembershipValue
+                    .text = getString(R.string.amount_formatted, data.balance)
+                transactionId = data.transactionId ?: ""
             }
         }
 

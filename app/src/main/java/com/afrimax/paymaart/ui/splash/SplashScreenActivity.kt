@@ -18,7 +18,8 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivitySplashScreenBinding
 import com.afrimax.paymaart.ui.home.HomeActivity
 import com.afrimax.paymaart.ui.intro.IntroActivity
-import com.afrimax.paymaart.ui.kyc.KycProgressActivity
+import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
+import com.afrimax.paymaart.util.NotificationNavigation
 import com.amplifyframework.core.Amplify
 
 private const val PROGRESS = "progress"
@@ -27,12 +28,14 @@ class SplashScreenActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashScreenBinding
     private lateinit var animator1: ObjectAnimator
     private lateinit var animator2: ObjectAnimator
+    private lateinit var action: String
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        action = intent.getStringExtra("action") ?: ""
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.splashScreenActivity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -70,11 +73,9 @@ class SplashScreenActivity : AppCompatActivity() {
             }
 
             override fun onAnimationEnd(p0: Animator) {
-                if (isLoggedIn) startActivity(
-                    Intent(
-                        this@SplashScreenActivity, HomeActivity::class.java
-                    )
-                )
+                if (isLoggedIn) {
+                    handleNavigation()
+                }
                 else startActivity(Intent(this@SplashScreenActivity, IntroActivity::class.java))
                 finish()
             }
@@ -105,6 +106,20 @@ class SplashScreenActivity : AppCompatActivity() {
                 startFinalAnim(false)
             }
         })
+    }
+
+    private fun handleNavigation(){
+        val targetActivity: Class<out AppCompatActivity> = when (action) {
+            NotificationNavigation.MEMBERSHIP_PLANS.screenName -> MembershipPlansActivity::class.java
+            else -> HomeActivity::class.java
+        }
+        if (action.isNotEmpty() && targetActivity != HomeActivity::class.java) {
+            val mainActivity = Intent(this@SplashScreenActivity, HomeActivity::class.java)
+            val targetIntent = Intent(this@SplashScreenActivity, targetActivity)
+            startActivities(arrayOf(mainActivity, targetIntent))
+        }else {
+            startActivity(Intent(this@SplashScreenActivity, HomeActivity::class.java))
+        }
     }
 
 }

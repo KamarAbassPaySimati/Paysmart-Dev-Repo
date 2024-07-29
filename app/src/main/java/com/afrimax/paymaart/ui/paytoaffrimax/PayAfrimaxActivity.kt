@@ -32,6 +32,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.SendPaymentBottomSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.TotalReceiptSheet
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.getInitials
 import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -295,17 +296,17 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
         if (isValid) {
             //Valid amount
             hideKeyboard(this@PayAfrimaxActivity)
-            TotalReceiptSheet().apply {
-                arguments = Bundle().apply {
-                    putString(Constants.PAYMENT_AMOUNT, amount)
-                    putString(Constants.PAYMENT_TXN_FEE, "0")
-                    putString(Constants.PAYMENT_VAT, "0")
-                    putString(Constants.AFRIMAX_ID, afrimaxId)
-                    putString(Constants.AFRIMAX_NAME, afrimaxName)
-                    putString(Constants.CUSTOMER_NAME, customerName)
-                    putString(Constants.CUSTOMER_ID, customerId.uppercase())
-                }
-            }.show(supportFragmentManager, TotalReceiptSheet.TAG)
+            val payAfrimaxModel = PayAfrimaxModel(
+                amount = amount,
+                txnFee = "0",
+                vat = "0",
+                afrimaxId = afrimaxId,
+                afrimaxName = afrimaxName,
+                customerName = customerName,
+                customerId = customerId.uppercase()
+            )
+            val totalReceiptSheet = TotalReceiptSheet(payAfrimaxModel)
+            totalReceiptSheet.show(supportFragmentManager, TotalReceiptSheet.TAG)
         }
     }
 
@@ -316,17 +317,17 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
         if (selectedPlan != null) {
             //Valid amount
             hideKeyboard(this@PayAfrimaxActivity)
-            TotalReceiptSheet().apply {
-                arguments = Bundle().apply {
-                    putString(Constants.PAYMENT_AMOUNT, selectedPlan!!.price)
-                    putString(Constants.PAYMENT_TXN_FEE, "0")
-                    putString(Constants.PAYMENT_VAT, "0")
-                    putString(Constants.AFRIMAX_ID, afrimaxId)
-                    putString(Constants.AFRIMAX_NAME, afrimaxName)
-                    putString(Constants.CUSTOMER_NAME, customerName)
-                    putString(Constants.CUSTOMER_ID, customerId)
-                }
-            }.show(supportFragmentManager, TotalReceiptSheet.TAG)
+            val payAfrimaxModel = PayAfrimaxModel(
+                amount = selectedPlan!!.price,
+                txnFee = "0",
+                vat = "0",
+                afrimaxId = afrimaxId,
+                afrimaxName = afrimaxName,
+                customerName = customerName,
+                customerId = customerId.uppercase()
+            )
+            val totalReceiptSheet = TotalReceiptSheet(payAfrimaxModel)
+            totalReceiptSheet.show(supportFragmentManager, TotalReceiptSheet.TAG)
         } else {
             b.payAfrimaxActivityPaymentErrorBox.visibility = View.VISIBLE
             b.payAfrimaxActivityPaymentErrorTV.text = getString(R.string.please_choose_a_plan)
@@ -470,12 +471,6 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
     val amount: String
         get() = b.payAfrimaxActivityAmountET.text.toString()
 
-    private fun getInitials(name: String): String {
-        if (name.isEmpty()) return ""
-        return name.split(" ")
-            .mapNotNull { it.firstOrNull()?.uppercase() }
-            .joinToString(" ")
-    }
 
     override fun onPaymentSuccess(successData: Any?) {
         val newPlan = selectedPlan?.let { it.serviceName[0] } ?: ""
