@@ -122,9 +122,8 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             override fun onClick(textView: View) {
                 val termsAndConditionsIntent =
                     Intent(this@RegisterActivity, WebViewActivity::class.java)
-                termsAndConditionsIntent.putExtra(
-                    Constants.TYPE, Constants.TERMS_AND_CONDITIONS_TYPE
-                )
+                termsAndConditionsIntent.putExtra(Constants.TYPE, Constants.TERMS_AND_CONDITIONS_TYPE)
+                termsAndConditionsIntent.putExtra(Constants.ANIMATE, true)
                 val options =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(this@RegisterActivity)
                         .toBundle()
@@ -141,6 +140,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                 val privacyPolicyIntent =
                     Intent(this@RegisterActivity, WebViewActivity::class.java)
                 privacyPolicyIntent.putExtra(Constants.TYPE, Constants.PRIVACY_POLICY_TYPE)
+                privacyPolicyIntent.putExtra(Constants.ANIMATE, true)
                 val options =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(this@RegisterActivity)
                         .toBundle()

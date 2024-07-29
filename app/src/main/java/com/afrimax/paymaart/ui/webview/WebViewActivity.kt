@@ -23,31 +23,41 @@ import com.afrimax.paymaart.util.Constants
 
 class WebViewActivity : AppCompatActivity() {
     private lateinit var b: ActivityWebViewBinding
+    private var animate: Boolean = false
+    private var type: String = ""
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         b = ActivityWebViewBinding.inflate(layoutInflater)
-        setAnimation()
         setContentView(b.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.webViewActivity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         val wic = WindowInsetsControllerCompat(window, window.decorView)
         wic.isAppearanceLightStatusBars = true
-
-        val type = intent.getStringExtra(Constants.TYPE) ?: Constants.PRIVACY_POLICY_TYPE
         var url = ""
-        if (type == Constants.PRIVACY_POLICY_TYPE) {
-            b.webViewActivityTitleTV.text = ContextCompat.getString(this, R.string.privacy_policy)
-            url = Constants.PRIVACY_POLICY_URL
-        } else if (type == Constants.TERMS_AND_CONDITIONS_TYPE) {
-            b.webViewActivityTitleTV.text =
-                ContextCompat.getString(this, R.string.terms_and_conditions_wv)
-            url = Constants.TERMS_AND_CONDITIONS_URL
+        animate = intent.getBooleanExtra(Constants.ANIMATE, false)
+        type = intent.getStringExtra(Constants.TYPE) ?: Constants.PRIVACY_POLICY_TYPE
+        if (animate) {
+            setAnimation()
+        }
+        when (type) {
+            Constants.PRIVACY_POLICY_TYPE -> {
+                b.webViewActivityTitleTV.text = ContextCompat.getString(this, R.string.privacy_policy)
+                url = Constants.PRIVACY_POLICY_URL
+            }
+            Constants.TERMS_AND_CONDITIONS_TYPE -> {
+                b.webViewActivityTitleTV.text = ContextCompat.getString(this, R.string.terms_and_conditions_wv)
+                url = Constants.TERMS_AND_CONDITIONS_URL
+            }
+            Constants.ABOUT_US_TYPE -> {
+                b.webViewActivityTitleTV.text = ContextCompat.getString(this, R.string.about_us)
+                url = Constants.ABOUT_US_URL
+            }
+
         }
 
         b.webViewActivityCloseButton.setOnClickListener {
@@ -92,6 +102,8 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private fun setAnimation() {
+        //This is a slide up animation.
+        //Used only in Registration Activity.
         val slide = Slide()
         slide.slideEdge = Gravity.BOTTOM
         slide.setDuration(300)

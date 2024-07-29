@@ -32,18 +32,21 @@
         <activity
             android:name=".ui.cashout.CashOutActivity"
             android:exported="false"
-            android:taskAffinity=".membership" />
+            android:taskAffinity=".membership"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.payment.FlagTransactionActivity"
             android:exported="false" />
         <activity
             android:name=".ui.paytoaffrimax.PayAfrimaxActivity"
             android:exported="false"
-            android:taskAffinity=".membership" />
+            android:taskAffinity=".membership"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.paytoaffrimax.ValidateAfrimaxIdActivity"
             android:exported="false"
-            android:taskAffinity=".membership" />
+            android:taskAffinity=".membership"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.payment.PaymentSuccessfulActivity"
             android:exported="false"
