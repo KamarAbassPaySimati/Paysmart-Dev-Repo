@@ -35,6 +35,7 @@ import com.afrimax.paymaart.data.model.ValidateAfrimaxIdResponse
 import com.afrimax.paymaart.data.model.WalletData
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
+import com.afrimax.paymaart.ui.cashout.CashOutSearchActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
@@ -153,7 +154,9 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityCashOutButton.setOnClickListener {
             if (checkKycStatus()){
-                //
+                startActivity(
+                    Intent(this, CashOutSearchActivity::class.java)
+                )
             }
         }
 //

@@ -16,6 +16,9 @@ class ActivityScenarioHolder {
             instrumentation.uiAutomation.grantRuntimePermission(
                 activity.packageName, "android.permission.CAMERA"
             )
+            instrumentation.uiAutomation.grantRuntimePermission(
+                activity.packageName, "android.permission.POST_NOTIFICATIONS"
+            )
         }
     }
 

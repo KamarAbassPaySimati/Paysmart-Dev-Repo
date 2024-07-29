@@ -1,6 +1,8 @@
 package com.afrimax.paymaart.data
 
 import com.afrimax.paymaart.data.model.ApproveUserRequest
+import com.afrimax.paymaart.data.model.CashOutApiResponse
+import com.afrimax.paymaart.data.model.CashOutRequestBody
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
 import com.afrimax.paymaart.data.model.DefaultResponse
@@ -27,6 +29,7 @@ import com.afrimax.paymaart.data.model.SaveInfoSimplifiedToFullRequest
 import com.afrimax.paymaart.data.model.SaveNewAddressDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveNewIdentityDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveNewInfoDetailsSelfKycRequest
+import com.afrimax.paymaart.data.model.SearchUsersDataResponse
 import com.afrimax.paymaart.data.model.SecurityQuestionsResponse
 import com.afrimax.paymaart.data.model.SelfKycDetailsResponse
 import com.afrimax.paymaart.data.model.SendForgotOtpResponse
@@ -38,6 +41,7 @@ import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionDetailsResponse
 import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentSuccessfulResponse
+import com.afrimax.paymaart.data.model.TransactionDetailsResponse
 import com.afrimax.paymaart.data.model.UpdateAutoRenewalRequestBody
 import com.afrimax.paymaart.data.model.UpdatePinOrPasswordRequest
 import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
@@ -63,6 +67,7 @@ private const val KYC_UPDATE = "kyc-update"
 private const val PAYMAART = "paymaart"
 private const val CUSTOMER = "customer"
 private const val AFRIMAX = "afrimax"
+private const val CASHIN_CASHOUT = "cashin-cashout"
 interface ApiService {
 
     @GET("$CUSTOMER_USER/security-questions")
@@ -181,6 +186,15 @@ interface ApiService {
 
     @POST("$CUSTOMER_USER/delete-notification-id")
     fun deleteFcmToken(@Header("Authorization") header: String, @Body body: FcmTokenRequest): Call<DefaultResponse>
+
+    @GET("$CASHIN_CASHOUT/search-cashout-customer")
+    fun getAgentsForSelfCashOut(@Header("Authorization") header: String, @Query("page") page: Int, @Query("search") search: String?): Call<SearchUsersDataResponse>
+
+    @POST("$CASHIN_CASHOUT/request-cashout-customer")
+    fun cashOut(@Header("Authorization") header: String, @Body body: CashOutRequestBody): Call<CashOutApiResponse>
+
+    @GET("$CASHIN_CASHOUT/calc-fee")
+    fun getTransactionDetails(@Header("Authorization") header: String, @Query("amount") amount: String): Call<TransactionDetailsResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
