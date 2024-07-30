@@ -125,7 +125,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulMembership.text = getString(R.string.balance)
                 binding.paymentSuccessfulMembershipValue
-                    .text = getString(R.string.amount_formatted, data.balance)
+                    .text = getString(R.string.amount_formatted, getFormattedAmount(data.balance))
                 transactionId = data.transactionId ?: ""
             }
         }

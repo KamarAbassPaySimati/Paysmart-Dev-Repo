@@ -7,5 +7,6 @@ data class PayAfrimaxModel(
     val afrimaxId: String,
     val afrimaxName: String,
     val customerName: String,
-    val customerId: String
+    val customerId: String,
+    val planName: String? = null
 )
