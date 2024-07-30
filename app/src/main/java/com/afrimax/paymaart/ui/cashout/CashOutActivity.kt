@@ -190,7 +190,7 @@ class CashOutActivity : BaseActivity(), SendPaymentInterface {
                                 vat = data.vatAmount.toString(),
                                 amount = amount,
                                 receiverPaymaartId = userData.paymaartId,
-                                displayAmount = "${amount.toInt() + data.grossTransactionFee}"
+                                displayAmount = data.totalAmount
                             )
                             val totalReceiptSheet = TotalReceiptSheet(cashOutModel)
                             totalReceiptSheet.show(supportFragmentManager, totalReceiptSheet.tag)

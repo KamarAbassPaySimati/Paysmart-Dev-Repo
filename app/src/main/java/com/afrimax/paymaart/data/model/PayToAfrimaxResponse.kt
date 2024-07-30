@@ -13,38 +13,38 @@ data class PayToAfrimaxResponse(
 )
 
 data class PayAfrimaxResponse(
-    @SerializedName("from_name") val fromName: String,
-    @SerializedName("from_paymaart_id") val fromPaymaartId: String,
-    @SerializedName("to_name") val toName: String,
-    @SerializedName("to_paymaart_id") val toPaymaartId: String,
-    @SerializedName("obo_paymaart_name") val oboPaymaartName: String,
+    @SerializedName("from_name") val fromName: String?,
+    @SerializedName("from_paymaart_id") val fromPaymaartId: String?,
+    @SerializedName("to_name") val toName: String?,
+    @SerializedName("to_paymaart_id") val toPaymaartId: String?,
+    @SerializedName("obo_paymaart_name") val oboPaymaartName: String?,
     @SerializedName("obo_paymaart_id") val oboPaymaartId: String?,
     @SerializedName("obo_phone_number") val oboPhoneNumber: String?,
-    @SerializedName("afrimax_name") val afrimaxName: String,
-    @SerializedName("afrimax_id") val afrimaxId: String,
+    @SerializedName("afrimax_name") val afrimaxName: String?,
+    @SerializedName("afrimax_id") val afrimaxId: String?,
     @SerializedName("transaction_amount") val transactionAmount: Double,
-    @SerializedName("tax") val tax: String,
-    @SerializedName("VAT") val vat: String,
-    @SerializedName("commission_earned") val commissionEarned: String,
-    @SerializedName("transaction_id") val transactionId: String,
+    @SerializedName("tax") val tax: String?,
+    @SerializedName("VAT") val vat: String?,
+    @SerializedName("commission_earned") val commissionEarned: String?,
+    @SerializedName("transaction_id") val transactionId: String?,
     @SerializedName("date_time") val dateTime: Long,
     var plan: String? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!,
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.readDouble(),
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.readLong(),
         parcel.readString()
     )
@@ -98,7 +98,9 @@ data class PayToAfrimaxRequestBody(
     @SerializedName("paymaart_id")
     val paymaartId: String,
     @SerializedName("paymaart_name")
-    val paymaartName: String
+    val paymaartName: String,
+    @SerializedName("plan_name")
+    val planName: String? = null,
 )
 
 data class PayToAfrimaxErrorResponse(

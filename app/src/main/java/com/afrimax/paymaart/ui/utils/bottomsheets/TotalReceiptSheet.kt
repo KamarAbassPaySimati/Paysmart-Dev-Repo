@@ -10,9 +10,7 @@ import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paymaart.databinding.TotalAmountReceiptBottomSheetBinding
 import com.afrimax.paymaart.ui.cashout.CashOutModel
 import com.afrimax.paymaart.ui.paytoaffrimax.PayAfrimaxModel
-import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getFormattedAmount
-import com.afrimax.paymaart.util.showLogE
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
@@ -72,8 +70,9 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                     customerName = model.afrimaxName,
                     customerId = model.afrimaxId.toInt(),
                     password = "",
-                    paymaartId =  model.customerName,
-                    paymaartName = model.customerName
+                    paymaartId =  model.customerId,
+                    paymaartName = model.customerName,
+                    planName = model.planName
                 )
                 sendPaymentBottomSheet = SendPaymentBottomSheet(payToAfrimax)
             }

@@ -89,13 +89,13 @@ class PaymentSuccessfulActivity : BaseActivity() {
                     toName = data.toName,
                     toId = data.toPaymaartId,
                     transactionAmount = data.transactionAmount,
-                    transactionFees = data.tax.toDouble(),
-                    vat = data.vat.toDouble(),
+                    transactionFees = data.tax?.toDouble(),
+                    vat = data.vat?.toDouble(),
                     transactionId = data.transactionId,
                     dateTime = data.dateTime
                 )
                 setCommonView(model)
-                transactionId = data.transactionId
+
                 binding.paymentSuccessfulToAfrimaxNameContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulToAfrimaxIdContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulToAfrimaxNameValue.text = data.afrimaxName
@@ -105,6 +105,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
                     binding.paymentSuccessfulMembership.text = getString(R.string.plan)
                     binding.paymentSuccessfulMembershipValue.text = data.plan
                 }
+                transactionId = data.transactionId ?: ""
             }
             is CashOutResponse -> {
                 val model = CommonViewModel(
@@ -124,7 +125,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulMembership.text = getString(R.string.balance)
                 binding.paymentSuccessfulMembershipValue
-                    .text = getString(R.string.amount_formatted, data.balance)
+                    .text = getString(R.string.amount_formatted, getFormattedAmount(data.balance))
                 transactionId = data.transactionId ?: ""
             }
         }

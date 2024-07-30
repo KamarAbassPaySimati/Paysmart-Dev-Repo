@@ -7,6 +7,7 @@ cameraCamera2 = "1.4.0-beta01"
 cucumberAndroid = "7.14.0"
 espressoContrib = "3.5.1"
 exifinterface = "1.3.7"
+firebaseBom = "33.1.2"
 glide = "4.16.0"
 googleRecaptcha = "18.5.1"
 javaJwt = "3.18.2"
@@ -45,6 +46,8 @@ recaptchaVersion = "18.5.1"
 googleGmsGoogleServices = "4.4.2"
 firebaseMessaging = "24.0.0"
 lifecycleProcess = "2.8.3"
+firebaseVersion = "3.0.2"
+googleGmsGoogleServicesVersion = "4.4.2"
 
 [libraries]
 aalto-xml = { module = "com.fasterxml:aalto-xml", version.ref = "aaltoXml" }
@@ -63,6 +66,9 @@ cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cuc
 cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberAndroid" }
 datafaker = { module = "net.datafaker:datafaker", version.ref = "datafaker" }
 espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espressoContrib" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 java-jwt = { module = "com.auth0:java-jwt", version.ref = "javaJwt" }
 java-otp = { module = "com.eatthepath:java-otp", version.ref = "javaOtp" }
@@ -95,4 +101,4 @@ androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-p
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 dotenv = { id = "co.uzzu.dotenv.gradle", version.ref = "dotenv" }
-
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseVersion" }
