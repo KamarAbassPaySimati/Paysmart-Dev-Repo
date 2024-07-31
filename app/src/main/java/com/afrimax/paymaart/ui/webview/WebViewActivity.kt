@@ -42,19 +42,29 @@ class WebViewActivity : AppCompatActivity() {
         animate = intent.getBooleanExtra(Constants.ANIMATE, false)
         type = intent.getStringExtra(Constants.TYPE) ?: Constants.PRIVACY_POLICY_TYPE
         if (animate) {
+            b.webViewActivityToolbarTwo.visibility = View.VISIBLE
             setAnimation()
+        }else {
+            b.webViewActivityToolbar.visibility = View.VISIBLE
+            wic.isAppearanceLightStatusBars = false
+            wic.isAppearanceLightNavigationBars = false
+            window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
+            window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
         }
         when (type) {
             Constants.PRIVACY_POLICY_TYPE -> {
                 b.webViewActivityTitleTV.text = ContextCompat.getString(this, R.string.privacy_policy)
+                b.webViewActivityToolbar.title = ContextCompat.getString(this, R.string.privacy_policy)
                 url = Constants.PRIVACY_POLICY_URL
             }
             Constants.TERMS_AND_CONDITIONS_TYPE -> {
                 b.webViewActivityTitleTV.text = ContextCompat.getString(this, R.string.terms_and_conditions_wv)
+                b.webViewActivityToolbar.title = ContextCompat.getString(this, R.string.terms_and_conditions_wv)
                 url = Constants.TERMS_AND_CONDITIONS_URL
             }
             Constants.ABOUT_US_TYPE -> {
                 b.webViewActivityTitleTV.text = ContextCompat.getString(this, R.string.about_us)
+                b.webViewActivityToolbar.title = ContextCompat.getString(this, R.string.about_us)
                 url = Constants.ABOUT_US_URL
             }
 
@@ -62,6 +72,10 @@ class WebViewActivity : AppCompatActivity() {
 
         b.webViewActivityCloseButton.setOnClickListener {
             finishAfterTransition()
+        }
+
+        b.webViewActivityToolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
 
         b.webViewActivityWV.apply {

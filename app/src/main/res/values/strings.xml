@@ -192,7 +192,7 @@
     <string name="malawi_citizen">Malawi citizen</string>
     <string name="expand_button_data">Expand Button</string>
     <string name="personal_customer">Personal customer</string>
-    <string name="full_kyc">Full KYC</string>
+    <string name="full_kyc">Full KYC Reg</string>
     <string name="simplified_kyc_star">Simplified KYC*</string>
     <string name="simplified_kyc_limit">*Simplified KYC Registration is available to Malawi citizens whose monthly income does not exceed 300,000 MWK; or whose Monthly Withdrawals do not exceed 300,000 MWK</string>
     <string name="business_customer">Business customer</string>
@@ -225,8 +225,8 @@
     <string name="enter_district">Enter district</string>
     <string name="save_and_continue">Save and continue</string>
     <string name="skip">Skip</string>
-    <string name="simplified_kyc">Simplified KYC</string>
-    <string name="non_malawi_full_kyc">Non-Malawi Full KYC</string>
+    <string name="simplified_kyc">Simplified KYC REG</string>
+    <string name="non_malawi_full_kyc">Non-Malawi Full KYC Reg</string>
     <string name="identity_details">Identity Details</string>
     <string name="next_personal_details">Next - Personal Details</string>
     <string name="step2of3">2 of 3</string>

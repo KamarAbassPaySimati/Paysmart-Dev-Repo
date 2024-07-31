@@ -63,11 +63,16 @@ fun <T> getFormattedAmount(amount: T?): String {
 }
 
 
-fun formatEpochTime(timestamp: Long?) : String {
+fun <T> formatEpochTime(timestamp: T?) : String {
     if (timestamp == null) {
         return "-"
     }
-    val date = Date(timestamp * 1000)
+    val newTimeStamp = when (timestamp) {
+        is Long -> timestamp
+        is String -> timestamp.toLongOrNull() ?: 0L
+        else -> 0L
+    }
+    val date = Date(newTimeStamp * 1000)
     return dateFormat.format(date)
 }
 
@@ -82,16 +87,22 @@ fun <T> formatEpochTimeTwo(timeStamp: T?): String {
     return dateFormatTwo.format(date)
 }
 
-//fun formatEpochTimeTwo(timestamp: Long?) : String {
-//    if (timestamp == null) {
-//        return "-"
-//    }
-//    val date = Date(timestamp * 1000)
-//    return dateFormatTwo.format(date)
-//}
+fun <T> formatEpochTimeThree(timeStamp: T?): String {
+    if (timeStamp == null) return ""
+    val newTimeStamp = when (timeStamp) {
+        is Long -> timeStamp
+        is String -> timeStamp.toLongOrNull() ?: 0L
+        else -> 0L
+    }
+    val date = Date(newTimeStamp * 1000)
+    return dateFormatThree.format(date)
+}
 
 val dateFormat: SimpleDateFormat
     get() = SimpleDateFormat("dd MMM yyyy, HH:mm 'hours'", Locale.getDefault())
 
 val dateFormatTwo: SimpleDateFormat
     get() = SimpleDateFormat("dd MMM yy", Locale.getDefault())
+
+val dateFormatThree: SimpleDateFormat
+    get() = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
