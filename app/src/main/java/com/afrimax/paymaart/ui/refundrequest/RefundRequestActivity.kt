@@ -21,7 +21,6 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.FilterParameterBottom
 import com.afrimax.paymaart.ui.utils.bottomsheets.SortParameterBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.RefundRequestSortFilterInterface
 import com.afrimax.paymaart.util.RecyclerViewType
-import com.afrimax.paymaart.util.showLogE
 import com.afrimax.paymaart.util.toDp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

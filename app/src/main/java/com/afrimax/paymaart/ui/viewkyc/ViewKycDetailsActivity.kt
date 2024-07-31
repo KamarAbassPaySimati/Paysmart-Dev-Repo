@@ -3,6 +3,7 @@ package com.afrimax.paymaart.ui.viewkyc
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -321,6 +322,7 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
     }
 
     private fun upgradeToFullKyc() {
+        showLoader()
         lifecycleScope.launch {
             val idToken = fetchIdToken()
 
@@ -330,7 +332,6 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
                 override fun onResponse(
                     call: Call<DefaultResponse>, response: Response<DefaultResponse>
                 ) {
-
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
                         val i = Intent(this@ViewKycDetailsActivity, KycCustomerPersonalDetailsActivity::class.java)
@@ -343,15 +344,36 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
                     } else {
                         showToast(getString(R.string.default_error_toast))
                     }
+                    hideLoader()
                 }
 
                 override fun onFailure(call: Call<DefaultResponse>, t: Throwable) {
                     showToast(getString(R.string.default_error_toast))
+                    hideLoader()
                 }
-
-
             })
         }
+    }
+
+    private fun showLoader() {
+        b.viewSelfKycActivityUpgradeButtonLottieLoader.visibility = View.VISIBLE
+        b.viewSelfKycActivityUpgradeButton.apply {
+            text = getString(R.string.empty_string)
+            isEnabled = false
+        }
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+    }
+
+    private fun hideLoader(){
+        b.viewSelfKycActivityUpgradeButtonLottieLoader.visibility = View.GONE
+        b.viewSelfKycActivityUpgradeButton.apply {
+            text = getString(R.string.upgrade_to_full_kyc)
+            isEnabled = true
+        }
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
     private fun onClickIdDocFront() {
