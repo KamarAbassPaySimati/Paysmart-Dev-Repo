@@ -11,6 +11,8 @@ import com.afrimax.paymaart.data.model.RefundRequest
 import com.afrimax.paymaart.databinding.LoaderAdapterViewBinding
 import com.afrimax.paymaart.databinding.RefundRequestAdapterViewBinding
 import com.afrimax.paymaart.util.RecyclerViewType
+import com.afrimax.paymaart.util.formatEpochTime
+import com.afrimax.paymaart.util.formatEpochTimeThree
 import com.afrimax.paymaart.util.formatEpochTimeTwo
 import com.afrimax.paymaart.util.getFormattedAmount
 import com.afrimax.paymaart.util.getInitials
@@ -23,7 +25,7 @@ class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>):
             binding.refundAdapterName.text = refundRequest.receiverName
             binding.refundAdapterId.text = refundRequest.receiverId
             binding.refundRequestAmount.text = getFormattedAmount(refundRequest.amount)
-            binding.refundAdapterDate.text = formatEpochTimeTwo(refundRequest.createdAt)
+            binding.refundAdapterDate.text = formatEpochTimeThree(refundRequest.createdAt)
             binding.refundAdapterTransactionId.text = refundRequest.transactionId
             when(refundRequest.transactionType) {
                 AFRIMAX -> {
