@@ -640,4 +640,13 @@
     <string name="no_data_found_subtext_refund_two">Try adjusting your filter to find what you’re looking for</string>
     <string name="no_refund_request_yet">No Refund Request Yet</string>
     <string name="no_refund_request_yet_subtext">You have no refund request at the moment.</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="no_transactions_yet">No Transactions Yet</string>
+    <string name="no_transactions_subtext">You have no transactions at the moment.</string>
+    <string name="recent_transactions_of_last_60_days">Recent transactions in last 60 days</string>
+    <string name="cash_in">Cash-in</string>
+    <string name="pay_in">Pay-in</string>
+    <string name="pay_out">Pay-out</string>
+    <string name="refund">Refund</string>
+    <string name="formatted_list_amount">%1$s %2$s</string>
 </resources>
