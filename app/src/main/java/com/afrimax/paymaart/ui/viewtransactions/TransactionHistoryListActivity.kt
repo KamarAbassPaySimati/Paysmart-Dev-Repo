@@ -1,13 +1,10 @@
 package com.afrimax.paymaart.ui.viewtransactions
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,8 +18,20 @@ import com.afrimax.paymaart.data.model.IndividualTransactionHistory
 import com.afrimax.paymaart.data.model.TransactionHistoryResponse
 import com.afrimax.paymaart.databinding.ActivityTransactionHistoryListBinding
 import com.afrimax.paymaart.ui.BaseActivity
-import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.AFRIMAX
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASHIN
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASHOUT
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASH_IN
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASH_OUT
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASH_OUT_FAILED
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASH_OUT_REQUEST
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.G2P_PAY_IN
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.INTEREST
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAYMAART
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_IN
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_PERSON
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.REFUND
 import com.afrimax.paymaart.ui.utils.adapters.decoration.RecyclerViewDecoration
 import com.afrimax.paymaart.util.showLogE
 import com.bumptech.glide.Glide
@@ -35,7 +44,7 @@ import java.util.TimerTask
 
 class TransactionHistoryListActivity : BaseActivity() {
     private lateinit var b: ActivityTransactionHistoryListBinding
-    private lateinit var transactionList: ArrayList<IndividualTransactionHistory>
+    private lateinit var transactionList: MutableList<IndividualTransactionHistory>
     private var pageValue: Int? = 1
     private var search: String? = null
     private var type: String? = null
@@ -65,7 +74,7 @@ class TransactionHistoryListActivity : BaseActivity() {
     }
 
     private fun initViews() {
-        transactionList = ArrayList()
+        transactionList = mutableListOf()
     }
 
     private fun setUpRecyclerView() {
@@ -79,7 +88,7 @@ class TransactionHistoryListActivity : BaseActivity() {
             }
         })
         b.transactionHistoryActivityRV.adapter = adapter
-        b.transactionHistoryActivityRV.addItemDecoration(RecyclerViewDecoration(this.toPx(24)))
+        b.transactionHistoryActivityRV.addItemDecoration(RecyclerViewDecoration(this.toPx(16)))
 
         b.transactionHistoryActivityRV.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
@@ -243,13 +252,16 @@ class TransactionHistoryListActivity : BaseActivity() {
 
 
         transactionList.clear()
-        transactionList.addAll(body.transactionHistory)
+        "ResponseBefore".showLogE(body.transactionHistory.size)
+        val newList = body.transactionHistory.filter { it.transactionType in allowedTransactionTypes }
+        transactionList.addAll(newList)
         if (body.nextPage != null) {
             //If there are users left to fetch , then also we add progress bar as the last item
             transactionList.add(
                 IndividualTransactionHistory(viewType = "loader")
             )
         }
+        "ResponseAfter".showLogE(transactionList.size)
         runOnUiThread {
             b.transactionHistoryActivityRV.adapter?.notifyDataSetChanged()
             b.transactionHistoryActivityRV.scrollToPosition(0)
@@ -330,14 +342,16 @@ class TransactionHistoryListActivity : BaseActivity() {
         val initialCount = transactionList.size
         pageValue = body.nextPage
         //Remove pagination loader and append data
+        val newList = body.transactionHistory.filter { it.transactionType in allowedTransactionTypes }
         transactionList.removeAt(transactionList.size - 1)
-        transactionList.addAll(body.transactionHistory)
+        transactionList.addAll(newList)
         if (body.nextPage != null) {
             //If there are users left to fetch , then also we add progress bar as the last item
             transactionList.add(
                 IndividualTransactionHistory(viewType = "loader")
             )
         }
+        transactionList.filter { it.transactionType in allowedTransactionTypes }
         runOnUiThread {
             val updatedPosition = transactionList.size - initialCount
             if (updatedPosition == 0) b.transactionHistoryActivityRV.adapter?.notifyItemChanged(
@@ -348,4 +362,20 @@ class TransactionHistoryListActivity : BaseActivity() {
             )
         }
     }
+
+    private val allowedTransactionTypes = setOf(
+        CASH_IN,
+        CASHIN,
+        CASH_OUT,
+        CASHOUT,
+        PAY_IN,
+        REFUND,
+        INTEREST,
+        G2P_PAY_IN,
+        CASH_OUT_REQUEST,
+        CASH_OUT_FAILED,
+        PAYMAART,
+        AFRIMAX,
+        PAY_PERSON
+    )
 }

@@ -17,8 +17,8 @@ data class TransactionHistoryResponse(
 data class IndividualTransactionHistory(
     @SerializedName("commission") val commission: String = "",
     @SerializedName("created_at") val createdAt: String = "",
-    @SerializedName("entered_by") val enteredBy: String? = null,
-    @SerializedName("entered_by_name") val enteredByName: String? = null,
+    @SerializedName("entered_by") val enteredBy: String? = "",
+    @SerializedName("entered_by_name") val enteredByName: String? = "",
     @SerializedName("receiver_id") val receiverId: String = "",
     @SerializedName("receiver_name") val receiverName: String = "",
     @SerializedName("receiver_profile_pic") val receiverProfilePic: String? = null,
