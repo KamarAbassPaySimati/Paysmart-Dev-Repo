@@ -156,6 +156,7 @@ object Constants {
     const val ANIMATE = "animation"
     const val ABOUT_US_URL = "https://www.paymaart.net/mobile-about"
     const val ABOUT_US_TYPE = "about_us"
+    const val COMPLETED = "Completed"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

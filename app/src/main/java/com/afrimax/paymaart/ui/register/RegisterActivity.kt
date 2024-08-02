@@ -228,6 +228,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         b.onboardRegistrationActivityCameraIV.setOnClickListener {
             if (isPicUploaded){
                 profilePicUri = null
+                isPicUploaded = false
                 b.onboardRegistrationActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
                 b.onboardRegistrationActivityProfileIV.apply {
                     setImageDrawable(ContextCompat.getDrawable(this@RegisterActivity, R.drawable.ic_no_image))
