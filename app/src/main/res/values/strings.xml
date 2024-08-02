@@ -543,7 +543,7 @@
     <string name="enter_your_password_to_view_your_wallet_balance">Enter your password to view your wallet balance</string>
     <string name="balance_placeholder">⬤⬤⬤⬤</string>
     <string name="switch_to_full_kyc">Switch to Full KYC</string>
-    <string name="select_your_preferred_membership_duration">Select your preferred membership duration</string>
+    <string name="select_your_preferred_membership_validity">Select your preferred membership validity</string>
     <string name="thirty_days_for_300_mwk">30 days for 300.00 MWK</string>
     <string name="ninety_one_days_for_850_mwk">91 days for 850.00 MWK</string>
     <string name="auto_renewal">Auto-renew?</string>
@@ -629,4 +629,15 @@
     <string name="balance">Balance</string>
     <string name="cash_out_successful">Cash-out Successful</string>
     <string name="cash_out_requested">Cash-out Requested</string>
+    <string name="rejected">Rejected</string>
+    <string name="refunded">Refunded</string>
+    <string name="sort">Sort</string>
+    <string name="filter">Filter</string>
+    <string name="transaction_type">Transaction Type</string>
+    <string name="clear_all">Clear All</string>
+    <string name="apply">Apply</string>
+    <string name="no_data_found_subtext_refund">Try adjusting your sort to find what you’re looking for</string>
+    <string name="no_data_found_subtext_refund_two">Try adjusting your filter to find what you’re looking for</string>
+    <string name="no_refund_request_yet">No Refund Request Yet</string>
+    <string name="no_refund_request_yet_subtext">You have no refund request at the moment.</string>
 </resources>
