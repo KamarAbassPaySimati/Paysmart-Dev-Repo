@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/filterParameterBottomSheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_bottom_sheet">
+
+    <TextView
+        android:id="@+id/filterParameterTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_medium"
+        android:text="@string/filter"
+        android:textColor="@color/primaryColor"
+        android:textSize="20sp"
+        android:layout_marginVertical="20dp"
+        android:layout_marginHorizontal="12dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/filterParameterContainer"
+        android:background="@color/grey1"/>
+
+    <LinearLayout
+        android:id="@+id/filterParameterContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/filterParameterTitle"
+        android:background="@color/neutralGreyTextFieldBackground">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/transaction_type"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="16sp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:paddingVertical="16dp"
+            android:background="@color/highlightedLight"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:background="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/filter_parameter_bg"
+                android:paddingStart="20dp"
+                android:paddingEnd="0dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/refunded"
+                    android:textAppearance="@style/body_text_style_two"
+                    android:layout_weight="1"/>
+
+                <CheckBox
+                    android:id="@+id/filterParameterRefundedCheckbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:buttonIconTint="@color/white"
+                    app:buttonTint="@color/primaryColor"
+                    android:layout_weight=".5"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/filter_parameter_bg"
+                android:paddingStart="20dp"
+                android:paddingEnd="0dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pending"
+                    android:textAppearance="@style/body_text_style_two"
+                    android:layout_weight="1"/>
+
+                <CheckBox
+                    android:id="@+id/filterParameterPendingCheckbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:buttonIconTint="@color/white"
+                    app:buttonTint="@color/primaryColor"
+                    android:layout_weight=".5"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/filter_parameter_bg"
+                android:paddingStart="20dp"
+                android:paddingEnd="0dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rejected"
+                    android:textAppearance="@style/body_text_style_two"
+                    android:layout_weight="1"/>
+
+                <CheckBox
+                    android:id="@+id/filterParameterRejectedCheckbox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:buttonIconTint="@color/white"
+                    app:buttonTint="@color/primaryColor"
+                    android:layout_weight=".5"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:paddingVertical="18dp"
+        android:paddingHorizontal="10dp"
+        android:layout_below="@id/filterParameterContainer">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/filterParameterClearButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/primary_outlined_button_background_medium"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/clear_all"
+            android:textAllCaps="false"
+            android:textColor="@color/primaryColor"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"/>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/filterParameterApplyButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/primary_rounded_button_background_medium"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/apply"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -153,6 +153,10 @@ object Constants {
     const val PREF_KEY_FCM_TOKEN = "pref_key_fcm_token"
     const val USER_DATA = "user_data"
     const val ACTION = "action"
+    const val ANIMATE = "animation"
+    const val ABOUT_US_URL = "https://www.paymaart.net/mobile-about"
+    const val ABOUT_US_TYPE = "about_us"
+    const val COMPLETED = "Completed"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

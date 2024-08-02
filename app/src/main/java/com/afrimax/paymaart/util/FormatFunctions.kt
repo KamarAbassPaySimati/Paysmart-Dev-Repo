@@ -71,13 +71,24 @@ fun formatEpochTime(timestamp: Long?) : String {
     return dateFormat.format(date)
 }
 
-fun formatEpochTimeTwo(timestamp: Long?) : String {
-    if (timestamp == null) {
-        return "-"
+fun <T> formatEpochTimeTwo(timeStamp: T?): String {
+    if (timeStamp == null) return ""
+    val newTimeStamp = when (timeStamp) {
+        is Long -> timeStamp
+        is String -> timeStamp.toLongOrNull() ?: 0L
+        else -> 0L
     }
-    val date = Date(timestamp * 1000)
+    val date = Date(newTimeStamp * 1000)
     return dateFormatTwo.format(date)
 }
+
+//fun formatEpochTimeTwo(timestamp: Long?) : String {
+//    if (timestamp == null) {
+//        return "-"
+//    }
+//    val date = Date(timestamp * 1000)
+//    return dateFormatTwo.format(date)
+//}
 
 val dateFormat: SimpleDateFormat
     get() = SimpleDateFormat("dd MMM yyyy, HH:mm 'hours'", Locale.getDefault())

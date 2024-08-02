@@ -23,6 +23,7 @@ import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
 import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paymaart.data.model.PayToAfrimaxResponse
+import com.afrimax.paymaart.data.model.RefundRequestResponse
 import com.afrimax.paymaart.data.model.SaveBasicDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveIdentitySimplifiedToFullRequest
 import com.afrimax.paymaart.data.model.SaveInfoSimplifiedToFullRequest
@@ -195,6 +196,9 @@ interface ApiService {
 
     @GET("$CASHIN_CASHOUT/calc-fee")
     fun getTransactionDetails(@Header("Authorization") header: String, @Query("amount") amount: String): Call<TransactionDetailsResponse>
+
+    @GET("$CUSTOMER_USER/list-refund-request")
+    fun getRefundRequests(@Header("Authorization") header: String, @Query("page") page: Int? = 1, @Query("status") status: String? = "", @Query("time") time: Int? = 60): Call<RefundRequestResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
