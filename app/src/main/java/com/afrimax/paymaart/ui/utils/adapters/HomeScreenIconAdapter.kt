@@ -40,10 +40,6 @@ class HomeScreenIconAdapter(
     override fun onBindViewHolder(holder: HomeScreenIconViewHolder, position: Int) {
         with(holder) {
             binding.iconImage.setImageDrawable(holder.itemView.context.getDrawableExt(R.drawable.ico_afrimax))
-            val isCurrentUserDebited = transactionList[position].senderId == userPaymaartId || transactionList[position].enteredBy == userPaymaartId
-            binding.iconName
-            binding.iconImage
-            binding.iconNameInitials
             // Set transaction-specific views
             when (transactionList[position].transactionType) {
                 CASH_IN, CASHIN -> {
@@ -96,10 +92,25 @@ class HomeScreenIconAdapter(
                             .into(it)
                     }
                 }
-                PAY_PERSON -> {}
-                else -> {}
+                PAY_PERSON -> {
+                    binding.iconNameInitials.visibility = View.GONE
+                    if (userPaymaartId == transactionList[position].senderId)
+                        setPersonImageDrawable(holder, transactionList[position].receiverProfilePic, transactionList[position].receiverName)
+                    else
+                        setPersonImageDrawable(holder, transactionList[position].senderProfilePic, transactionList[position].senderName)
+                }else -> {}
             }
         }
+    }
+
+    private fun setPersonImageDrawable(holder: HomeScreenIconViewHolder, userImage: String?, userName: String?){
+        Glide
+            .with(holder.itemView.context)
+            .load(BuildConfig.CDN_BASE_URL + userImage)
+            .centerCrop()
+            .into(holder.binding.iconImage)
+        val mUserName = userName?.split(" ") ?: emptyList()
+        holder.binding.iconName.text = if (mUserName.size > 1) mUserName[0] else ""
     }
     
     companion object {
