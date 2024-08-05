@@ -49,6 +49,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPasswordSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPinSheet
 import com.afrimax.paymaart.ui.utils.interfaces.HomeInterface
 import com.afrimax.paymaart.ui.viewkyc.ViewKycDetailsActivity
+import com.afrimax.paymaart.ui.viewtransactions.TransactionHistoryListActivity
 import com.afrimax.paymaart.ui.webview.WebViewActivity
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getFormattedAmount
@@ -150,7 +151,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityScanQrButton.setOnClickListener {
             if (checkKycStatus()){
-                //
+                startActivity(Intent(this, TransactionHistoryListActivity::class.java))
             }
         }
 
@@ -183,13 +184,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         b.homeActivityPersonsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityTransactionsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityMerchantsRecyclerView.layoutManager = GridLayoutManager(this, 4)
-        val nameList = listOf(
-            "John Doe MJR",
-            "Jane Smith ABC",
-            "Michael Lee XYZ",
-            "Sarah Wilson DEF",
-        )
-        homeScreenIconAdapter = HomeScreenIconAdapter(nameList)
+        homeScreenIconAdapter = HomeScreenIconAdapter(emptyList(), "")
         b.homeActivityPersonsRecyclerView.adapter = homeScreenIconAdapter
         b.homeActivityTransactionsRecyclerView.adapter = homeScreenIconAdapter
         b.homeActivityMerchantsRecyclerView.adapter = homeScreenIconAdapter
