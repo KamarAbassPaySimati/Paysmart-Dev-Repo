@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transactionHistorySheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    app:backgroundTint="@color/transparent"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/filters"
+        android:textColor="@color/primaryColor"
+        android:textSize="20sp"
+        tools:ignore="RelativeOverlap" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/neutralGreyOutline" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/neutralGreyTextFieldBackground"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/transactionHistorySheetTimePeriodTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/highlightedLight"
+                android:fontFamily="@font/inter_regular"
+                android:padding="16dp"
+                android:text="@string/time_period"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+            <TextView
+                android:id="@+id/transactionHistorySheetTransactionTypeTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:padding="16dp"
+                android:text="@string/transaction_type"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="16sp"
+                tools:ignore="RelativeOverlap" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHeight_max="360dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+
+                    <RadioGroup
+                        android:id="@+id/transactionHistorySheetRG"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:layoutDirection="rtl"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <RadioButton
+                            android:id="@+id/transactionHistorySheetTodayRB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/today"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <RadioButton
+                            android:id="@+id/transactionHistorySheetYesterdayRB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/yesterday"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <RadioButton
+                            android:id="@+id/transactionHistorySheetLast7RB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/last_7_days"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <RadioButton
+                            android:id="@+id/transactionHistorySheetLast30RB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/last_30_days"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <RadioButton
+                            android:id="@+id/transactionHistorySheetLast60RB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/last_60_days"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                    </RadioGroup>
+
+                    <LinearLayout
+                        android:id="@+id/transactionHistorySheetTransactionTypeContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <CheckBox
+                            android:id="@+id/transactionHistorySheetCashInCB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:layoutDirection="rtl"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/cash_in"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonIconTint="@color/white"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <CheckBox
+                            android:id="@+id/transactionHistorySheetCashOutCB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:layoutDirection="rtl"
+                            android:padding="16dp"
+                            android:text="@string/cash_out"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonIconTint="@color/white"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <CheckBox
+                            android:id="@+id/transactionHistorySheetInterestCB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:layoutDirection="rtl"
+                            android:padding="16dp"
+                            android:text="@string/interest"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonIconTint="@color/white"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <CheckBox
+                            android:id="@+id/transactionHistorySheetPayAfrimaxCB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:layoutDirection="rtl"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/pay_afrimax"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonIconTint="@color/white"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <CheckBox
+                            android:id="@+id/transactionHistorySheetPayPaymaartCB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:layoutDirection="rtl"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/pay_paymaart"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonIconTint="@color/white"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <CheckBox
+                            android:id="@+id/transactionHistorySheetPayPersonCB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:layoutDirection="rtl"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/pay_person"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonIconTint="@color/white"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <CheckBox
+                            android:id="@+id/transactionHistorySheetPayInCB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:layoutDirection="rtl"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/pay_in"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonIconTint="@color/white"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                        <CheckBox
+                            android:id="@+id/transactionHistorySheetRefundCB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:layoutDirection="rtl"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/refund"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonIconTint="@color/white"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:weightSum="2">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/transactionHistorySheetClearAllButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:background="@drawable/primary_outlined_button_background"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/clear_all"
+            android:textAllCaps="false"
+            android:textColor="@color/primaryColor"
+            android:textSize="18sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/transactionHistorySheetApplyButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@drawable/primary_rounded_button_background"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/apply"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

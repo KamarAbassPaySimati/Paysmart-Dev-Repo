@@ -13,7 +13,7 @@ data class TransactionDetailsResponse(
 
 data class TransactionDetails(
     @SerializedName("grossTransactionFee")
-    val grossTransactionFee: Int,
+    val grossTransactionFee: Double,
     @SerializedName("netTransactionFee")
     val netTransactionFee: Double,
     @SerializedName("vatAmount")

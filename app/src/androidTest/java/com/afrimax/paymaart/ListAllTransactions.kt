@@ -15,41 +15,41 @@ import org.junit.runner.RunWith
 class ListAllTransactions {
     @When("I click on drop down for transactions")
     fun iClickOnDropDownTransactions(){
-        Espresso.onView(withId(R.id.transactionsDropDown))
+        Espresso.onView(withId(R.id.homeActivityTransactionsTExpandButton))
             .perform(ViewActions.click())
         Thread.sleep(3000)
     }
     @Then("I should see recent four transactions")
     fun iShouldSeeRecentTransactions(){
-        Espresso.onView(withId(R.id.recent4Transactions)).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.homeActivityTransactionsRecyclerView)).check(matches(isDisplayed()))
         Thread.sleep(5000)
     }
     @When("I click on see all link")
     fun iClickOnSeeAll(){
-        Espresso.onView(withId(R.id.seeAllLink))
+        Espresso.onView(withId(R.id.homeActivityTransactionsSeeAllTV))
             .perform(ViewActions.click())
         Thread.sleep(3000)
     }
     @Then("I should be redirected to transaction history screen")
     fun iShouldBeRedirectedToHistoryScreen(){
-        Espresso.onView(withId(R.id.transactionsList)).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.transactionHistoryActivity)).check(matches(isDisplayed()))
         Thread.sleep(5000)
     }
     @When("I search {string}")
     fun iSearch(searchValue :String){
-        Espresso.onView(withId(R.id.searchBar)).perform(
+        Espresso.onView(withId(R.id.transactionHistoryActivitySearchET)).perform(
             ViewActions.replaceText(searchValue), ViewActions.closeSoftKeyboard()
         )
         Thread.sleep(5000)
     }
     @Then("I should see the list of afrimax transactions")
     fun iShouldAfrimaxTransactions(){
-        Espresso.onView(withId(R.id.transactionsList)).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.transactionHistoryActivityRV)).check(matches(isDisplayed()))
         Thread.sleep(5000)
     }
     @Then("I should see the searched transactions")
     fun iShouldSearchedTransactions(){
-        Espresso.onView(withId(R.id.transactionsList)).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.transactionHistoryActivityRV)).check(matches(isDisplayed()))
         Thread.sleep(5000)
     }
 }
