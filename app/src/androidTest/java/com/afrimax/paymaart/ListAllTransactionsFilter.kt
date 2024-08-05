@@ -15,43 +15,43 @@ import org.junit.runner.RunWith
 class ListAllTransactionsFilter {
     @When("I click on drop down for transaction")
     fun iClickOnDropDownTransactions(){
-        Espresso.onView(R.id.dropDownTransactionsButton).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.homeActivityTransactionsTExpandButton)).perform(ViewActions.click())
         Thread.sleep(3000)
     }
     @Then("I should see recent four transactions")
     fun iShouldSeeRecentFourTransactions(){
-        Espresso.onView(R.id.recentFourTransactionsView).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.homeActivityTransactionsRecyclerView)).check(matches(isDisplayed()))
         Thread.sleep(3000)
     }
     @When("I click on see all link")
     fun iClickOnSeeAll(){
-        Espresso.onView(R.id.seeAllLinkText).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.homeActivityTransactionsSeeAllTV)).perform(ViewActions.click())
         Thread.sleep(3000)
     }
     @Then("I should be redirected to transaction history screen")
     fun iShouldBeRedirectedToTransactionHistory(){
-        Espresso.onView(R.id.transactionHistoryScreen).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.transactionHistoryActivity)).check(matches(isDisplayed()))
         Thread.sleep(3000)
     }
     @When("I click on filter button")
     fun iClickOnFilter(){
-        Espresso.onView(R.id.filterOption).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.transactionHistoryActivityFilterIV)).perform(ViewActions.click())
         Thread.sleep(3000)
     }
     @Then("I should see the filter pop up")
     fun iShouldSeeFilterPopUp(){
-        Espresso.onView(R.id.filterPopUp).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.transactionHistorySheet)).check(matches(isDisplayed()))
         Thread.sleep(3000)
     }
     @When("I select the filter type as {string}")
     fun iSelectTheFilterType(filterType: String){
         when(filterType){
             "timePeriod"->{
-                Espresso.onView(R.id.timePeriodFilter).perform(ViewActions.click())
+                Espresso.onView(withId(R.id.transactionHistorySheetTimePeriodTV)).perform(ViewActions.click())
                 Thread.sleep(3000)
             }
             "transactionType"-> {
-                Espresso.onView(R.id.transactionTypeFilter).perform(ViewActions.click())
+                Espresso.onView(withId(R.id.transactionHistorySheetTransactionTypeTV)).perform(ViewActions.click())
                 Thread.sleep(3000)
             }
         }
@@ -60,47 +60,47 @@ class ListAllTransactionsFilter {
     fun iSelectTheFilter(filterType: String){
         when(filterType){
             "today"->{
-                Espresso.onView(R.id.today).perform(ViewActions.click())
+                Espresso.onView(withId(R.id.transactionHistorySheetTodayRB)).perform(ViewActions.click())
                 Thread.sleep(3000)
             }
             "yesterday"-> {
-                Espresso.onView(R.id.yesterday).perform(ViewActions.click())
+                Espresso.onView(withId(R.id.transactionHistorySheetYesterdayRB)).perform(ViewActions.click())
                 Thread.sleep(3000)
             }
             "last 7 days"->{
-                Espresso.onView(R.id.last7Days).perform(ViewActions.click())
+                Espresso.onView(withId(R.id.transactionHistorySheetLast7RB)).perform(ViewActions.click())
                 Thread.sleep(3000)
             }
             "last 30 days"-> {
-                Espresso.onView(R.id.last30Days).perform(ViewActions.click())
+                Espresso.onView(withId(R.id.transactionHistorySheetLast30RB)).perform(ViewActions.click())
                 Thread.sleep(3000)
             }
             "cash-in"->{
-                Espresso.onView(R.id.cashIn).perform(ViewActions.click())
+                Espresso.onView(withId(R.id.transactionHistorySheetCashInCB)).perform(ViewActions.click())
                 Thread.sleep(3000)
             }
             "cash-out"-> {
-                Espresso.onView(R.id.cashOut).perform(ViewActions.click())
+                Espresso.onView(withId(R.id.transactionHistorySheetCashOutCB)).perform(ViewActions.click())
                 Thread.sleep(3000)
             }
             "Pay Afrimax"->{
-                Espresso.onView(R.id.payAfrimax).perform(ViewActions.click())
+                Espresso.onView(withId(R.id.transactionHistorySheetPayAfrimaxCB)).perform(ViewActions.click())
                 Thread.sleep(3000)
             }
             "Pay Person"-> {
-                Espresso.onView(R.id.payPerson).perform(ViewActions.click())
+                Espresso.onView(withId(R.id.transactionHistorySheetPayPersonCB)).perform(ViewActions.click())
                 Thread.sleep(3000)
             }
         }
     }
     @When("I click on apply button")
     fun iClickApplyButton(){
-        Espresso.onView(R.id.applyButton).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.transactionHistorySheetApplyButton)).perform(ViewActions.click())
         Thread.sleep(3000)
     }
     @When("I click on clear all button")
     fun iClickClearAllButton(){
-        Espresso.onView(R.id.clearAllButton).perform(ViewActions.click())
+        Espresso.onView(withId(R.id.transactionHistorySheetClearAllButton)).perform(ViewActions.click())
         Thread.sleep(3000)
     }
 }
