@@ -31,7 +31,7 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.HomeScreenData
 import com.afrimax.paymaart.data.model.HomeScreenResponse
-import com.afrimax.paymaart.data.model.ValidateAfrimaxIdResponse
+import com.afrimax.paymaart.data.model.IndividualTransactionHistory
 import com.afrimax.paymaart.data.model.WalletData
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
@@ -57,7 +57,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.Date
 
@@ -72,6 +71,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var mMembershipType: String = ""
     private var mKycStatus: String = ""
     private var customerName: String = ""
+    private var allRecentTransactions: MutableList<IndividualTransactionHistory> = mutableListOf()
     private lateinit var notificationPermissionCheckLauncher: ActivityResultLauncher<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,7 +151,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityScanQrButton.setOnClickListener {
             if (checkKycStatus()){
-                startActivity(Intent(this, TransactionHistoryListActivity::class.java))
+                //
             }
         }
 
@@ -170,10 +170,10 @@ class HomeActivity : BaseActivity(), HomeInterface {
             )
         }
         b.homeActivityPersonsBox.setOnClickListener{
-            toggleTransactions(
-                b.homeActivityPersonsHiddenContainer,
-                b.homeActivityPersonsTExpandButton
-            )
+//            toggleTransactions(
+//                b.homeActivityPersonsHiddenContainer,
+//                b.homeActivityPersonsTExpandButton
+//            )
         }
         b.homeActivityMerchantsBox.setOnClickListener {
             toggleTransactions(
@@ -181,13 +181,18 @@ class HomeActivity : BaseActivity(), HomeInterface {
                 b.homeActivityMerchantsTExpandButton
             )
         }
+        b.homeActivityTransactionsSeeAllTV.setOnClickListener {
+            if (checkKycStatus()) {
+                startActivity(Intent(this, TransactionHistoryListActivity::class.java))
+            }
+        }
+        val userPaymaartId = retrievePaymaartId() ?: ""
         b.homeActivityPersonsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityTransactionsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityMerchantsRecyclerView.layoutManager = GridLayoutManager(this, 4)
-        homeScreenIconAdapter = HomeScreenIconAdapter(emptyList(), "")
-        b.homeActivityPersonsRecyclerView.adapter = homeScreenIconAdapter
-        b.homeActivityTransactionsRecyclerView.adapter = homeScreenIconAdapter
-        b.homeActivityMerchantsRecyclerView.adapter = homeScreenIconAdapter
+        b.homeActivityPersonsRecyclerView.adapter = HomeScreenIconAdapter(emptyList(), userPaymaartId)
+        b.homeActivityTransactionsRecyclerView.adapter = HomeScreenIconAdapter(allRecentTransactions, userPaymaartId)
+        b.homeActivityMerchantsRecyclerView.adapter = HomeScreenIconAdapter(emptyList(), userPaymaartId)
     }
 
     private fun onClickEyeButton() {
@@ -433,6 +438,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
                     if (body != null && response.isSuccessful) {
                         runOnUiThread {
                             populateHomeScreenData(body.homeScreenData)
+                            populateRecyclerViews(body.transactionData)
                         }
                     } else {
                         runOnUiThread {
@@ -539,6 +545,22 @@ class HomeActivity : BaseActivity(), HomeInterface {
         }
         showMembershipBanner()
         hideLoader()
+    }
+
+    private fun populateRecyclerViews(transactionHistory: List<IndividualTransactionHistory>){
+        if (transactionHistory.isEmpty()) {
+            b.homeActivityNoTransactionsTV.visibility = View.VISIBLE
+            b.homeActivityTransactionsRecyclerView.visibility = View.GONE
+            b.homeActivityTransactionsSeeAllTV.visibility = View.GONE
+        }else {
+            b.homeActivityNoTransactionsTV.visibility = View.GONE
+            b.homeActivityTransactionsRecyclerView.visibility = View.VISIBLE
+            if (transactionHistory.size > 4) b.homeActivityTransactionsSeeAllTV.visibility = View.VISIBLE
+            allRecentTransactions.clear()
+            allRecentTransactions.addAll(transactionHistory)
+            b.homeActivityTransactionsRecyclerView.adapter?.notifyItemChanged(0)
+        }
+
     }
 
     private fun showMembershipBanner() {

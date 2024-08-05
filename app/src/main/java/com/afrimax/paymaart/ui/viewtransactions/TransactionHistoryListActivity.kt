@@ -33,7 +33,9 @@ import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companio
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_PERSON
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.REFUND
 import com.afrimax.paymaart.ui.utils.adapters.decoration.RecyclerViewDecoration
-import com.afrimax.paymaart.util.showLogE
+import com.afrimax.paymaart.ui.utils.bottomsheets.TransactionHistorySheet
+import com.afrimax.paymaart.ui.utils.interfaces.TransactionHistoryInterface
+import com.afrimax.paymaart.util.Constants
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -42,7 +44,7 @@ import retrofit2.Response
 import java.util.Timer
 import java.util.TimerTask
 
-class TransactionHistoryListActivity : BaseActivity() {
+class TransactionHistoryListActivity : BaseActivity(), TransactionHistoryInterface {
     private lateinit var b: ActivityTransactionHistoryListBinding
     private lateinit var transactionList: MutableList<IndividualTransactionHistory>
     private var pageValue: Int? = 1
@@ -84,7 +86,7 @@ class TransactionHistoryListActivity : BaseActivity() {
         val adapter = TransactionHistoryAdapter(this, transactionList, userPaymaartId)
         adapter.setOnClickListener(object : TransactionHistoryAdapter.OnClickListener {
             override fun onClick(transaction: IndividualTransactionHistory) {
-                "Response".showLogE(transaction)
+
             }
         })
         b.transactionHistoryActivityRV.adapter = adapter
@@ -114,14 +116,15 @@ class TransactionHistoryListActivity : BaseActivity() {
         }
 
         b.transactionHistoryActivityFilterIV.setOnClickListener {
-//            TransactionHistorySheet().apply {
-//                arguments = Bundle().apply {
-//                    if (time != null) putInt(Constants.TRANSACTION_FILTER_TIME, time!!) else putInt(
-//                        Constants.TRANSACTION_FILTER_TIME, 60
-//                    )
-//                    putString(Constants.TRANSACTION_FILTER_TYPE, type)
-//                }
-//            }.show(supportFragmentManager, TransactionHistorySheet.TAG)
+            TransactionHistorySheet().apply {
+                arguments = Bundle().apply {
+                    if (time != null)
+                        putInt(Constants.TRANSACTION_FILTER_TIME, time!!)
+                    else
+                        putInt(Constants.TRANSACTION_FILTER_TIME, 60)
+                    putString(Constants.TRANSACTION_FILTER_TYPE, type)
+                }
+            }.show(supportFragmentManager, TransactionHistorySheet.TAG)
         }
 
         configureSearchTextChangeListener()
@@ -252,7 +255,6 @@ class TransactionHistoryListActivity : BaseActivity() {
 
 
         transactionList.clear()
-        "ResponseBefore".showLogE(body.transactionHistory.size)
         val newList = body.transactionHistory.filter { it.transactionType in allowedTransactionTypes }
         transactionList.addAll(newList)
         if (body.nextPage != null) {
@@ -261,7 +263,6 @@ class TransactionHistoryListActivity : BaseActivity() {
                 IndividualTransactionHistory(viewType = "loader")
             )
         }
-        "ResponseAfter".showLogE(transactionList.size)
         runOnUiThread {
             b.transactionHistoryActivityRV.adapter?.notifyDataSetChanged()
             b.transactionHistoryActivityRV.scrollToPosition(0)
@@ -378,4 +379,16 @@ class TransactionHistoryListActivity : BaseActivity() {
         AFRIMAX,
         PAY_PERSON
     )
+
+    override fun clearAllFilters() {
+        time = null
+        type = null
+//        searchTransactionsApi(search)
+    }
+
+    override fun onFiltersApplied(time: Int, transactionType: String) {
+        this.time = time
+        this.type = transactionType
+        searchTransactionsApi(search)
+    }
 }

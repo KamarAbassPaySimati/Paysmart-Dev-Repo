@@ -9,7 +9,6 @@
         android:id="@+id/icon_container"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:background="@drawable/bg_transaction_profile"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,16 +18,17 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icon_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:src="@drawable/ic_arrow_back"
             android:visibility="gone"/>
 
         <TextView
             android:id="@+id/icon_name_initials"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:fontFamily="@font/inter_light"
+            android:background="@drawable/bg_transaction_profile"
             android:text="@string/paymaart"
             android:gravity="center"/>
 

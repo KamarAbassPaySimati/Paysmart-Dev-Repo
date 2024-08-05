@@ -4,8 +4,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.afrimax.paymaart.BuildConfig
+import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.model.IndividualTransactionHistory
 import com.afrimax.paymaart.databinding.HomeRecyclerviewAdapterViewBinding
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASHIN
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASHOUT
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_PERSON
+import com.afrimax.paymaart.util.formatEpochTimeThree
+import com.afrimax.paymaart.util.getDrawableExt
+import com.afrimax.paymaart.util.getFormattedAmount
+import com.afrimax.paymaart.util.getInitials
+import com.bumptech.glide.Glide
+import kotlin.math.abs
 
 class HomeScreenIconAdapter(
     private val transactionList: List<IndividualTransactionHistory>,
@@ -23,73 +35,78 @@ class HomeScreenIconAdapter(
         return HomeScreenIconViewHolder(binding)
     }
 
-    override fun getItemCount() = transactionList.size
+    override fun getItemCount() = if (transactionList.size > 4) 4 else transactionList.size
 
     override fun onBindViewHolder(holder: HomeScreenIconViewHolder, position: Int) {
         with(holder) {
+            binding.iconImage.setImageDrawable(holder.itemView.context.getDrawableExt(R.drawable.ico_afrimax))
             val isCurrentUserDebited = transactionList[position].senderId == userPaymaartId || transactionList[position].enteredBy == userPaymaartId
-            binding.iconImage.visibility = View.GONE
-            binding.iconNameInitials.text = getInitials(transactionList[position].receiverName)
-            binding.iconName.text = getFirstName(transactionList[position].receiverName)
+            binding.iconName
+            binding.iconImage
+            binding.iconNameInitials
+            // Set transaction-specific views
             when (transactionList[position].transactionType) {
-                CASH_IN -> {
-
+                CASH_IN, CASHIN -> {
+                    binding.iconImage.visibility = View.GONE
+                    binding.iconName.text = holder.itemView.context.getString(R.string.cash_in)
+                    binding.iconNameInitials.text = getInitials(transactionList[position].senderName)
                 }
-                CASH_OUT -> {
-
-                }
-                AFRIMAX -> {
-
+                CASH_OUT, CASHOUT, CASH_OUT_REQUEST, CASH_OUT_FAILED -> {
+                    binding.iconImage.visibility = View.GONE
+                    binding.iconName.text = holder.itemView.context.getString(R.string.cash_out)
+                    binding.iconNameInitials.text = getInitials(transactionList[position].receiverName)
                 }
                 PAY_IN -> {
-
-                }
-                PAY_OUT -> {
-
+                    binding.iconImage.visibility = View.GONE
+                    binding.iconName.text = holder.itemView.context.getString(R.string.pay_in)
+                    binding.iconNameInitials.text = getInitials(transactionList[position].enteredByName)
                 }
                 REFUND -> {
-
-                }
-                PAYMAART -> {
-
+                    binding.iconImage.visibility = View.GONE
+                    binding.iconName.text = holder.itemView.context.getString(R.string.refund)
+                    binding.iconNameInitials.text = getInitials(transactionList[position].senderName)
                 }
                 INTEREST -> {
-
+                    binding.iconImage.visibility = View.GONE
+                    binding.iconName.text = holder.itemView.context.getString(R.string.interest)
+                    binding.iconNameInitials.visibility = View.GONE
                 }
                 G2P_PAY_IN -> {
-
+                    binding.iconImage.visibility = View.GONE
+                    binding.iconName.text = holder.itemView.context.getString(R.string.g2p_pay_in)
+                    binding.iconNameInitials.text = getInitials(transactionList[position].senderName)
                 }
-                CASH_OUT_REQUEST -> {
-
+                PAYMAART -> {
+                    binding.iconNameInitials.visibility = View.GONE
+                    binding.iconName.text =holder.itemView.context.getString(R.string.paymaart)
+                    binding.iconImage.apply {
+                        visibility = View.VISIBLE
+                        setImageDrawable(holder.itemView.context.getDrawableExt(R.drawable.ico_paymaart_icon))
+                    }
                 }
-                CASH_OUT_FAILED -> {
-
+                AFRIMAX -> {
+                    binding.iconNameInitials.visibility = View.GONE
+                    binding.iconName.text =holder.itemView.context.getString(R.string.afrimax)
+                    binding.iconImage.also {
+                        it.visibility = View.VISIBLE
+                        Glide
+                            .with(holder.itemView.context)
+                            .load(R.drawable.ico_afrimax)
+                            .fitCenter()
+                            .into(it)
+                    }
                 }
+                PAY_PERSON -> {}
+                else -> {}
             }
         }
     }
-
-    private fun getFirstName(name: String?): String{
-        if (name.isNullOrEmpty()) return ""
-        return name.split(" ")[0]
-    }
-
-    private fun getInitials(name: String?): String {
-        if (name.isNullOrEmpty()) return ""
-        var initials = ""
-        for (word in name.split(" ")) {
-            if (word.isNotEmpty()) {
-                initials += word.first().uppercase()
-            }
-        }
-        return initials
-    }
+    
     companion object {
         const val CASH_IN = "cash_in"
         const val CASH_OUT = "cash_out"
         const val AFRIMAX = "afrimax"
         const val PAY_IN = "pay_in"
-        const val PAY_OUT = "pay_out"
         const val REFUND = "refund"
         const val PAYMAART = "paymaart"
         const val INTEREST = "interest"

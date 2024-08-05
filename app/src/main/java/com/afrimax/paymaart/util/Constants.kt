@@ -157,6 +157,8 @@ object Constants {
     const val ABOUT_US_URL = "https://www.paymaart.net/mobile-about"
     const val ABOUT_US_TYPE = "about_us"
     const val COMPLETED = "Completed"
+    const val TRANSACTION_FILTER_TIME = "transaction_filter_time"
+    const val TRANSACTION_FILTER_TYPE = "transaction_filter_type"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

@@ -581,7 +581,7 @@
     <string name="full_kyc_reg">Full KYC Reg</string>
     <string name="pay_afrimax">Pay Afrimax</string>
     <string name="afrimax_id">Afrimax ID</string>
-    <string name="enter_afrimax_id">Enter afrimax ID</string>
+    <string name="enter_afrimax_id">Enter Afrimax ID</string>
     <string name="afrimax_name">Afrimax Name</string>
     <string name="afrimax_id_note">Note: If Afrimax name is incorrect, please re-enter your Afrimax ID</string>
     <string name="re_enter">Re-enter</string>
@@ -651,4 +651,13 @@
     <string name="formatted_list_amount">%1$s %2$s</string>
     <string name="interest">Interest</string>
     <string name="g2p_pay_in">G2P</string>
+    <string name="filters">Filters</string>
+    <string name="time_period">Time Period</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="last_7_days">Last 7 days</string>
+    <string name="last_30_days">Last 30 days</string>
+    <string name="last_60_days">Last 60 days</string>
+    <string name="pay_paymaart">Pay Paymaart</string>
+    <string name="pay_person">Pay Person</string>
 </resources>
