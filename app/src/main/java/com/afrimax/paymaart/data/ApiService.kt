@@ -81,7 +81,7 @@ interface ApiService {
     @POST("$CUSTOMER_USER/verify-otp")
     fun verifyOtp(@Body body: VerifyOtpRequestBody): Call<VerifyOtpResponse>
 
-    @POST("$CUSTOMER_USER/create")
+    @POST("$CUSTOMER_USER/register")
     fun registerCustomer(@Body body: CreateUserRequestBody): Call<CreateUserResponse>
 
     @POST("$CUSTOMER_USER/resend-credentials")
