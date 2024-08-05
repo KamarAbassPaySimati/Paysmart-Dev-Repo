@@ -660,4 +660,7 @@
     <string name="last_60_days">Last 60 days</string>
     <string name="pay_paymaart">Pay Paymaart</string>
     <string name="pay_person">Pay Person</string>
+    <string name="hi_how_can_we_help">Hi! How Can We Help?</string>
+    <string name="help_center_description">"Please reach out to \n hello@paymaart.com for any support"</string>
+    <string name="complaints_procedure">Complaints Procedure</string>
 </resources>
