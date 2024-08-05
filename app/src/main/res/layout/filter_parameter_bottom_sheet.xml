@@ -38,7 +38,7 @@
             android:textSize="16sp"
             android:layout_weight="1"
             android:textAlignment="center"
-            android:paddingVertical="16dp"
+            android:paddingVertical="24dp"
             android:background="@color/highlightedLight"/>
 
         <LinearLayout
@@ -53,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/filter_parameter_bg"
                 android:paddingStart="20dp"
-                android:paddingEnd="0dp">
+                android:paddingEnd="0dp"
+                android:paddingVertical="6dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -77,7 +78,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/filter_parameter_bg"
                 android:paddingStart="20dp"
-                android:paddingEnd="0dp">
+                android:paddingEnd="0dp"
+                android:paddingVertical="6dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -101,7 +103,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/filter_parameter_bg"
                 android:paddingStart="20dp"
-                android:paddingEnd="0dp">
+                android:paddingEnd="0dp"
+                android:paddingVertical="6dp">
 
                 <TextView
                     android:layout_width="0dp"
@@ -129,14 +132,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/white"
-        android:paddingVertical="18dp"
-        android:paddingHorizontal="10dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="24dp"
+        android:paddingHorizontal="16dp"
         android:layout_below="@id/filterParameterContainer">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/filterParameterClearButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="58dp"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/primary_outlined_button_background_medium"
             android:fontFamily="@font/inter_medium"
@@ -151,7 +155,7 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/filterParameterApplyButton"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="58dp"
             style="?android:attr/borderlessButtonStyle"
             android:background="@drawable/primary_rounded_button_background_medium"
             android:fontFamily="@font/inter_medium"

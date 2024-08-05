@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/transactionHistoryActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.viewtransactions.TransactionHistoryListActivity">
+
+    <LinearLayout
+        android:id="@+id/transactionHistoryActivityTopSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/transactionHistoryActivityTopBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/transactionHistoryActivityBackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/back_button"
+                android:padding="16dp"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/white"/>
+
+            <TextView
+                android:id="@+id/transactionHistoryActivityHeaderTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/transactionHistoryActivityBackButton"
+                android:fontFamily="@font/inter_medium"
+                android:includeFontPadding="false"
+                android:text="@string/transaction_history"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_toStartOf="@+id/transactionHistoryActivityFilterIV"
+                android:background="@drawable/bg_search_edit_text">
+
+                <EditText
+                    android:id="@+id/transactionHistoryActivitySearchET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/transactionHistoryActivitySearchClearIV"
+                    android:autofillHints=""
+                    android:background="@color/transparent"
+                    android:drawableEnd="@drawable/ico_search_neutral_grey"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/inter_regular"
+                    android:hint="@string/paymaart_id"
+                    android:inputType="textNoSuggestions"
+                    android:maxLines="1"
+                    android:padding="12dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/neutralGrey"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/transactionHistoryActivitySearchClearIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/close_button_data"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_close"
+                    app:tint="@color/neutralGreyPrimaryText"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/transactionHistoryActivityFilterIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/image_description"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:src="@drawable/ic_filter" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/transactionHistoryActivityTopSection">
+
+        <LinearLayout
+            android:id="@+id/transactionHistoryActivityNoDataFoundContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/transactionHistoryActivityNoDataFoundIV"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:contentDescription="@string/search"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ico_search_for_users" />
+
+            <TextView
+                android:id="@+id/transactionHistoryActivityNoDataFoundTitleTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/no_transactions_yet"
+                android:textAlignment="center"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/transactionHistoryActivityNoDataFoundSubtextTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/no_transactions_subtext"
+                android:textAlignment="center"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/transactionHistoryActivityContentBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/transactionHistoryActivityRecentTransactionsTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_regular"
+                android:padding="16dp"
+                android:text="@string/recent_transactions_of_last_60_days"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/transactionHistoryActivityRV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/transactionHistoryActivityLoaderLottie"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_loader" />
+
+    </FrameLayout>
+
+</RelativeLayout>
