@@ -82,7 +82,7 @@ class TransactionHistoryListActivity : BaseActivity(), TransactionHistoryInterfa
     private fun setUpRecyclerView() {
         b.transactionHistoryActivityRV.layoutManager = LinearLayoutManager(this)
         b.transactionHistoryActivityRV.isNestedScrollingEnabled = false
-        val userPaymaartId: String = retrievePaymaartId()?.uppercase() ?: ""
+        val userPaymaartId: String = retrievePaymaartId()
         val adapter = TransactionHistoryAdapter(this, transactionList, userPaymaartId)
         adapter.setOnClickListener(object : TransactionHistoryAdapter.OnClickListener {
             override fun onClick(transaction: IndividualTransactionHistory) {

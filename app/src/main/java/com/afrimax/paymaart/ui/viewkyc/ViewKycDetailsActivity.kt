@@ -84,7 +84,7 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
 
     private fun setupLayout() {
         val accountName = intent.getStringExtra(Constants.KYC_NAME) ?: ""
-        val paymaartId = retrievePaymaartId() ?: ""
+        val paymaartId = retrievePaymaartId()
 
         //populate views
         val nameList = accountName.uppercase().split(" ")
