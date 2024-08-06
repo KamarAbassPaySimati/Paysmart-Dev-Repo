@@ -105,9 +105,7 @@ class SplashScreenActivity : BaseActivity() {
             val paymaartId = retrievePaymaartId()
 
             animator1.cancel()
-            animator2 = ObjectAnimator.ofInt(
-                binding.horizontalProgressBar, "progress", binding.horizontalProgressBar.progress, 100
-            )
+            animator2 = ObjectAnimator.ofInt(binding.horizontalProgressBar, "progress", binding.horizontalProgressBar.progress, 100)
 
             if (amplifyLoginStatus && paymaartId.isNotEmpty()) {
                 startFinalAnim(true)
