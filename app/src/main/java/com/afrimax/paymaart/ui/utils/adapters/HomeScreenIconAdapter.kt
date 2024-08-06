@@ -16,6 +16,7 @@ import com.afrimax.paymaart.util.formatEpochTimeThree
 import com.afrimax.paymaart.util.getDrawableExt
 import com.afrimax.paymaart.util.getFormattedAmount
 import com.afrimax.paymaart.util.getInitials
+import com.afrimax.paymaart.util.showLogE
 import com.bumptech.glide.Glide
 import kotlin.math.abs
 
@@ -93,7 +94,6 @@ class HomeScreenIconAdapter(
                     }
                 }
                 PAY_PERSON -> {
-                    binding.iconNameInitials.visibility = View.GONE
                     if (userPaymaartId == transactionList[position].senderId)
                         setPersonImageDrawable(holder, transactionList[position].receiverProfilePic, transactionList[position].receiverName)
                     else
@@ -104,13 +104,23 @@ class HomeScreenIconAdapter(
     }
 
     private fun setPersonImageDrawable(holder: HomeScreenIconViewHolder, userImage: String?, userName: String?){
-        Glide
-            .with(holder.itemView.context)
-            .load(BuildConfig.CDN_BASE_URL + userImage)
-            .centerCrop()
-            .into(holder.binding.iconImage)
-        val mUserName = userName?.split(" ") ?: emptyList()
-        holder.binding.iconName.text = if (mUserName.size > 1) mUserName[0] else ""
+        if (userImage.isNullOrEmpty()){
+            holder.binding.iconImage.visibility = View.GONE
+            holder.binding.iconNameInitials.visibility = View.VISIBLE
+            holder.binding.iconNameInitials.text = getInitials(userName)
+            holder.binding.iconName.visibility = View.GONE
+            holder.binding.iconName.text = getInitials(userName)
+        }else {
+            holder.binding.iconNameInitials.visibility = View.GONE
+            Glide
+                .with(holder.itemView.context)
+                .load(BuildConfig.CDN_BASE_URL + userImage)
+                .centerCrop()
+                .into(holder.binding.iconImage)
+            val mUserName = userName?.split(" ") ?: emptyList()
+            holder.binding.iconName.text = if (mUserName.size > 1) mUserName[0] else ""
+        }
+
     }
     
     companion object {

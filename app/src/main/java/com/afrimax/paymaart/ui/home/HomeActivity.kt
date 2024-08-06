@@ -188,7 +188,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
                 startActivity(Intent(this, TransactionHistoryListActivity::class.java))
             }
         }
-        val userPaymaartId = retrievePaymaartId() ?: ""
+        val userPaymaartId = retrievePaymaartId()
         b.homeActivityPersonsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityTransactionsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityMerchantsRecyclerView.layoutManager = GridLayoutManager(this, 4)
