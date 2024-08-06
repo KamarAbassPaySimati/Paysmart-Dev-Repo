@@ -225,7 +225,7 @@
     <string name="enter_district">Enter district</string>
     <string name="save_and_continue">Save and continue</string>
     <string name="skip">Skip</string>
-    <string name="simplified_kyc">Simplified KYC REG</string>
+    <string name="simplified_kyc">Simplified KYC Reg</string>
     <string name="non_malawi_full_kyc">Non-Malawi Full KYC Reg</string>
     <string name="identity_details">Identity Details</string>
     <string name="next_personal_details">Next - Personal Details</string>
@@ -398,7 +398,7 @@
     <string name="persons">Persons</string>
     <string name="merchants">Merchants</string>
     <string name="refund_request">Refund Request</string>
-    <string name="help_centre">Help center</string>
+    <string name="help_centre">Help Centre</string>
     <string name="privacy_policy_two">Privacy policy</string>
     <string name="faqs">FAQs</string>
     <string name="terms_of_service">Terms of service</string>
@@ -541,7 +541,7 @@
     <string name="enter_your_pin_to_view_your_wallet_balance">Enter your PIN to view your wallet balance</string>
     <string name="view_balance">View Balance</string>
     <string name="enter_your_password_to_view_your_wallet_balance">Enter your password to view your wallet balance</string>
-    <string name="balance_placeholder">⬤⬤⬤⬤</string>
+    <string name="balance_placeholder">⬤⬤⬤⬤⬤⬤</string>
     <string name="switch_to_full_kyc">Switch to Full KYC</string>
     <string name="select_your_preferred_membership_validity">Select your preferred membership validity</string>
     <string name="thirty_days_for_300_mwk">30 days for 300.00 MWK</string>
@@ -581,7 +581,7 @@
     <string name="full_kyc_reg">Full KYC Reg</string>
     <string name="pay_afrimax">Pay Afrimax</string>
     <string name="afrimax_id">Afrimax ID</string>
-    <string name="enter_afrimax_id">Enter afrimax ID</string>
+    <string name="enter_afrimax_id">Enter Afrimax ID</string>
     <string name="afrimax_name">Afrimax Name</string>
     <string name="afrimax_id_note">Note: If Afrimax name is incorrect, please re-enter your Afrimax ID</string>
     <string name="re_enter">Re-enter</string>
@@ -640,4 +640,27 @@
     <string name="no_data_found_subtext_refund_two">Try adjusting your filter to find what you’re looking for</string>
     <string name="no_refund_request_yet">No Refund Request Yet</string>
     <string name="no_refund_request_yet_subtext">You have no refund request at the moment.</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="no_transactions_yet">No Transactions Yet</string>
+    <string name="no_transactions_subtext">You have no transactions at the moment.</string>
+    <string name="recent_transactions_of_last_60_days">Recent transactions in last 60 days</string>
+    <string name="cash_in">Cash-in</string>
+    <string name="pay_in">Pay-in</string>
+    <string name="pay_out">Pay-out</string>
+    <string name="refund">Refund</string>
+    <string name="formatted_list_amount">%1$s %2$s</string>
+    <string name="interest">Interest</string>
+    <string name="g2p_pay_in">G2P</string>
+    <string name="filters">Filters</string>
+    <string name="time_period">Time Period</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="last_7_days">Last 7 days</string>
+    <string name="last_30_days">Last 30 days</string>
+    <string name="last_60_days">Last 60 days</string>
+    <string name="pay_paymaart">Pay Paymaart</string>
+    <string name="pay_person">Pay Person</string>
+    <string name="hi_how_can_we_help">Hi! How Can We Help?</string>
+    <string name="help_center_description">"Please reach out to \n hello@paymaart.com for any support"</string>
+    <string name="complaints_procedure">Complaints Procedure</string>
 </resources>

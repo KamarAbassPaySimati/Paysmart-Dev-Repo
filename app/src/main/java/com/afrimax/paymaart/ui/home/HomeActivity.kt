@@ -31,7 +31,7 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.HomeScreenData
 import com.afrimax.paymaart.data.model.HomeScreenResponse
-import com.afrimax.paymaart.data.model.ValidateAfrimaxIdResponse
+import com.afrimax.paymaart.data.model.IndividualTransactionHistory
 import com.afrimax.paymaart.data.model.WalletData
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
@@ -49,6 +49,9 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPasswordSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPinSheet
 import com.afrimax.paymaart.ui.utils.interfaces.HomeInterface
 import com.afrimax.paymaart.ui.viewkyc.ViewKycDetailsActivity
+import com.afrimax.paymaart.ui.viewtransactions.TransactionHistoryListActivity
+import com.afrimax.paymaart.ui.webview.HelpCenterActivity
+import com.afrimax.paymaart.ui.webview.ToolBarType
 import com.afrimax.paymaart.ui.webview.WebViewActivity
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getFormattedAmount
@@ -56,7 +59,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.DecimalFormat
 import java.util.Calendar
 import java.util.Date
 
@@ -71,6 +73,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var mMembershipType: String = ""
     private var mKycStatus: String = ""
     private var customerName: String = ""
+    private var allRecentTransactions: MutableList<IndividualTransactionHistory> = mutableListOf()
     private lateinit var notificationPermissionCheckLauncher: ActivityResultLauncher<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -169,10 +172,10 @@ class HomeActivity : BaseActivity(), HomeInterface {
             )
         }
         b.homeActivityPersonsBox.setOnClickListener{
-            toggleTransactions(
-                b.homeActivityPersonsHiddenContainer,
-                b.homeActivityPersonsTExpandButton
-            )
+//            toggleTransactions(
+//                b.homeActivityPersonsHiddenContainer,
+//                b.homeActivityPersonsTExpandButton
+//            )
         }
         b.homeActivityMerchantsBox.setOnClickListener {
             toggleTransactions(
@@ -180,19 +183,18 @@ class HomeActivity : BaseActivity(), HomeInterface {
                 b.homeActivityMerchantsTExpandButton
             )
         }
+        b.homeActivityTransactionsSeeAllTV.setOnClickListener {
+            if (checkKycStatus()) {
+                startActivity(Intent(this, TransactionHistoryListActivity::class.java))
+            }
+        }
+        val userPaymaartId = retrievePaymaartId()
         b.homeActivityPersonsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityTransactionsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityMerchantsRecyclerView.layoutManager = GridLayoutManager(this, 4)
-        val nameList = listOf(
-            "John Doe MJR",
-            "Jane Smith ABC",
-            "Michael Lee XYZ",
-            "Sarah Wilson DEF",
-        )
-        homeScreenIconAdapter = HomeScreenIconAdapter(nameList)
-        b.homeActivityPersonsRecyclerView.adapter = homeScreenIconAdapter
-        b.homeActivityTransactionsRecyclerView.adapter = homeScreenIconAdapter
-        b.homeActivityMerchantsRecyclerView.adapter = homeScreenIconAdapter
+        b.homeActivityPersonsRecyclerView.adapter = HomeScreenIconAdapter(emptyList(), userPaymaartId)
+        b.homeActivityTransactionsRecyclerView.adapter = HomeScreenIconAdapter(allRecentTransactions, userPaymaartId)
+        b.homeActivityMerchantsRecyclerView.adapter = HomeScreenIconAdapter(emptyList(), userPaymaartId)
     }
 
     private fun onClickEyeButton() {
@@ -294,6 +296,14 @@ class HomeActivity : BaseActivity(), HomeInterface {
             dest = DRAWER_ABOUT_US
             b.homeActivity.closeDrawer(GravityCompat.END)
         }
+        b.homeActivityNavView.homeDrawerHelpCenterTV.setOnClickListener {
+            dest = HELP_CENTER
+            b.homeActivity.closeDrawer(GravityCompat.END)
+        }
+        b.homeActivityNavView.homeDrawerFaqTV.setOnClickListener {
+            dest = FAQS
+            b.homeActivity.closeDrawer(GravityCompat.END)
+        }
         setDrawerClosedListener()
     }
 
@@ -340,19 +350,30 @@ class HomeActivity : BaseActivity(), HomeInterface {
                     DRAWER_PRIVACY_POLICY -> {
                         val intent = Intent(this@HomeActivity, WebViewActivity::class.java)
                         intent.putExtra(Constants.TYPE, Constants.PRIVACY_POLICY_TYPE)
+                        intent.putExtra(Constants.TOOLBAR_TYPE, ToolBarType.PRIMARY.name)
                         startActivity(intent)
                     }
                     DRAWER_TERMS_AND_CONDITIONS -> {
                         val intent = Intent(this@HomeActivity, WebViewActivity::class.java)
                         intent.putExtra(Constants.TYPE, Constants.TERMS_AND_CONDITIONS_TYPE)
+                        intent.putExtra(Constants.TOOLBAR_TYPE, ToolBarType.PRIMARY.name)
                         startActivity(intent)
                     }
                     DRAWER_ABOUT_US -> {
                         val intent = Intent(this@HomeActivity, WebViewActivity::class.java)
                         intent.putExtra(Constants.TYPE, Constants.ABOUT_US_TYPE)
+                        intent.putExtra(Constants.TOOLBAR_TYPE, ToolBarType.PRIMARY.name)
                         startActivity(intent)
                     }
-
+                    HELP_CENTER -> {
+                        startActivity(Intent(this@HomeActivity, HelpCenterActivity::class.java))
+                    }
+                    FAQS -> {
+                        val intent = Intent(this@HomeActivity, WebViewActivity::class.java)
+                        intent.putExtra(Constants.TYPE, Constants.FAQS_TYPE)
+                        intent.putExtra(Constants.TOOLBAR_TYPE, ToolBarType.WHITE_START.name)
+                        startActivity(intent)
+                    }
                 }
                 dest = 0
                 isSettingsClicked = false
@@ -438,6 +459,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
                     if (body != null && response.isSuccessful) {
                         runOnUiThread {
                             populateHomeScreenData(body.homeScreenData)
+                            populateRecyclerViews(body.transactionData)
                         }
                     } else {
                         runOnUiThread {
@@ -465,14 +487,13 @@ class HomeActivity : BaseActivity(), HomeInterface {
         b.homeActivityProfilePaymaartMemberSinceTV.text = getString(R.string.member_since_formatted, year)
         //Populate kyc details to side drawer
         when (homeScreenData.membership){
-            MembershipType.GO.type -> {
-                membershipType(MembershipType.GO.typeName, R.color.goMemberStrokeColor, R.drawable.go_member_bg)
-            }
             MembershipType.PRIME.type -> {
                 membershipType(MembershipType.PRIME.typeName, R.color.primeMemberStrokeColor, R.drawable.prime_member_bg)
             }
             MembershipType.PRIMEX.type -> {
                 membershipType(MembershipType.PRIMEX.typeName, R.color.primeXMemberStrokeColor, R.drawable.prime_x_member_bg)
+            }else -> {
+                membershipType(MembershipType.GO.typeName, R.color.goMemberStrokeColor, R.drawable.go_member_bg)
             }
         }
         val kycType = homeScreenData.kycType
@@ -544,6 +565,22 @@ class HomeActivity : BaseActivity(), HomeInterface {
         }
         showMembershipBanner()
         hideLoader()
+    }
+
+    private fun populateRecyclerViews(transactionHistory: List<IndividualTransactionHistory>){
+        if (transactionHistory.isEmpty()) {
+            b.homeActivityNoTransactionsTV.visibility = View.VISIBLE
+            b.homeActivityTransactionsRecyclerView.visibility = View.GONE
+            b.homeActivityTransactionsSeeAllTV.visibility = View.GONE
+        }else {
+            b.homeActivityNoTransactionsTV.visibility = View.GONE
+            b.homeActivityTransactionsRecyclerView.visibility = View.VISIBLE
+            if (transactionHistory.size > 4) b.homeActivityTransactionsSeeAllTV.visibility = View.VISIBLE
+            allRecentTransactions.clear()
+            allRecentTransactions.addAll(transactionHistory)
+            b.homeActivityTransactionsRecyclerView.adapter?.notifyItemChanged(0)
+        }
+
     }
 
     private fun showMembershipBanner() {
@@ -621,6 +658,8 @@ class HomeActivity : BaseActivity(), HomeInterface {
         const val DRAWER_PRIVACY_POLICY = 13
         const val DRAWER_TERMS_AND_CONDITIONS = 14
         const val DRAWER_ABOUT_US = 15
+        const val HELP_CENTER = 16
+        const val FAQS = 17
     }
 
     override fun onClickViewBalance(viewWalletScope: String, data: WalletData?) {

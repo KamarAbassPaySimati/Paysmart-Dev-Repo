@@ -43,6 +43,7 @@ import com.afrimax.paymaart.data.model.SubscriptionDetailsResponse
 import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentSuccessfulResponse
 import com.afrimax.paymaart.data.model.TransactionDetailsResponse
+import com.afrimax.paymaart.data.model.TransactionHistoryResponse
 import com.afrimax.paymaart.data.model.UpdateAutoRenewalRequestBody
 import com.afrimax.paymaart.data.model.UpdatePinOrPasswordRequest
 import com.afrimax.paymaart.data.model.UpdatePinPasswordRequest
@@ -80,7 +81,7 @@ interface ApiService {
     @POST("$CUSTOMER_USER/verify-otp")
     fun verifyOtp(@Body body: VerifyOtpRequestBody): Call<VerifyOtpResponse>
 
-    @POST("$CUSTOMER_USER/create")
+    @POST("$CUSTOMER_USER/register")
     fun registerCustomer(@Body body: CreateUserRequestBody): Call<CreateUserResponse>
 
     @POST("$CUSTOMER_USER/resend-credentials")
@@ -199,6 +200,9 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/list-refund-request")
     fun getRefundRequests(@Header("Authorization") header: String, @Query("page") page: Int? = 1, @Query("status") status: String? = "", @Query("time") time: Int? = 60): Call<RefundRequestResponse>
+
+    @GET("agent-users/customer/list-transaction")
+    fun getTransactionHistory(@Header("Authorization") header: String, @Query("page") page: Int?, @Query("search") search: String?, @Query("type") type: String?, @Query("time") time: Int?): Call<TransactionHistoryResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

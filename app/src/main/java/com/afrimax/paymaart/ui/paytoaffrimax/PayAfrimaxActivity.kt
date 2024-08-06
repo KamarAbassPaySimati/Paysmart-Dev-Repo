@@ -311,7 +311,7 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
     }
 
     private val customerId: String
-        get() = retrievePaymaartId() ?: ""
+        get() = retrievePaymaartId()
 
     private fun validatePlan() {
         if (selectedPlan != null) {
