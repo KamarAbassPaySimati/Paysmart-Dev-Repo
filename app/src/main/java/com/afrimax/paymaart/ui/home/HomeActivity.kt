@@ -50,6 +50,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPinSheet
 import com.afrimax.paymaart.ui.utils.interfaces.HomeInterface
 import com.afrimax.paymaart.ui.viewkyc.ViewKycDetailsActivity
 import com.afrimax.paymaart.ui.viewtransactions.TransactionHistoryListActivity
+import com.afrimax.paymaart.ui.viewtransactions.ViewSpecificTransactionActivity
 import com.afrimax.paymaart.ui.webview.HelpCenterActivity
 import com.afrimax.paymaart.ui.webview.ToolBarType
 import com.afrimax.paymaart.ui.webview.WebViewActivity
@@ -189,12 +190,21 @@ class HomeActivity : BaseActivity(), HomeInterface {
             }
         }
         val userPaymaartId = retrievePaymaartId()
+        val transactionHistoryListAdapter = HomeScreenIconAdapter(allRecentTransactions, userPaymaartId)
         b.homeActivityPersonsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityTransactionsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityMerchantsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityPersonsRecyclerView.adapter = HomeScreenIconAdapter(emptyList(), userPaymaartId)
-        b.homeActivityTransactionsRecyclerView.adapter = HomeScreenIconAdapter(allRecentTransactions, userPaymaartId)
+        b.homeActivityTransactionsRecyclerView.adapter = transactionHistoryListAdapter
         b.homeActivityMerchantsRecyclerView.adapter = HomeScreenIconAdapter(emptyList(), userPaymaartId)
+
+        transactionHistoryListAdapter.setOnClickListener(object : HomeScreenIconAdapter.OnClickListener {
+            override fun onClick(transaction: IndividualTransactionHistory) {
+                val intent = Intent(this@HomeActivity, ViewSpecificTransactionActivity::class.java)
+                intent.putExtra(Constants.TRANSACTION_ID, transaction.transactionId)
+                startActivity(intent)
+            }
+        })
     }
 
     private fun onClickEyeButton() {
@@ -578,7 +588,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
             if (transactionHistory.size > 4) b.homeActivityTransactionsSeeAllTV.visibility = View.VISIBLE
             allRecentTransactions.clear()
             allRecentTransactions.addAll(transactionHistory)
-            b.homeActivityTransactionsRecyclerView.adapter?.notifyItemChanged(0)
+            b.homeActivityTransactionsRecyclerView.adapter?.notifyDataSetChanged()
         }
 
     }

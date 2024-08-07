@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/paymentReceiptActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.viewtransactions.ViewSpecificTransactionActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/viewSpecificTransactionToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationIconTint="@color/neutralGreyPrimaryText"
+        app:title="@string/privacy_policy"
+        app:titleTextAppearance="@style/toolbarTextAppearanceTwo"
+        app:titleTextColor="@color/neutralGreyPrimaryText"
+        android:elevation="0dp"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/viewSpecificTransactionToolbar">
+
+        <RelativeLayout
+            android:id="@+id/paymentReceiptActivityContentBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/paymentReceiptActivityStatusContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/accentPositive">
+
+                <TextView
+                    android:id="@+id/paymentReceiptActivityStatusTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:drawablePadding="12dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:padding="16dp"
+                    android:text="@string/cash_in_successful"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    app:drawableStartCompat="@drawable/ico_payment_success" />
+
+            </RelativeLayout>
+
+            <ScrollView
+                android:id="@+id/paymentReceiptActivitySV"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/paymentReceiptActivityButtonContainer"
+                android:layout_below="@+id/paymentReceiptActivityStatusContainer"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:contentDescription="@string/paymaart_logo"
+                        android:src="@drawable/image_paymaart_logo" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/thank_you_for_using_paymaart"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="24dp"
+                        android:background="@drawable/bg_payment_success_card"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/from"
+                            android:textColor="@color/neutralGreyPrimaryText"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityFromPaymaartNameContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/paymaart_name"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityFromPaymaartNameTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/paymaart_name"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityFromPaymaartIdContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/paymaart_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityFromPaymaartIdTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/paymaart_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/inter_medium"
+                            android:text="@string/to"
+                            android:textColor="@color/neutralGreyPrimaryText"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityToPaymaartNameContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/paymaart_name"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityToPaymaartNameTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/paymaart_name"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityToPaymaartIdContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/paymaart_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityToPaymaartIdTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/paymaart_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityToAfrimaxNameContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:weightSum="2"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/afrimax_name"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityToAfrimaxNameTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/acct_name"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityToAfrimaxIdContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:weightSum="2"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/afrimax_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityToAfrimaxIdTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/acct_no"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/bg_payment_success_card"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityPaymentContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityPaymentTypeTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_medium"
+                                android:text="@string/txn_value"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityPaymentValueTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_medium"
+                                android:text="@string/txn_value"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityTxnFeeContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/txn_fee"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityTxnFeeTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/txn_fee"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityTxnIdContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/txn_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityTxnIdTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/txn_id"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityDateTimeContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/date_time"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityDateTimeTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/date_time"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityNoteContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:weightSum="2"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/note"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityNoteTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/note"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityBalanceContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:weightSum="2"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityBalanceTVKey"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/balance"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityBalanceTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/balance"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityPlanContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:weightSum="2"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/plan"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityPlanTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/plan"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityMembershipContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:weightSum="2"
+                            tools:visibility="visible">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/membership"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityMembershipTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/membership"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <LinearLayout
+                android:id="@+id/paymentReceiptActivityButtonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="32dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/paymentReceiptActivityFlagPaymentIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:background="@drawable/bg_payment_status_button"
+                    android:contentDescription="@string/flag_payment_data"
+                    android:padding="16dp"
+                    android:src="@drawable/ico_flag_primary" />
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/paymentReceiptActivitySharePaymentIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_payment_status_button"
+                    android:contentDescription="@string/share_payment"
+                    android:padding="16dp"
+                    android:src="@drawable/ico_share_primary" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/registrationActivityLoaderLottie"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_loader" />
+
+    </FrameLayout>
+
+</RelativeLayout>

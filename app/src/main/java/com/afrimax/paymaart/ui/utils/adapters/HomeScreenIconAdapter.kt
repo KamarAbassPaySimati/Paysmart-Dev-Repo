@@ -8,25 +8,19 @@ import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.model.IndividualTransactionHistory
 import com.afrimax.paymaart.databinding.HomeRecyclerviewAdapterViewBinding
-import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASHIN
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASHOUT
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_PERSON
-import com.afrimax.paymaart.util.formatEpochTimeThree
 import com.afrimax.paymaart.util.getDrawableExt
-import com.afrimax.paymaart.util.getFormattedAmount
 import com.afrimax.paymaart.util.getInitials
-import com.afrimax.paymaart.util.showLogE
 import com.bumptech.glide.Glide
-import kotlin.math.abs
 
 class HomeScreenIconAdapter(
     private val transactionList: List<IndividualTransactionHistory>,
     private val userPaymaartId: String
 ): RecyclerView.Adapter<HomeScreenIconAdapter.HomeScreenIconViewHolder>() {
-    inner class HomeScreenIconViewHolder(val binding: HomeRecyclerviewAdapterViewBinding) :
-        RecyclerView.ViewHolder(binding.root)
-
+    inner class HomeScreenIconViewHolder(val binding: HomeRecyclerviewAdapterViewBinding) : RecyclerView.ViewHolder(binding.root)
+    private var onClickListener: OnClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeScreenIconViewHolder {
         val binding = HomeRecyclerviewAdapterViewBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -101,6 +95,9 @@ class HomeScreenIconAdapter(
                 }else -> {}
             }
         }
+        holder.itemView.setOnClickListener {
+            onClickListener?.onClick(transactionList[position])
+        }
     }
 
     private fun setPersonImageDrawable(holder: HomeScreenIconViewHolder, userImage: String?, userName: String?){
@@ -112,15 +109,26 @@ class HomeScreenIconAdapter(
             holder.binding.iconName.text = getInitials(userName)
         }else {
             holder.binding.iconNameInitials.visibility = View.GONE
-            Glide
-                .with(holder.itemView.context)
-                .load(BuildConfig.CDN_BASE_URL + userImage)
-                .centerCrop()
-                .into(holder.binding.iconImage)
+            val imageUrl = BuildConfig.CDN_BASE_URL + userImage
+            holder.binding.iconImage.also {
+                it.visibility = View.VISIBLE
+                Glide
+                    .with(holder.itemView.context)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .into(it)
+            }
             val mUserName = userName?.split(" ") ?: emptyList()
             holder.binding.iconName.text = if (mUserName.size > 1) mUserName[0] else ""
         }
 
+    }
+    fun setOnClickListener(onClickListener: OnClickListener) {
+        this.onClickListener = onClickListener
+    }
+
+    interface OnClickListener {
+        fun onClick(transaction: IndividualTransactionHistory)
     }
     
     companion object {

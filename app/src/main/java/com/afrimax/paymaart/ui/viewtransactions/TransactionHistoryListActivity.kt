@@ -1,6 +1,7 @@
 package com.afrimax.paymaart.ui.viewtransactions
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -86,7 +87,9 @@ class TransactionHistoryListActivity : BaseActivity(), TransactionHistoryInterfa
         val adapter = TransactionHistoryAdapter(this, transactionList, userPaymaartId)
         adapter.setOnClickListener(object : TransactionHistoryAdapter.OnClickListener {
             override fun onClick(transaction: IndividualTransactionHistory) {
-
+                val intent = Intent(this@TransactionHistoryListActivity, ViewSpecificTransactionActivity::class.java)
+                intent.putExtra(Constants.TRANSACTION_ID, transaction.transactionId)
+                startActivity(intent)
             }
         })
         b.transactionHistoryActivityRV.adapter = adapter
@@ -383,7 +386,7 @@ class TransactionHistoryListActivity : BaseActivity(), TransactionHistoryInterfa
     override fun clearAllFilters() {
         time = null
         type = null
-//        searchTransactionsApi(search)
+        searchTransactionsApi(search)
     }
 
     override fun onFiltersApplied(time: Int, transactionType: String) {
