@@ -98,7 +98,9 @@ data class PayToAfrimaxRequestBody(
     @SerializedName("paymaart_id")
     val paymaartId: String,
     @SerializedName("paymaart_name")
-    val paymaartName: String
+    val paymaartName: String,
+    @SerializedName("plan_name")
+    val planName: String? = null,
 )
 
 data class PayToAfrimaxErrorResponse(

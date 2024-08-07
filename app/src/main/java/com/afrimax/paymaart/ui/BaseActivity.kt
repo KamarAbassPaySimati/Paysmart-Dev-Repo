@@ -19,10 +19,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 open class BaseActivity: AppCompatActivity() {
-    fun retrievePaymaartId(): String? {
+    fun retrievePaymaartId(): String {
         val sharedPreferences: SharedPreferences =
             this.getSharedPreferences(Constants.USER_DATA_PREFS, Context.MODE_PRIVATE)
-        return sharedPreferences.getString(Constants.PREF_KEY_PAYMAART_ID, null)
+        val paymaartId = sharedPreferences.getString(Constants.PREF_KEY_PAYMAART_ID, null) ?: ""
+        return paymaartId.uppercase()
     }
 
     fun retrieveLoginMode(): String? {

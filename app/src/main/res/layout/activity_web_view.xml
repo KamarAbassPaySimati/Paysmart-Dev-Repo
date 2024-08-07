@@ -9,11 +9,37 @@
     android:orientation="vertical"
     tools:context=".ui.webview.WebViewActivity">
 
-    <RelativeLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/webViewActivityToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationIconTint="@color/white"
+        app:title="@string/privacy_policy"
+        app:titleTextAppearance="@style/toolbarTextAppearance"
+        app:titleCentered="true"
+        android:visibility="gone"/>
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/webViewActivityToolbarThree"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="16dp">
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:navigationIconTint="@color/neutralGreyPrimaryText"
+        app:title="@string/privacy_policy"
+        app:titleTextAppearance="@style/toolbarTextAppearanceTwo"
+        app:titleTextColor="@color/neutralGreyPrimaryText"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/webViewActivityToolbarTwo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="16dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/webViewActivityTitleTV"

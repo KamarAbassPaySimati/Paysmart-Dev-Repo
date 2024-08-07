@@ -20,6 +20,8 @@ import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatSpinner
+import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -40,6 +42,7 @@ import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.EditKycVerificationSheet
 import com.afrimax.paymaart.ui.utils.interfaces.KycYourPersonalDetailsInterface
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.countries
 import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.kotlin.core.Amplify
@@ -78,7 +81,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     private lateinit var profilePicUrl: String
     private var publicProfile: Boolean = false
     private var isPublicProfileUpdate: Boolean = false
-
+    private val items = countries.map { it.dialCode }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         b = ActivityKycCustomerPersonalDetailsBinding.inflate(layoutInflater)
@@ -104,51 +107,9 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         viewScope = intent.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
         profilePicUrl = intent.getStringExtra(Constants.PROFILE_PICTURE) ?: ""
         publicProfile = intent.getBooleanExtra(Constants.PUBLIC_PROFILE, false)
-
-        if (BuildConfig.STAGE == Constants.STAGE_DEV || BuildConfig.STAGE == Constants.STAGE_QA) {
-            //This is required for Indian phone number testing
-            b.kycYourPersonalDetailsActivityCountryCodeSpinner.visibility = View.VISIBLE
-            b.kycYourPersonalDetailsActivityCountryCodeSpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        p0: AdapterView<*>?, p1: View?, position: Int, p3: Long
-                    ) {
-                        when (position) {
-                            0 -> b.kycYourPersonalDetailsActivityPhoneET.filters =
-                                arrayOf(InputFilter.LengthFilter(11))
-
-                            //Indian Phone numbers are 10 in size + 2 for space
-                            1 -> b.kycYourPersonalDetailsActivityPhoneET.filters =
-                                arrayOf(InputFilter.LengthFilter(12))
-                        }
-                        if (b.kycYourPersonalDetailsActivityPhoneET.text.toString()
-                                .isNotEmpty() && !shouldKeepPhoneNumber
-                        ) {
-                            b.kycYourPersonalDetailsActivityPhoneET.text!!.clear()
-
-                            isPhoneVerified = false
-                            b.kycYourPersonalDetailsActivityPhoneVerifyButton.visibility =
-                                View.VISIBLE
-                            b.kycYourPersonalDetailsActivityPhoneVerifiedTV.visibility = View.GONE
-                        }
-                        shouldKeepPhoneNumber = false
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                        //
-                    }
-                }
-            b.kycYourPersonalDetailsActivityCountryCodeDropDownIV.visibility = View.VISIBLE
-            b.kycYourPersonalDetailsActivityCountryCodeTV.visibility = View.GONE
-
-            val items = arrayOf("+265", "+91")
-            val adapter = ArrayAdapter(this, R.layout.spinner_country_code, items)
-            b.kycYourPersonalDetailsActivityCountryCodeSpinner.adapter = adapter
-        } else {
-            b.kycYourPersonalDetailsActivityCountryCodeSpinner.visibility = View.GONE
-            b.kycYourPersonalDetailsActivityCountryCodeDropDownIV.visibility = View.GONE
-            b.kycYourPersonalDetailsActivityCountryCodeTV.visibility = View.VISIBLE
-        }
+        val adapter = ArrayAdapter(this, R.layout.spinner_country_code, items)
+        setSpinnerDropdownHeight(b.kycYourPersonalDetailsActivityCountryCodeSpinner, 800, 150)
+        b.kycYourPersonalDetailsActivityCountryCodeSpinner.adapter = adapter
 
         nextScreenResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -169,6 +130,18 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                     }
                 }
             }
+    }
+
+    private fun setSpinnerDropdownHeight(spinner: AppCompatSpinner, height: Int, verticalOffset: Int) {
+        try {
+            val popup = AppCompatSpinner::class.java.getDeclaredField("mPopup")
+            popup.isAccessible = true
+            val popupWindow = popup.get(spinner) as ListPopupWindow
+            popupWindow.height = height
+            popupWindow.verticalOffset = verticalOffset
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun setUpLayout() {
@@ -224,6 +197,33 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     }
 
     private fun setUpListeners() {
+
+        b.kycYourPersonalDetailsActivityCountryCodeTV.setOnClickListener {
+            b.kycYourPersonalDetailsActivityCountryCodeSpinner.performClick()
+        }
+
+        b.kycYourPersonalDetailsActivityCountryCodeSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    p0: AdapterView<*>?, p1: View?, position: Int, p3: Long
+                ) {
+                    if (b.kycYourPersonalDetailsActivityPhoneET.text.toString()
+                            .isNotEmpty() && !shouldKeepPhoneNumber
+                    ) {
+                        b.kycYourPersonalDetailsActivityPhoneET.text!!.clear()
+
+                        isPhoneVerified = false
+                        b.kycYourPersonalDetailsActivityPhoneVerifyButton.visibility =
+                            View.VISIBLE
+                        b.kycYourPersonalDetailsActivityPhoneVerifiedTV.visibility = View.GONE
+                    }
+                    shouldKeepPhoneNumber = false
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    //
+                }
+            }
 
         b.kycYourPersonalDetailsActivityBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()

@@ -24,6 +24,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.TotalReceiptSheet
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getInitials
+import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -190,7 +191,7 @@ class CashOutActivity : BaseActivity(), SendPaymentInterface {
                                 vat = data.vatAmount.toString(),
                                 amount = amount,
                                 receiverPaymaartId = userData.paymaartId,
-                                displayAmount = "${amount.toInt() + data.grossTransactionFee}"
+                                displayAmount = data.totalAmount
                             )
                             val totalReceiptSheet = TotalReceiptSheet(cashOutModel)
                             totalReceiptSheet.show(supportFragmentManager, totalReceiptSheet.tag)
@@ -199,6 +200,7 @@ class CashOutActivity : BaseActivity(), SendPaymentInterface {
                     }
 
                     override fun onFailure(call: Call<TransactionDetailsResponse>, throwable: Throwable) {
+                        hideLoader()
                         showToast(getString(R.string.default_error_toast))
                     }
 

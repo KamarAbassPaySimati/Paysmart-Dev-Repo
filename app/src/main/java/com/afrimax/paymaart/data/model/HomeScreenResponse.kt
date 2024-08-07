@@ -6,7 +6,9 @@ data class HomeScreenResponse(
     @SerializedName("data")
     val homeScreenData: HomeScreenData,
     @SerializedName("success_status")
-    val successStatus: Boolean
+    val successStatus: Boolean,
+    @SerializedName("transaction_data")
+    val transactionData: List<IndividualTransactionHistory>
 )
 
 data class HomeScreenData(

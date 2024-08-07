@@ -6,15 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.model.RefundRequest
 import com.afrimax.paymaart.databinding.LoaderAdapterViewBinding
 import com.afrimax.paymaart.databinding.RefundRequestAdapterViewBinding
 import com.afrimax.paymaart.util.RecyclerViewType
-import com.afrimax.paymaart.util.formatEpochTimeTwo
+import com.afrimax.paymaart.util.formatEpochTimeThree
 import com.afrimax.paymaart.util.getFormattedAmount
 import com.afrimax.paymaart.util.getInitials
 import com.bumptech.glide.Glide
+import kotlin.math.abs
 
 class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -22,8 +24,7 @@ class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>):
         fun bind(refundRequest: RefundRequest){
             binding.refundAdapterName.text = refundRequest.receiverName
             binding.refundAdapterId.text = refundRequest.receiverId
-            binding.refundRequestAmount.text = getFormattedAmount(refundRequest.amount)
-            binding.refundAdapterDate.text = formatEpochTimeTwo(refundRequest.createdAt)
+            binding.refundAdapterDate.text = formatEpochTimeThree(refundRequest.createdAt)
             binding.refundAdapterTransactionId.text = refundRequest.transactionId
             when(refundRequest.transactionType) {
                 AFRIMAX -> {
@@ -56,13 +57,14 @@ class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>):
                         binding.iconImage.visibility = View.VISIBLE
                         Glide
                             .with(context)
-                            .load(refundRequest.profilePic)
+                            .load(BuildConfig.CDN_BASE_URL + refundRequest.profilePic)
                             .into(binding.iconImage)
                     }
                 }
             }
             when(refundRequest.status){
                 PENDING -> {
+                    binding.refundRequestAmount.text = getFormattedAmount(abs(refundRequest.amount.toDouble()))
                     binding.refundAdapterStatus.apply {
                         text = ContextCompat.getString(context, R.string.pending)
                         setTextColor(ContextCompat.getColor(context, R.color.pendingCardTextColor))
@@ -70,6 +72,7 @@ class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>):
                     }
                 }
                 REJECTED -> {
+                    binding.refundRequestAmount.text = getFormattedAmount(refundRequest.amount)
                     binding.refundAdapterStatus.apply {
                         text = ContextCompat.getString(context, R.string.rejected)
                         setTextColor(ContextCompat.getColor(context, R.color.errorRed))
@@ -77,6 +80,7 @@ class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>):
                     }
                 }
                 else -> {
+                    binding.refundRequestAmount.text = getFormattedAmount(refundRequest.amount)
                     binding.refundAdapterStatus.apply {
                         text = ContextCompat.getString(context, R.string.refunded)
                         setTextColor(ContextCompat.getColor(context, R.color.refundedCardTextColor))
