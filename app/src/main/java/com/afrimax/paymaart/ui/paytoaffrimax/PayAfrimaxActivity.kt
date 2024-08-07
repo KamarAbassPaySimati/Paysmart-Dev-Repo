@@ -311,7 +311,7 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
     }
 
     private val customerId: String
-        get() = retrievePaymaartId() ?: ""
+        get() = retrievePaymaartId()
 
     private fun validatePlan() {
         if (selectedPlan != null) {
@@ -324,7 +324,8 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
                 afrimaxId = afrimaxId,
                 afrimaxName = afrimaxName,
                 customerName = customerName,
-                customerId = customerId.uppercase()
+                customerId = customerId.uppercase(),
+                planName = selectedPlan!!.serviceName[0]
             )
             val totalReceiptSheet = TotalReceiptSheet(payAfrimaxModel)
             totalReceiptSheet.show(supportFragmentManager, TotalReceiptSheet.TAG)

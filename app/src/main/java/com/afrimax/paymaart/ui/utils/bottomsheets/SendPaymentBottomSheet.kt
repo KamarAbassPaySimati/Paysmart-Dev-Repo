@@ -209,6 +209,7 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
     private fun onConfirmClickedPayPaymaart(password: String, data: SubscriptionDetailsRequestBody) {
         val activity = context as BaseActivity
         val credential = AESCrypt.encrypt(password)
+        activity.hideKeyboard(view, requireContext())
         showButtonLoader()
         val subscriptionPaymentRequestBody = SubscriptionPaymentRequestBody(
             referenceNumber = data.referenceNumber,
@@ -264,6 +265,7 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
     private fun onConfirmClickedPayAfrimax(password: String, data: PayToAfrimaxRequestBody) {
         val activity = requireContext() as BaseActivity
         val encryptedPassword = AESCrypt.encrypt(password)
+        activity.hideKeyboard(view, requireContext())
         val newRequestBody = data.copy(password = encryptedPassword)
         showButtonLoader()
         lifecycleScope.launch {

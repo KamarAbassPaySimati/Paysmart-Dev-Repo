@@ -23,6 +23,7 @@ import com.afrimax.paymaart.ui.home.HomeActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.splash.SplashScreenActivity
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 
@@ -95,6 +96,7 @@ class MessagingService(
      * it builds and displays the notification.*/
     private fun showNotification(data: Intent) {
         //Create the channel first | This only happens once when the app is first booting
+        "Response".showLogE(Gson().toJson(data))
         createNotificationChannel()
 
         val action =  data.getStringExtra(ACTION).toString()

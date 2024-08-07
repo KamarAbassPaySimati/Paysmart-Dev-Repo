@@ -676,7 +676,7 @@ class KycCaptureUploadActivity : BaseActivity() {
         val paymaartId = retrievePaymaartId()
         val stream = contentResolver.openInputStream(uri)
 
-        if (stream != null && paymaartId != null) {
+        if (stream != null) {
             val objectKey = "kyc_data/$paymaartId/${UUID.randomUUID()}/${
                 getFileNameFromUri(
                     this, uri

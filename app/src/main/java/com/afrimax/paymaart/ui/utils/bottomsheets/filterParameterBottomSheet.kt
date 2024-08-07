@@ -36,7 +36,7 @@ class FilterParameterBottom(private val filterList: List<FilterParameter>): Bott
         }
         filterList.forEach { filterParameter ->
             when (filterParameter.name) {
-                "refunded" -> binding.filterParameterRefundedCheckbox.isChecked = filterParameter.isSelected
+                "approved" -> binding.filterParameterRefundedCheckbox.isChecked = filterParameter.isSelected
                 "pending" -> binding.filterParameterPendingCheckbox.isChecked = filterParameter.isSelected
                 "rejected" -> binding.filterParameterRejectedCheckbox.isChecked = filterParameter.isSelected
             }

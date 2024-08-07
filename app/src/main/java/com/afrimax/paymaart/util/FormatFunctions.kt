@@ -2,11 +2,14 @@ package com.afrimax.paymaart.util
 
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 private val DECIMAL_FORMAT_LONG = DecimalFormat("#,###.00")
 private val DECIMAL_FORMAT_SHORT = DecimalFormat("0.00")
+private val TIME_ZONE = "Africa/Blantyre"
 /**
     fun getFormattedAmount(amount: Double?): String{
         if (amount == null) {
@@ -63,11 +66,16 @@ fun <T> getFormattedAmount(amount: T?): String {
 }
 
 
-fun formatEpochTime(timestamp: Long?) : String {
+fun <T> formatEpochTime(timestamp: T?) : String {
     if (timestamp == null) {
         return "-"
     }
-    val date = Date(timestamp * 1000)
+    val newTimeStamp = when (timestamp) {
+        is Long -> timestamp
+        is String -> timestamp.toLongOrNull() ?: 0L
+        else -> 0L
+    }
+    val date = Date(newTimeStamp * 1000)
     return dateFormat.format(date)
 }
 
@@ -82,16 +90,35 @@ fun <T> formatEpochTimeTwo(timeStamp: T?): String {
     return dateFormatTwo.format(date)
 }
 
-//fun formatEpochTimeTwo(timestamp: Long?) : String {
-//    if (timestamp == null) {
-//        return "-"
-//    }
-//    val date = Date(timestamp * 1000)
-//    return dateFormatTwo.format(date)
-//}
+fun <T> formatEpochTimeThree(timeStamp: T?): String {
+    if (timeStamp == null) return ""
+    val newTimeStamp = when (timeStamp) {
+        is Long -> timeStamp
+        is String -> timeStamp.toLongOrNull() ?: 0L
+        else -> 0L
+    }
+    val date = Date(newTimeStamp * 1000)
+    return dateFormatThree.format(date)
+}
 
 val dateFormat: SimpleDateFormat
-    get() = SimpleDateFormat("dd MMM yyyy, HH:mm 'hours'", Locale.getDefault())
+    get() {
+        val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm 'hours'", Locale.getDefault())
+        sdf.timeZone = TimeZone.getTimeZone(TIME_ZONE)
+        return sdf
+    }
 
 val dateFormatTwo: SimpleDateFormat
-    get() = SimpleDateFormat("dd MMM yy", Locale.getDefault())
+    get()  {
+        val sdf = SimpleDateFormat("dd MMM yy", Locale.getDefault())
+        sdf.timeZone = TimeZone.getTimeZone(TIME_ZONE)
+        return sdf
+    }
+
+val dateFormatThree: SimpleDateFormat
+    get() {
+        val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+        sdf.timeZone = TimeZone.getTimeZone(TIME_ZONE)
+        return sdf
+    }
+
