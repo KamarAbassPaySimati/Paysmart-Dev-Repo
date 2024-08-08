@@ -11,8 +11,10 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityHelpCenterBinding
 import com.afrimax.paymaart.util.Constants
@@ -29,6 +31,11 @@ class HelpCenterActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val wic = WindowInsetsControllerCompat(window, window.decorView)
+        wic.isAppearanceLightStatusBars = true
+        wic.isAppearanceLightNavigationBars = true
+        window.statusBarColor = ContextCompat.getColor(this, R.color.offWhite)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.offWhite)
         initViews()
     }
 
