@@ -575,7 +575,7 @@
     <string name="activate_auto_renew_now">Activate Auto-renew</string>
     <string name="renewal_message_formatted">%1$s days for %2$s MWK</string>
     <string name="membership">Membership</string>
-    <string name="formatted_membership_value">%1$s days\n%2$s - %3$s</string>
+    <string name="formatted_membership_value">%1$s/ %2$s days\n%3$s - %4$s</string>
     <string name="unable_to_proceed">Unable to proceed due to multiple incorrect attempts.</string>
     <string name="insufficient_funds">Insufficient funds</string>
     <string name="full_kyc_reg">Full KYC Reg</string>
@@ -677,5 +677,8 @@
     <string name="g2p_pay_in_value">Pay-in G2P Value</string>
     <string name="trust_acc_int">Trust Acct. Interest</string>
     <string name="interest_period">Interest Period</string>
-    <string name="interest_period_formatted">Average balances\n %1$s - %2$s</string>
+    <string name="interest_period_formatted">Average balances\n %1$s</string>
+    <string name="refund_successful">Refund Successful</string>
+    <string name="g2p_pay_in_successful">G2P Pay-in Successful</string>
+    <string name="cash_out_failed">Cash-out Failed</string>
 </resources>

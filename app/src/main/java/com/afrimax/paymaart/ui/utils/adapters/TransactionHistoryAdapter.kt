@@ -51,8 +51,7 @@ class TransactionHistoryAdapter(
                 PAY_IN -> setTransactionDetails(transaction.enteredBy ?: "", transaction.enteredByName ?: "", R.string.pay_in)
                 REFUND -> setTransactionDetails(transaction.senderId, transaction.receiverName, R.string.refund)
                 INTEREST -> {
-                    setTransactionDetails(transaction.senderId, transaction.receiverName, R.string.interest)
-                    b.cardTransactionPaymaartIdTV.visibility = View.GONE
+                    setImageTransaction(R.string.interest, R.drawable.ico_paymaart_icon)
                 }
                 G2P_PAY_IN -> setTransactionDetails(transaction.senderId, transaction.senderName, R.string.g2p_pay_in)
                 PAYMAART -> setImageTransaction(R.string.paymaart, R.drawable.ico_paymaart_icon)

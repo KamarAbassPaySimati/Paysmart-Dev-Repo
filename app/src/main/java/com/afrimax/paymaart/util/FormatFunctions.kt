@@ -73,6 +73,7 @@ fun <T> formatEpochTime(timestamp: T?) : String {
     val newTimeStamp = when (timestamp) {
         is Long -> timestamp
         is String -> timestamp.toLongOrNull() ?: 0L
+        is Double -> timestamp.toLong()
         else -> 0L
     }
     val date = Date(newTimeStamp * 1000)

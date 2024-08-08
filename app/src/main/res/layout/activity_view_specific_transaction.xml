@@ -15,11 +15,10 @@
         android:background="@color/white"
         app:navigationIcon="@drawable/ic_arrow_back"
         app:navigationIconTint="@color/neutralGreyPrimaryText"
-        app:title="@string/privacy_policy"
         app:titleTextAppearance="@style/toolbarTextAppearanceTwo"
         app:titleTextColor="@color/neutralGreyPrimaryText"
         android:elevation="0dp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -45,7 +44,7 @@
                     android:drawablePadding="12dp"
                     android:fontFamily="@font/inter_regular"
                     android:padding="16dp"
-                    android:text="@string/cash_in_successful"
+                    android:text="@string/payment_successful"
                     android:textColor="@color/white"
                     android:textSize="20sp"
                     app:drawableStartCompat="@drawable/ico_payment_success" />
@@ -352,6 +351,35 @@
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_regular"
                                 android:text="@string/txn_fee"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/paymentReceiptActivityVatInclContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/vat_included"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/paymentReceiptActivityVatInclTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/inter_regular"
+                                android:text="@string/vat_included"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp" />
 

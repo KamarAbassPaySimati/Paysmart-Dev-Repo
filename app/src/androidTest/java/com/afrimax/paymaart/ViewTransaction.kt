@@ -17,11 +17,11 @@ import org.junit.runner.RunWith
 class ViewTransaction {
     @Then("I click on the first row of the transaction table")
     fun iClickFirstRowOfTransactions(){
-        Espresso.onView(withId(R.id.transactionHistory))
+        Espresso.onView(withId(R.id.transactionHistoryActivityRV))
             .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, ViewActions.click()))
     }
     @Then("I should be redirected to payment receipt screen")
     fun iShouldBeRedirectedPaymentReceiptScreen(){
-        Espresso.onView(withId(R.id.transactionDetails)).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.paymentReceiptActivity)).check(matches(isDisplayed()))
     }
 }

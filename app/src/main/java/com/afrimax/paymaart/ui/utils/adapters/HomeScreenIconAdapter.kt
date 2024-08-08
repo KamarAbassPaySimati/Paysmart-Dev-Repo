@@ -58,9 +58,16 @@ class HomeScreenIconAdapter(
                     binding.iconNameInitials.text = getInitials(transactionList[position].senderName)
                 }
                 INTEREST -> {
-                    binding.iconImage.visibility = View.GONE
-                    binding.iconName.text = holder.itemView.context.getString(R.string.interest)
                     binding.iconNameInitials.visibility = View.GONE
+                    binding.iconName.text =holder.itemView.context.getString(R.string.interest)
+                    binding.iconImage.also {
+                        it.visibility = View.VISIBLE
+                        Glide
+                            .with(holder.itemView.context)
+                            .load(R.drawable.ico_paymaart_icon)
+                            .fitCenter()
+                            .into(it)
+                    }
                 }
                 G2P_PAY_IN -> {
                     binding.iconImage.visibility = View.GONE
