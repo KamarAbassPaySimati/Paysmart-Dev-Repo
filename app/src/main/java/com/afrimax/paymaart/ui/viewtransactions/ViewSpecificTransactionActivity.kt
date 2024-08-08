@@ -214,7 +214,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 val membershipStart = formatEpochTimeTwo(membershipData.membershipStart)
                 val membershipExpiry = formatEpochTimeTwo(membershipData.membershipExpiry)
                 b.paymentReceiptActivityMembershipContainer.visibility = if (membershipData.membershipName == null) View.GONE else View.VISIBLE
-                b.paymentReceiptActivityMembershipTV.text = getString(R.string.formatted_membership_value, membershipName, membershipValidity, membershipStart, membershipExpiry)
+                b.paymentReceiptActivityMembershipTV.text = getString(R.string.formatted_membership_value_two, membershipName, membershipValidity, membershipStart, membershipExpiry)
             }
             INTEREST -> {
                 setupCommonView(commonView)
