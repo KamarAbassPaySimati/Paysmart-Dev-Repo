@@ -40,8 +40,9 @@ class TransactionHistoryAdapter(
             )
 
             // Set common views
+            b.cardTransactionNameTV.visibility = View.GONE
             b.cardTransactionIV.visibility = View.GONE
-            b.cardTransactionShortNameTV.visibility = View.VISIBLE
+            b.cardTransactionShortNameTV.visibility = View.GONE
 
             // Set transaction-specific views
             when (transaction.transactionType) {
@@ -49,8 +50,10 @@ class TransactionHistoryAdapter(
                 CASH_OUT, CASHOUT, CASH_OUT_REQUEST, CASH_OUT_FAILED -> setTransactionDetails(transaction.receiverId, transaction.receiverName, R.string.cash_out)
                 PAY_IN -> setTransactionDetails(transaction.enteredBy ?: "", transaction.enteredByName ?: "", R.string.pay_in)
                 REFUND -> setTransactionDetails(transaction.senderId, transaction.receiverName, R.string.refund)
-                INTEREST -> setTransactionDetails(transaction.senderId, transaction.receiverName, R.string.interest)
-                G2P_PAY_IN -> setTransactionDetails(transaction.senderId, transaction.receiverName, R.string.g2p_pay_in)
+                INTEREST -> {
+                    setImageTransaction(R.string.interest, R.drawable.ico_paymaart_icon)
+                }
+                G2P_PAY_IN -> setTransactionDetails(transaction.senderId, transaction.senderName, R.string.g2p_pay_in)
                 PAYMAART -> setImageTransaction(R.string.paymaart, R.drawable.ico_paymaart_icon)
                 AFRIMAX -> setImageTransaction(R.string.afrimax, R.drawable.ico_afrimax)
                 PAY_PERSON -> {
@@ -63,42 +66,63 @@ class TransactionHistoryAdapter(
         }
 
         private fun setTransactionDetails(id: String, name: String, nameResId: Int) {
-            b.cardTransactionNameTV.text = context.getString(nameResId)
-            b.cardTransactionPaymaartIdTV.text = id
-            b.cardTransactionShortNameTV.text = getInitials(name)
+            b.cardTransactionNameTV.apply {
+                visibility = View.VISIBLE
+                text = context.getString(nameResId)
+            }
+            b.cardTransactionPaymaartIdTV.apply {
+                visibility = View.VISIBLE
+                text = id
+            }
+            b.cardTransactionShortNameTV.apply {
+                visibility = View.VISIBLE
+                text = getInitials(name)
+            }
         }
 
         private fun setImageTransaction(nameResId: Int, imageResId: Int) {
-            b.cardTransactionNameTV.text = context.getString(nameResId)
+            b.cardTransactionNameTV.apply {
+                visibility = View.VISIBLE
+                text = context.getString(nameResId)
+            }
             b.cardTransactionPaymaartIdTV.visibility = View.GONE
             b.cardTransactionShortNameTV.visibility = View.GONE
-            b.cardTransactionIV.visibility = View.VISIBLE
-            Glide
-                .with(context)
-                .load(imageResId)
-                .into(b.cardTransactionIV)
+            b.cardTransactionIV.also {
+                it.visibility = View.VISIBLE
+                Glide
+                    .with(context)
+                    .load(imageResId)
+                    .into(it)
+            }
         }
 
         private fun setPaymaartTransactionType(name: String, userId: String, image: String?){
-            b.cardTransactionNameTV.text = name
-            b.cardTransactionPaymaartIdTV.text = userId
+            b.cardTransactionNameTV.apply {
+                visibility = View.VISIBLE
+                text = name
+            }
+            b.cardTransactionPaymaartIdTV.apply {
+                visibility = View.VISIBLE
+                text = userId
+            }
             if (image.isNullOrEmpty()) {
                 b.cardTransactionIV.visibility = View.GONE
-                b.cardTransactionShortNameTV.visibility = View.VISIBLE
-                b.cardTransactionShortNameTV.text = getInitials(name)
+                b.cardTransactionShortNameTV.apply {
+                    visibility = View.VISIBLE
+                    text = getInitials(name)
+                }
             }else {
                 b.cardTransactionShortNameTV.visibility = View.GONE
-                b.cardTransactionIV.visibility = View.VISIBLE
-                Glide
-                    .with(context)
-                    .load(BuildConfig.CDN_BASE_URL + image)
-                    .centerCrop()
-                    .into(b.cardTransactionIV)
+                b.cardTransactionIV.also {
+                    it.visibility = View.VISIBLE
+                    Glide
+                        .with(context)
+                        .load(BuildConfig.CDN_BASE_URL + image)
+                        .centerCrop()
+                        .into(it)
+                }
             }
-
-
         }
-        
     }
 
     class PagerLoaderViewHolder(b: CardPagerLoaderBinding) : RecyclerView.ViewHolder(b.root) {}
