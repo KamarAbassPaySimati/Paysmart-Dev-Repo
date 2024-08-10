@@ -26,6 +26,7 @@ import com.afrimax.paymaart.data.model.PayPersonRequestBody
 import com.afrimax.paymaart.data.model.PayPersonResponse
 import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paymaart.data.model.PayToAfrimaxResponse
+import com.afrimax.paymaart.data.model.PersonTransactions
 import com.afrimax.paymaart.data.model.RefundRequestResponse
 import com.afrimax.paymaart.data.model.SaveBasicDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveIdentitySimplifiedToFullRequest
@@ -216,6 +217,9 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/search-by-phone")
     suspend fun searchUsersByPhoneCredentials(@Header("Authorization") header: String, @Body body: PayPersonRequestBody): Response<PayPersonResponse>
+
+    @GET("$CUSTOMER_USER/view-transaction")
+    fun viewPersonTransactionHistory(@Header("Authorization") header: String, @Query("paymaart_id") paymaartId: String, @Query("page") page: Int = 1): Call<PersonTransactions>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

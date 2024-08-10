@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    android:gravity="start"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/datePaymentListDatePill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/date_time"
+        android:background="@drawable/date_pill_bg"
+        android:fontFamily="@font/inter_regular"
+        android:textSize="10sp"
+        android:textColor="@color/black"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="16dp"
+        tools:ignore="SmallSp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="@dimen/_180sdp"
+        android:maxWidth="@dimen/_250sdp"
+        android:background="@drawable/payment_list_tile_bg"
+        android:paddingVertical="20dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="4dp">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/paymentListAdapterAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_0_00"
+                android:fontFamily="@font/inter_semibold"
+                android:textColor="@color/primaryColor"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mwk"
+                android:layout_marginStart="4dp"
+                android:fontFamily="@font/inter_regular"
+                android:textColor="@color/primaryColor"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/paymentListAdapterTransactionId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:text="@string/txn_id_formatted"
+            android:fontFamily="@font/inter_regular"
+            android:textSize="12sp"
+            android:textColor="@color/neutralGreyPrimaryText"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/paymentListAdapterPaymentStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/paymaart"
+                app:drawableStartCompat="@drawable/ic_payment_success"
+                android:drawablePadding="5dp"
+                android:fontFamily="@font/inter_regular"
+                android:textSize="12sp"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/paymentListAdapterPaymentDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date_time"
+                android:fontFamily="@font/inter_regular"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="8sp"
+                android:layout_weight="1"
+                tools:ignore="SmallSp" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/paymentListAdapterDivider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/highlightedLight" />
+
+        <TextView
+            android:id="@+id/paymentListAdapterNoteTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxWidth="@dimen/_225sdp"
+            android:text="@string/note_formatted"
+            android:justificationMode="inter_word"
+            android:fontFamily="@font/inter_regular"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="12sp"
+            tools:ignore="UnusedAttribute"
+            android:layout_marginTop="5dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -2,6 +2,7 @@ package com.afrimax.paymaart.ui.payperson
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.ContactsContract
@@ -22,6 +23,7 @@ import com.afrimax.paymaart.data.model.PayPersonResponse
 import com.afrimax.paymaart.databinding.ActivityListPersonTransactionBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.adapters.PayPersonListAdapter
+import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.showLogE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -64,6 +66,15 @@ class ListPersonTransactionActivity : BaseActivity() {
 
     private fun setupView(){
         val payPersonListAdapter = PayPersonListAdapter(mContactsList)
+        payPersonListAdapter.setOnClickListener(object : PayPersonListAdapter.OnClickListener{
+            override fun onClick(transaction: PayPerson) {
+                val intent = Intent(this@ListPersonTransactionActivity, PersonTransactionActivity::class.java)
+                intent.putExtra(Constants.PAYMAART_ID, transaction.paymaartId)
+                intent.putExtra(Constants.CUSTOMER_NAME, transaction.fullName)
+                intent.putExtra(Constants.PROFILE_PICTURE, transaction.profilePicture)
+                startActivity(intent)
+            }
+        })
         binding.listPersonTransactionRV.apply {
             layoutManager = LinearLayoutManager(this@ListPersonTransactionActivity, LinearLayoutManager.VERTICAL, false)
             adapter = payPersonListAdapter
