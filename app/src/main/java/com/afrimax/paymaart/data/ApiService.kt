@@ -13,6 +13,7 @@ import com.afrimax.paymaart.data.model.GetAfrimaxPlansResponse
 import com.afrimax.paymaart.data.model.GetInstitutesResponse
 import com.afrimax.paymaart.data.model.GetSharedSecretRequest
 import com.afrimax.paymaart.data.model.GetSharedSecretResponse
+import com.afrimax.paymaart.data.model.GetTransactionDetailsResponse
 import com.afrimax.paymaart.data.model.GetUserKycDataResponse
 import com.afrimax.paymaart.data.model.HomeScreenResponse
 import com.afrimax.paymaart.data.model.KycSaveAddressDetailsRequest
@@ -203,6 +204,9 @@ interface ApiService {
 
     @GET("agent-users/customer/list-transaction")
     fun getTransactionHistory(@Header("Authorization") header: String, @Query("page") page: Int?, @Query("search") search: String?, @Query("type") type: String?, @Query("time") time: Int?): Call<TransactionHistoryResponse>
+
+    @GET("agent-users/customer/view-transaction")
+    fun getTransactionDetailsApi(@Header("Authorization") header: String, @Query("transaction_id") transactionId: String): Call<GetTransactionDetailsResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

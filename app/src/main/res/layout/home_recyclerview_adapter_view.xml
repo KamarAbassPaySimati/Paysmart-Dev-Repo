@@ -21,7 +21,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:src="@drawable/ic_arrow_back"
-            style="@style/profileImagePreviewSmall"
+            app:shapeAppearanceOverlay="@style/profileImagePreviewSmall"
             android:visibility="gone"/>
 
         <TextView
