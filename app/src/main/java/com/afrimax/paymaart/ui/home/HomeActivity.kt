@@ -14,7 +14,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -50,11 +52,17 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.ViewWalletPinSheet
 import com.afrimax.paymaart.ui.utils.interfaces.HomeInterface
 import com.afrimax.paymaart.ui.viewkyc.ViewKycDetailsActivity
 import com.afrimax.paymaart.ui.viewtransactions.TransactionHistoryListActivity
+import com.afrimax.paymaart.ui.viewtransactions.ViewSpecificTransactionActivity
 import com.afrimax.paymaart.ui.webview.HelpCenterActivity
 import com.afrimax.paymaart.ui.webview.ToolBarType
 import com.afrimax.paymaart.ui.webview.WebViewActivity
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getFormattedAmount
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -75,6 +83,10 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var customerName: String = ""
     private var allRecentTransactions: MutableList<IndividualTransactionHistory> = mutableListOf()
     private lateinit var notificationPermissionCheckLauncher: ActivityResultLauncher<String>
+
+    private lateinit var checkUpdateLauncher: ActivityResultLauncher<IntentSenderRequest>
+    private lateinit var appUpdateManager: AppUpdateManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -96,9 +108,11 @@ class HomeActivity : BaseActivity(), HomeInterface {
         setUpListeners()
         setDrawerListeners()
         askNotificationPermission()
+        checkForUpdate()
     }
 
     private fun initViews() {
+        appUpdateManager = AppUpdateManagerFactory.create(this)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -109,7 +123,15 @@ class HomeActivity : BaseActivity(), HomeInterface {
             }
         })
 
-        notificationPermissionCheckLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+        notificationPermissionCheckLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
+
+        checkUpdateLauncher =
+            registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result: ActivityResult ->
+                if (result.resultCode != RESULT_OK) {
+                    finish()
+                }
+            }
     }
 
     private fun setUpListeners() {
@@ -188,13 +210,22 @@ class HomeActivity : BaseActivity(), HomeInterface {
                 startActivity(Intent(this, TransactionHistoryListActivity::class.java))
             }
         }
-        val userPaymaartId = retrievePaymaartId() ?: ""
+        val userPaymaartId = retrievePaymaartId()
+        val transactionHistoryListAdapter = HomeScreenIconAdapter(allRecentTransactions, userPaymaartId)
         b.homeActivityPersonsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityTransactionsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityMerchantsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityPersonsRecyclerView.adapter = HomeScreenIconAdapter(emptyList(), userPaymaartId)
-        b.homeActivityTransactionsRecyclerView.adapter = HomeScreenIconAdapter(allRecentTransactions, userPaymaartId)
+        b.homeActivityTransactionsRecyclerView.adapter = transactionHistoryListAdapter
         b.homeActivityMerchantsRecyclerView.adapter = HomeScreenIconAdapter(emptyList(), userPaymaartId)
+
+        transactionHistoryListAdapter.setOnClickListener(object : HomeScreenIconAdapter.OnClickListener {
+            override fun onClick(transaction: IndividualTransactionHistory) {
+                val intent = Intent(this@HomeActivity, ViewSpecificTransactionActivity::class.java)
+                intent.putExtra(Constants.TRANSACTION_ID, transaction.transactionId)
+                startActivity(intent)
+            }
+        })
     }
 
     private fun onClickEyeButton() {
@@ -644,9 +675,37 @@ class HomeActivity : BaseActivity(), HomeInterface {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
+    private fun checkForUpdate() {
+        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(
+                    AppUpdateType.IMMEDIATE
+                )
+            ) {
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    checkUpdateLauncher,
+                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                )
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         getHomeScreenDataApi()
+
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                // If an in-app update is already running, resume the update.
+                appUpdateManager.startUpdateFlowForResult(
+                    appUpdateInfo,
+                    checkUpdateLauncher,
+                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build()
+                )
+            }
+        }
     }
 
     companion object {

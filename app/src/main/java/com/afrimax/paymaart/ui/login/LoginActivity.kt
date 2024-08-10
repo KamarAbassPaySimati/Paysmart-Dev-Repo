@@ -17,6 +17,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatSpinner
+import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -32,6 +34,7 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.LoginLoginByDialog
 import com.afrimax.paymaart.ui.utils.interfaces.LoginByDialogInterface
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.LoginPinTransformation
+import com.afrimax.paymaart.util.countries
 import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
@@ -40,12 +43,10 @@ import com.amplifyframework.auth.result.step.AuthSignInStep
 import com.amplifyframework.core.Amplify
 
 class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
-
     private lateinit var b: ActivityLoginBinding
-
     private var isPinSelected = true
     private var isPasswordSelected = false
-
+    private val items = countries.map { it.dialCode }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
@@ -66,43 +67,21 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
     private fun initViews() {
         b.loginActivityPinET.transformationMethod = LoginPinTransformation()
+        val adapter = ArrayAdapter(this, R.layout.spinner_country_code, items)
+        setSpinnerDropdownHeight(b.loginActivityCountryCodeSpinner, 800, 150)
+        b.loginActivityCountryCodeSpinner.adapter = adapter
 
-        if (BuildConfig.STAGE == Constants.STAGE_DEV || BuildConfig.STAGE == Constants.STAGE_QA) {
-            //This is required for Indian phone number testing
-            b.loginActivityCountryCodeSpinner.visibility = View.VISIBLE
-            b.loginActivityCountryCodeDropDownIV.visibility = View.VISIBLE
-            b.loginActivityCountryCodeTV.visibility = View.GONE
+    }
 
-            val items = arrayOf("+265", "+91")
-            val adapter = ArrayAdapter(this, R.layout.spinner_country_code, items)
-            b.loginActivityCountryCodeSpinner.adapter = adapter
-
-            b.loginActivityCountryCodeSpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        p0: AdapterView<*>?, p1: View?, position: Int, p3: Long
-                    ) {
-                        when (position) {
-                            0 -> b.loginActivityPhoneET.filters =
-                                arrayOf(InputFilter.LengthFilter(11))
-
-                            //Indian Phone numbers are 10 in size + 2 for space
-                            1 -> b.loginActivityPhoneET.filters =
-                                arrayOf(InputFilter.LengthFilter(12))
-                        }
-                        if (b.loginActivityPhoneET.text.toString()
-                                .isNotEmpty()
-                        ) b.loginActivityPhoneET.text!!.clear()
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                        //
-                    }
-                }
-        } else {
-            b.loginActivityCountryCodeSpinner.visibility = View.GONE
-            b.loginActivityCountryCodeDropDownIV.visibility = View.GONE
-            b.loginActivityCountryCodeTV.visibility = View.VISIBLE
+    private fun setSpinnerDropdownHeight(spinner: AppCompatSpinner, height: Int, verticalOffset: Int) {
+        try {
+            val popup = AppCompatSpinner::class.java.getDeclaredField("mPopup")
+            popup.isAccessible = true
+            val popupWindow = popup.get(spinner) as ListPopupWindow
+            popupWindow.height = height
+            popupWindow.verticalOffset = verticalOffset
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -110,6 +89,26 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
         b.loginActivityBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        b.loginActivityCountryCodeTV.setOnClickListener {
+            b.loginActivityCountryCodeSpinner.performClick()
+        }
+
+        b.loginActivityCountryCodeSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    p0: AdapterView<*>?, p1: View?, position: Int, p3: Long
+                ) {
+                    b.loginActivityCountryCodeTV.text = items[position]
+                    if (b.loginActivityPhoneET.text.toString()
+                            .isNotEmpty()
+                    ) b.loginActivityPhoneET.text!!.clear()
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    //
+                }
+            }
 
         b.loginActivityPinButton.setOnClickListener {
             onClickPinButton()

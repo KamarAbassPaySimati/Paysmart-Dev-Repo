@@ -55,9 +55,8 @@ class TransactionHistorySheet: BottomSheetDialogFragment(){
 
         b.transactionHistorySheetClearAllButton.setOnClickListener {
             type = ""
-            setTransactionTypeFilter(emptyList())
-//            sheetCallback.clearAllFilters()
-//            dismiss()
+            sheetCallback.clearAllFilters()
+            dismiss()
         }
 
         b.transactionHistorySheetApplyButton.setOnClickListener {
