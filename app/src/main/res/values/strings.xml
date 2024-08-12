@@ -687,4 +687,7 @@
     <string name="txn_id_formatted">Txn ID: %1$s</string>
     <string name="note_formatted">Note: %1$s</string>
     <string name="paid">Paid</string>
+    <string name="paymaart_id_and_name">Paymaart ID, name</string>
+    <string name="phone_number_and_name">Phone number, name</string>
+    <string name="no_contacts_permission">No contacts Permission</string>
 </resources>

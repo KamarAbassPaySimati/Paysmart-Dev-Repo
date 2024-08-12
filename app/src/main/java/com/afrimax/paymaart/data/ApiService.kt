@@ -17,7 +17,6 @@ import com.afrimax.paymaart.data.model.GetTransactionDetailsResponse
 import com.afrimax.paymaart.data.model.GetUserKycDataResponse
 import com.afrimax.paymaart.data.model.HomeScreenResponse
 import com.afrimax.paymaart.data.model.KycSaveAddressDetailsRequest
-import com.afrimax.paymaart.data.model.ResendCredentialsRequest
 import com.afrimax.paymaart.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
@@ -28,6 +27,7 @@ import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paymaart.data.model.PayToAfrimaxResponse
 import com.afrimax.paymaart.data.model.PersonTransactions
 import com.afrimax.paymaart.data.model.RefundRequestResponse
+import com.afrimax.paymaart.data.model.ResendCredentialsRequest
 import com.afrimax.paymaart.data.model.SaveBasicDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveIdentitySimplifiedToFullRequest
 import com.afrimax.paymaart.data.model.SaveInfoSimplifiedToFullRequest
@@ -215,11 +215,14 @@ interface ApiService {
     @GET("$CUSTOMER_USER/search-by-id")
     suspend fun searchUsersByPaymaartCredentials(@Header("Authorization") header: String, @Query("page") page: Int = 1, @Query("search") search: String?): Response<PayPersonResponse>
 
-    @GET("$CUSTOMER_USER/search-by-phone")
+    @POST("$CUSTOMER_USER/search-by-phone")
     suspend fun searchUsersByPhoneCredentials(@Header("Authorization") header: String, @Body body: PayPersonRequestBody): Response<PayPersonResponse>
 
     @GET("$CUSTOMER_USER/view-transaction")
     fun viewPersonTransactionHistory(@Header("Authorization") header: String, @Query("paymaart_id") paymaartId: String, @Query("page") page: Int = 1): Call<PersonTransactions>
+
+    @GET("$CUSTOMER_USER/recent-transaction")
+    fun getPersonRecentTransactionList(@Header("Authorization") header: String, @Query("page") page: Int = 1): Call<PayPersonResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

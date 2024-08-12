@@ -31,7 +31,7 @@ android {
         applicationId 'com.afrimax.paymaart'
         minSdk 24
         targetSdk 34
-        versionCode 1
+        versionCode 19
         versionName "1.0"
 
         testApplicationId 'com.afrimax.paymaart'

@@ -51,7 +51,7 @@ class PersonTransactionActivity : BaseActivity() {
         windowInsetsController.isAppearanceLightStatusBars = false
         windowInsetsController.isAppearanceLightNavigationBars = false
         window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.primaryColor)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
         setupView()
         getPersonTransactions()
     }
