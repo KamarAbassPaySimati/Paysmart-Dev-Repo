@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.PayPerson
@@ -25,11 +26,14 @@ import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.adapters.PayPersonListAdapter
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.showLogE
+import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 
 private const val REQUEST_READ_CONTACTS = 111
@@ -38,10 +42,13 @@ class ListPersonTransactionActivity : BaseActivity() {
     private val mContactsList = mutableListOf<PayPerson>()
     private var typeJob: Job? = null
     private var searchByPaymaartCredentials: Boolean = true
-    private var phoneNumberList: List<String> = emptyList()
+    private var phoneNumberList: MutableList<Contacts> = mutableListOf()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private var searchText: String = ""
-    private var searchJob: Job? = null
+    private var isPaginating: Boolean = false
+    private var paginationEnd: Boolean = false
+    private var page: Int = 1
+    private var totalListItems: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListPersonTransactionBinding.inflate(layoutInflater)
@@ -57,11 +64,9 @@ class ListPersonTransactionActivity : BaseActivity() {
         wic.isAppearanceLightNavigationBars = true
         window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
-
-        checkPermissionForContactsRequest()
         setupView()
         setupListeners()
-        showEmptyScreen(true)
+        getRecentPersonTransactions()
     }
 
     private fun setupView(){
@@ -79,6 +84,44 @@ class ListPersonTransactionActivity : BaseActivity() {
             layoutManager = LinearLayoutManager(this@ListPersonTransactionActivity, LinearLayoutManager.VERTICAL, false)
             adapter = payPersonListAdapter
         }
+        binding.listPersonTransactionRV.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE && !isPaginating) {
+                    isPaginating = true
+                    if (!paginationEnd) {
+                        if (searchText.isNotEmpty()){
+                            paymaartUserPagination()
+                        }else {
+                            getRecentPersonTransactionsPagination()
+                        }
+                    }
+                }
+            }
+        })
+        binding.listPersonTransactionContactsIV.setOnClickListener {
+            checkPermissionForContactsRequest()
+            if(ContextCompat.checkSelfPermission(this@ListPersonTransactionActivity, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+                if (searchByPaymaartCredentials) {
+                    binding.listPersonTransactionSearchET.hint = getString(R.string.phone_number_and_name)
+                }else {
+                    binding.listPersonTransactionSearchET.hint = getString(R.string.paymaart_id_and_name)
+                }
+            }else{
+                showToast(getString(R.string.no_contacts_permission))
+            }
+            if (searchText.isNotEmpty()) {
+                showEmptyScreen(true)
+                mContactsList.clear()
+                binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
+            }
+            searchByPaymaartCredentials = !searchByPaymaartCredentials
+            binding.listPersonTransactionSearchET.text.clear()
+        }
+
+        binding.listPersonTransactionBackButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun setupListeners() {
@@ -92,30 +135,38 @@ class ListPersonTransactionActivity : BaseActivity() {
                 typeJob = coroutineScope.launch {
                     delay(500)
                     editable?.let { text ->
+                        phoneNumberList.clear()
                         searchText = text.toString()
-                        if (searchText.isNotEmpty()) {
-                            searchForPaymaartUser()
-                        } else {
-                            mContactsList.clear()
-                            binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
-                            if(searchText.isNotEmpty()) {
-                                showEmptyScreen(true)
-                            }else{
-                                showEmptyScreen(false)
+                        if (searchByPaymaartCredentials){
+                            if (searchText.isNotEmpty() && searchText.length > 4) {
+                                searchForPaymaartUser()
+                            } else {
+                                mContactsList.clear()
+                                binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
+                                if(searchText.isNotEmpty()) {
+                                    showEmptyScreen(true)
+                                }else{
+                                    showEmptyScreen(false)
+                                }
+                            }
+                        }else{
+                            if (searchText.isNotEmpty() && searchText.length > 4) {
+                                when {
+                                    searchText.toIntOrNull() != null -> searchContacts(searchText.toInt())
+                                    searchText.toLongOrNull() != null -> searchContacts(searchText.toLong())
+                                    else -> searchContacts(searchText)
+                                }
+                                searchForPaymaartUser()
+                            } else {
+                                mContactsList.clear()
+                                binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
+                                if(searchText.isNotEmpty()) {
+                                    showEmptyScreen(true)
+                                }else{
+                                    showEmptyScreen(false)
+                                }
                             }
                         }
-
-//                        val inputText = text.toString()
-//                        if (inputText.isNotEmpty()) {
-//                            when {
-//                                inputText.toIntOrNull() != null -> searchContacts(inputText.toInt())
-//                                inputText.toLongOrNull() != null -> searchContacts(inputText.toLong())
-//                                else -> searchContacts(inputText)
-//                            }
-//                        } else {
-//                            mContactsList.clear()
-//                            binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
-//                        }
                     }
                 }
             }
@@ -185,9 +236,8 @@ class ListPersonTransactionActivity : BaseActivity() {
                 }
             }
             cursor.close()
+            phoneNumberList.addAll(contactsSet)
         }
-        mContactsList.clear()
-//        mContactsList.addAll(contactsSet)
     }
 
     @SuppressLint("Range")
@@ -229,9 +279,8 @@ class ListPersonTransactionActivity : BaseActivity() {
                 }
             }
             cursor.close()
+            phoneNumberList.addAll(contactsSet)
         }
-        mContactsList.clear()
-//        mContactsList.addAll(contactsSet)
     }
 
     @SuppressLint("Range")
@@ -273,17 +322,16 @@ class ListPersonTransactionActivity : BaseActivity() {
                 }
             }
             cursor.close()
+            phoneNumberList.addAll(contactsSet)
         }
-        mContactsList.clear()
-//        mContactsList.addAll(contactsSet)
     }
+
     private fun searchForPaymaartUser() {
-        var response: Response<PayPersonResponse>
         coroutineScope.launch {
             showLoader()
             val idToken = fetchIdToken()
             try {
-                response = if (searchByPaymaartCredentials)
+                val response = if (searchByPaymaartCredentials)
                     ApiClient.apiService.searchUsersByPaymaartCredentials(
                         header = idToken,
                         search = searchText
@@ -297,11 +345,14 @@ class ListPersonTransactionActivity : BaseActivity() {
                     hideLoader()
                     val data = response.body()
                     if (data != null) {
+                        totalListItems += data.payPersonList.size
+                        paginationEnd = totalListItems >= data.totalCount
+                        if (!paginationEnd) {page++}
                         mContactsList.clear()
                         mContactsList.addAll(data.payPersonList)
                         if (mContactsList.isEmpty()) {
                             binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
-                            showEmptyScreen(true)
+                            showEmptyScreen(false)
                         }else {
                             binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
                         }
@@ -317,6 +368,102 @@ class ListPersonTransactionActivity : BaseActivity() {
                 }else{
                     showEmptyScreen(false)
                 }
+                showToast(getString(R.string.default_error_toast))
+            }
+        }
+    }
+
+    private fun getRecentPersonTransactions() {
+        coroutineScope.launch {
+            showLoader()
+            val idToken = fetchIdToken()
+            val recentTransactionHandler = ApiClient.apiService.getPersonRecentTransactionList(idToken, page)
+
+            recentTransactionHandler.enqueue(object : Callback<PayPersonResponse> {
+                override fun onResponse(call: Call<PayPersonResponse>, response: Response<PayPersonResponse>, ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val data = response.body()
+                        if (data?.payPersonList.isNullOrEmpty()) {
+                            showEmptyScreen(true)
+                        }else{
+                            totalListItems += data?.payPersonList?.size!!
+                            paginationEnd = totalListItems >= data.totalCount
+                            if (!paginationEnd) {page++}
+                            mContactsList.clear()
+                            mContactsList.addAll(data.payPersonList)
+                        }
+                    }
+                    hideLoader()
+                }
+                override fun onFailure(call: Call<PayPersonResponse>, throwable: Throwable) {
+                    hideLoader()
+                    showToast(getString(R.string.default_error_toast))
+                }
+
+            })
+        }
+    }
+
+    private fun getRecentPersonTransactionsPagination() {
+        coroutineScope.launch {
+            showLoader()
+            val idToken = fetchIdToken()
+            val recentTransactionHandler = ApiClient.apiService.getPersonRecentTransactionList(idToken, page)
+
+            recentTransactionHandler.enqueue(object : Callback<PayPersonResponse> {
+                override fun onResponse(call: Call<PayPersonResponse>, response: Response<PayPersonResponse>, ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val data = response.body()
+                        if (data?.payPersonList.isNullOrEmpty()) {
+                            showEmptyScreen(true)
+                        }else{
+                            totalListItems += data?.payPersonList?.size!!
+                            paginationEnd = totalListItems >= data.totalCount
+                            if (!paginationEnd) {page++}
+                            mContactsList.clear()
+                            mContactsList.addAll(data.payPersonList)
+                        }
+                    }
+                    hideLoader()
+                }
+                override fun onFailure(call: Call<PayPersonResponse>, throwable: Throwable) {
+                    hideLoader()
+                    showToast(getString(R.string.default_error_toast))
+                }
+
+            })
+        }
+    }
+
+    private fun paymaartUserPagination() {
+        coroutineScope.launch {
+            val idToken = fetchIdToken()
+            try {
+                val response = if (searchByPaymaartCredentials)
+                    ApiClient.apiService.searchUsersByPaymaartCredentials(
+                        header = idToken,
+                        search = searchText
+                    )
+                else
+                    ApiClient.apiService.searchUsersByPhoneCredentials(
+                        header = idToken,
+                        body = PayPersonRequestBody(phoneNumberList)
+                    )
+                if (response.isSuccessful && response.body() != null) {
+                    val data = response.body()
+                    if (data != null) {
+                        val previousListSize = mContactsList.size
+                        totalListItems += data.payPersonList.size
+                        paginationEnd = totalListItems >= data.totalCount
+                        if (!paginationEnd) {page++}
+                        mContactsList.addAll(data.payPersonList)
+                        binding.listPersonTransactionRV.adapter?.notifyItemRangeInserted(previousListSize, mContactsList.size)
+                    }
+                    isPaginating = false
+                }else{
+                    showEmptyScreen(false)
+                }
+            }catch (e: Exception){
                 showToast(getString(R.string.default_error_toast))
             }
         }
@@ -343,14 +490,13 @@ class ListPersonTransactionActivity : BaseActivity() {
         binding.listPersonTransactionNoDataFoundIV.setImageResource(if(condition) R.drawable.ico_search_for_users else R.drawable.ico_no_data_found)
         binding.listPersonTransactionNoDataFoundTitleTV.text = getString(if (condition) R.string.no_transactions_yet else R.string.no_data_found)
         binding.listPersonTransactionNoDataFoundSubtextTV.text = getString(if (condition) R.string.no_transactions_subtext else R.string.no_data_found_subtext)
-
     }
 }
 
-
-
 data class Contacts(
+    @SerializedName("name")
     val name: String,
+    @SerializedName("phone")
     val phoneNumber: String
 
 )

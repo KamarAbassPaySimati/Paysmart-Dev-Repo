@@ -1,15 +1,20 @@
 package com.afrimax.paymaart.ui.utils.adapters
 
 import android.content.Context
+import android.provider.Settings.Global.getString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.model.Transaction
 import com.afrimax.paymaart.databinding.DatePaymentListAdapterBinding
 import com.afrimax.paymaart.databinding.ReceivedPaymentListAdapterViewBinding
 import com.afrimax.paymaart.databinding.SentPaymentListAdapterViewBinding
 import com.afrimax.paymaart.util.formatEpochTime
+import com.afrimax.paymaart.util.formatEpochTimeFour
+import com.afrimax.paymaart.util.formatEpochTimeThree
 import com.afrimax.paymaart.util.formatEpochTimeTwo
 import com.afrimax.paymaart.util.showLogE
 
@@ -95,8 +100,8 @@ class PaymentListAdapter(val context: Context, private val transactions: List<Tr
         private val note = binding.paymentListAdapterNoteTV
         fun bind(transaction: Transaction){
             totalAmount.text = transaction.totalAmount
-            date.text = formatEpochTime(transaction.createdAt)
-            transactionId.text = transaction.transactionId
+            date.text = formatEpochTimeThree(transaction.createdAt)
+            transactionId.text = "Txn ID: ${transaction.transactionId}"
             note.text = transaction.note ?: ""
             if ( transaction.note.isNullOrEmpty() ){
                 note.visibility = View.GONE
@@ -108,7 +113,7 @@ class PaymentListAdapter(val context: Context, private val transactions: List<Tr
     inner class PaymentDateHeaderViewHolder(binding: DatePaymentListAdapterBinding): RecyclerView.ViewHolder(binding.root) {
         private val dateText = binding.datePaymentListDatePill
         fun bind(transaction: Transaction){
-            dateText.text = formatEpochTime(transaction.createdAt)
+            dateText.text = formatEpochTimeFour(transaction.createdAt)
         }
     }
 

@@ -1,4 +1,5 @@
 package com.afrimax.paymaart.data.model
+import com.afrimax.paymaart.ui.payperson.Contacts
 import com.google.gson.annotations.SerializedName
 
 
@@ -13,16 +14,18 @@ data class PayPersonResponse(
 
 data class PayPerson(
     @SerializedName("full_name")
-    val fullName: String,
+    val fullName: String = "",
     @SerializedName("paymaart_id")
-    val paymaartId: String,
+    val paymaartId: String? = null,
     @SerializedName("phone_number")
-    val phoneNumber: String,
+    val phoneNumber: String = "",
     @SerializedName("profile_pic")
-    val profilePicture: String? = null
+    val profilePicture: String? = null,
+    @SerializedName("country_code")
+    val countryCode: String = "",
 )
 
 data class PayPersonRequestBody(
     @SerializedName("phone_number")
-    val phoneNumber: List<String>
+    val phoneNumber: List<Contacts>
 )

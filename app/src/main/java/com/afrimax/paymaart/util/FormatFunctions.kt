@@ -103,6 +103,17 @@ fun <T> formatEpochTimeThree(timeStamp: T?): String {
     return dateFormatThree.format(date)
 }
 
+fun <T> formatEpochTimeFour(timeStamp: T?): String {
+    if (timeStamp == null) return ""
+    val newTimeStamp = when (timeStamp) {
+        is Long -> timeStamp
+        is String -> timeStamp.toLongOrNull() ?: 0L
+        else -> 0L
+    }
+    val date = Date(newTimeStamp * 1000)
+    return dateFormatFour.format(date)
+}
+
 val dateFormat: SimpleDateFormat
     get() {
         val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm 'hours'", Locale.getDefault())
@@ -120,6 +131,13 @@ val dateFormatTwo: SimpleDateFormat
 val dateFormatThree: SimpleDateFormat
     get() {
         val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+        sdf.timeZone = TimeZone.getTimeZone(TIME_ZONE)
+        return sdf
+    }
+
+val dateFormatFour: SimpleDateFormat
+    get() {
+        val sdf =  SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         sdf.timeZone = TimeZone.getTimeZone(TIME_ZONE)
         return sdf
     }

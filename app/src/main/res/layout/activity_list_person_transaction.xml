@@ -59,7 +59,7 @@
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/close_button_data"
                 android:padding="12dp"
-                android:src="@drawable/ic_phone" />
+                android:src="@drawable/ic_phone"/>
 
             <View
                 android:layout_width="1dp"
@@ -79,7 +79,7 @@
                 android:drawableEnd="@drawable/ico_search_neutral_grey"
                 android:ellipsize="end"
                 android:fontFamily="@font/inter_regular"
-                android:hint="@string/paymaart_id"
+                android:hint="@string/paymaart_id_and_name"
                 android:inputType="textNoSuggestions"
                 android:maxLines="1"
                 android:padding="12dp"

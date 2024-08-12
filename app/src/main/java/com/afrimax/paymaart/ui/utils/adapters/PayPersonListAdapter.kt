@@ -1,11 +1,14 @@
 package com.afrimax.paymaart.ui.utils.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.data.model.PayPerson
 import com.afrimax.paymaart.databinding.PayPersonAdapterViewBinding
-import com.afrimax.paymaart.ui.payperson.Contacts
+import com.afrimax.paymaart.util.getInitials
+import com.bumptech.glide.Glide
 
 class PayPersonListAdapter(private val contacts: List<PayPerson>) : RecyclerView.Adapter<PayPersonListAdapter.ContactsViewHolder>(){
     private var onClickListener: OnClickListener? = null
@@ -22,9 +25,39 @@ class PayPersonListAdapter(private val contacts: List<PayPerson>) : RecyclerView
 
     override fun onBindViewHolder(holder: ContactsViewHolder, position: Int) {
         with(holder){
-            binding.payPersonName.text = contacts[position].fullName
-            binding.payPersonUserPhoneNumber.text = contacts[position].phoneNumber
-            binding.payPersonUserId.text = contacts[position].paymaartId
+            binding.payPersonName.visibility = View.GONE
+            binding.payPersonUserPhoneNumber.visibility = View.GONE
+            binding.payPersonUserId.visibility = View.GONE
+            binding.payPersonShortNameTV.visibility = View.GONE
+            binding.payPersonIV.visibility = View.GONE
+
+            binding.payPersonName.apply {
+                visibility = View.VISIBLE
+                text = contacts[position].fullName
+            }
+            binding.payPersonUserPhoneNumber.apply {
+                visibility = View.VISIBLE
+                text = contacts[position].let { it.countryCode + " " +formattedPhoneNumber(it.phoneNumber) }
+            }
+            binding.payPersonUserId.apply {
+                visibility = if (contacts[position].paymaartId.isNullOrEmpty()) View.GONE else View.VISIBLE
+                text = contacts[position].paymaartId
+            }
+            if (contacts[position].profilePicture.isNullOrEmpty()) {
+                binding.payPersonShortNameTV.apply {
+                    visibility = View.VISIBLE
+                    text = getInitials(contacts[position].fullName)
+                }
+            }else {
+                binding.payPersonIV.also {
+                    it.visibility = View.VISIBLE
+                    Glide
+                        .with(it)
+                        .load(BuildConfig.CDN_BASE_URL + contacts[position].profilePicture)
+                        .centerCrop()
+                        .into(it)
+                }
+            }
             binding.root.setOnClickListener {
                 if (onClickListener != null) {
                     onClickListener!!.onClick(contacts[position])
@@ -43,4 +76,7 @@ class PayPersonListAdapter(private val contacts: List<PayPerson>) : RecyclerView
         fun onClick(transaction: PayPerson)
     }
 
+    private fun formattedPhoneNumber(phoneNumber: String): String {
+        return "${phoneNumber.substring(0, 2)} ${phoneNumber.substring(2, 6)} ${phoneNumber.substring(6)}"
+    }
 }
