@@ -37,6 +37,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 private const val REQUEST_READ_CONTACTS = 111
+
 class ListPersonTransactionActivity : BaseActivity() {
     private lateinit var binding: ActivityListPersonTransactionBinding
     private val mContactsList = mutableListOf<PayPerson>()
@@ -69,11 +70,14 @@ class ListPersonTransactionActivity : BaseActivity() {
         getRecentPersonTransactions()
     }
 
-    private fun setupView(){
+    private fun setupView() {
         val payPersonListAdapter = PayPersonListAdapter(mContactsList)
-        payPersonListAdapter.setOnClickListener(object : PayPersonListAdapter.OnClickListener{
+        payPersonListAdapter.setOnClickListener(object : PayPersonListAdapter.OnClickListener {
             override fun onClick(transaction: PayPerson) {
-                val intent = Intent(this@ListPersonTransactionActivity, PersonTransactionActivity::class.java)
+                val intent = Intent(
+                    this@ListPersonTransactionActivity,
+                    PersonTransactionActivity::class.java
+                )
                 intent.putExtra(Constants.PAYMAART_ID, transaction.paymaartId)
                 intent.putExtra(Constants.CUSTOMER_NAME, transaction.fullName)
                 intent.putExtra(Constants.PROFILE_PICTURE, transaction.profilePicture)
@@ -81,18 +85,23 @@ class ListPersonTransactionActivity : BaseActivity() {
             }
         })
         binding.listPersonTransactionRV.apply {
-            layoutManager = LinearLayoutManager(this@ListPersonTransactionActivity, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(
+                this@ListPersonTransactionActivity,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
             adapter = payPersonListAdapter
         }
-        binding.listPersonTransactionRV.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+        binding.listPersonTransactionRV.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE && !isPaginating) {
                     isPaginating = true
                     if (!paginationEnd) {
-                        if (searchText.isNotEmpty()){
+                        if (searchText.isNotEmpty()) {
                             paymaartUserPagination()
-                        }else {
+                        } else {
                             getRecentPersonTransactionsPagination()
                         }
                     }
@@ -101,13 +110,19 @@ class ListPersonTransactionActivity : BaseActivity() {
         })
         binding.listPersonTransactionContactsIV.setOnClickListener {
             checkPermissionForContactsRequest()
-            if(ContextCompat.checkSelfPermission(this@ListPersonTransactionActivity, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED){
+            if (ContextCompat.checkSelfPermission(
+                    this@ListPersonTransactionActivity,
+                    Manifest.permission.READ_CONTACTS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 if (searchByPaymaartCredentials) {
-                    binding.listPersonTransactionSearchET.hint = getString(R.string.phone_number_and_name)
-                }else {
-                    binding.listPersonTransactionSearchET.hint = getString(R.string.paymaart_id_and_name)
+                    binding.listPersonTransactionSearchET.hint =
+                        getString(R.string.phone_number_and_name)
+                } else {
+                    binding.listPersonTransactionSearchET.hint =
+                        getString(R.string.paymaart_id_and_name)
                 }
-            }else{
+            } else {
                 showToast(getString(R.string.no_contacts_permission))
             }
             if (searchText.isNotEmpty()) {
@@ -125,7 +140,7 @@ class ListPersonTransactionActivity : BaseActivity() {
     }
 
     private fun setupListeners() {
-        binding.listPersonTransactionSearchET.addTextChangedListener (object: TextWatcher {
+        binding.listPersonTransactionSearchET.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -137,20 +152,20 @@ class ListPersonTransactionActivity : BaseActivity() {
                     editable?.let { text ->
                         phoneNumberList.clear()
                         searchText = text.toString()
-                        if (searchByPaymaartCredentials){
+                        if (searchByPaymaartCredentials) {
                             if (searchText.isNotEmpty() && searchText.length > 4) {
                                 searchForPaymaartUser()
                             } else {
                                 mContactsList.clear()
                                 binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
-                                if(searchText.isNotEmpty()) {
+                                if (searchText.isNotEmpty()) {
                                     showEmptyScreen(true)
-                                }else{
+                                } else {
                                     showEmptyScreen(false)
                                 }
                             }
-                        }else{
-                            if (searchText.isNotEmpty() && searchText.length > 4) {
+                        } else {
+                            if (searchText.isNotEmpty() && searchText.length >= 3) {
                                 when {
                                     searchText.toIntOrNull() != null -> searchContacts(searchText.toInt())
                                     searchText.toLongOrNull() != null -> searchContacts(searchText.toLong())
@@ -160,9 +175,9 @@ class ListPersonTransactionActivity : BaseActivity() {
                             } else {
                                 mContactsList.clear()
                                 binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
-                                if(searchText.isNotEmpty()) {
+                                if (searchText.isNotEmpty()) {
                                     showEmptyScreen(true)
-                                }else{
+                                } else {
                                     showEmptyScreen(false)
                                 }
                             }
@@ -174,8 +189,16 @@ class ListPersonTransactionActivity : BaseActivity() {
     }
 
     private fun checkPermissionForContactsRequest() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_READ_CONTACTS)
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_CONTACTS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_CONTACTS),
+                REQUEST_READ_CONTACTS
+            )
         }
     }
 
@@ -187,7 +210,8 @@ class ListPersonTransactionActivity : BaseActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_READ_CONTACTS -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) { } else {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
                     "Response".showLogE("MainActivity: Permission denied to read contacts")
                 }
             }
@@ -211,7 +235,8 @@ class ListPersonTransactionActivity : BaseActivity() {
         if (cursor != null && cursor.count > 0) {
             while (cursor.moveToNext()) {
                 val id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
-                val name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                val name =
+                    cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
 
                 if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
                     val pCursor = contentResolver.query(
@@ -222,14 +247,21 @@ class ListPersonTransactionActivity : BaseActivity() {
                         null
                     )
                     if (pCursor != null && pCursor.count > 0) {
+                        val normalizedNumbersSet = mutableSetOf<String>()
                         while (pCursor.moveToNext()) {
-                            val phoneNo = pCursor.getString(pCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                            contactsSet.add(
-                                Contacts(
-                                    name = name,
-                                    phoneNumber = phoneNo
+                            val phoneNo =
+                                pCursor.getString(pCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+
+                            val normalizedPhoneNo = phoneNo.replace(Regex("\\D"), "")
+                            if (!normalizedNumbersSet.contains(normalizedPhoneNo)) {
+                                contactsSet.add(
+                                    Contacts(
+                                        name = name,
+                                        phoneNumber = phoneNo
+                                    )
                                 )
-                            )
+                                normalizedNumbersSet.add(normalizedPhoneNo)
+                            }
                         }
                         pCursor.close()
                     }
@@ -256,8 +288,10 @@ class ListPersonTransactionActivity : BaseActivity() {
 
         if (cursor != null && cursor.count > 0) {
             while (cursor.moveToNext()) {
-                val phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                val contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
+                val phoneNo =
+                    cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val contactId =
+                    cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
 
                 val contactCursor = contentResolver.query(
                     ContactsContract.Contacts.CONTENT_URI,
@@ -268,7 +302,8 @@ class ListPersonTransactionActivity : BaseActivity() {
                 )
 
                 if (contactCursor != null && contactCursor.moveToFirst()) {
-                    val name = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                    val name =
+                        contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
                     contactsSet.add(
                         Contacts(
                             name = name,
@@ -299,8 +334,10 @@ class ListPersonTransactionActivity : BaseActivity() {
 
         if (cursor != null && cursor.count > 0) {
             while (cursor.moveToNext()) {
-                val phoneNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                val contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
+                val phoneNo =
+                    cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val contactId =
+                    cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID))
 
                 val contactCursor = contentResolver.query(
                     ContactsContract.Contacts.CONTENT_URI,
@@ -311,7 +348,8 @@ class ListPersonTransactionActivity : BaseActivity() {
                 )
 
                 if (contactCursor != null && contactCursor.moveToFirst()) {
-                    val name = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                    val name =
+                        contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
                     contactsSet.add(
                         Contacts(
                             name = name,
@@ -347,25 +385,27 @@ class ListPersonTransactionActivity : BaseActivity() {
                     if (data != null) {
                         totalListItems += data.payPersonList.size
                         paginationEnd = totalListItems >= data.totalCount
-                        if (!paginationEnd) {page++}
+                        if (!paginationEnd) {
+                            page++
+                        }
                         mContactsList.clear()
                         mContactsList.addAll(data.payPersonList)
                         if (mContactsList.isEmpty()) {
                             binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
                             showEmptyScreen(false)
-                        }else {
+                        } else {
                             binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
                         }
                     }
-                }else{
+                } else {
                     hideLoader()
                     showEmptyScreen(false)
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 hideLoader()
-                if(searchText.isEmpty()) {
+                if (searchText.isEmpty()) {
                     showEmptyScreen(true)
-                }else{
+                } else {
                     showEmptyScreen(false)
                 }
                 showToast(getString(R.string.default_error_toast))
@@ -377,24 +417,31 @@ class ListPersonTransactionActivity : BaseActivity() {
         coroutineScope.launch {
             showLoader()
             val idToken = fetchIdToken()
-            val recentTransactionHandler = ApiClient.apiService.getPersonRecentTransactionList(idToken, page)
+            val recentTransactionHandler =
+                ApiClient.apiService.getPersonRecentTransactionList(idToken, page)
 
             recentTransactionHandler.enqueue(object : Callback<PayPersonResponse> {
-                override fun onResponse(call: Call<PayPersonResponse>, response: Response<PayPersonResponse>, ) {
+                override fun onResponse(
+                    call: Call<PayPersonResponse>,
+                    response: Response<PayPersonResponse>,
+                ) {
                     if (response.isSuccessful && response.body() != null) {
                         val data = response.body()
                         if (data?.payPersonList.isNullOrEmpty()) {
                             showEmptyScreen(true)
-                        }else{
+                        } else {
                             totalListItems += data?.payPersonList?.size!!
                             paginationEnd = totalListItems >= data.totalCount
-                            if (!paginationEnd) {page++}
+                            if (!paginationEnd) {
+                                page++
+                            }
                             mContactsList.clear()
                             mContactsList.addAll(data.payPersonList)
                         }
                     }
                     hideLoader()
                 }
+
                 override fun onFailure(call: Call<PayPersonResponse>, throwable: Throwable) {
                     hideLoader()
                     showToast(getString(R.string.default_error_toast))
@@ -408,24 +455,31 @@ class ListPersonTransactionActivity : BaseActivity() {
         coroutineScope.launch {
             showLoader()
             val idToken = fetchIdToken()
-            val recentTransactionHandler = ApiClient.apiService.getPersonRecentTransactionList(idToken, page)
+            val recentTransactionHandler =
+                ApiClient.apiService.getPersonRecentTransactionList(idToken, page)
 
             recentTransactionHandler.enqueue(object : Callback<PayPersonResponse> {
-                override fun onResponse(call: Call<PayPersonResponse>, response: Response<PayPersonResponse>, ) {
+                override fun onResponse(
+                    call: Call<PayPersonResponse>,
+                    response: Response<PayPersonResponse>,
+                ) {
                     if (response.isSuccessful && response.body() != null) {
                         val data = response.body()
                         if (data?.payPersonList.isNullOrEmpty()) {
                             showEmptyScreen(true)
-                        }else{
+                        } else {
                             totalListItems += data?.payPersonList?.size!!
                             paginationEnd = totalListItems >= data.totalCount
-                            if (!paginationEnd) {page++}
+                            if (!paginationEnd) {
+                                page++
+                            }
                             mContactsList.clear()
                             mContactsList.addAll(data.payPersonList)
                         }
                     }
                     hideLoader()
                 }
+
                 override fun onFailure(call: Call<PayPersonResponse>, throwable: Throwable) {
                     hideLoader()
                     showToast(getString(R.string.default_error_toast))
@@ -455,15 +509,20 @@ class ListPersonTransactionActivity : BaseActivity() {
                         val previousListSize = mContactsList.size
                         totalListItems += data.payPersonList.size
                         paginationEnd = totalListItems >= data.totalCount
-                        if (!paginationEnd) {page++}
+                        if (!paginationEnd) {
+                            page++
+                        }
                         mContactsList.addAll(data.payPersonList)
-                        binding.listPersonTransactionRV.adapter?.notifyItemRangeInserted(previousListSize, mContactsList.size)
+                        binding.listPersonTransactionRV.adapter?.notifyItemRangeInserted(
+                            previousListSize,
+                            mContactsList.size
+                        )
                     }
                     isPaginating = false
-                }else{
+                } else {
                     showEmptyScreen(false)
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 showToast(getString(R.string.default_error_toast))
             }
         }
@@ -487,9 +546,11 @@ class ListPersonTransactionActivity : BaseActivity() {
         binding.listPersonTransactionLoaderLottie.visibility = View.GONE
         binding.listPersonTransactionContentBox.visibility = View.GONE
         binding.listPersonTransactionNoDataFoundContainer.visibility = View.VISIBLE
-        binding.listPersonTransactionNoDataFoundIV.setImageResource(if(condition) R.drawable.ico_search_for_users else R.drawable.ico_no_data_found)
-        binding.listPersonTransactionNoDataFoundTitleTV.text = getString(if (condition) R.string.no_transactions_yet else R.string.no_data_found)
-        binding.listPersonTransactionNoDataFoundSubtextTV.text = getString(if (condition) R.string.no_transactions_subtext else R.string.no_data_found_subtext)
+        binding.listPersonTransactionNoDataFoundIV.setImageResource(if (condition) R.drawable.ico_search_for_users else R.drawable.ico_no_data_found)
+        binding.listPersonTransactionNoDataFoundTitleTV.text =
+            getString(if (condition) R.string.no_transactions_yet else R.string.no_data_found)
+        binding.listPersonTransactionNoDataFoundSubtextTV.text =
+            getString(if (condition) R.string.no_transactions_subtext else R.string.no_data_found_subtext)
     }
 }
 
