@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/transactionHistoryActivityBackButton"
-                android:fontFamily="@font/inter_medium"
+                android:fontFamily="@font/inter_semibold"
                 android:includeFontPadding="false"
                 android:text="@string/transaction_history"
                 android:textColor="@color/white"

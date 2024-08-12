@@ -1,12 +1,10 @@
 package com.afrimax.paymaart.ui.membership
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -15,7 +13,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
-import com.afrimax.paymaart.data.ApiService
 import com.afrimax.paymaart.data.model.SubscriptionDetails
 import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionDetailsResponse
@@ -30,15 +27,11 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.TotalAmountReceiptBottomSheet
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getDrawableExt
-import com.afrimax.paymaart.util.showLogE
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -286,25 +279,6 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
-    /**
-        private fun getStartDate(): String {
-            val currentDate = Date()
-            val dateFormat = dateFormat
-            return dateFormat.format(currentDate)
-        }
-
-        private fun getEndDate(startDate: String, validity: String?): String{
-            if (validity.isNullOrEmpty())
-                return ""
-            val dateFormat = dateFormat
-            val calendar = Calendar.getInstance()
-            calendar.time = dateFormat.parse(startDate)!!
-            calendar.add(Calendar.DAY_OF_YEAR, validity.toInt())
-            val futureDate = calendar.time
-            return dateFormat.format(futureDate)
-        }
-     */
-
     private fun getDate(timeStamp: Long): String{
         val newTimeStamp = timeStamp * 1000
         val date = Date(newTimeStamp)
@@ -313,7 +287,7 @@ class PurchasedMembershipPlanViewActivity : BaseActivity(), SendPaymentInterface
     }
 
     private val dateFormat: SimpleDateFormat
-        get() = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        get() = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
 
     override fun onPaymentSuccess(successData: Any?) {
         val intent = Intent(this, PaymentSuccessfulActivity::class.java)

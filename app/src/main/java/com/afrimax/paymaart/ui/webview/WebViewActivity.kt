@@ -20,11 +20,13 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.databinding.ActivityWebViewBinding
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.showLogE
 
 class WebViewActivity : AppCompatActivity() {
     private lateinit var b: ActivityWebViewBinding
     private var animate: Boolean = false
     private var type: String = ""
+    private var toolBarType: ToolBarType = ToolBarType.WHITE
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,32 +42,58 @@ class WebViewActivity : AppCompatActivity() {
         wic.isAppearanceLightStatusBars = true
         var url = ""
         animate = intent.getBooleanExtra(Constants.ANIMATE, false)
+        val toolBar = intent.getStringExtra(Constants.TOOLBAR_TYPE)
+        toolBarType = toolBar?.let { ToolBarType.valueOf(it) } ?: ToolBarType.WHITE
         type = intent.getStringExtra(Constants.TYPE) ?: Constants.PRIVACY_POLICY_TYPE
         if (animate) {
-            b.webViewActivityToolbarTwo.visibility = View.VISIBLE
             setAnimation()
-        }else {
-            b.webViewActivityToolbar.visibility = View.VISIBLE
-            wic.isAppearanceLightStatusBars = false
-            wic.isAppearanceLightNavigationBars = false
-            window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
-            window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
+        }
+
+        when (toolBarType) {
+            ToolBarType.PRIMARY -> {
+                b.webViewActivityToolbar.visibility = View.VISIBLE
+                b.webViewActivityToolbarTwo.visibility = View.GONE
+                b.webViewActivityToolbarThree.visibility = View.GONE
+                wic.isAppearanceLightStatusBars = false
+                wic.isAppearanceLightNavigationBars = false
+                window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
+                window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
+            }
+            ToolBarType.WHITE -> {
+                b.webViewActivityToolbarTwo.visibility = View.VISIBLE
+                b.webViewActivityToolbar.visibility = View.GONE
+                b.webViewActivityToolbarThree.visibility = View.GONE
+            }
+            ToolBarType.WHITE_START -> {
+                b.webViewActivityToolbarThree.visibility = View.VISIBLE
+                b.webViewActivityToolbar.visibility = View.GONE
+                b.webViewActivityToolbarTwo.visibility = View.GONE
+            }
         }
         when (type) {
             Constants.PRIVACY_POLICY_TYPE -> {
                 b.webViewActivityTitleTV.text = ContextCompat.getString(this, R.string.privacy_policy)
                 b.webViewActivityToolbar.title = ContextCompat.getString(this, R.string.privacy_policy)
+                b.webViewActivityToolbarThree.title = ContextCompat.getString(this, R.string.privacy_policy)
                 url = Constants.PRIVACY_POLICY_URL
             }
             Constants.TERMS_AND_CONDITIONS_TYPE -> {
                 b.webViewActivityTitleTV.text = ContextCompat.getString(this, R.string.terms_and_conditions_wv)
-                b.webViewActivityToolbar.title = ContextCompat.getString(this, R.string.terms_and_conditions_wv)
+                b.webViewActivityToolbar.title = ContextCompat.getString(this, R.string.terms_of_service)
+                b.webViewActivityToolbarThree.title = ContextCompat.getString(this, R.string.terms_of_service)
                 url = Constants.TERMS_AND_CONDITIONS_URL
             }
             Constants.ABOUT_US_TYPE -> {
-                b.webViewActivityTitleTV.text = ContextCompat.getString(this, R.string.about_us)
                 b.webViewActivityToolbar.title = ContextCompat.getString(this, R.string.about_us)
                 url = Constants.ABOUT_US_URL
+            }
+            Constants.HELP_CENTER_TYPE -> {
+                b.webViewActivityToolbarThree.title = getString(R.string.empty_string)
+                url = Constants.HELP_CENTER_URL
+            }
+            Constants.FAQS_TYPE -> {
+                b.webViewActivityToolbarThree.title = getString(R.string.faqs)
+                url = Constants.FAQs_URL
             }
 
         }
@@ -75,6 +103,10 @@ class WebViewActivity : AppCompatActivity() {
         }
 
         b.webViewActivityToolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        b.webViewActivityToolbarThree.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -126,4 +158,10 @@ class WebViewActivity : AppCompatActivity() {
         window.enterTransition = slide
         window.returnTransition = slide
     }
+}
+
+enum class ToolBarType{
+    PRIMARY,
+    WHITE,
+    WHITE_START
 }
