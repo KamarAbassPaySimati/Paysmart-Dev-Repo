@@ -25,6 +25,9 @@ import com.afrimax.paymaart.data.model.PayPersonRequestBody
 import com.afrimax.paymaart.data.model.PayPersonResponse
 import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paymaart.data.model.PayToAfrimaxResponse
+import com.afrimax.paymaart.data.model.PayToUnRegisteredPersonRequest
+import com.afrimax.paymaart.data.model.GetTaxForPayToUnRegisteredPersonResponse
+import com.afrimax.paymaart.data.model.PayToUnRegisteredPersonResponse
 import com.afrimax.paymaart.data.model.PersonTransactions
 import com.afrimax.paymaart.data.model.RefundRequestResponse
 import com.afrimax.paymaart.data.model.ResendCredentialsRequest
@@ -75,6 +78,7 @@ private const val PAYMAART = "paymaart"
 private const val CUSTOMER = "customer"
 private const val AFRIMAX = "afrimax"
 private const val CASHIN_CASHOUT = "cashin-cashout"
+
 interface ApiService {
 
     @GET("$CUSTOMER_USER/security-questions")
@@ -96,16 +100,24 @@ interface ApiService {
     fun viewKyc(@Header("Authorization") header: String): Call<GetUserKycDataResponse>
 
     @POST("$CUSTOMER_USER/create-kyc")
-    fun saveCustomerKYCPreference(@Header("Authorization") header: String, @Body body: KycSaveCustomerPreferenceRequest): Call<DefaultResponse>
+    fun saveCustomerKYCPreference(
+        @Header("Authorization") header: String, @Body body: KycSaveCustomerPreferenceRequest
+    ): Call<DefaultResponse>
 
     @POST("$CUSTOMER_USER/create-kyc")
-    fun saveCustomerAddressDetails(@Header("Authorization") header: String, @Body body: KycSaveAddressDetailsRequest): Call<DefaultResponse>
+    fun saveCustomerAddressDetails(
+        @Header("Authorization") header: String, @Body body: KycSaveAddressDetailsRequest
+    ): Call<DefaultResponse>
 
     @POST("$CUSTOMER_USER/create-kyc")
-    fun saveCustomerIdentityDetails(@Header("Authorization") header: String, @Body body: KycSaveIdentityDetailRequest): Call<DefaultResponse>
+    fun saveCustomerIdentityDetails(
+        @Header("Authorization") header: String, @Body body: KycSaveIdentityDetailRequest
+    ): Call<DefaultResponse>
 
     @POST("$CUSTOMER_USER/create-kyc")
-    fun saveCustomerPersonalDetails(@Header("Authorization") header: String, @Body body: KycSavePersonalDetailRequest): Call<DefaultResponse>
+    fun saveCustomerPersonalDetails(
+        @Header("Authorization") header: String, @Body body: KycSavePersonalDetailRequest
+    ): Call<DefaultResponse>
 
     @GET("admin-users/list-institution")
     fun getInstitutes(@Query("search") search: String): Call<GetInstitutesResponse>
@@ -114,103 +126,182 @@ interface ApiService {
     fun getHomeScreenData(@Header("Authorization") header: String): Call<HomeScreenResponse>
 
     @POST("$CUSTOMER_USER/delete-request")
-    fun deleteAccountRequest(@Header("Authorization") header: String, @Body body: DeleteAccountReqRequest): Call<DefaultResponse>
+    fun deleteAccountRequest(
+        @Header("Authorization") header: String, @Body body: DeleteAccountReqRequest
+    ): Call<DefaultResponse>
 
     @GET("$CUSTOMER_USER/request-otp")
-    fun sendForgotOtp(@Query("email_address") emailAddress: String, @Query("type") type: String): Call<SendForgotOtpResponse>
+    fun sendForgotOtp(
+        @Query("email_address") emailAddress: String, @Query("type") type: String
+    ): Call<SendForgotOtpResponse>
 
     @GET("$CUSTOMER_USER/validate-otp")
-    fun verifyForgotOtp(@Query(value = "otp") otp: String, @Query("encrypted_otp") encryptedOtp: String, @Query("user_id") userId: String): Call<VerifyForgotOtpResponse>
+    fun verifyForgotOtp(
+        @Query(value = "otp") otp: String,
+        @Query("encrypted_otp") encryptedOtp: String,
+        @Query("user_id") userId: String
+    ): Call<VerifyForgotOtpResponse>
 
     @POST("$CUSTOMER_USER/forgot-password")
     fun updatePinPassword(@Body body: UpdatePinPasswordRequest): Call<DefaultResponse>
 
     @POST("$CUSTOMER_USER/update-password")
-    fun updatePinOrPassword(@Header("Authorization") header: String, @Body body: UpdatePinOrPasswordRequest): Call<DefaultResponse>
+    fun updatePinOrPassword(
+        @Header("Authorization") header: String, @Body body: UpdatePinOrPasswordRequest
+    ): Call<DefaultResponse>
 
     @GET("$CUSTOMER_USER/view-membership-benefits")
     fun getMembershipDetails(@Header("Authorization") header: String): Call<MembershipPlansResponse>
 
     @GET("$CUSTOMER_USER/view-self-kyc-customer")
-    fun getSelfKycDetails(@Query(value = "password") password: String, @Header("Authorization") header: String): Call<SelfKycDetailsResponse>
+    fun getSelfKycDetails(
+        @Query(value = "password") password: String, @Header("Authorization") header: String
+    ): Call<SelfKycDetailsResponse>
 
     @POST("$KYC_UPDATE/send-otp-mobile-customer")
-    fun sendOtpForEditSelfKyc(@Header("Authorization") header: String, @Body body: SendOtpForEditSelfKycRequest): Call<SendOtpForEditSelfKycResponse>
+    fun sendOtpForEditSelfKyc(
+        @Header("Authorization") header: String, @Body body: SendOtpForEditSelfKycRequest
+    ): Call<SendOtpForEditSelfKycResponse>
 
     @GET("$KYC_UPDATE/view-kyc-data-mobile-customer")
     fun getSelfKycUserData(@Header("Authorization") header: String): Call<SelfKycDetailsResponse>
 
     @POST("$KYC_UPDATE/update/basicDetails-customer-self")
-    fun saveBasicDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveBasicDetailsSelfKycRequest): Call<DefaultResponse>
+    fun saveBasicDetailsSelfKyc(
+        @Header("Authorization") header: String, @Body body: SaveBasicDetailsSelfKycRequest
+    ): Call<DefaultResponse>
 
     @POST("$KYC_UPDATE/verify-otp-mobile-customer")
-    fun verifyOtpForEditSelfKyc(@Header("Authorization") header: String, @Body body: VerifyOtpForEditSelfKycRequest): Call<VerifyOtpForEditSelfKycResponse>
+    fun verifyOtpForEditSelfKyc(
+        @Header("Authorization") header: String, @Body body: VerifyOtpForEditSelfKycRequest
+    ): Call<VerifyOtpForEditSelfKycResponse>
 
     @POST("$KYC_UPDATE/update/addressDetails-customer-self")
-    fun saveNewAddressDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveNewAddressDetailsSelfKycRequest): Call<DefaultResponse>
+    fun saveNewAddressDetailsSelfKyc(
+        @Header("Authorization") header: String, @Body body: SaveNewAddressDetailsSelfKycRequest
+    ): Call<DefaultResponse>
 
     @POST("$KYC_UPDATE/update/documentsDetails-customer-self")
-    fun saveNewIdentityDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveNewIdentityDetailsSelfKycRequest): Call<DefaultResponse>
+    fun saveNewIdentityDetailsSelfKyc(
+        @Header("Authorization") header: String, @Body body: SaveNewIdentityDetailsSelfKycRequest
+    ): Call<DefaultResponse>
 
     @POST("$KYC_UPDATE/update/infoDetails-customer-self")
-    fun saveNewInfoDetailsSelfKyc(@Header("Authorization") header: String, @Body body: SaveNewInfoDetailsSelfKycRequest): Call<DefaultResponse>
+    fun saveNewInfoDetailsSelfKyc(
+        @Header("Authorization") header: String, @Body body: SaveNewInfoDetailsSelfKycRequest
+    ): Call<DefaultResponse>
 
     @POST("$KYC_UPDATE/update/convert-kyc-mobile-customer-self")
     fun switchToFullKyc(@Header("Authorization") header: String): Call<DefaultResponse>
 
     @POST("$KYC_UPDATE/update/simplifiedtofull-mobile-customer-self")
-    fun saveIdentitySimplifiedToFull(@Header("Authorization") header: String, @Body body: SaveIdentitySimplifiedToFullRequest): Call<DefaultResponse>
+    fun saveIdentitySimplifiedToFull(
+        @Header("Authorization") header: String, @Body body: SaveIdentitySimplifiedToFullRequest
+    ): Call<DefaultResponse>
 
     @POST("$KYC_UPDATE/update/simplifiedtofull-mobile-customer-self")
-    fun saveInfoSimplifiedToFull(@Header("Authorization") header: String, @Body body: SaveInfoSimplifiedToFullRequest): Call<DefaultResponse>
+    fun saveInfoSimplifiedToFull(
+        @Header("Authorization") header: String, @Body body: SaveInfoSimplifiedToFullRequest
+    ): Call<DefaultResponse>
 
     @GET("$CUSTOMER_USER/view-wallet")
-    fun viewWallet(@Header("Authorization") header: String, @Query("password") password: String): Call<ViewWalletResponse>
+    fun viewWallet(
+        @Header("Authorization") header: String, @Query("password") password: String
+    ): Call<ViewWalletResponse>
 
     @POST("$PAYMAART/$CUSTOMER/subscription-details")
-    fun getSubscriptionDetails(@Header("Authorization") header: String, @Body body: SubscriptionDetailsRequestBody) : Call<SubscriptionDetailsResponse>
+    fun getSubscriptionDetails(
+        @Header("Authorization") header: String, @Body body: SubscriptionDetailsRequestBody
+    ): Call<SubscriptionDetailsResponse>
 
     @POST("$PAYMAART/$CUSTOMER/subscription-payment")
-    fun subscriptionPayment(@Header("Authorization") header: String, @Body body: SubscriptionPaymentRequestBody): Call<SubscriptionPaymentSuccessfulResponse>
+    fun subscriptionPayment(
+        @Header("Authorization") header: String, @Body body: SubscriptionPaymentRequestBody
+    ): Call<SubscriptionPaymentSuccessfulResponse>
 
     @PATCH("$PAYMAART/$CUSTOMER/update-auto-renew")
-    fun updateAutoRenewal(@Header("Authorization") header: String, @Body body: UpdateAutoRenewalRequestBody): Call<Unit>
+    fun updateAutoRenewal(
+        @Header("Authorization") header: String, @Body body: UpdateAutoRenewalRequestBody
+    ): Call<Unit>
 
     @GET("$AFRIMAX/cmr/customer/{id}")
-    fun validateAfrimaxId(@Header("Authorization") header: String, @Path("id") afrimaxId: Number): Call<ValidateAfrimaxIdResponse>
+    fun validateAfrimaxId(
+        @Header("Authorization") header: String, @Path("id") afrimaxId: Number
+    ): Call<ValidateAfrimaxIdResponse>
 
     @GET("$AFRIMAX/cmr/plans")
-    fun getAfrimaxPlans(@Header("Authorization") header: String, @Query("page") page: Int): Call<GetAfrimaxPlansResponse>
+    fun getAfrimaxPlans(
+        @Header("Authorization") header: String, @Query("page") page: Int
+    ): Call<GetAfrimaxPlansResponse>
 
     @POST("$AFRIMAX/cmr/payment")
-    fun payToAfrimax(@Header("Authorization") header: String, @Body body: PayToAfrimaxRequestBody): Call<PayToAfrimaxResponse>
+    fun payToAfrimax(
+        @Header("Authorization") header: String, @Body body: PayToAfrimaxRequestBody
+    ): Call<PayToAfrimaxResponse>
 
     @POST("flag-transaction/flag-transaction-customer")
-    fun flagTransaction(@Header("Authorization") header: String, @Body body: FlagTransactionRequest): Call<DefaultResponse>
+    fun flagTransaction(
+        @Header("Authorization") header: String, @Body body: FlagTransactionRequest
+    ): Call<DefaultResponse>
 
     @POST("$CUSTOMER_USER/add-notification-id")
-    fun storeFcmToken(@Header("Authorization") header: String, @Body body: FcmTokenRequest): Call<DefaultResponse>
+    fun storeFcmToken(
+        @Header("Authorization") header: String, @Body body: FcmTokenRequest
+    ): Call<DefaultResponse>
 
     @POST("$CUSTOMER_USER/delete-notification-id")
-    fun deleteFcmToken(@Header("Authorization") header: String, @Body body: FcmTokenRequest): Call<DefaultResponse>
+    fun deleteFcmToken(
+        @Header("Authorization") header: String, @Body body: FcmTokenRequest
+    ): Call<DefaultResponse>
 
     @GET("$CASHIN_CASHOUT/search-cashout-customer")
-    fun getAgentsForSelfCashOut(@Header("Authorization") header: String, @Query("page") page: Int, @Query("search") search: String?): Call<SearchUsersDataResponse>
+    fun getAgentsForSelfCashOut(
+        @Header("Authorization") header: String,
+        @Query("page") page: Int,
+        @Query("search") search: String?
+    ): Call<SearchUsersDataResponse>
 
     @POST("$CASHIN_CASHOUT/request-cashout-customer")
-    fun cashOut(@Header("Authorization") header: String, @Body body: CashOutRequestBody): Call<CashOutApiResponse>
+    fun cashOut(
+        @Header("Authorization") header: String, @Body body: CashOutRequestBody
+    ): Call<CashOutApiResponse>
 
     @GET("$CASHIN_CASHOUT/calc-fee")
-    fun getTransactionDetails(@Header("Authorization") header: String, @Query("amount") amount: String): Call<TransactionDetailsResponse>
+    fun getTransactionDetails(
+        @Header("Authorization") header: String, @Query("amount") amount: String
+    ): Call<TransactionDetailsResponse>
 
     @GET("$CUSTOMER_USER/list-refund-request")
-    fun getRefundRequests(@Header("Authorization") header: String, @Query("page") page: Int? = 1, @Query("status") status: String? = "", @Query("time") time: Int? = 60): Call<RefundRequestResponse>
+    fun getRefundRequests(
+        @Header("Authorization") header: String,
+        @Query("page") page: Int? = 1,
+        @Query("status") status: String? = "",
+        @Query("time") time: Int? = 60
+    ): Call<RefundRequestResponse>
 
     @GET("agent-users/customer/list-transaction")
-    fun getTransactionHistory(@Header("Authorization") header: String, @Query("page") page: Int?, @Query("search") search: String?, @Query("type") type: String?, @Query("time") time: Int?): Call<TransactionHistoryResponse>
+    fun getTransactionHistory(
+        @Header("Authorization") header: String,
+        @Query("page") page: Int?,
+        @Query("search") search: String?,
+        @Query("type") type: String?,
+        @Query("time") time: Int?
+    ): Call<TransactionHistoryResponse>
 
     @GET("agent-users/customer/view-transaction")
-    fun getTransactionDetailsApi(@Header("Authorization") header: String, @Query("transaction_id") transactionId: String): Call<GetTransactionDetailsResponse>
+    fun getTransactionDetailsApi(
+        @Header("Authorization") header: String, @Query("transaction_id") transactionId: String
+    ): Call<GetTransactionDetailsResponse>
+
+    @POST("bank-transactions/pay-unregister")
+    suspend fun getTaxForPayToUnRegisteredPerson(
+        @Header("Authorization") header: String, @Body body: PayToUnRegisteredPersonRequest
+    ): Response<GetTaxForPayToUnRegisteredPersonResponse>
+
+    @POST("bank-transactions/pay-unregister")
+    suspend fun payToUnRegisteredPerson(
+        @Header("Authorization") header: String, @Body body: PayToUnRegisteredPersonRequest
+    ): Response<PayToUnRegisteredPersonResponse>
 
     @GET("$CUSTOMER_USER/search-by-id")
     suspend fun searchUsersByPaymaartCredentials(@Header("Authorization") header: String, @Query("page") page: Int = 1, @Query("search") search: String?): Response<PayPersonResponse>
@@ -226,8 +317,12 @@ interface ApiService {
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
-    fun getSharedSecret(@Body body: GetSharedSecretRequest, @Header("Authorization") header: String): Call<GetSharedSecretResponse>
+    fun getSharedSecret(
+        @Body body: GetSharedSecretRequest, @Header("Authorization") header: String
+    ): Call<GetSharedSecretResponse>
 
     @POST("$BDD/approve")
-    fun approveUser(@Body body: ApproveUserRequest, @Header("Authorization") header: String): Call<DefaultResponse>
+    fun approveUser(
+        @Body body: ApproveUserRequest, @Header("Authorization") header: String
+    ): Call<DefaultResponse>
 }
