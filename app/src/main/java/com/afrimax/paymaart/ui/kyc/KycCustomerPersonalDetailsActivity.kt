@@ -546,7 +546,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                 isValid = false
             }
 
-            phoneEditText.text.toString().replace(" ", "").length < 9 -> {
+            phoneEditText.text.toString().replace(" ", "").length < 8 -> {
                 showPhoneWarning(getString(R.string.invalid_phone))
                 isValid = false
             }
@@ -568,11 +568,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     }
 
     private fun getCountryCode(): String {
-        return if (BuildConfig.STAGE == Constants.STAGE_DEV || BuildConfig.STAGE == Constants.STAGE_QA) {
-            b.kycYourPersonalDetailsActivityCountryCodeSpinner.selectedItem.toString()
-        } else {
-            "+265"
-        }
+        return b.kycYourPersonalDetailsActivityCountryCodeSpinner.selectedItem.toString()
     }
 
     private fun sentOtpForEditSelfKycApi(type: String) {

@@ -41,6 +41,7 @@ import com.afrimax.paymaart.ui.cashout.CashOutSearchActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
+import com.afrimax.paymaart.ui.payperson.ListPersonTransactionActivity
 import com.afrimax.paymaart.ui.paytoaffrimax.ValidateAfrimaxIdActivity
 import com.afrimax.paymaart.ui.refundrequest.RefundRequestActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
@@ -169,7 +170,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         }
         b.homeActivityPayPersonButton.setOnClickListener {
             if (checkKycStatus()){
-                //
+                startActivity(Intent(this, ListPersonTransactionActivity::class.java))
             }
         }
 

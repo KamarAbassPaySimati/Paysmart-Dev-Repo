@@ -157,14 +157,14 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_in_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.cash_in_successful)
                 b.paymentReceiptActivityBalanceContainer.visibility = View.VISIBLE
-                b.paymentReceiptActivityBalanceTV.text = getString(R.string.amount_formatted, transactionDetail.receiverClosingBalance)
+                b.paymentReceiptActivityBalanceTV.text = getString(R.string.amount_formatted, getFormattedAmount(transactionDetail.receiverClosingBalance))
             }
             CASH_OUT, CASHOUT -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_out_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.cash_out_successful)
                 b.paymentReceiptActivityBalanceContainer.visibility = View.VISIBLE
-                b.paymentReceiptActivityBalanceTV.text = getString(R.string.amount_formatted, transactionDetail.receiverClosingBalance)
+                b.paymentReceiptActivityBalanceTV.text = getString(R.string.amount_formatted, getFormattedAmount(transactionDetail.receiverClosingBalance))
             }
             AFRIMAX -> {
                 setupCommonView(commonView)
@@ -185,7 +185,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.pay_in_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.pay_in_successful)
                 b.paymentReceiptActivityBalanceContainer.visibility = View.VISIBLE
-                b.paymentReceiptActivityBalanceTV.text = getFormattedAmount(transactionDetail.receiverClosingBalance)
+                b.paymentReceiptActivityBalanceTV.text = getString(R.string.amount_formatted, getFormattedAmount(transactionDetail.receiverClosingBalance))
             }
             PAY_PERSON -> {
                 setupCommonView(commonView)

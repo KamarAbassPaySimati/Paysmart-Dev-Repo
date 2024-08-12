@@ -6,6 +6,7 @@ import java.time.Instant
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.abs
 
 private val DECIMAL_FORMAT_LONG = DecimalFormat("#,###.00")
 private val DECIMAL_FORMAT_SHORT = DecimalFormat("0.00")
@@ -58,7 +59,7 @@ fun <T> getFormattedAmount(amount: T?): String {
         else -> 0.00
     }
 
-    return if (newAmount < 1000) {
+    return if (abs(newAmount) < 1000) {
         DECIMAL_FORMAT_SHORT.format(newAmount)
     } else {
         DECIMAL_FORMAT_LONG.format(newAmount)
@@ -102,6 +103,17 @@ fun <T> formatEpochTimeThree(timeStamp: T?): String {
     return dateFormatThree.format(date)
 }
 
+fun <T> formatEpochTimeFour(timeStamp: T?): String {
+    if (timeStamp == null) return ""
+    val newTimeStamp = when (timeStamp) {
+        is Long -> timeStamp
+        is String -> timeStamp.toLongOrNull() ?: 0L
+        else -> 0L
+    }
+    val date = Date(newTimeStamp * 1000)
+    return dateFormatFour.format(date)
+}
+
 val dateFormat: SimpleDateFormat
     get() {
         val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm 'hours'", Locale.getDefault())
@@ -119,6 +131,13 @@ val dateFormatTwo: SimpleDateFormat
 val dateFormatThree: SimpleDateFormat
     get() {
         val sdf = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale.getDefault())
+        sdf.timeZone = TimeZone.getTimeZone(TIME_ZONE)
+        return sdf
+    }
+
+val dateFormatFour: SimpleDateFormat
+    get() {
+        val sdf =  SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         sdf.timeZone = TimeZone.getTimeZone(TIME_ZONE)
         return sdf
     }

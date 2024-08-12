@@ -548,7 +548,7 @@
     <string name="ninety_one_days_for_850_mwk">91 days for 850.00 MWK</string>
     <string name="auto_renewal">Auto-renew?</string>
     <string name="auto_renewal_two">Auto Renew</string>
-    <string name="membership_plan_formatted">%1$s days| %2$s | Auto Renewal %3$s</string>
+    <string name="membership_plan_formatted">%1$s days| %2$s | Auto Renew %3$s</string>
     <string name="membership_plan_validity_formatted">Validity %1$s - %2$s</string>
     <string name="membership_type_formatted">%1$s Membership</string>
     <string name="send_payment">Send Payment</string>
@@ -576,7 +576,7 @@
     <string name="renewal_message_formatted">%1$s days for %2$s MWK</string>
     <string name="membership">Membership</string>
     <string name="formatted_membership_value">%1$s days\n%2$s - %3$s</string>
-    <string name="formatted_membership_value_two">%1$s/ %2$s days\n%3$s - %4$s</string>
+    <string name="formatted_membership_value_two">%1$s %2$s days\n%3$s - %4$s</string>
     <string name="unable_to_proceed">Unable to proceed due to multiple incorrect attempts.</string>
     <string name="insufficient_funds">Insufficient funds</string>
     <string name="full_kyc_reg">Full KYC Reg</string>
@@ -592,6 +592,7 @@
     <string name="amount">" Amount"</string>
     <string name="please_enter_amount">Please enter amount</string>
     <string name="minimum_amount_is_1_mwk">Minimum amount is 1.00 MWK</string>
+    <string name="minimum_amount_is_500_mwk">Minimum amount is 500.00 MWK</string>
     <string name="invalid_amount">Invalid amount</string>
     <string name="please_choose_a_plan">Please a choose a plan</string>
     <string name="send_payment_subtext_pay_afrimax">Once confirmed, credits sent to Afrimax cannot be reversed.</string>
@@ -682,4 +683,11 @@
     <string name="refund_successful">Refund Successful</string>
     <string name="g2p_pay_in_successful">G2P Pay-in Successful</string>
     <string name="cash_out_failed">Cash-out Failed</string>
+    <string name="formatted_mwk">%1$s MWK</string>
+    <string name="txn_id_formatted">Txn ID: %1$s</string>
+    <string name="note_formatted">Note: %1$s</string>
+    <string name="paid">Paid</string>
+    <string name="paymaart_id_and_name">Paymaart ID, name</string>
+    <string name="phone_number_and_name">Phone number, name</string>
+    <string name="no_contacts_permission">No contacts Permission</string>
 </resources>
