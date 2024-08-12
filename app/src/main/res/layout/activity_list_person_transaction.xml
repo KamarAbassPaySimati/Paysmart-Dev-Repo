@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listPersonTransactionActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.payperson.ListPersonTransactionActivity">
+
+    <LinearLayout
+        android:id="@+id/listPersonTransactionTopSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/listPersonTransactionTopBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/listPersonTransactionBackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/back_button"
+                android:padding="16dp"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/white"/>
+
+            <TextView
+                android:id="@+id/listPersonTransactionHeaderTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/listPersonTransactionBackButton"
+                android:fontFamily="@font/inter_semibold"
+                android:includeFontPadding="false"
+                android:text="@string/transaction_history"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/bg_search_edit_text"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:id="@+id/listPersonTransactionContactsIV"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/close_button_data"
+                android:padding="12dp"
+                android:src="@drawable/ic_phone" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="30dp"
+                android:background="@color/neutralGrey"
+                android:layout_toEndOf="@id/listPersonTransactionContactsIV"
+                android:layout_centerVertical="true"/>
+
+            <EditText
+                android:id="@+id/listPersonTransactionSearchET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/listPersonTransactionSearchClearIV"
+                android:layout_toEndOf="@+id/listPersonTransactionContactsIV"
+                android:autofillHints=""
+                android:background="@color/transparent"
+                android:drawableEnd="@drawable/ico_search_neutral_grey"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_regular"
+                android:hint="@string/paymaart_id"
+                android:inputType="textNoSuggestions"
+                android:maxLines="1"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/neutralGrey"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/listPersonTransactionSearchClearIV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/close_button_data"
+                android:padding="12dp"
+                android:src="@drawable/ic_close"
+                app:tint="@color/neutralGreyPrimaryText"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/listPersonTransactionContentBox"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/listPersonTransactionTopSection"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/listPersonTransactionRecentTransactionsTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
+            android:padding="16dp"
+            android:text="@string/recent_transactions_of_last_60_days"
+            android:textColor="@color/neutralGrey"
+            android:textSize="14sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listPersonTransactionRV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/listPersonTransactionNoDataFoundContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/listPersonTransactionTopSection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/listPersonTransactionNoDataFoundIV"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:contentDescription="@string/search"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ico_search_for_users" />
+
+        <TextView
+            android:id="@+id/listPersonTransactionNoDataFoundTitleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/no_transactions_yet"
+            android:textAlignment="center"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/listPersonTransactionNoDataFoundSubtextTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/no_transactions_subtext"
+            android:textAlignment="center"
+            android:textColor="@color/neutralGrey"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/listPersonTransactionLoaderLottie"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/lottie_loader"
+        app:layout_constraintTop_toBottomOf="@id/listPersonTransactionTopSection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

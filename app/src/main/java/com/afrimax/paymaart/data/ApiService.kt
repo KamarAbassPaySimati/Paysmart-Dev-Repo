@@ -22,8 +22,11 @@ import com.afrimax.paymaart.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paymaart.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paymaart.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paymaart.data.model.MembershipPlansResponse
+import com.afrimax.paymaart.data.model.PayPersonRequestBody
+import com.afrimax.paymaart.data.model.PayPersonResponse
 import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paymaart.data.model.PayToAfrimaxResponse
+import com.afrimax.paymaart.data.model.PersonTransactions
 import com.afrimax.paymaart.data.model.RefundRequestResponse
 import com.afrimax.paymaart.data.model.SaveBasicDetailsSelfKycRequest
 import com.afrimax.paymaart.data.model.SaveIdentitySimplifiedToFullRequest
@@ -56,6 +59,7 @@ import com.afrimax.paymaart.data.model.VerifyOtpRequestBody
 import com.afrimax.paymaart.data.model.VerifyOtpResponse
 import com.afrimax.paymaart.data.model.ViewWalletResponse
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -207,6 +211,15 @@ interface ApiService {
 
     @GET("agent-users/customer/view-transaction")
     fun getTransactionDetailsApi(@Header("Authorization") header: String, @Query("transaction_id") transactionId: String): Call<GetTransactionDetailsResponse>
+
+    @GET("$CUSTOMER_USER/search-by-id")
+    suspend fun searchUsersByPaymaartCredentials(@Header("Authorization") header: String, @Query("page") page: Int = 1, @Query("search") search: String?): Response<PayPersonResponse>
+
+    @GET("$CUSTOMER_USER/search-by-phone")
+    suspend fun searchUsersByPhoneCredentials(@Header("Authorization") header: String, @Body body: PayPersonRequestBody): Response<PayPersonResponse>
+
+    @GET("$CUSTOMER_USER/view-transaction")
+    fun viewPersonTransactionHistory(@Header("Authorization") header: String, @Query("paymaart_id") paymaartId: String, @Query("page") page: Int = 1): Call<PersonTransactions>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

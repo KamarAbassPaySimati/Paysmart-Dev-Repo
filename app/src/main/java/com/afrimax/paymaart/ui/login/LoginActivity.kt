@@ -557,7 +557,7 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
                 isValid = false
             }
 
-            phoneEditText.text.toString().replace(" ", "").length < 9 -> {
+            phoneEditText.text.toString().replace(" ", "").length < 8 -> {
                 showPhoneWarning(getString(R.string.invalid_phone))
                 isValid = false
             }
@@ -822,11 +822,7 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
 
     private fun getCountryCode(): String {
-        return if (BuildConfig.STAGE == Constants.STAGE_DEV || BuildConfig.STAGE == Constants.STAGE_QA) {
-            b.loginActivityCountryCodeSpinner.selectedItem.toString()
-        } else {
-            "+265"
-        }
+        return b.loginActivityCountryCodeSpinner.selectedItem.toString()
     }
 
     private fun showButtonLoader(

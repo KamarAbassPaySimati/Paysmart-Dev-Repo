@@ -84,7 +84,7 @@ class WebViewActivity : AppCompatActivity() {
                 url = Constants.TERMS_AND_CONDITIONS_URL
             }
             Constants.ABOUT_US_TYPE -> {
-                b.webViewActivityToolbarThree.title = ContextCompat.getString(this, R.string.about_us)
+                b.webViewActivityToolbar.title = ContextCompat.getString(this, R.string.about_us)
                 url = Constants.ABOUT_US_URL
             }
             Constants.HELP_CENTER_TYPE -> {

@@ -6,6 +6,7 @@ import java.time.Instant
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.abs
 
 private val DECIMAL_FORMAT_LONG = DecimalFormat("#,###.00")
 private val DECIMAL_FORMAT_SHORT = DecimalFormat("0.00")
@@ -58,7 +59,7 @@ fun <T> getFormattedAmount(amount: T?): String {
         else -> 0.00
     }
 
-    return if (newAmount < 1000) {
+    return if (abs(newAmount) < 1000) {
         DECIMAL_FORMAT_SHORT.format(newAmount)
     } else {
         DECIMAL_FORMAT_LONG.format(newAmount)
