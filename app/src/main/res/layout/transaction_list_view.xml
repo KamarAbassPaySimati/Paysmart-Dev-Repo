@@ -73,7 +73,7 @@
             android:maxLines="1"
             android:text="@string/paymaart_id"
             android:textColor="@color/neutralGrey"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="14sp" />
 
 
     </LinearLayout>
@@ -121,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/inter_medium"
+            android:fontFamily="@font/inter_regular"
             android:maxLines="1"
             android:text="@string/mwk"
             android:textColor="@color/neutralGrey"

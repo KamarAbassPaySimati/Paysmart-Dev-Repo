@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:id="@+id/payPersonCard"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="14dp"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/payPersonProfileSection"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:layout_marginEnd="16dp">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/payPersonIV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:shapeAppearanceOverlay="@style/profileImagePreviewSmall"
+            android:src="@drawable/ic_arrow_back"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/payPersonShortNameTV"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:fontFamily="@font/inter_medium"
+            android:textColor="@color/primaryColor"
+            android:background="@drawable/bg_transaction_profile"
+            android:text="@string/mwk"
+            android:gravity="center"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/payPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/paymaart"
+            android:fontFamily="@font/inter_medium"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:id="@+id/payPersonContainer"
+            android:layout_below="@+id/payPersonName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:id="@+id/payPersonUserId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/paymaart"
+                app:drawableStartCompat="@drawable/ico_user_search_result"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_regular"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/payPersonUserPhoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/paymaart"
+                app:drawableStartCompat="@drawable/ico_phone_search_result"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_regular"
+                android:textColor="@color/neutralGrey"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -29,6 +29,8 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatSpinner
+import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -37,7 +39,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.lifecycleScope
-import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
@@ -55,13 +56,13 @@ import com.afrimax.paymaart.ui.utils.interfaces.VerificationBottomSheetInterface
 import com.afrimax.paymaart.ui.webview.WebViewActivity
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.RecaptchaManager
+import com.afrimax.paymaart.util.countries
 import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.kotlin.core.Amplify
 import com.amplifyframework.storage.StorageException
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.recaptcha.Recaptcha
 import com.google.android.recaptcha.RecaptchaAction
 import com.google.android.recaptcha.RecaptchaClient
 import com.google.gson.Gson
@@ -90,7 +91,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     private var profilePicUri: Uri? = null
     private var isPicUploaded: Boolean = false
     private var profilePicBaseString: String = ""
-
+    private val items = countries.map { it.dialCode }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
@@ -163,47 +164,10 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
     private fun initViews() {
         guideSheet = GuideBottomSheet()
-
-        if (BuildConfig.STAGE == Constants.STAGE_DEV || BuildConfig.STAGE == Constants.STAGE_QA) {
-            //This is required for Indian phone number testing
-            b.onboardRegistrationActivityCountryCodeSpinner.visibility = View.VISIBLE
-            b.onboardRegistrationActivityCountryCodeDropDownIV.visibility = View.VISIBLE
-            b.onboardRegistrationActivityCountryCodeTV.visibility = View.GONE
-
-            val items = arrayOf("+265", "+91")
-            val adapter = ArrayAdapter(this, R.layout.spinner_country_code, items)
-            b.onboardRegistrationActivityCountryCodeSpinner.adapter = adapter
-
-            b.onboardRegistrationActivityCountryCodeSpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        p0: AdapterView<*>?, p1: View?, position: Int, p3: Long,
-                    ) {
-                        when (position) {
-                            0 -> b.onboardRegistrationActivityPhoneET.filters =
-                                arrayOf(InputFilter.LengthFilter(11))
-
-                            //Indian Phone numbers are 10 in size + 2 for space
-                            1 -> b.onboardRegistrationActivityPhoneET.filters =
-                                arrayOf(InputFilter.LengthFilter(12))
-                        }
-                        if (b.onboardRegistrationActivityPhoneET.text.toString()
-                                .isNotEmpty()
-                        ) b.onboardRegistrationActivityPhoneET.text!!.clear()
-                        isPhoneVerified = false
-                        b.onboardRegistrationActivityPhoneVerifyButton.visibility = View.VISIBLE
-                        b.onboardRegistrationActivityPhoneVerifiedTV.visibility = View.GONE
-                    }
-
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                        //
-                    }
-                }
-        } else {
-            b.onboardRegistrationActivityCountryCodeSpinner.visibility = View.GONE
-            b.onboardRegistrationActivityCountryCodeDropDownIV.visibility = View.GONE
-            b.onboardRegistrationActivityCountryCodeTV.visibility = View.VISIBLE
-        }
+        b.onboardRegistrationActivityCountryCodeDropDownIV.visibility = View.VISIBLE
+        val adapter = ArrayAdapter(this, R.layout.spinner_country_code, items)
+        setSpinnerDropdownHeight(b.onboardRegistrationActivityCountryCodeSpinner, 800, 150)
+        b.onboardRegistrationActivityCountryCodeSpinner.adapter = adapter
 
         fileResultLauncher =
             registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -216,7 +180,41 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             }
     }
 
+    private fun setSpinnerDropdownHeight(spinner: AppCompatSpinner, height: Int, verticalOffset: Int) {
+        try {
+            val popup = AppCompatSpinner::class.java.getDeclaredField("mPopup")
+            popup.isAccessible = true
+            val popupWindow = popup.get(spinner) as ListPopupWindow
+            popupWindow.height = height
+            popupWindow.verticalOffset = verticalOffset
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private fun setupListeners() {
+
+        b.onboardRegistrationActivityCountryCodeTV.setOnClickListener {
+            b.onboardRegistrationActivityCountryCodeSpinner.performClick()
+        }
+        b.onboardRegistrationActivityCountryCodeSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    p0: AdapterView<*>?, p1: View?, position: Int, p3: Long,
+                ) {
+                    if (b.onboardRegistrationActivityPhoneET.text.toString()
+                            .isNotEmpty()
+                    ) b.onboardRegistrationActivityPhoneET.text!!.clear()
+                    isPhoneVerified = false
+                    b.onboardRegistrationActivityCountryCodeTV.text = items[position]
+                    b.onboardRegistrationActivityPhoneVerifyButton.visibility = View.VISIBLE
+                    b.onboardRegistrationActivityPhoneVerifiedTV.visibility = View.GONE
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                }
+
+            }
 
         b.onboardRegistrationActivityBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -634,7 +632,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         val firstName = b.onboardRegistrationActivityFirstNameET.text.toString()
         val middleName = b.onboardRegistrationActivityMiddleNameET.text.toString()
         val lastName = b.onboardRegistrationActivityLastNameET.text.toString()
-        val countryCode = getCountryCode()
+        val countryCode = b.onboardRegistrationActivityCountryCodeSpinner.selectedItem.toString()
         val phoneNumber = b.onboardRegistrationActivityPhoneET.text.toString().replace(" ", "")
         val email = b.onboardRegistrationActivityEmailET.text.toString()
 
@@ -726,14 +724,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         loaderLottie.visibility = View.GONE
 
-    }
-
-    private fun getCountryCode(): String {
-        return if (BuildConfig.STAGE == Constants.STAGE_DEV || BuildConfig.STAGE == Constants.STAGE_QA) {
-            b.onboardRegistrationActivityCountryCodeSpinner.selectedItem.toString()
-        } else {
-            "+265"
-        }
     }
 
     private fun obtainSecurityQuestionAnswers(): List<SecurityQuestionAnswerModel> {
@@ -925,7 +915,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                 value = b.onboardRegistrationActivityPhoneET.text.toString()
                 b.onboardRegistrationActivityPhoneVerifyPB.visibility = View.VISIBLE
                 b.onboardRegistrationActivityPhoneVerifyButton.visibility = View.GONE
-                countryCode = getCountryCode()
+                countryCode = b.onboardRegistrationActivityCountryCodeSpinner.selectedItem.toString()
             }
         }
 
@@ -1085,7 +1075,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                 isValid = false
             }
 
-            phoneEditText.text.toString().replace(" ", "").length < 9 -> {
+            phoneEditText.text.toString().replace(" ", "").length < 8 -> {
                 showPhoneWarning(getString(R.string.invalid_phone))
                 isValid = false
             }
