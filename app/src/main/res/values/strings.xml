@@ -564,6 +564,7 @@
     <string name="paymaart_name">Paymaart Name</string>
     <string name="to">To</string>
     <string name="txn_value">Txn Value*</string>
+    <string name="txn_value_two">Txn Value</string>
     <string name="txn_id">Txn ID</string>
     <string name="date_time">Date, time (CAT)</string>
     <string name="note">Note</string>
