@@ -383,7 +383,8 @@ class ListPersonTransactionActivity : BaseActivity() {
                 override fun onResponse(call: Call<PayPersonResponse>, response: Response<PayPersonResponse>, ) {
                     if (response.isSuccessful && response.body() != null) {
                         val data = response.body()
-                        if (data?.payPersonList.isNullOrEmpty()) {
+                        val payPersonList = response.body()?.payPersonList
+                        if (payPersonList.isNullOrEmpty()) {
                             showEmptyScreen(true)
                         }else{
                             totalListItems += data?.payPersonList?.size!!
@@ -393,7 +394,6 @@ class ListPersonTransactionActivity : BaseActivity() {
                             mContactsList.addAll(data.payPersonList)
                         }
                     }
-                    hideLoader()
                 }
                 override fun onFailure(call: Call<PayPersonResponse>, throwable: Throwable) {
                     hideLoader()
@@ -484,12 +484,16 @@ class ListPersonTransactionActivity : BaseActivity() {
     private fun showEmptyScreen(condition: Boolean) {
         // true - no past transactions
         //false - no data found when searched,
-        binding.listPersonTransactionLoaderLottie.visibility = View.GONE
-        binding.listPersonTransactionContentBox.visibility = View.GONE
-        binding.listPersonTransactionNoDataFoundContainer.visibility = View.VISIBLE
-        binding.listPersonTransactionNoDataFoundIV.setImageResource(if(condition) R.drawable.ico_search_for_users else R.drawable.ico_no_data_found)
-        binding.listPersonTransactionNoDataFoundTitleTV.text = getString(if (condition) R.string.no_transactions_yet else R.string.no_data_found)
-        binding.listPersonTransactionNoDataFoundSubtextTV.text = getString(if (condition) R.string.no_transactions_subtext else R.string.no_data_found_subtext)
+        try {
+            binding.listPersonTransactionLoaderLottie.visibility = View.GONE
+            binding.listPersonTransactionContentBox.visibility = View.GONE
+            binding.listPersonTransactionNoDataFoundContainer.visibility = View.VISIBLE
+            binding.listPersonTransactionNoDataFoundIV.setImageResource(if(condition) R.drawable.ico_search_for_users else R.drawable.ico_no_data_found)
+            binding.listPersonTransactionNoDataFoundTitleTV.text = getString(if (condition) R.string.no_transactions_yet else R.string.no_data_found)
+            binding.listPersonTransactionNoDataFoundSubtextTV.text = getString(if (condition) R.string.no_transactions_subtext else R.string.no_data_found_subtext)
+        }catch (e: Exception){
+            "Response".showLogE(e.message ?: "")
+        }
     }
 }
 
