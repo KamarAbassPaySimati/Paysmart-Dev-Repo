@@ -34,31 +34,47 @@ class HomeScreenIconAdapter(
 
     override fun onBindViewHolder(holder: HomeScreenIconViewHolder, position: Int) {
         with(holder) {
+            binding.iconImage.visibility = View.GONE
+            binding.iconName.visibility = View.GONE
+            binding.iconNameInitials.visibility = View.GONE
             binding.iconImage.setImageDrawable(holder.itemView.context.getDrawableExt(R.drawable.ico_afrimax))
             // Set transaction-specific views
             when (transactionList[position].transactionType) {
                 CASH_IN, CASHIN -> {
-                    binding.iconImage.visibility = View.GONE
-                    binding.iconName.text = holder.itemView.context.getString(R.string.cash_in)
-                    binding.iconNameInitials.text = getInitials(transactionList[position].senderName)
+                    binding.iconName.apply {
+                        visibility = View.VISIBLE
+                        text = holder.itemView.context.getString(R.string.cash_in)
+                    }
+                    binding.iconNameInitials.apply {
+                        visibility = View.VISIBLE
+                        text = getInitials(transactionList[position].senderName)
+                    }
                 }
                 CASH_OUT, CASHOUT, CASH_OUT_REQUEST, CASH_OUT_FAILED -> {
-                    binding.iconImage.visibility = View.GONE
-                    binding.iconName.text = holder.itemView.context.getString(R.string.cash_out)
-                    binding.iconNameInitials.text = getInitials(transactionList[position].receiverName)
+                    binding.iconName.apply {
+                        visibility = View.VISIBLE
+                        text = holder.itemView.context.getString(R.string.cash_out)
+                    }
+                    binding.iconNameInitials.apply {
+                        visibility = View.VISIBLE
+                        text = getInitials(transactionList[position].receiverName)
+                    }
                 }
                 PAY_IN -> {
-                    binding.iconImage.visibility = View.GONE
                     binding.iconName.text = holder.itemView.context.getString(R.string.pay_in)
                     binding.iconNameInitials.text = getInitials(transactionList[position].enteredByName)
                 }
                 REFUND -> {
-                    binding.iconImage.visibility = View.GONE
-                    binding.iconName.text = holder.itemView.context.getString(R.string.refund)
-                    binding.iconNameInitials.text = getInitials(transactionList[position].senderName)
+                    binding.iconName.apply {
+                        visibility = View.VISIBLE
+                        text = holder.itemView.context.getString(R.string.refund)
+                    }
+                    binding.iconNameInitials.apply {
+                        visibility = View.VISIBLE
+                        text = getInitials(transactionList[position].senderName)
+                    }
                 }
                 INTEREST -> {
-                    binding.iconNameInitials.visibility = View.GONE
                     binding.iconName.text =holder.itemView.context.getString(R.string.interest)
                     binding.iconImage.also {
                         it.visibility = View.VISIBLE
@@ -70,21 +86,29 @@ class HomeScreenIconAdapter(
                     }
                 }
                 G2P_PAY_IN -> {
-                    binding.iconImage.visibility = View.GONE
-                    binding.iconName.text = holder.itemView.context.getString(R.string.g2p_pay_in)
-                    binding.iconNameInitials.text = getInitials(transactionList[position].senderName)
+                    binding.iconName.apply {
+                        visibility = View.VISIBLE
+                        text = holder.itemView.context.getString(R.string.g2p_pay_in)
+                    }
+                    binding.iconNameInitials.apply {
+                        visibility = View.VISIBLE
+                        text = getInitials(transactionList[position].senderName)
+                    }
                 }
                 PAYMAART -> {
-                    binding.iconNameInitials.visibility = View.GONE
-                    binding.iconName.text =holder.itemView.context.getString(R.string.paymaart)
+                    binding.iconName.apply {
+                        visibility = View.VISIBLE
+                        text =holder.itemView.context.getString(R.string.paymaart)
+                    }
                     binding.iconImage.apply {
                         visibility = View.VISIBLE
                         setImageDrawable(holder.itemView.context.getDrawableExt(R.drawable.ico_paymaart_icon))
                     }
                 }
                 AFRIMAX -> {
-                    binding.iconNameInitials.visibility = View.GONE
-                    binding.iconName.text =holder.itemView.context.getString(R.string.afrimax)
+                    binding.iconName.apply {
+                        visibility = View.VISIBLE
+                    }
                     binding.iconImage.also {
                         it.visibility = View.VISIBLE
                         Glide

@@ -76,7 +76,9 @@ class PayPersonListAdapter(private val contacts: List<PayPerson>) : RecyclerView
         fun onClick(transaction: PayPerson)
     }
 
-    private fun formattedPhoneNumber(phoneNumber: String): String {
+    private fun formattedPhoneNumber(phoneNumber: String?): String {
+        if(phoneNumber == null)
+            return ""
         return "${phoneNumber.substring(0, 2)} ${phoneNumber.substring(2, 6)} ${phoneNumber.substring(6)}"
     }
 }
