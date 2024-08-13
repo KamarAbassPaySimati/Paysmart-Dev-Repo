@@ -164,6 +164,7 @@ object Constants {
     const val TOOLBAR_TYPE = "toolbar_type"
     const val FAQS_TYPE = "faqs_type"
     const val FAQs_URL = "https://www.paymaart.net/mobile-faqs"
+    const val PAYMAART_ID = "paymaart_id"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"
