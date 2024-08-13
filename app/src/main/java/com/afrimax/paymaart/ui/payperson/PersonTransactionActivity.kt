@@ -84,17 +84,16 @@ class PersonTransactionActivity : BaseActivity() {
             personTransactionHandler.enqueue(object: Callback<PersonTransactions> {
                 override fun onResponse(call: Call<PersonTransactions>, response: Response<PersonTransactions>) {
                     if (response.isSuccessful && response.body() != null) {
-                        if ( response.body() != null ) {
-                            val transactions = response.body()?.transactions
+                        val transactions = response.body()?.transactions
+                        if (transactions.isNullOrEmpty()) {
+                            showEmptyScreen()
+                        }else{
+                            hideLoader()
                             transactionList.clear()
-                            transactionList.addAll(processMessage(transactions ?: emptyList()))
-                            "Response".showLogE(transactionList)
+                            transactionList.addAll(processMessage(transactions))
                             binding.paymentListRecyclerView.adapter?.notifyDataSetChanged()
                         }
-                    }else {
-                        showEmptyScreen()
                     }
-                    hideLoader()
                 }
 
                 override fun onFailure(call: Call<PersonTransactions>, throwable: Throwable) {
