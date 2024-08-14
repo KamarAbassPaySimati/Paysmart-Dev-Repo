@@ -162,10 +162,12 @@ class UnregisteredPayActivity : BaseActivity() {
 
 
         if (isValid) {
+            val fullName =
+                "${b.unregisteredPayActivityFirstNameET.text} ${b.unregisteredPayActivityMiddleNameET.text} ${b.unregisteredPayActivityLastNameET.text}"
             startActivity(Intent(
                 this@UnregisteredPayActivity, PayPersonActivity::class.java
             ).apply {
-                putExtra(Constants.USER_DATA, userData)
+                putExtra(Constants.USER_DATA, userData.copy(name = fullName))
             })
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)

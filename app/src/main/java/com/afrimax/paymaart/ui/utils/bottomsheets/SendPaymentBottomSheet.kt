@@ -77,6 +77,9 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                     else -> ""
                 }
             }
+           is PayToUnRegisteredPersonRequest -> {
+               getString(R.string.send_payment_subtext)
+            }
 
             else -> ""
         }

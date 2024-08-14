@@ -116,6 +116,8 @@ object Constants {
     const val VIEW_SCOPE_UPDATE = "view_scope_update" // used for upgrading simplified to full kyc
     const val PUBLIC_PROFILE = "public_profile"
     const val PROFILE_PICTURE = "profile_picture"
+    const val PHONE_NUMBER = "phone_number"
+    const val COUNTRY_CODE = "country_code"
     const val KYC_SEND_EMAIL = "kyc_send_email"
     const val OTP_SECURITY_QUESTION = "otp_security_question"
     const val OTP_QUESTION_ID = "otp_question_id"

@@ -7,6 +7,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
+import android.view.WindowManager
+import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -15,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.IndividualSearchUserData
-import com.afrimax.paymaart.data.model.PayAfrimaxResponse
 import com.afrimax.paymaart.data.model.PayToUnRegisteredPersonRequest
 import com.afrimax.paymaart.data.model.PayUnRegisteredPersonResponse
 import com.afrimax.paymaart.databinding.ActivityPayPersonBinding
@@ -25,6 +26,7 @@ import com.afrimax.paymaart.ui.payment.PaymentSuccessfulActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.TotalReceiptSheet
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
+import com.airbnb.lottie.LottieAnimationView
 import kotlinx.coroutines.launch
 
 
@@ -191,12 +193,19 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
     }
 
     private fun getTaxAndVatApi(amount: Double) {
+        showButtonLoader(
+            b.payPersonActivitySendPaymentButton, b.payPersonActivitySendPaymentButtonLoaderLottie
+        )
+        val phone = if (userData.countryCode.isEmpty()) "+265${userData.phoneNumber}".replace(
+            " ", ""
+        ) else "${userData.countryCode}${userData.phoneNumber}".replace(" ", "")
+
         lifecycleScope.launch {
             val idToken = fetchIdToken()
             val payPersonUnregisteredCall = ApiClient.apiService.getTaxForPayToUnRegisteredPerson(
                 idToken, PayToUnRegisteredPersonRequest(
                     amount = amount,
-                    phoneNumber = "${userData.countryCode}${userData.phoneNumber}",
+                    phoneNumber = phone,
                     callType = true,
                     receiverName = userData.name,
                     senderId = this@PayPersonActivity.retrievePaymaartId(),
@@ -207,12 +216,17 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
             val body = payPersonUnregisteredCall.body()
 
             if (payPersonUnregisteredCall.isSuccessful && body != null) {
+                hideButtonLoader(
+                    b.payPersonActivitySendPaymentButton,
+                    b.payPersonActivitySendPaymentButtonLoaderLottie,
+                    getString(R.string.send_payment)
+                )
                 TotalReceiptSheet(
                     PayPersonModel(
-                        amount = amount.toString(),
+                        amount = body.data.totalAmount,
                         vat = body.data.vatAmount,
                         txnFee = body.data.grossTransactionFee,
-                        phoneNumber = "${userData.countryCode}${userData.phoneNumber}",
+                        phoneNumber = phone,
                         receiverName = userData.name,
                         note = b.payPersonActivityAddNoteET.text.toString(),
                         senderId = this@PayPersonActivity.retrievePaymaartId()
@@ -232,6 +246,26 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
         }
         startActivity(intent, sceneTransitions)
         finishAfterTransition()
+    }
+
+
+    private fun showButtonLoader(
+        actionButton: AppCompatButton, loaderLottie: LottieAnimationView
+    ) {
+        actionButton.text = getString(R.string.empty_string)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+        loaderLottie.visibility = View.VISIBLE
+    }
+
+    private fun hideButtonLoader(
+        actionButton: AppCompatButton, loaderLottie: LottieAnimationView, buttonText: String
+    ) {
+        actionButton.text = buttonText
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        loaderLottie.visibility = View.GONE
     }
 
     override fun onPaymentFailure(message: String) {
