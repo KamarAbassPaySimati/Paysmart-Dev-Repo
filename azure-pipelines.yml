@@ -15,7 +15,7 @@ variables:
     - group: qa_customer
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-production') }}:
     - group: pre-production_customer
-  - ${{ if or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')) }}:
+  - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     - group: develop_customer
 stages:
 - stage: CodeQuality
@@ -53,7 +53,7 @@ stages:
     - job: "lint_sast_dast"
       displayName: "Code Quality"
       dependsOn: Download_Environment
-      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
       steps:
@@ -90,7 +90,7 @@ stages:
     - job: "sast"
       displayName: 'Static Application Security Testing (SAST)'
       dependsOn: Download_Environment
-      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
       steps:
@@ -103,7 +103,7 @@ stages:
     - job: "dast"
       displayName: 'Dynamic Application Security Testing (DAST)'
       dependsOn: Download_Environment
-      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
       steps:
@@ -121,7 +121,7 @@ stages:
   jobs:
     - job: android_build
       # dependsOn: lint_sast_dast
-      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       displayName: "Build"
       pool:
         vmImage: "macOS-latest"
