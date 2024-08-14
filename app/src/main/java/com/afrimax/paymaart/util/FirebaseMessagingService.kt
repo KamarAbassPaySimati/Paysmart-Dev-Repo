@@ -209,4 +209,5 @@ class MessagingService(
 
 enum class NotificationNavigation(val screenName: String){
     MEMBERSHIP_PLANS("membership"),
+    TRANSACTIONS("transactions")
 }
