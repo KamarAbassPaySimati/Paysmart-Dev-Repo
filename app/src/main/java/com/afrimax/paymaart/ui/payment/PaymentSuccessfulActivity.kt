@@ -24,6 +24,7 @@ import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.model.CashOutResponse
 import com.afrimax.paymaart.data.model.PayAfrimaxResponse
+import com.afrimax.paymaart.data.model.PayToRegisteredPersonResponse
 import com.afrimax.paymaart.data.model.PayUnRegisteredPersonResponse
 import com.afrimax.paymaart.data.model.SubscriptionPaymentDetails
 import com.afrimax.paymaart.databinding.ActivityPaymentSuccessfulBinding
@@ -154,6 +155,29 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 binding.paymentSuccessfulToPhoneNumberContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulToPaymaartIdContainer.visibility = View.GONE
                 transactionId = data.transactionId ?: ""
+                binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                binding.paymentSuccessfulMembershipValue.text = data.note
+            }
+
+
+            is PayToRegisteredPersonResponse -> {
+                val model = CommonViewModel(
+                    fromName = data.senderName,
+                    fromId = data.senderId,
+                    toName = data.receiverName,
+                    toId = data.receiverId,
+                    transactionAmount = data.transactionAmount,
+                    transactionFees = data.transactionFee,
+                    vat = data.vat,
+                    transactionId = data.transactionId,
+                    dateTime = data.createdAt.toLong()
+                )
+                setCommonView(model)
+                binding.paymentSuccessfulToPhoneNumberContainer.visibility = View.GONE
+                binding.paymentSuccessfulToPaymaartIdContainer.visibility = View.VISIBLE
+                transactionId = data.transactionId ?: ""
+                binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                binding.paymentSuccessfulMembershipValue.text = data.note
             }
         }
 

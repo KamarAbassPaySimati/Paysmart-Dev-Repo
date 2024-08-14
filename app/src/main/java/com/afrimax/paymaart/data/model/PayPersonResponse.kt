@@ -18,7 +18,7 @@ data class PayPerson(
     @SerializedName("paymaart_id")
     val paymaartId: String? = null,
     @SerializedName("phone_number")
-    val phoneNumber: String = "",
+    val phoneNumber: String? = "",
     @SerializedName("profile_pic")
     val profilePicture: String? = null,
     @SerializedName("country_code")

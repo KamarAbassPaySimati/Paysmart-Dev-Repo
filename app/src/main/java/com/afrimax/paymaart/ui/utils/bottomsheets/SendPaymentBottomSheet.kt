@@ -18,6 +18,7 @@ import com.afrimax.paymaart.data.model.DefaultResponse
 import com.afrimax.paymaart.data.model.PayToAfrimaxErrorResponse
 import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paymaart.data.model.PayToAfrimaxResponse
+import com.afrimax.paymaart.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paymaart.data.model.PayToUnRegisteredPersonRequest
 import com.afrimax.paymaart.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paymaart.data.model.SubscriptionPaymentRequestBody
@@ -68,7 +69,10 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
         }
 
         binding.sendPaymentSubText.text = when (data) {
-            is SubscriptionDetailsRequestBody -> getString(R.string.send_payment_subtext)
+            is SubscriptionDetailsRequestBody, is PayToUnRegisteredPersonRequest, is PayToRegisteredPersonRequest -> getString(
+                R.string.send_payment_subtext
+            )
+
             is PayToAfrimaxRequestBody -> getString(R.string.send_payment_subtext_pay_afrimax)
             is CashOutRequestBody -> {
                 when (loginMode) {
@@ -76,9 +80,6 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                     Constants.SELECTION_PASSWORD -> getString(R.string.enter_your_password_to_make_secure_payment)
                     else -> ""
                 }
-            }
-           is PayToUnRegisteredPersonRequest -> {
-               getString(R.string.send_payment_subtext)
             }
 
             else -> ""
@@ -189,6 +190,11 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                 is PayToUnRegisteredPersonRequest -> onConfirmClickedPayUnRegisteredPerson(
                     binding.sendPaymentPin.text.toString(), data
                 )
+
+                is PayToRegisteredPersonRequest -> onConfirmClickedPayRegisteredPerson(
+                    binding.sendPaymentPin.text.toString(),
+                    data
+                )
             }
         }
     }
@@ -219,6 +225,15 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
 
                 is CashOutRequestBody -> onConfirmClickedCashOut(
                     binding.sendPaymentPassword.text.toString(), data
+                )
+
+                is PayToUnRegisteredPersonRequest -> onConfirmClickedPayUnRegisteredPerson(
+                    binding.sendPaymentPassword.text.toString(), data
+                )
+
+                is PayToRegisteredPersonRequest -> onConfirmClickedPayRegisteredPerson(
+                    binding.sendPaymentPassword.text.toString(),
+                    data
                 )
             }
         }
@@ -423,7 +438,60 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                 dismiss()
             } else {
                 val errorBody =
-                    Gson().fromJson(payToUnRegisteredCall.errorBody()?.string(), DefaultResponse::class.java)
+                    Gson().fromJson(
+                        payToUnRegisteredCall.errorBody()?.string(),
+                        DefaultResponse::class.java
+                    )
+                if (errorBody.message == "Incorrect password") {
+                    when (loginMode) {
+                        Constants.SELECTION_PIN -> {
+                            binding.sendPaymentPinETWarning.apply {
+                                visibility = View.VISIBLE
+                                text = getString(R.string.invalid_pin)
+                            }
+                        }
+
+                        Constants.SELECTION_PASSWORD -> {
+                            binding.sendPaymentPasswordETWarning.apply {
+                                visibility = View.VISIBLE
+                                text = getString(R.string.invalid_password)
+                            }
+                        }
+                    }
+                } else {
+                    displayError(errorBody.message)
+                }
+            }
+
+        }
+    }
+
+
+    private fun onConfirmClickedPayRegisteredPerson(
+        password: String, data: PayToRegisteredPersonRequest
+    ) {
+        val activity = requireContext() as BaseActivity
+        val encryptedPassword = AESCrypt.encrypt(password)
+        val newRequestBody = data.copy(credential = encryptedPassword)
+        activity.hideKeyboard(view, requireContext())
+        showButtonLoader()
+        lifecycleScope.launch {
+            val idToken = activity.fetchIdToken()
+            val payToUnRegisteredCall = ApiClient.apiService.payToRegisteredPerson(
+                idToken, newRequestBody
+            )
+
+            val body = payToUnRegisteredCall.body()
+
+            if (payToUnRegisteredCall.isSuccessful && body != null) {
+                sheetCallback.onPaymentSuccess(body.data)
+                dismiss()
+            } else {
+                val errorBody =
+                    Gson().fromJson(
+                        payToUnRegisteredCall.errorBody()?.string(),
+                        DefaultResponse::class.java
+                    )
                 if (errorBody.message == "Incorrect password") {
                     when (loginMode) {
                         Constants.SELECTION_PIN -> {

@@ -395,6 +395,7 @@ class ListPersonTransactionActivity : BaseActivity() {
                     call: Call<PayPersonResponse>,
                     response: Response<PayPersonResponse>,
                 ) {
+                    hideLoader()
                     if (response.isSuccessful && response.body() != null) {
                         val data = response.body()
                         val payPersonList = response.body()?.payPersonList

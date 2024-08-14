@@ -68,13 +68,22 @@ class PersonTransactionActivity : BaseActivity() {
 
     private fun setUpListeners() {
         binding.paymentListSubmitButton.setOnClickListener {
-            val i = Intent(this@PersonTransactionActivity, UnregisteredPayActivity::class.java)
+
+            val i = if (paymaartID.isNotEmpty() && phoneNumber.isNotEmpty()) Intent(
+                this@PersonTransactionActivity, PayPersonActivity::class.java
+            ) else Intent(this@PersonTransactionActivity, UnregisteredPayActivity::class.java)
+
+            val phone = when {
+                paymaartID.isNotEmpty() && phoneNumber.isEmpty() -> paymaartID
+                else -> phoneNumber
+            }
+
             val userData = IndividualSearchUserData(
                 paymaartId = paymaartID,
-                phoneNumber = phoneNumber,
+                phoneNumber = phone,
                 viewType = "",
                 countryCode = countryCode,
-                name = "",
+                name = userName,
                 membership = ""
             )
             i.putExtra(Constants.USER_DATA, userData)
@@ -124,6 +133,7 @@ class PersonTransactionActivity : BaseActivity() {
                 }
 
                 override fun onFailure(call: Call<PersonTransactions>, throwable: Throwable) {
+                    "Response".showLogE(throwable)
                     showEmptyScreen()
                     showToast(getString(R.string.default_error_toast))
                 }
@@ -173,10 +183,10 @@ class PersonTransactionActivity : BaseActivity() {
         return groupedMessages
     }
 
-    private fun getFormattedDate(timestamp: Long?): String {
+    private fun getFormattedDate(timestamp: Double?): String {
         if (timestamp == null) return ""
         val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-        return sdf.format(Date(timestamp * 1000))
+        return sdf.format(Date(timestamp.toLong() * 1000))
     }
 }
 

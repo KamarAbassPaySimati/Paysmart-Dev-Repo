@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.model.CashOutRequestBody
 import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
+import com.afrimax.paymaart.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paymaart.data.model.PayToUnRegisteredPersonRequest
 import com.afrimax.paymaart.databinding.TotalAmountReceiptBottomSheetBinding
 import com.afrimax.paymaart.ui.cashout.CashOutModel
-import com.afrimax.paymaart.ui.payperson.PayPersonModel
+import com.afrimax.paymaart.ui.payperson.PayPersonRegisteredModel
+import com.afrimax.paymaart.ui.payperson.PayPersonUnRegisteredModel
 import com.afrimax.paymaart.ui.paytoaffrimax.PayAfrimaxModel
 import com.afrimax.paymaart.util.getFormattedAmount
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -38,10 +40,16 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                 vat = model.vat
             }
 
-            is PayPersonModel -> {
+            is PayPersonUnRegisteredModel -> {
                 amount = model.amount
                 vat = model.vat
                 txnFee = model.txnFee
+            }
+
+            is PayPersonRegisteredModel -> {
+                vat = model.vat
+                txnFee = model.txnFee
+                amount = model.amount
             }
         }
         b.totalAmountReceiptTotalAmount.text =
@@ -96,16 +104,27 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                 sendPaymentBottomSheet = SendPaymentBottomSheet(cashOutModel)
             }
 
-            is PayPersonModel -> {
-                val payPersonModel = PayToUnRegisteredPersonRequest(
+            is PayPersonUnRegisteredModel -> {
+                val payPersonUnRegisteredModel = PayToUnRegisteredPersonRequest(
                     amount = model.amount.toDouble(),
                     callType = false,
+                    phoneNumber = model.phoneNumber,
                     receiverName = model.receiverName,
                     note = model.note,
                     senderId = model.senderId,
                     password = null
                 )
-                sendPaymentBottomSheet = SendPaymentBottomSheet(payPersonModel)
+                sendPaymentBottomSheet = SendPaymentBottomSheet(payPersonUnRegisteredModel)
+            }
+
+            is PayPersonRegisteredModel -> {
+                val payPersonRegisteredModel = PayToRegisteredPersonRequest(
+                    transactionAmount = model.amount.toDouble(),
+                    paymaartId = model.paymaartId,
+                    note = model.note,
+                    credential = null
+                )
+                sendPaymentBottomSheet = SendPaymentBottomSheet(payPersonRegisteredModel)
             }
         }
         dismiss()

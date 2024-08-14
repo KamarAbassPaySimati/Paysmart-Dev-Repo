@@ -10,21 +10,23 @@ import com.afrimax.paymaart.databinding.PayPersonAdapterViewBinding
 import com.afrimax.paymaart.util.getInitials
 import com.bumptech.glide.Glide
 
-class PayPersonListAdapter(private val contacts: List<PayPerson>) : RecyclerView.Adapter<PayPersonListAdapter.ContactsViewHolder>(){
+class PayPersonListAdapter(private val contacts: List<PayPerson>) :
+    RecyclerView.Adapter<PayPersonListAdapter.ContactsViewHolder>() {
     private var onClickListener: OnClickListener? = null
-    inner class ContactsViewHolder(val binding: PayPersonAdapterViewBinding): RecyclerView.ViewHolder(binding.root)
+
+    inner class ContactsViewHolder(val binding: PayPersonAdapterViewBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactsViewHolder {
         val view = PayPersonAdapterViewBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
         return ContactsViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ContactsViewHolder, position: Int) {
-        with(holder){
+        val contact = contacts[position]
+        with(holder) {
             binding.payPersonName.visibility = View.GONE
             binding.payPersonUserPhoneNumber.visibility = View.GONE
             binding.payPersonUserId.visibility = View.GONE
@@ -35,27 +37,35 @@ class PayPersonListAdapter(private val contacts: List<PayPerson>) : RecyclerView
                 visibility = View.VISIBLE
                 text = contacts[position].fullName
             }
-            binding.payPersonUserPhoneNumber.apply {
-                visibility = View.VISIBLE
-                text = contacts[position].let { it.countryCode + " " +formattedPhoneNumber(it.phoneNumber) }
+            if (!contact.phoneNumber.isNullOrEmpty() && !contact.paymaartId.isNullOrEmpty()) {
+                //registered customer
+                binding.payPersonUserPhoneNumber.visibility = View.VISIBLE
+                binding.payPersonUserPhoneNumber.text =
+                    contact.let { it.countryCode + " " + formattedPhoneNumber(it.phoneNumber) }
+
+                binding.payPersonUserId.visibility = View.VISIBLE
+                binding.payPersonUserId.text = contact.paymaartId
+            } else if (contact.phoneNumber.isNullOrEmpty() && !contact.paymaartId.isNullOrEmpty()) {
+                //Unregistered customer
+                binding.payPersonUserPhoneNumber.visibility = View.VISIBLE
+                binding.payPersonUserPhoneNumber.text = formattedPhoneNumber(contact.paymaartId)
+            } else if (contact.paymaartId.isNullOrEmpty() && !contact.phoneNumber.isNullOrEmpty()) {
+                //Unregistered customer
+                binding.payPersonUserPhoneNumber.visibility = View.VISIBLE
+                binding.payPersonUserPhoneNumber.text = formattedPhoneNumber(contact.phoneNumber)
             }
-            binding.payPersonUserId.apply {
-                visibility = if (contacts[position].paymaartId.isNullOrEmpty()) View.GONE else View.VISIBLE
-                text = contacts[position].paymaartId
-            }
+
             if (contacts[position].profilePicture.isNullOrEmpty()) {
                 binding.payPersonShortNameTV.apply {
                     visibility = View.VISIBLE
                     text = getInitials(contacts[position].fullName)
                 }
-            }else {
+            } else {
                 binding.payPersonIV.also {
                     it.visibility = View.VISIBLE
-                    Glide
-                        .with(it)
+                    Glide.with(it)
                         .load(BuildConfig.CDN_BASE_URL + contacts[position].profilePicture)
-                        .centerCrop()
-                        .into(it)
+                        .centerCrop().into(it)
                 }
             }
             binding.root.setOnClickListener {
@@ -77,8 +87,11 @@ class PayPersonListAdapter(private val contacts: List<PayPerson>) : RecyclerView
     }
 
     private fun formattedPhoneNumber(phoneNumber: String?): String {
-        if(phoneNumber == null)
-            return ""
-        return "${phoneNumber.substring(0, 2)} ${phoneNumber.substring(2, 6)} ${phoneNumber.substring(6)}"
+        if (phoneNumber == null) return ""
+        return "${phoneNumber.substring(0, 2)} ${
+            phoneNumber.substring(
+                2, 6
+            )
+        } ${phoneNumber.substring(6)}"
     }
 }

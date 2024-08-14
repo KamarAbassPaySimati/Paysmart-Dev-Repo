@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.IndividualSearchUserData
+import com.afrimax.paymaart.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paymaart.data.model.PayToUnRegisteredPersonRequest
 import com.afrimax.paymaart.data.model.PayUnRegisteredPersonResponse
 import com.afrimax.paymaart.databinding.ActivityPayPersonBinding
@@ -188,17 +189,20 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
         if (isValid) {
             //Valid amount
             hideKeyboard(this@PayPersonActivity)
-            getTaxAndVatApi(amount = amount.toDouble())
+            if (userData.paymaartId.isNotEmpty() && userData.phoneNumber.isNotEmpty()) getTaxAndVatForRegisteredApi(
+                amount = amount.toDouble()
+            )
+            else getTaxAndVatForUnRegisteredApi(amount = amount.toDouble())
         }
     }
 
-    private fun getTaxAndVatApi(amount: Double) {
+    private fun getTaxAndVatForUnRegisteredApi(amount: Double) {
         showButtonLoader(
             b.payPersonActivitySendPaymentButton, b.payPersonActivitySendPaymentButtonLoaderLottie
         )
-        val phone = if (userData.countryCode.isEmpty()) "+265${userData.phoneNumber}".replace(
+        val phone = if (userData.phoneNumber.startsWith("+")) userData.phoneNumber.replace(
             " ", ""
-        ) else "${userData.countryCode}${userData.phoneNumber}".replace(" ", "")
+        ) else "+265${userData.phoneNumber}".replace(" ", "")
 
         lifecycleScope.launch {
             val idToken = fetchIdToken()
@@ -222,7 +226,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
                     getString(R.string.send_payment)
                 )
                 TotalReceiptSheet(
-                    PayPersonModel(
+                    PayPersonUnRegisteredModel(
                         amount = body.data.totalAmount,
                         vat = body.data.vatAmount,
                         txnFee = body.data.grossTransactionFee,
@@ -238,16 +242,41 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
         }
     }
 
-    override fun onPaymentSuccess(successData: Any?) {
-        val intent = Intent(this, PaymentSuccessfulActivity::class.java)
-        val sceneTransitions = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
-        if (successData != null && successData is PayUnRegisteredPersonResponse) {
-            intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData as Parcelable)
-        }
-        startActivity(intent, sceneTransitions)
-        finishAfterTransition()
-    }
+    private fun getTaxAndVatForRegisteredApi(amount: Double) {
+        showButtonLoader(
+            b.payPersonActivitySendPaymentButton, b.payPersonActivitySendPaymentButtonLoaderLottie
+        )
 
+        lifecycleScope.launch {
+            val idToken = fetchIdToken()
+            val payPersonUnregisteredCall = ApiClient.apiService.getTaxForPayToRegisteredPerson(
+                idToken, PayToRegisteredPersonRequest(
+                    paymaartId = userData.paymaartId,
+                    transactionAmount = amount,
+                )
+            )
+            val body = payPersonUnregisteredCall.body()
+
+            if (payPersonUnregisteredCall.isSuccessful && body != null) {
+                hideButtonLoader(
+                    b.payPersonActivitySendPaymentButton,
+                    b.payPersonActivitySendPaymentButtonLoaderLottie,
+                    getString(R.string.send_payment)
+                )
+                TotalReceiptSheet(
+                    PayPersonRegisteredModel(
+                        amount = body.totalAmount.toString(),
+                        vat = body.vat.toString(),
+                        txnFee = body.transactionFee.toString(),
+                        note = b.payPersonActivityAddNoteET.text.toString(),
+                        paymaartId = userData.paymaartId
+                    )
+                ).show(supportFragmentManager, TotalReceiptSheet.TAG)
+            } else {
+                showToast(getString(R.string.default_error_toast))
+            }
+        }
+    }
 
     private fun showButtonLoader(
         actionButton: AppCompatButton, loaderLottie: LottieAnimationView
@@ -267,6 +296,17 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
         loaderLottie.visibility = View.GONE
     }
+
+    override fun onPaymentSuccess(successData: Any?) {
+        val intent = Intent(this, PaymentSuccessfulActivity::class.java)
+        val sceneTransitions = ActivityOptionsCompat.makeSceneTransitionAnimation(this).toBundle()
+        if (successData != null) {
+            intent.putExtra(Constants.SUCCESS_PAYMENT_DATA, successData as Parcelable)
+        }
+        startActivity(intent, sceneTransitions)
+        finishAfterTransition()
+    }
+
 
     override fun onPaymentFailure(message: String) {
         b.payPersonActivityPaymentErrorBox.visibility = View.VISIBLE
