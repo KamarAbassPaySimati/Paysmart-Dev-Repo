@@ -342,23 +342,21 @@ class ListPersonTransactionActivity : BaseActivity() {
                         body = PayPersonRequestBody(phoneNumberList)
                     )
                 if (response.isSuccessful) {
-                    hideLoader()
                     val data = response.body()
                     if (data != null) {
-                        totalListItems += data.payPersonList.size
-                        paginationEnd = totalListItems >= data.totalCount
-                        if (!paginationEnd) {page++}
-                        mContactsList.clear()
-                        mContactsList.addAll(data.payPersonList)
-                        if (mContactsList.isEmpty()) {
-                            binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
+                        if (data.payPersonList.isEmpty()) {
                             showEmptyScreen(false)
-                        }else {
+                        }else{
+                            hideLoader()
+                            totalListItems += data.payPersonList.size
+                            paginationEnd = totalListItems >= data.totalCount
+                            if (!paginationEnd) {page++}
+                            mContactsList.clear()
+                            mContactsList.addAll(data.payPersonList)
                             binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
                         }
                     }
-                }else{
-                    hideLoader()
+                }else {
                     showEmptyScreen(false)
                 }
             }catch (e: Exception){
@@ -392,6 +390,7 @@ class ListPersonTransactionActivity : BaseActivity() {
                             if (!paginationEnd) {page++}
                             mContactsList.clear()
                             mContactsList.addAll(data.payPersonList)
+                            hideLoader()
                         }
                     }
                 }
@@ -479,6 +478,7 @@ class ListPersonTransactionActivity : BaseActivity() {
         binding.listPersonTransactionLoaderLottie.visibility = View.GONE
         binding.listPersonTransactionNoDataFoundContainer.visibility = View.GONE
         binding.listPersonTransactionContentBox.visibility = View.VISIBLE
+        if (searchText.isNotEmpty())  binding.listPersonTransactionRecentTransactionsTV.visibility = View.GONE
     }
 
     private fun showEmptyScreen(condition: Boolean) {

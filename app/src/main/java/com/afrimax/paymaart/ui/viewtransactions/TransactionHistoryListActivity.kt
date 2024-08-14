@@ -32,6 +32,7 @@ import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companio
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAYMAART
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_IN
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_PERSON
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_UNREGISTERED
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.REFUND
 import com.afrimax.paymaart.ui.utils.adapters.decoration.RecyclerViewDecoration
 import com.afrimax.paymaart.ui.utils.bottomsheets.TransactionHistorySheet
@@ -380,7 +381,8 @@ class TransactionHistoryListActivity : BaseActivity(), TransactionHistoryInterfa
         CASH_OUT_FAILED,
         PAYMAART,
         AFRIMAX,
-        PAY_PERSON
+        PAY_PERSON,
+        PAY_UNREGISTERED
     )
 
     override fun clearAllFilters() {

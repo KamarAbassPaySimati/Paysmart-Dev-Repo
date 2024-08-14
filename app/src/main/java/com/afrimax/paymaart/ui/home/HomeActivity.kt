@@ -43,6 +43,7 @@ import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
 import com.afrimax.paymaart.ui.payperson.ListPersonTransactionActivity
+import com.afrimax.paymaart.ui.payperson.PersonTransactionActivity
 import com.afrimax.paymaart.ui.paytoaffrimax.ValidateAfrimaxIdActivity
 import com.afrimax.paymaart.ui.refundrequest.RefundRequestActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
@@ -234,7 +235,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         payPersonTransactionsAdapter.setOnClickListener(object: HomeScreenPayPersonAdapter.OnClickListener{
             override fun onClick(transaction: PayPersonTransactions) {
-                val intent = Intent(this@HomeActivity, ViewSpecificTransactionActivity::class.java)
+                val intent = Intent(this@HomeActivity, PersonTransactionActivity::class.java)
                 intent.putExtra(Constants.PAYMAART_ID, transaction.paymaartId)
                 intent.putExtra(Constants.CUSTOMER_NAME, transaction.name)
                 intent.putExtra(Constants.PROFILE_PICTURE, transaction.profilePic)
