@@ -633,11 +633,11 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private fun populatePayPersonRecyclerView(payPersonTransactions: List<PayPersonTransactions>) {
         if (payPersonTransactions.isEmpty()) {
             b.homeActivityNoPersonTransactionsTV.visibility = View.VISIBLE
-            b.homeActivityTransactionsRecyclerView.visibility = View.GONE
+            b.homeActivityPersonsRecyclerView.visibility = View.GONE
             b.homeActivityPersonsSeeAllTV.visibility = View.GONE
         } else {
             b.homeActivityNoTransactionsTV.visibility = View.GONE
-            b.homeActivityTransactionsRecyclerView.visibility = View.VISIBLE
+            b.homeActivityPersonsRecyclerView.visibility = View.VISIBLE
             if (payPersonTransactions.size > 4) b.homeActivityPersonsSeeAllTV.visibility = View.VISIBLE
             allRecentPayPersonTransactions.clear()
             allRecentPayPersonTransactions.addAll(payPersonTransactions)

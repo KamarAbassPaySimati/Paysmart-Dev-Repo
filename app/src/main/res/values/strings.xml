@@ -684,6 +684,9 @@
     <string name="refund_successful">Refund Successful</string>
     <string name="g2p_pay_in_successful">G2P Pay-in Successful</string>
     <string name="cash_out_failed">Cash-out Failed</string>
+    <string name="un_registered_user">Un-registered User</string>
+    <string name="back_button_data">Back button</string>
+    <string name="unregistered_pay_note">Note:Beneficiary will be required to present photo ID in the above name to receive funds</string>
     <string name="formatted_mwk">%1$s MWK</string>
     <string name="txn_id_formatted">Txn ID: %1$s</string>
     <string name="note_formatted">Note: %1$s</string>

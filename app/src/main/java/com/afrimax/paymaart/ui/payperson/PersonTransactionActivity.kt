@@ -1,5 +1,6 @@
 package com.afrimax.paymaart.ui.payperson
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -9,6 +10,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
+import com.afrimax.paymaart.data.model.IndividualSearchUserData
 import com.afrimax.paymaart.data.model.PersonTransactions
 import com.afrimax.paymaart.data.model.Transaction
 import com.afrimax.paymaart.databinding.ActivityPersonTransactionBinding
@@ -32,15 +34,22 @@ class PersonTransactionActivity : BaseActivity() {
     private var transactionList: MutableList<Transaction> = mutableListOf()
     private val job = Job()
     private val scope = CoroutineScope(Dispatchers.Main + job)
-    private var paymaartId: String = ""
+
+    private var paymaartID: String = ""
     private var userName: String = ""
     private var profilePicture: String = ""
+    private var phoneNumber: String = ""
+    private var countryCode: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonTransactionBinding.inflate(layoutInflater)
-        paymaartId = intent.getStringExtra(Constants.PAYMAART_ID) ?: ""
+        paymaartID = intent.getStringExtra(Constants.PAYMAART_ID) ?: ""
         userName = intent.getStringExtra(Constants.CUSTOMER_NAME) ?: ""
         profilePicture = intent.getStringExtra(Constants.PROFILE_PICTURE) ?: ""
+        phoneNumber = intent.getStringExtra(Constants.PHONE_NUMBER) ?: ""
+        countryCode = intent.getStringExtra(Constants.COUNTRY_CODE) ?: ""
+
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.paymentListActivity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -54,14 +63,40 @@ class PersonTransactionActivity : BaseActivity() {
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
         setupView()
         getPersonTransactions()
+        setUpListeners()
     }
 
-    private fun setupView(){
+    private fun setUpListeners() {
+        binding.paymentListSubmitButton.setOnClickListener {
+
+            val i = if (paymaartID.isNotEmpty() && phoneNumber.isNotEmpty()) Intent(
+                this@PersonTransactionActivity, PayPersonActivity::class.java
+            ) else Intent(this@PersonTransactionActivity, UnregisteredPayActivity::class.java)
+
+            val phone = when {
+                paymaartID.isNotEmpty() && phoneNumber.isEmpty() -> paymaartID
+                else -> phoneNumber
+            }
+
+            val userData = IndividualSearchUserData(
+                paymaartId = paymaartID,
+                phoneNumber = phone,
+                viewType = "",
+                countryCode = countryCode,
+                name = userName,
+                membership = ""
+            )
+            i.putExtra(Constants.USER_DATA, userData)
+            startActivity(i)
+        }
+    }
+
+    private fun setupView() {
         binding.paymentListToolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
         binding.paymentListReceiverName.text = userName
-        binding.paymentListReceiverPaymaartId.text = paymaartId
+        binding.paymentListReceiverPaymaartId.text = paymaartID
 
         val layoutManager = LinearLayoutManager(this)
         layoutManager.stackFromEnd = false
@@ -77,17 +112,18 @@ class PersonTransactionActivity : BaseActivity() {
         scope.launch {
             val idToken = fetchIdToken()
             val personTransactionHandler = ApiClient.apiService.viewPersonTransactionHistory(
-                header = idToken,
-                paymaartId = paymaartId
+                header = idToken, paymaartId = paymaartID
             )
 
-            personTransactionHandler.enqueue(object: Callback<PersonTransactions> {
-                override fun onResponse(call: Call<PersonTransactions>, response: Response<PersonTransactions>) {
+            personTransactionHandler.enqueue(object : Callback<PersonTransactions> {
+                override fun onResponse(
+                    call: Call<PersonTransactions>, response: Response<PersonTransactions>
+                ) {
                     if (response.isSuccessful && response.body() != null) {
                         val transactions = response.body()?.transactions
                         if (transactions.isNullOrEmpty()) {
                             showEmptyScreen()
-                        }else{
+                        } else {
                             hideLoader()
                             transactionList.clear()
                             transactionList.addAll(processMessage(transactions))
@@ -122,11 +158,11 @@ class PersonTransactionActivity : BaseActivity() {
     private fun showEmptyScreen() {
         binding.paymentListNoDataFoundContainer.visibility = View.VISIBLE
         binding.paymentListRecyclerView.visibility = View.GONE
-        binding.paymentListSubmitButtonContainer.visibility = View.GONE
+        binding.paymentListSubmitButtonContainer.visibility = View.VISIBLE
         binding.listPersonTransactionLoaderLottie.visibility = View.GONE
     }
 
-    private fun processMessage(transactions: List<Transaction>): List<Transaction>{
+    private fun processMessage(transactions: List<Transaction>): List<Transaction> {
         if (transactions.isEmpty()) return transactions
         val groupedMessages = mutableListOf<Transaction>()
         var uniqueDate: String = getFormattedDate(transactions[0].createdAt)
@@ -138,16 +174,17 @@ class PersonTransactionActivity : BaseActivity() {
             }
             groupedMessages.add(transaction.copy(showDate = false))
         }
-        if (!groupedMessages.last().showDate){
+        "Response".showLogE(groupedMessages.last().showDate)
+        if (!groupedMessages.last().showDate) {
             groupedMessages.add(groupedMessages.last().copy(showDate = true))
         }
         return groupedMessages
     }
 
-    private fun getFormattedDate(timestamp: Long?): String {
+    private fun getFormattedDate(timestamp: Double?): String {
         if (timestamp == null) return ""
         val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-        return sdf.format(Date(timestamp * 1000))
+        return sdf.format(Date(timestamp.toLong() * 1000))
     }
 }
 
