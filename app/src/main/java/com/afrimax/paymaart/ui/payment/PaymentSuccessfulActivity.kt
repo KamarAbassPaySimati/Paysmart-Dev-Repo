@@ -155,8 +155,10 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 binding.paymentSuccessfulToPhoneNumberContainer.visibility = View.VISIBLE
                 binding.paymentSuccessfulToPaymaartIdContainer.visibility = View.GONE
                 transactionId = data.transactionId ?: ""
-                binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
-                binding.paymentSuccessfulMembershipValue.text = data.note
+                if (!data.note.isNullOrEmpty()) {
+                    binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                    binding.paymentSuccessfulMembershipValue.text = data.note
+                }
             }
 
 
@@ -176,8 +178,11 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 binding.paymentSuccessfulToPhoneNumberContainer.visibility = View.GONE
                 binding.paymentSuccessfulToPaymaartIdContainer.visibility = View.VISIBLE
                 transactionId = data.transactionId ?: ""
-                binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
-                binding.paymentSuccessfulMembershipValue.text = data.note
+                if (!data.note.isNullOrEmpty()) {
+                    binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                    binding.paymentSuccessfulMembershipValue.text = data.note
+                }
+
             }
         }
 
