@@ -61,7 +61,10 @@ class HomeScreenIconAdapter(
                     }
                 }
                 PAY_IN -> {
-                    binding.iconName.text = holder.itemView.context.getString(R.string.pay_in)
+                    binding.iconName.apply {
+                        visibility = View.VISIBLE
+                        text = holder.itemView.context.getString(R.string.pay_in)
+                    }
                     binding.iconNameInitials.text = getInitials(transactionList[position].enteredByName)
                 }
                 REFUND -> {
@@ -75,7 +78,10 @@ class HomeScreenIconAdapter(
                     }
                 }
                 INTEREST -> {
-                    binding.iconName.text =holder.itemView.context.getString(R.string.interest)
+                    binding.iconName.apply {
+                        visibility = View.VISIBLE
+                        text =holder.itemView.context.getString(R.string.interest)
+                    }
                     binding.iconImage.also {
                         it.visibility = View.VISIBLE
                         Glide
@@ -123,6 +129,16 @@ class HomeScreenIconAdapter(
                         setPersonImageDrawable(holder, transactionList[position].receiverProfilePic, transactionList[position].receiverName)
                     else
                         setPersonImageDrawable(holder, transactionList[position].senderProfilePic, transactionList[position].senderName)
+                }
+                PAY_UNREGISTERED -> {
+                    binding.iconName.apply {
+                        visibility = View.VISIBLE
+                        text = getFirstName(transactionList[position].receiverName)
+                    }
+                    binding.iconNameInitials.apply {
+                        visibility = View.VISIBLE
+                        text = getInitials(transactionList[position].receiverName)
+                    }
                 }else -> {}
             }
         }
@@ -136,7 +152,7 @@ class HomeScreenIconAdapter(
             holder.binding.iconImage.visibility = View.GONE
             holder.binding.iconNameInitials.visibility = View.VISIBLE
             holder.binding.iconNameInitials.text = getInitials(userName)
-            holder.binding.iconName.visibility = View.GONE
+            holder.binding.iconName.visibility = View.VISIBLE
             holder.binding.iconName.text = getInitials(userName)
         }else {
             holder.binding.iconNameInitials.visibility = View.GONE
@@ -149,10 +165,17 @@ class HomeScreenIconAdapter(
                     .centerCrop()
                     .into(it)
             }
-            val mUserName = userName?.split(" ") ?: emptyList()
-            holder.binding.iconName.text = if (mUserName.size > 1) mUserName[0] else ""
+            holder.binding.iconName.apply {
+                visibility = View.VISIBLE
+                text = getFirstName(userName)
+            }
         }
 
+    }
+
+    private fun getFirstName(name: String?): String {
+        if (name.isNullOrEmpty()) return ""
+        return name.split(" ").firstOrNull() ?: ""
     }
     fun setOnClickListener(onClickListener: OnClickListener) {
         this.onClickListener = onClickListener
@@ -173,5 +196,6 @@ class HomeScreenIconAdapter(
         const val G2P_PAY_IN = "g2p_pay_in"
         const val CASH_OUT_REQUEST = "cashout_request"
         const val CASH_OUT_FAILED = "cashout_failed"
+        const val PAY_UNREGISTERED = "pay_unregister"
     }
 }

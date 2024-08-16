@@ -133,7 +133,6 @@ class PersonTransactionActivity : BaseActivity() {
                 }
 
                 override fun onFailure(call: Call<PersonTransactions>, throwable: Throwable) {
-                    "Response".showLogE(throwable)
                     showEmptyScreen()
                     showToast(getString(R.string.default_error_toast))
                 }
@@ -178,7 +177,6 @@ class PersonTransactionActivity : BaseActivity() {
         "Response".showLogE(groupedMessages.last().showDate)
         if (!groupedMessages.last().showDate) {
             groupedMessages.add(groupedMessages.last().copy(showDate = true))
-            "ResponseAgain".showLogE(groupedMessages.last().copy(showDate = true))
         }
         return groupedMessages
     }

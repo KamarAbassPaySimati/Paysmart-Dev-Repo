@@ -62,6 +62,10 @@ class TransactionHistoryAdapter(
                     else
                         setPaymaartTransactionType(transaction.senderName, transaction.senderId, transaction.senderProfilePic)
                 }
+                PAY_UNREGISTERED -> {
+                    //Using this because
+                    setPaymaartTransactionType(transaction.receiverName, transaction.receiverId,transaction.receiverProfilePic)
+                }
             }
         }
 
@@ -191,5 +195,6 @@ class TransactionHistoryAdapter(
         const val G2P_PAY_IN = "g2p_pay_in"
         const val CASH_OUT_REQUEST = "cashout_request"
         const val CASH_OUT_FAILED = "cashout_failed"
+        const val PAY_UNREGISTERED = "pay_unregister"
     }
 }

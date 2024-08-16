@@ -29,9 +29,9 @@ class MembershipPlanAdapter(
         with(holder) {
             binding.membershipPlanNameTV.text = membershipPlans[position].serviceBeneficiary ?: ""
             binding.membershipPlanSubTitleTV.text = membershipPlans[position].subtitle ?: ""
-            binding.membershipPlanPrimeTV.text = membershipPlans[position].prime ?: ""
-            binding.membershipPlanPrimeXTV.text = membershipPlans[position].primeX ?: ""
-            binding.membershipPlanGoTV.text = membershipPlans[position].go ?: ""
+            binding.membershipPlanPrimeTV.text = membershipPlans[position].prime.let { if (it.isNullOrEmpty()) "" else it.replace("%", "") }
+            binding.membershipPlanPrimeXTV.text = membershipPlans[position].primeX.let { if (it.isNullOrEmpty()) "" else it.replace("%", "") }
+            binding.membershipPlanGoTV.text = membershipPlans[position].go.let { if (it.isNullOrEmpty()) "" else it.replace("%", "") }
         }
     }
 }

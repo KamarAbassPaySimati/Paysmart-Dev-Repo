@@ -409,6 +409,7 @@ class ListPersonTransactionActivity : BaseActivity() {
                             }
                             mContactsList.clear()
                             mContactsList.addAll(data.payPersonList)
+                            hideLoader()
                         }
                     }
                 }
@@ -505,6 +506,7 @@ class ListPersonTransactionActivity : BaseActivity() {
         binding.listPersonTransactionLoaderLottie.visibility = View.GONE
         binding.listPersonTransactionNoDataFoundContainer.visibility = View.GONE
         binding.listPersonTransactionContentBox.visibility = View.VISIBLE
+        if (searchText.isNotEmpty())  binding.listPersonTransactionRecentTransactionsTV.visibility = View.GONE
     }
 
     private fun showEmptyScreen(condition: Boolean) {
