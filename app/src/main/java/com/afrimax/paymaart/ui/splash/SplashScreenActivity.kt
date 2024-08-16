@@ -21,7 +21,9 @@ import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.home.HomeActivity
 import com.afrimax.paymaart.ui.intro.IntroActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
+import com.afrimax.paymaart.ui.viewtransactions.ViewSpecificTransactionActivity
 import com.afrimax.paymaart.util.AuthCalls
+import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.NotificationNavigation
 import com.amplifyframework.core.Amplify
 import kotlinx.coroutines.launch
@@ -36,6 +38,7 @@ class SplashScreenActivity : BaseActivity() {
     private lateinit var animator2: ObjectAnimator
     private lateinit var action: String
     private lateinit var authCalls: AuthCalls
+    private var transactionId: String = ""
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +46,7 @@ class SplashScreenActivity : BaseActivity() {
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         action = intent.getStringExtra("action") ?: ""
+        transactionId = intent.getStringExtra(Constants.TRANSACTION_ID) ?: ""
         authCalls = AuthCalls()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.splashScreenActivity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -129,13 +133,16 @@ class SplashScreenActivity : BaseActivity() {
     }
 
     private fun handleNavigation(){
-        val targetActivity: Class<out AppCompatActivity> = when (action) {
-            NotificationNavigation.MEMBERSHIP_PLANS.screenName -> MembershipPlansActivity::class.java
-            else -> HomeActivity::class.java
+        val targetIntent = when(action) {
+            NotificationNavigation.MEMBERSHIP_PLANS.screenName -> Intent(this@SplashScreenActivity, MembershipPlansActivity::class.java)
+            NotificationNavigation.TRANSACTIONS.screenName -> {
+                Intent(this@SplashScreenActivity, ViewSpecificTransactionActivity::class.java).apply {
+                    putExtra(Constants.TRANSACTION_ID, transactionId)
+                }
+            }else -> Intent(this@SplashScreenActivity, HomeActivity::class.java)
         }
-        if (action.isNotEmpty() && targetActivity != HomeActivity::class.java) {
+        if (action.isNotEmpty() && targetIntent.component?.className != HomeActivity::class.java.name) {
             val mainActivity = Intent(this@SplashScreenActivity, HomeActivity::class.java)
-            val targetIntent = Intent(this@SplashScreenActivity, targetActivity)
             startActivities(arrayOf(mainActivity, targetIntent))
         }else {
             startActivity(Intent(this@SplashScreenActivity, HomeActivity::class.java))

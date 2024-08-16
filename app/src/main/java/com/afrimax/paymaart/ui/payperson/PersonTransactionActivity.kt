@@ -138,10 +138,8 @@ class PersonTransactionActivity : BaseActivity() {
             }
             groupedMessages.add(transaction.copy(showDate = false))
         }
-        "Response".showLogE(groupedMessages.last().showDate)
         if (!groupedMessages.last().showDate){
             groupedMessages.add(groupedMessages.last().copy(showDate = true))
-            "ResponseAgain".showLogE(groupedMessages.last().copy(showDate = true))
         }
         return groupedMessages
     }

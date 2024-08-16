@@ -203,7 +203,7 @@
                             android:layout_marginTop="12dp"
                             android:orientation="horizontal"
                             android:gravity="center"
-                            android:weightSum="4">
+                            android:weightSum="3">
 
                             <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/homeActivityPayAfrimaxButton"
@@ -235,7 +235,8 @@
                                 android:textAllCaps="false"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp"
-                                app:drawableTopCompat="@drawable/ico_pay_merchant" />
+                                app:drawableTopCompat="@drawable/ico_pay_merchant"
+                                android:visibility="gone"/>
 
                             <androidx.appcompat.widget.AppCompatButton
                                 android:id="@+id/homeActivityPayPaymaartButton"
@@ -552,7 +553,8 @@
                     android:layout_weight="1"
                     android:background="@drawable/bg_button_cash_in"
                     android:elevation="2dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -578,7 +580,7 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_marginHorizontal="8dp"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:background="@drawable/bg_button_cash_out"
                     android:elevation="2dp"
                     android:fontFamily="@font/inter_semibold"
