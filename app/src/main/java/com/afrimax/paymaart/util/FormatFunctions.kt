@@ -86,6 +86,7 @@ fun <T> formatEpochTimeTwo(timeStamp: T?): String {
     val newTimeStamp = when (timeStamp) {
         is Long -> timeStamp
         is String -> timeStamp.toLongOrNull() ?: 0L
+        is Double -> timeStamp.toLong()
         else -> 0L
     }
     val date = Date(newTimeStamp * 1000)
@@ -97,6 +98,7 @@ fun <T> formatEpochTimeThree(timeStamp: T?): String {
     val newTimeStamp = when (timeStamp) {
         is Long -> timeStamp
         is String -> timeStamp.toLongOrNull() ?: 0L
+        is Double -> timeStamp.toLong()
         else -> 0L
     }
     val date = Date(newTimeStamp * 1000)
@@ -108,6 +110,7 @@ fun <T> formatEpochTimeFour(timeStamp: T?): String {
     val newTimeStamp = when (timeStamp) {
         is Long -> timeStamp
         is String -> timeStamp.toLongOrNull() ?: 0L
+        is Double -> timeStamp.toLong()
         else -> 0L
     }
     val date = Date(newTimeStamp * 1000)

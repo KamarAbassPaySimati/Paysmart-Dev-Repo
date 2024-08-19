@@ -16,6 +16,7 @@ import com.afrimax.paymaart.util.formatEpochTime
 import com.afrimax.paymaart.util.formatEpochTimeFour
 import com.afrimax.paymaart.util.formatEpochTimeThree
 import com.afrimax.paymaart.util.formatEpochTimeTwo
+import com.afrimax.paymaart.util.getFormattedAmount
 import com.afrimax.paymaart.util.showLogE
 
 class PaymentListAdapter(val context: Context, private val transactions: List<Transaction>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -26,12 +27,14 @@ class PaymentListAdapter(val context: Context, private val transactions: List<Tr
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when{
-            transactions[position].transactionType == "credit" -> VIEW_TYPE_RECEIVED
-            transactions[position].showDate -> VIEW_TYPE_DATE_HEADER
-            else -> VIEW_TYPE_SENT
-        }
-
+        if (transactions[position].showDate)
+            return VIEW_TYPE_DATE_HEADER
+        if(transactions[position].transactionType == "credit")
+            return VIEW_TYPE_RECEIVED
+        if (transactions[position].transactionType == "debit")
+            return VIEW_TYPE_SENT
+        //Default - the list item should be either of these three.
+        return -1
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType){
@@ -81,9 +84,9 @@ class PaymentListAdapter(val context: Context, private val transactions: List<Tr
         private val divider = binding.paymentListAdapterDivider
         private val note = binding.paymentListAdapterNoteTV
         fun bind(transaction: Transaction){
-            totalAmount.text = transaction.totalAmount
+            totalAmount.text = getFormattedAmount(transaction.totalAmount)
             date.text = formatEpochTime(transaction.createdAt)
-            transactionId.text = transaction.transactionId
+            transactionId.text = "Txn ID: ${transaction.transactionId}"
             note.text = transaction.note ?: ""
             if ( transaction.note.isNullOrEmpty() ){
                 note.visibility = View.GONE
@@ -99,7 +102,7 @@ class PaymentListAdapter(val context: Context, private val transactions: List<Tr
         private val divider = binding.paymentListAdapterDivider
         private val note = binding.paymentListAdapterNoteTV
         fun bind(transaction: Transaction){
-            totalAmount.text = transaction.totalAmount
+            totalAmount.text = getFormattedAmount(transaction.totalAmount)
             date.text = formatEpochTimeThree(transaction.createdAt)
             transactionId.text = "Txn ID: ${transaction.transactionId}"
             note.text = transaction.note ?: ""

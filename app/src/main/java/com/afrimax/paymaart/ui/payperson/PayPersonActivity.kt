@@ -27,6 +27,7 @@ import com.afrimax.paymaart.ui.payment.PaymentSuccessfulActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.TotalReceiptSheet
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.getInitials
 import com.airbnb.lottie.LottieAnimationView
 import kotlinx.coroutines.launch
 
@@ -62,9 +63,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
 
     private fun setUpLayout() {
 
-        val nameList = userData.name.uppercase().split(" ")
-        val shortName = "${nameList[0][0]}${nameList[1][0]}${nameList[2][0]}"
-        b.payPersonActivityShortNameTV.text = shortName
+        b.payPersonActivityShortNameTV.text = getInitials(userData.name)
 
         b.payPersonActivityNameTV.text = userData.name
         b.payPersonActivityPaymaartIdTV.text = userData.paymaartId
