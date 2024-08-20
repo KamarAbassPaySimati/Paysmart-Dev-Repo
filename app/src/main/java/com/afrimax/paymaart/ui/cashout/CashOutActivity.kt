@@ -148,11 +148,11 @@ class CashOutActivity : BaseActivity(), SendPaymentInterface {
                 b.selfCashOutActivityPaymentErrorTV.text = getString(R.string.please_enter_amount)
             }
 
-            amount.toDouble() < 1.0 -> {
+            amount.toDouble() < 500.0 -> {
                 isValid = false
                 b.selfCashOutActivityPaymentErrorBox.visibility = View.VISIBLE
                 b.selfCashOutActivityPaymentErrorTV.text =
-                    getString(R.string.minimum_amount_is_1_mwk)
+                    getString(R.string.minimum_amount_is_500_mwk)
             }
 
             mainDigits.length > 7 || decimalDigits.length > 2 -> {

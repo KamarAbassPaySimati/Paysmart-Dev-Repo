@@ -1075,7 +1075,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                 isValid = false
             }
 
-            phoneEditText.text.toString().replace(" ", "").length < 9 -> {
+            phoneEditText.text.toString().replace(" ", "").length < 8 -> {
                 showPhoneWarning(getString(R.string.invalid_phone))
                 isValid = false
             }
