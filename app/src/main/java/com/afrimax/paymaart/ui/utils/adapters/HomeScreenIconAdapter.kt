@@ -65,7 +65,10 @@ class HomeScreenIconAdapter(
                         visibility = View.VISIBLE
                         text = holder.itemView.context.getString(R.string.pay_in)
                     }
-                    binding.iconNameInitials.text = getInitials(transactionList[position].enteredByName)
+                    binding.iconNameInitials.apply {
+                        visibility = View.VISIBLE
+                        text = getInitials(transactionList[position].enteredByName)
+                    }
                 }
                 REFUND -> {
                     binding.iconName.apply {

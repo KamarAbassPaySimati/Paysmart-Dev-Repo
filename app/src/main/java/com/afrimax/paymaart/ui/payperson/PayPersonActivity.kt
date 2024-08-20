@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
+import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.IndividualSearchUserData
@@ -29,6 +30,7 @@ import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.getInitials
 import com.airbnb.lottie.LottieAnimationView
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
 
@@ -62,12 +64,25 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
     }
 
     private fun setUpLayout() {
-
-        b.payPersonActivityShortNameTV.text = getInitials(userData.name)
-
+        if (userData.profilePicture.isNullOrEmpty()) {
+            b.payPersonActivityShortNameTV.apply {
+                visibility = View.VISIBLE
+                text = getInitials(userData.name)
+            }
+        }else {
+            b.payPersonActivityProfileIV.also {
+                it.visibility = View.VISIBLE
+                Glide
+                    .with(this)
+                    .load(BuildConfig.CDN_BASE_URL + userData.profilePicture)
+                    .centerCrop()
+                    .into(it)
+            }
+        }
         b.payPersonActivityNameTV.text = userData.name
         b.payPersonActivityPaymaartIdTV.text = userData.paymaartId
     }
+
 
     private fun setUpListeners() {
 

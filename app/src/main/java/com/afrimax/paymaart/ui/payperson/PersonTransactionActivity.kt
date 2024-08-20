@@ -87,7 +87,8 @@ class PersonTransactionActivity : BaseActivity() {
                 viewType = "",
                 countryCode = countryCode,
                 name = userName,
-                membership = ""
+                membership = "",
+                profilePicture = profilePicture
             )
             i.putExtra(Constants.USER_DATA, userData)
             startActivity(i)
