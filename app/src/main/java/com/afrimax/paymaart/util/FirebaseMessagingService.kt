@@ -22,6 +22,7 @@ import com.afrimax.paymaart.R
 import com.afrimax.paymaart.ui.home.HomeActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.splash.SplashScreenActivity
+import com.afrimax.paymaart.ui.viewtransactions.ViewSpecificTransactionActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -98,19 +99,23 @@ class MessagingService(
         //Create the channel first | This only happens once when the app is first booting
         "Response".showLogE(Gson().toJson(data))
         createNotificationChannel()
-
+        var transactionId: String? = null
         val action =  data.getStringExtra(ACTION).toString()
+        if (action == NotificationNavigation.TRANSACTIONS.screenName) transactionId = data.getStringExtra(TXN_ID).toString()
         val targetActivity: Class<out AppCompatActivity> = when (action) {
             NotificationNavigation.MEMBERSHIP_PLANS.screenName -> MembershipPlansActivity::class.java
+            NotificationNavigation.TRANSACTIONS.screenName -> ViewSpecificTransactionActivity::class.java
             else -> SplashScreenActivity::class.java
         }
         val intent = if (isAppInForeground()) {
             Intent(this, targetActivity).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                if (targetActivity == ViewSpecificTransactionActivity::class.java) putExtra(Constants.TRANSACTION_ID, transactionId) //Pass the transactionId to the activity
             }
         }else{
             Intent(this, SplashScreenActivity::class.java).apply {
                 putExtra(Constants.ACTION, action)
+                putExtra(Constants.TRANSACTION_ID, transactionId)
             }
         }
         val pendingIntent = PendingIntent.getActivity(
@@ -201,6 +206,7 @@ class MessagingService(
         const val TITLE = "title"
         const val BODY = "body"
         const val ACTION = "action"
+        const val TXN_ID = "txn_id"
 
         //payload_values
         const val ACTION_LOGOUT = "logout"
@@ -209,4 +215,5 @@ class MessagingService(
 
 enum class NotificationNavigation(val screenName: String){
     MEMBERSHIP_PLANS("membership"),
+    TRANSACTIONS("transactions"),
 }

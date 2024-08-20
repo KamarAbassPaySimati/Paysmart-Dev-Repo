@@ -34,6 +34,7 @@ import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.HomeScreenData
 import com.afrimax.paymaart.data.model.HomeScreenResponse
 import com.afrimax.paymaart.data.model.IndividualTransactionHistory
+import com.afrimax.paymaart.data.model.PayPersonTransactions
 import com.afrimax.paymaart.data.model.WalletData
 import com.afrimax.paymaart.databinding.ActivityHomeBinding
 import com.afrimax.paymaart.ui.BaseActivity
@@ -41,9 +42,12 @@ import com.afrimax.paymaart.ui.cashout.CashOutSearchActivity
 import com.afrimax.paymaart.ui.delete.DeleteAccountActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlansActivity
 import com.afrimax.paymaart.ui.password.UpdatePasswordPinActivity
+import com.afrimax.paymaart.ui.payperson.ListPersonTransactionActivity
+import com.afrimax.paymaart.ui.payperson.PersonTransactionActivity
 import com.afrimax.paymaart.ui.paytoaffrimax.ValidateAfrimaxIdActivity
 import com.afrimax.paymaart.ui.refundrequest.RefundRequestActivity
 import com.afrimax.paymaart.ui.utils.adapters.HomeScreenIconAdapter
+import com.afrimax.paymaart.ui.utils.adapters.HomeScreenPayPersonAdapter
 import com.afrimax.paymaart.ui.utils.bottomsheets.CompleteKycSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.LogoutConfirmationSheet
 import com.afrimax.paymaart.ui.utils.bottomsheets.ViewKycPinSheet
@@ -72,7 +76,6 @@ import java.util.Date
 
 class HomeActivity : BaseActivity(), HomeInterface {
     private lateinit var b: ActivityHomeBinding
-    private lateinit var homeScreenIconAdapter: HomeScreenIconAdapter
     private var rejectionReasons = ArrayList<String>()
     private var dest = 0
     private var isSettingsClicked: Boolean = false
@@ -82,8 +85,8 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var mKycStatus: String = ""
     private var customerName: String = ""
     private var allRecentTransactions: MutableList<IndividualTransactionHistory> = mutableListOf()
+    private var allRecentPayPersonTransactions: MutableList<PayPersonTransactions> = mutableListOf()
     private lateinit var notificationPermissionCheckLauncher: ActivityResultLauncher<String>
-
     private lateinit var checkUpdateLauncher: ActivityResultLauncher<IntentSenderRequest>
     private lateinit var appUpdateManager: AppUpdateManager
 
@@ -169,7 +172,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         }
         b.homeActivityPayPersonButton.setOnClickListener {
             if (checkKycStatus()){
-                //
+                startActivity(Intent(this, ListPersonTransactionActivity::class.java))
             }
         }
 
@@ -194,10 +197,10 @@ class HomeActivity : BaseActivity(), HomeInterface {
             )
         }
         b.homeActivityPersonsBox.setOnClickListener{
-//            toggleTransactions(
-//                b.homeActivityPersonsHiddenContainer,
-//                b.homeActivityPersonsTExpandButton
-//            )
+            toggleTransactions(
+                b.homeActivityPersonsHiddenContainer,
+                b.homeActivityPersonsTExpandButton
+            )
         }
         b.homeActivityMerchantsBox.setOnClickListener {
             toggleTransactions(
@@ -206,16 +209,19 @@ class HomeActivity : BaseActivity(), HomeInterface {
             )
         }
         b.homeActivityTransactionsSeeAllTV.setOnClickListener {
-            if (checkKycStatus()) {
-                startActivity(Intent(this, TransactionHistoryListActivity::class.java))
-            }
+            startActivity(Intent(this, TransactionHistoryListActivity::class.java))
         }
+        b.homeActivityPersonsSeeAllTV.setOnClickListener {
+            startActivity(Intent(this, ListPersonTransactionActivity::class.java))
+        }
+
         val userPaymaartId = retrievePaymaartId()
         val transactionHistoryListAdapter = HomeScreenIconAdapter(allRecentTransactions, userPaymaartId)
+        val payPersonTransactionsAdapter = HomeScreenPayPersonAdapter(allRecentPayPersonTransactions)
         b.homeActivityPersonsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityTransactionsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityMerchantsRecyclerView.layoutManager = GridLayoutManager(this, 4)
-        b.homeActivityPersonsRecyclerView.adapter = HomeScreenIconAdapter(emptyList(), userPaymaartId)
+        b.homeActivityPersonsRecyclerView.adapter = payPersonTransactionsAdapter
         b.homeActivityTransactionsRecyclerView.adapter = transactionHistoryListAdapter
         b.homeActivityMerchantsRecyclerView.adapter = HomeScreenIconAdapter(emptyList(), userPaymaartId)
 
@@ -223,6 +229,16 @@ class HomeActivity : BaseActivity(), HomeInterface {
             override fun onClick(transaction: IndividualTransactionHistory) {
                 val intent = Intent(this@HomeActivity, ViewSpecificTransactionActivity::class.java)
                 intent.putExtra(Constants.TRANSACTION_ID, transaction.transactionId)
+                startActivity(intent)
+            }
+        })
+
+        payPersonTransactionsAdapter.setOnClickListener(object: HomeScreenPayPersonAdapter.OnClickListener{
+            override fun onClick(transaction: PayPersonTransactions) {
+                val intent = Intent(this@HomeActivity, PersonTransactionActivity::class.java)
+                intent.putExtra(Constants.PAYMAART_ID, transaction.paymaartId)
+                intent.putExtra(Constants.CUSTOMER_NAME, transaction.name)
+                intent.putExtra(Constants.PROFILE_PICTURE, transaction.profilePic)
                 startActivity(intent)
             }
         })
@@ -491,6 +507,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
                         runOnUiThread {
                             populateHomeScreenData(body.homeScreenData)
                             populateRecyclerViews(body.transactionData)
+                            populatePayPersonRecyclerView(body.payPersonData)
                         }
                     } else {
                         runOnUiThread {
@@ -609,9 +626,23 @@ class HomeActivity : BaseActivity(), HomeInterface {
             if (transactionHistory.size > 4) b.homeActivityTransactionsSeeAllTV.visibility = View.VISIBLE
             allRecentTransactions.clear()
             allRecentTransactions.addAll(transactionHistory)
-            b.homeActivityTransactionsRecyclerView.adapter?.notifyItemChanged(0)
+            b.homeActivityPersonsRecyclerView.adapter?.notifyDataSetChanged()
         }
+    }
 
+    private fun populatePayPersonRecyclerView(payPersonTransactions: List<PayPersonTransactions>) {
+        if (payPersonTransactions.isEmpty()) {
+            b.homeActivityNoPersonTransactionsTV.visibility = View.VISIBLE
+            b.homeActivityPersonsRecyclerView.visibility = View.GONE
+            b.homeActivityPersonsSeeAllTV.visibility = View.GONE
+        } else {
+            b.homeActivityNoTransactionsTV.visibility = View.GONE
+            b.homeActivityPersonsRecyclerView.visibility = View.VISIBLE
+            if (payPersonTransactions.size > 4) b.homeActivityPersonsSeeAllTV.visibility = View.VISIBLE
+            allRecentPayPersonTransactions.clear()
+            allRecentPayPersonTransactions.addAll(payPersonTransactions)
+            b.homeActivityPersonsRecyclerView.adapter?.notifyDataSetChanged()
+        }
     }
 
     private fun showMembershipBanner() {

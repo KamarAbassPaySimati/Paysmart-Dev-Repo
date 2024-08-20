@@ -517,7 +517,7 @@
                                 android:importantForAutofill="no"
                                 android:inputType="phone"
                                 android:longClickable="false"
-                                android:maxLength="11"
+                                android:maxLength="15"
                                 android:maxLines="1"
                                 android:padding="12dp"
                                 android:textColor="@color/neutralGreyPrimaryText"

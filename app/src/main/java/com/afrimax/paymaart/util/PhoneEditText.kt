@@ -50,7 +50,7 @@ class PhoneEditText : AppCompatEditText {
                         }
                     }
                     // Set the formatted text back to the EditText without triggering TextWatcher
-                    if (formattedText.toString() != it.toString() && formattedText.length < 11) {
+                    if (formattedText.toString() != it.toString() && formattedText.length < 15) {
                         setText(formattedText)
                         setSelection(formattedText.length)
                     }

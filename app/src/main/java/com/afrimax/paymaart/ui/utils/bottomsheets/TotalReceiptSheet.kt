@@ -7,8 +7,12 @@ import android.view.ViewGroup
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.model.CashOutRequestBody
 import com.afrimax.paymaart.data.model.PayToAfrimaxRequestBody
+import com.afrimax.paymaart.data.model.PayToRegisteredPersonRequest
+import com.afrimax.paymaart.data.model.PayToUnRegisteredPersonRequest
 import com.afrimax.paymaart.databinding.TotalAmountReceiptBottomSheetBinding
 import com.afrimax.paymaart.ui.cashout.CashOutModel
+import com.afrimax.paymaart.ui.payperson.PayPersonRegisteredModel
+import com.afrimax.paymaart.ui.payperson.PayPersonUnRegisteredModel
 import com.afrimax.paymaart.ui.paytoaffrimax.PayAfrimaxModel
 import com.afrimax.paymaart.util.getFormattedAmount
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -23,21 +27,37 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         b = TotalAmountReceiptBottomSheetBinding.inflate(inflater, container, false)
-        when(model) {
+        when (model) {
             is PayAfrimaxModel -> {
                 amount = model.amount
                 txnFee = model.txnFee
                 vat = model.vat
             }
-            is CashOutModel ->{
+
+            is CashOutModel -> {
                 amount = model.displayAmount
                 txnFee = model.transactionFee
                 vat = model.vat
             }
+
+            is PayPersonUnRegisteredModel -> {
+                amount = model.amount
+                vat = model.vat
+                txnFee = model.txnFee
+            }
+
+            is PayPersonRegisteredModel -> {
+                vat = model.vat
+                txnFee = model.txnFee
+                amount = model.amount
+            }
         }
-        b.totalAmountReceiptTotalAmount.text = getString(R.string.amount_formatted, getFormattedAmount(amount))
-        b.totalAmountReceiptTxnFee.text = getString(R.string.amount_formatted, getFormattedAmount(txnFee))
-        b.totalAmountReceiptVatIncluded.text = getString(R.string.amount_formatted, getFormattedAmount(vat))
+        b.totalAmountReceiptTotalAmount.text =
+            getString(R.string.amount_formatted, getFormattedAmount(amount))
+        b.totalAmountReceiptTxnFee.text =
+            getString(R.string.amount_formatted, getFormattedAmount(txnFee))
+        b.totalAmountReceiptVatIncluded.text =
+            getString(R.string.amount_formatted, getFormattedAmount(vat))
 
         initViews()
         setUpListeners()
@@ -63,30 +83,55 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
 
     private fun onClickProceed() {
         var sendPaymentBottomSheet = SendPaymentBottomSheet()
-        when(model) {
+        when (model) {
             is PayAfrimaxModel -> {
                 val payToAfrimax = PayToAfrimaxRequestBody(
                     amount = model.amount.toDouble(),
                     customerName = model.afrimaxName,
                     customerId = model.afrimaxId.toInt(),
                     password = "",
-                    paymaartId =  model.customerId,
+                    paymaartId = model.customerId,
                     paymaartName = model.customerName,
                     planName = model.planName
                 )
                 sendPaymentBottomSheet = SendPaymentBottomSheet(payToAfrimax)
             }
-            is CashOutModel ->{
+
+            is CashOutModel -> {
                 val cashOutModel = CashOutRequestBody(
-                    requestedTo = model.receiverPaymaartId,
-                    transactionAmount = model.amount
+                    requestedTo = model.receiverPaymaartId, transactionAmount = model.amount
                 )
                 sendPaymentBottomSheet = SendPaymentBottomSheet(cashOutModel)
+            }
+
+            is PayPersonUnRegisteredModel -> {
+                val payPersonUnRegisteredModel = PayToUnRegisteredPersonRequest(
+                    amount = model.amount.toDouble(),
+                    callType = false,
+                    phoneNumber = model.phoneNumber,
+                    receiverName = model.receiverName,
+                    note = model.note,
+                    senderId = model.senderId,
+                    password = null
+                )
+                sendPaymentBottomSheet = SendPaymentBottomSheet(payPersonUnRegisteredModel)
+            }
+
+            is PayPersonRegisteredModel -> {
+                val payPersonRegisteredModel = PayToRegisteredPersonRequest(
+                    transactionAmount = model.amount.toDouble(),
+                    paymaartId = model.paymaartId,
+                    note = model.note,
+                    credential = null
+                )
+                sendPaymentBottomSheet = SendPaymentBottomSheet(payPersonRegisteredModel)
             }
         }
         dismiss()
         sendPaymentBottomSheet.isCancelable = false
-        sendPaymentBottomSheet.show(requireActivity().supportFragmentManager, SendPaymentBottomSheet.TAG)
+        sendPaymentBottomSheet.show(
+            requireActivity().supportFragmentManager, SendPaymentBottomSheet.TAG
+        )
     }
 
     companion object {
