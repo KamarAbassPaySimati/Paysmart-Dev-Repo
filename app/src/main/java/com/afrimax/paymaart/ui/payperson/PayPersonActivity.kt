@@ -20,7 +20,6 @@ import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.IndividualSearchUserData
 import com.afrimax.paymaart.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paymaart.data.model.PayToUnRegisteredPersonRequest
-import com.afrimax.paymaart.data.model.PayUnRegisteredPersonResponse
 import com.afrimax.paymaart.databinding.ActivityPayPersonBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlanModel
@@ -242,6 +241,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
                 TotalReceiptSheet(
                     PayPersonUnRegisteredModel(
                         amount = body.data.totalAmount,
+                        enteredAmount = amount.toString(),
                         vat = body.data.vatAmount,
                         txnFee = body.data.grossTransactionFee,
                         phoneNumber = phone,
@@ -280,6 +280,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
                 TotalReceiptSheet(
                     PayPersonRegisteredModel(
                         amount = body.totalAmount.toString(),
+                        enteredAmount = amount.toString(),
                         vat = body.vat.toString(),
                         txnFee = body.transactionFee.toString(),
                         note = b.payPersonActivityAddNoteET.text.toString(),

@@ -19,7 +19,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
     private lateinit var b: TotalAmountReceiptBottomSheetBinding
-    private var amount: String = "0.0"
+    private var totalAmount: String = "0.0"
+    private  var enteredAmount:String ="0.0"
     private var txnFee: String = "0.0"
     private var vat: String = "0.0"
 
@@ -29,31 +30,35 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
         b = TotalAmountReceiptBottomSheetBinding.inflate(inflater, container, false)
         when (model) {
             is PayAfrimaxModel -> {
-                amount = model.amount
+                totalAmount = model.amount
+                enteredAmount = model.enteredAmount
                 txnFee = model.txnFee
                 vat = model.vat
             }
 
             is CashOutModel -> {
-                amount = model.displayAmount
+                totalAmount = model.displayAmount
+                enteredAmount = model.enteredAmount
                 txnFee = model.transactionFee
                 vat = model.vat
             }
 
             is PayPersonUnRegisteredModel -> {
-                amount = model.amount
+                totalAmount = model.amount
+                enteredAmount = model.enteredAmount
                 vat = model.vat
                 txnFee = model.txnFee
             }
 
             is PayPersonRegisteredModel -> {
                 vat = model.vat
+                enteredAmount = model.enteredAmount
                 txnFee = model.txnFee
-                amount = model.amount
+                totalAmount = model.amount
             }
         }
         b.totalAmountReceiptTotalAmount.text =
-            getString(R.string.amount_formatted, getFormattedAmount(amount))
+            getString(R.string.amount_formatted, getFormattedAmount(totalAmount))
         b.totalAmountReceiptTxnFee.text =
             getString(R.string.amount_formatted, getFormattedAmount(txnFee))
         b.totalAmountReceiptVatIncluded.text =
@@ -86,7 +91,7 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
         when (model) {
             is PayAfrimaxModel -> {
                 val payToAfrimax = PayToAfrimaxRequestBody(
-                    amount = model.amount.toDouble(),
+                    amount = model.enteredAmount.toDouble(),
                     customerName = model.afrimaxName,
                     customerId = model.afrimaxId.toInt(),
                     password = "",
@@ -99,14 +104,14 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
 
             is CashOutModel -> {
                 val cashOutModel = CashOutRequestBody(
-                    requestedTo = model.receiverPaymaartId, transactionAmount = model.amount
+                    requestedTo = model.receiverPaymaartId, transactionAmount = model.enteredAmount
                 )
                 sendPaymentBottomSheet = SendPaymentBottomSheet(cashOutModel)
             }
 
             is PayPersonUnRegisteredModel -> {
                 val payPersonUnRegisteredModel = PayToUnRegisteredPersonRequest(
-                    amount = model.amount.toDouble(),
+                    amount = model.enteredAmount.toDouble(),
                     callType = false,
                     phoneNumber = model.phoneNumber,
                     receiverName = model.receiverName,
@@ -119,7 +124,7 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
 
             is PayPersonRegisteredModel -> {
                 val payPersonRegisteredModel = PayToRegisteredPersonRequest(
-                    transactionAmount = model.amount.toDouble(),
+                    transactionAmount = model.enteredAmount.toDouble(),
                     paymaartId = model.paymaartId,
                     note = model.note,
                     credential = null
