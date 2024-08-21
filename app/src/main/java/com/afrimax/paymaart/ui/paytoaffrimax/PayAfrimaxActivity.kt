@@ -298,6 +298,7 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
             hideKeyboard(this@PayAfrimaxActivity)
             val payAfrimaxModel = PayAfrimaxModel(
                 amount = amount,
+                enteredAmount = amount,
                 txnFee = "0",
                 vat = "0",
                 afrimaxId = afrimaxId,
@@ -325,7 +326,8 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
                 afrimaxName = afrimaxName,
                 customerName = customerName,
                 customerId = customerId.uppercase(),
-                planName = selectedPlan!!.serviceName[0]
+                planName = selectedPlan!!.serviceName[0],
+                enteredAmount = selectedPlan!!.price
             )
             val totalReceiptSheet = TotalReceiptSheet(payAfrimaxModel)
             totalReceiptSheet.show(supportFragmentManager, TotalReceiptSheet.TAG)
