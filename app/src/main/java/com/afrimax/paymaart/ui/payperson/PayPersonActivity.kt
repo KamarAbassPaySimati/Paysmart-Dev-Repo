@@ -68,14 +68,11 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
                 visibility = View.VISIBLE
                 text = getInitials(userData.name)
             }
-        }else {
+        } else {
             b.payPersonActivityProfileIV.also {
                 it.visibility = View.VISIBLE
-                Glide
-                    .with(this)
-                    .load(BuildConfig.CDN_BASE_URL + userData.profilePicture)
-                    .centerCrop()
-                    .into(it)
+                Glide.with(this).load(BuildConfig.CDN_BASE_URL + userData.profilePicture)
+                    .centerCrop().into(it)
             }
         }
         b.payPersonActivityNameTV.text = userData.name
@@ -202,20 +199,31 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
         if (isValid) {
             //Valid amount
             hideKeyboard(this@PayPersonActivity)
-            if (userData.paymaartId.isNotEmpty() && userData.phoneNumber.isNotEmpty()) getTaxAndVatForRegisteredApi(
-                amount = amount.toDouble()
-            )
-            else getTaxAndVatForUnRegisteredApi(amount = amount.toDouble())
+            if (userData.paymaartId.isEmpty() && userData.phoneNumber.isNotEmpty()) {
+                //unregistered
+                val phone = if (userData.phoneNumber.startsWith("+")) userData.paymaartId.replace(
+                    " ", ""
+                ) else "+265${userData.phoneNumber}".replace(" ", "")
+
+                getTaxAndVatForUnRegisteredApi(amount = amount.toDouble(), phone)
+            } else if (userData.paymaartId.isNotEmpty() && userData.phoneNumber.isEmpty()) {
+                //unregistered
+                val phone = if (userData.paymaartId.startsWith("+")) userData.paymaartId.replace(
+                    " ", ""
+                ) else "+265${userData.paymaartId}".replace(" ", "")
+
+                getTaxAndVatForUnRegisteredApi(amount = amount.toDouble(), phone)
+            } else {
+                //registered
+                getTaxAndVatForRegisteredApi(amount = amount.toDouble())
+            }
         }
     }
 
-    private fun getTaxAndVatForUnRegisteredApi(amount: Double) {
+    private fun getTaxAndVatForUnRegisteredApi(amount: Double, phone: String) {
         showButtonLoader(
             b.payPersonActivitySendPaymentButton, b.payPersonActivitySendPaymentButtonLoaderLottie
         )
-        val phone = if (userData.phoneNumber.startsWith("+")) userData.phoneNumber.replace(
-            " ", ""
-        ) else "+265${userData.phoneNumber}".replace(" ", "")
 
         lifecycleScope.launch {
             val idToken = fetchIdToken()
