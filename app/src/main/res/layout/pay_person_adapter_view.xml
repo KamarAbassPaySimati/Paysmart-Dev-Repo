@@ -74,6 +74,8 @@
                 android:id="@+id/payPersonUserPhoneNumber"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:text="@string/paymaart"
                 app:drawableStartCompat="@drawable/ico_phone_search_result"
                 android:layout_weight="1"
