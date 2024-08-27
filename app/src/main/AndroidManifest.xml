@@ -22,9 +22,11 @@
         <activity
             android:name=".ui.payperson.PayPersonActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:taskAffinity=".payment"/>
         <activity
             android:name=".ui.payperson.UnregisteredPayActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false"
             android:taskAffinity=".payment"/>
         <activity
@@ -49,17 +51,17 @@
             android:name=".ui.refundrequest.RefundRequestActivity"
             android:exported="false" />
         <!--
-          For the below two activities task affinity is set to .membership
-        because the final activity payment successful activity has .membership as task affinity
+          For the below two activities task affinity is set to .payment
+        because the final activity payment successful activity has .payment as task affinity
         -->
         <activity
             android:name=".ui.cashout.CashOutSearchActivity"
             android:exported="false"
-            android:taskAffinity=".membership" />
+            android:taskAffinity=".payment" />
         <activity
             android:name=".ui.cashout.CashOutActivity"
             android:exported="false"
-            android:taskAffinity=".membership"
+            android:taskAffinity=".payment"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.payment.FlagTransactionActivity"
@@ -67,23 +69,23 @@
         <activity
             android:name=".ui.paytoaffrimax.PayAfrimaxActivity"
             android:exported="false"
-            android:taskAffinity=".membership"
+            android:taskAffinity=".payment"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.paytoaffrimax.ValidateAfrimaxIdActivity"
             android:exported="false"
-            android:taskAffinity=".membership"
+            android:taskAffinity=".payment"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.payment.PaymentSuccessfulActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:taskAffinity=".membership" />
+            android:taskAffinity=".payment" />
         <activity
             android:name=".ui.membership.PurchasedMembershipPlanViewActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:taskAffinity=".membership" />
+            android:taskAffinity=".payment" />
         <activity
             android:name=".ui.kyc.KycEditSuccessfulActivity"
             android:exported="false"
@@ -112,7 +114,7 @@
             android:name=".ui.membership.MembershipPlansActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:taskAffinity=".membership" />
+            android:taskAffinity=".payment" />
         <activity
             android:name=".ui.delete.DeleteAccountActivity"
             android:exported="false"

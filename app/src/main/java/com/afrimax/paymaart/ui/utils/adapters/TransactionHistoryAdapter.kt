@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
@@ -12,13 +11,9 @@ import com.afrimax.paymaart.data.model.IndividualTransactionHistory
 import com.afrimax.paymaart.databinding.CardPagerLoaderBinding
 import com.afrimax.paymaart.databinding.TransactionListViewBinding
 import com.afrimax.paymaart.util.formatEpochTimeThree
-import com.afrimax.paymaart.util.formatEpochTimeTwo
 import com.afrimax.paymaart.util.getFormattedAmount
 import com.afrimax.paymaart.util.getInitials
-import com.afrimax.paymaart.util.showLogE
 import com.bumptech.glide.Glide
-import java.util.Locale
-import kotlin.math.abs
 
 class TransactionHistoryAdapter(
     private val context: Context,
@@ -28,15 +23,17 @@ class TransactionHistoryAdapter(
 
     private var onClickListener: OnClickListener? = null
 
-    inner class TransactionHistoryViewHolder(val b: TransactionListViewBinding) : RecyclerView.ViewHolder(b.root) {
+    inner class TransactionHistoryViewHolder(val b: TransactionListViewBinding) :
+        RecyclerView.ViewHolder(b.root) {
         fun setView(transaction: IndividualTransactionHistory) {
-            val isCurrentUserDebited = transaction.senderId == userPaymaartId || transaction.enteredBy == userPaymaartId
+            val isCurrentUserDebited =
+                transaction.senderId == userPaymaartId || transaction.enteredBy == userPaymaartId
             val amountPrefix = if (isCurrentUserDebited) "-" else "+"
             b.cardTransactionAmountDateTimeTV.text = formatEpochTimeThree(transaction.createdAt)
             b.cardTransactionAmountTV.text = context.getString(
                 R.string.formatted_list_amount,
                 amountPrefix,
-                getFormattedAmount(abs(transaction.transactionAmount.toDouble()))
+                getFormattedAmount(transaction.transactionAmount)
             )
 
             // Set common views
@@ -46,25 +43,50 @@ class TransactionHistoryAdapter(
 
             // Set transaction-specific views
             when (transaction.transactionType) {
-                CASH_IN, CASHIN -> setTransactionDetails(transaction.senderId, transaction.senderName, R.string.cash_in)
-                CASH_OUT, CASHOUT, CASH_OUT_REQUEST, CASH_OUT_FAILED -> setTransactionDetails(transaction.receiverId, transaction.receiverName, R.string.cash_out)
-                PAY_IN -> setTransactionDetails(transaction.enteredBy ?: "", transaction.enteredByName ?: "", R.string.pay_in)
-                REFUND -> setTransactionDetails(transaction.senderId, transaction.receiverName, R.string.refund)
+                CASH_IN, CASHIN -> setTransactionDetails(
+                    transaction.senderId, transaction.senderName, R.string.cash_in
+                )
+
+                CASH_OUT, CASHOUT, CASH_OUT_REQUEST, CASH_OUT_FAILED -> setTransactionDetails(
+                    transaction.receiverId, transaction.receiverName, R.string.cash_out
+                )
+
+                PAY_IN -> setTransactionDetails(
+                    transaction.enteredBy ?: "", transaction.enteredByName ?: "", R.string.pay_in
+                )
+
+                REFUND -> setTransactionDetails(
+                    transaction.senderId, transaction.receiverName, R.string.refund
+                )
+
                 INTEREST -> {
                     setImageTransaction(R.string.interest, R.drawable.ico_paymaart_icon)
                 }
-                G2P_PAY_IN -> setTransactionDetails(transaction.senderId, transaction.senderName, R.string.g2p_pay_in)
+
+                G2P_PAY_IN -> setTransactionDetails(
+                    transaction.senderId, transaction.senderName, R.string.g2p_pay_in
+                )
+
                 PAYMAART -> setImageTransaction(R.string.paymaart, R.drawable.ico_paymaart_icon)
                 AFRIMAX -> setImageTransaction(R.string.afrimax, R.drawable.ico_afrimax)
                 PAY_PERSON -> {
-                    if (userPaymaartId == transaction.senderId)
-                        setPaymaartTransactionType(transaction.receiverName, transaction.receiverId, transaction.receiverProfilePic)
-                    else
-                        setPaymaartTransactionType(transaction.senderName, transaction.senderId, transaction.senderProfilePic)
+                    if (userPaymaartId == transaction.senderId) setPaymaartTransactionType(
+                        transaction.receiverName,
+                        transaction.receiverId,
+                        transaction.receiverProfilePic
+                    )
+                    else setPaymaartTransactionType(
+                        transaction.senderName, transaction.senderId, transaction.senderProfilePic
+                    )
                 }
+
                 PAY_UNREGISTERED -> {
                     //Using this because
-                    setPaymaartTransactionType(transaction.receiverName, transaction.receiverId,transaction.receiverProfilePic)
+                    setPaymaartTransactionType(
+                        transaction.receiverName,
+                        transaction.receiverId,
+                        transaction.receiverProfilePic
+                    )
                 }
             }
         }
@@ -93,14 +115,11 @@ class TransactionHistoryAdapter(
             b.cardTransactionShortNameTV.visibility = View.GONE
             b.cardTransactionIV.also {
                 it.visibility = View.VISIBLE
-                Glide
-                    .with(context)
-                    .load(imageResId)
-                    .into(it)
+                Glide.with(context).load(imageResId).into(it)
             }
         }
 
-        private fun setPaymaartTransactionType(name: String, userId: String, image: String?){
+        private fun setPaymaartTransactionType(name: String, userId: String, image: String?) {
             b.cardTransactionNameTV.apply {
                 visibility = View.VISIBLE
                 text = name
@@ -115,15 +134,11 @@ class TransactionHistoryAdapter(
                     visibility = View.VISIBLE
                     text = getInitials(name)
                 }
-            }else {
+            } else {
                 b.cardTransactionShortNameTV.visibility = View.GONE
                 b.cardTransactionIV.also {
                     it.visibility = View.VISIBLE
-                    Glide
-                        .with(context)
-                        .load(BuildConfig.CDN_BASE_URL + image)
-                        .centerCrop()
-                        .into(it)
+                    Glide.with(context).load(BuildConfig.CDN_BASE_URL + image).centerCrop().into(it)
                 }
             }
         }
@@ -181,6 +196,7 @@ class TransactionHistoryAdapter(
     companion object {
         const val USER_DATA = 1
         const val PAGER_LOADER = 2
+
         //transaction types
         const val CASHIN = "cashin"
         const val CASH_IN = "cash_in"
