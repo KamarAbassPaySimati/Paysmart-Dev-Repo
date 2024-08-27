@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PersonTransactions(
     @SerializedName("data") val transactions: List<Transaction>,
+    @SerializedName("full_name") val fullName:String?,
     @SerializedName("success_status") val successStatus: Boolean,
     @SerializedName("total_count") val totalCount: Int
 )
