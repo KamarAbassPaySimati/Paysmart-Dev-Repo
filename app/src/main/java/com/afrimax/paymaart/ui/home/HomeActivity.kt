@@ -237,6 +237,8 @@ class HomeActivity : BaseActivity(), HomeInterface {
             override fun onClick(transaction: PayPersonTransactions) {
                 val intent = Intent(this@HomeActivity, PersonTransactionActivity::class.java)
                 intent.putExtra(Constants.PAYMAART_ID, transaction.paymaartId)
+                intent.putExtra(Constants.PHONE_NUMBER, transaction.phoneNumber)
+                intent.putExtra(Constants.COUNTRY_CODE, transaction.countryCode)
                 intent.putExtra(Constants.CUSTOMER_NAME, transaction.name)
                 intent.putExtra(Constants.PROFILE_PICTURE, transaction.profilePic)
                 startActivity(intent)

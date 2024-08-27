@@ -189,7 +189,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityFromPaymaartIdTV.text = transactionDetail.enteredBy
                 b.paymentReceiptActivityFromPaymaartNameTV.text = transactionDetail.enteredByName
             }
-            PAY_PERSON -> {
+            PAY_PERSON, PAY_UNREGISTERED -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityNoteContainer.visibility = View.VISIBLE
                 b.paymentReceiptActivityNoteTV.text = if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
@@ -331,6 +331,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         const val AFRIMAX = "afrimax"
         const val PAY_IN = "pay_in"
         const val PAY_PERSON = "pay_person"
+        const val PAY_UNREGISTERED = "pay_unregister"
         const val REFUND = "refund"
         const val PAYMAART = "paymaart"
         const val INTEREST = "interest"
@@ -358,7 +359,7 @@ fun TransactionDetail.toCommonView() = CommonViewData(
     fromPaymaartID = this.senderId ?: "",
     toPaymaartName = this.receiverName ?: "",
     toPaymaartId = this.receiverId ?: "",
-    txnValue = this.transactionAmount,
+    txnValue = this.transactionAmount ?: "",
     txnFee = this.transactionFee ?: "",
     vatIncluded = this.vat ?: "",
     txnId = this.transactionId,

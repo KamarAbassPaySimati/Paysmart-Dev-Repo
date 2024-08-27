@@ -22,9 +22,11 @@
         <activity
             android:name=".ui.payperson.PayPersonActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustResize"
             android:taskAffinity=".payment"/>
         <activity
             android:name=".ui.payperson.UnregisteredPayActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false"
             android:taskAffinity=".payment"/>
         <activity

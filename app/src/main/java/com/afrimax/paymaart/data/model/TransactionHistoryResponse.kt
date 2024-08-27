@@ -25,7 +25,7 @@ data class IndividualTransactionHistory(
     @SerializedName("sender_id") val senderId: String = "",
     @SerializedName("sender_name") val senderName: String = "",
     @SerializedName("sender_profile_pic") val senderProfilePic: String? = null,
-    @SerializedName("transaction_amount") val transactionAmount: String = "",
+    @SerializedName("transaction_amount") val transactionAmount: String? = "",
     @SerializedName("transaction_fee") val transactionFee: String? = null,
     @SerializedName("transaction_id") val transactionId: String = "",
     @SerializedName("transaction_type") val transactionType: String = "",

@@ -242,7 +242,7 @@ class ListPersonTransactionActivity : BaseActivity() {
                                 pCursor.getString(pCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                             val normalizedPhoneNo = phoneNo.replace(Regex("\\D"), "")
                             if (!normalizedNumbersSet.contains(normalizedPhoneNo)) {
-                                contactsSet.add(Contacts(name = name, phoneNumber = phoneNo))
+                                contactsSet.add(Contacts(name = name, phoneNumber = phoneNo.replace(" ", "")))
                                 normalizedNumbersSet.add(normalizedPhoneNo)
                             }
                         }
