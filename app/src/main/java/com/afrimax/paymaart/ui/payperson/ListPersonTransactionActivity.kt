@@ -236,13 +236,19 @@ class ListPersonTransactionActivity : BaseActivity() {
                         arrayOf(id),
                         null
                     )
+
                     if (pCursor != null && pCursor.count > 0) {
                         while (pCursor.moveToNext()) {
                             val phoneNo =
                                 pCursor.getString(pCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                            val normalizedPhoneNo = phoneNo.replace(Regex("\\D"), "")
+                            val normalizedPhoneNo = phoneNo.replace(" ", "")
+
                             if (!normalizedNumbersSet.contains(normalizedPhoneNo)) {
-                                contactsSet.add(Contacts(name = name, phoneNumber = phoneNo.replace(" ", "")))
+                                contactsSet.add(
+                                    Contacts(
+                                        name = name, phoneNumber = phoneNo.replace(" ", "")
+                                    )
+                                )
                                 normalizedNumbersSet.add(normalizedPhoneNo)
                             }
                         }
@@ -266,6 +272,7 @@ class ListPersonTransactionActivity : BaseActivity() {
         )
 
         if (cursor != null && cursor.count > 0) {
+            val normalizedNumbersSet = mutableSetOf<String>()
             while (cursor.moveToNext()) {
                 val phoneNo =
                     cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
@@ -283,11 +290,17 @@ class ListPersonTransactionActivity : BaseActivity() {
                 if (contactCursor != null && contactCursor.moveToFirst()) {
                     val name =
                         contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                    contactsSet.add(
-                        Contacts(
-                            name = name, phoneNumber = phoneNo
+                    val normalizedPhoneNo = phoneNo.replace(" ", "")
+
+                    if (!normalizedNumbersSet.contains(normalizedPhoneNo)) {
+                        contactsSet.add(
+                            Contacts(
+                                name = name, phoneNumber = phoneNo.replace(" ", "")
+                            )
                         )
-                    )
+                        normalizedNumbersSet.add(normalizedPhoneNo)
+                    }
+
                     contactCursor.close()
                 }
             }
@@ -307,6 +320,7 @@ class ListPersonTransactionActivity : BaseActivity() {
         )
 
         if (cursor != null && cursor.count > 0) {
+            val normalizedNumbersSet = mutableSetOf<String>()
             while (cursor.moveToNext()) {
                 val phoneNo =
                     cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
@@ -324,11 +338,17 @@ class ListPersonTransactionActivity : BaseActivity() {
                 if (contactCursor != null && contactCursor.moveToFirst()) {
                     val name =
                         contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                    contactsSet.add(
-                        Contacts(
-                            name = name, phoneNumber = phoneNo
+                    val normalizedPhoneNo = phoneNo.replace(" ", "")
+
+                    if (!normalizedNumbersSet.contains(normalizedPhoneNo)) {
+                        contactsSet.add(
+                            Contacts(
+                                name = name, phoneNumber = phoneNo.replace(" ", "")
+                            )
                         )
-                    )
+                        normalizedNumbersSet.add(normalizedPhoneNo)
+                    }
+
                     contactCursor.close()
                 }
             }
@@ -506,7 +526,8 @@ class ListPersonTransactionActivity : BaseActivity() {
         binding.listPersonTransactionLoaderLottie.visibility = View.GONE
         binding.listPersonTransactionNoDataFoundContainer.visibility = View.GONE
         binding.listPersonTransactionContentBox.visibility = View.VISIBLE
-        if (searchText.isNotEmpty())  binding.listPersonTransactionRecentTransactionsTV.visibility = View.GONE
+        if (searchText.isNotEmpty()) binding.listPersonTransactionRecentTransactionsTV.visibility =
+            View.GONE
     }
 
     private fun showEmptyScreen(condition: Boolean) {

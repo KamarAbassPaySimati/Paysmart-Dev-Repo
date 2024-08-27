@@ -84,8 +84,8 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var mMembershipType: String = ""
     private var mKycStatus: String = ""
     private var customerName: String = ""
-    private var allRecentTransactions: MutableList<IndividualTransactionHistory> = mutableListOf()
-    private var allRecentPayPersonTransactions: MutableList<PayPersonTransactions> = mutableListOf()
+    private var allRecentTransactions: ArrayList<IndividualTransactionHistory> = ArrayList()
+    private var allRecentPayPersonTransactions: ArrayList<PayPersonTransactions> = ArrayList()
     private lateinit var notificationPermissionCheckLauncher: ActivityResultLauncher<String>
     private lateinit var checkUpdateLauncher: ActivityResultLauncher<IntentSenderRequest>
     private lateinit var appUpdateManager: AppUpdateManager
@@ -628,7 +628,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
             if (transactionHistory.size > 4) b.homeActivityTransactionsSeeAllTV.visibility = View.VISIBLE
             allRecentTransactions.clear()
             allRecentTransactions.addAll(transactionHistory)
-            b.homeActivityPersonsRecyclerView.adapter?.notifyDataSetChanged()
+            b.homeActivityTransactionsRecyclerView.adapter?.notifyDataSetChanged()
         }
     }
 

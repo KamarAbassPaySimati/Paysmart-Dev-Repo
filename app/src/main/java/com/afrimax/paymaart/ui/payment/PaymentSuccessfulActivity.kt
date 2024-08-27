@@ -212,7 +212,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                finishAffinity()
+                this@PaymentSuccessfulActivity.finishAffinity()
             }
         })
     }
