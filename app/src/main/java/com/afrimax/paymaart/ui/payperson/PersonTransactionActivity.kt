@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.IndividualSearchUserData
@@ -17,7 +18,9 @@ import com.afrimax.paymaart.databinding.ActivityPersonTransactionBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.utils.adapters.PaymentListAdapter
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.getInitials
 import com.afrimax.paymaart.util.showLogE
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -61,7 +64,9 @@ class PersonTransactionActivity : BaseActivity() {
         windowInsetsController.isAppearanceLightNavigationBars = false
         window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
-        setupView()
+
+        setUpLayout()
+        setupRecyclerView()
         getPersonTransactions()
         setUpListeners()
     }
@@ -69,34 +74,29 @@ class PersonTransactionActivity : BaseActivity() {
     private fun setUpListeners() {
         binding.paymentListSubmitButton.setOnClickListener {
 
-            val i = if (paymaartID.isNotEmpty() && phoneNumber.isNotEmpty()) Intent(
-                this@PersonTransactionActivity, PayPersonActivity::class.java
-            ) else Intent(this@PersonTransactionActivity, UnregisteredPayActivity::class.java)
-
-            val phone = when {
-                paymaartID.isNotEmpty() && phoneNumber.isEmpty() -> paymaartID
-                else -> phoneNumber
-            }
+            val i =
+                if (transactionList.isNotEmpty() || (paymaartID.isNotEmpty() && phoneNumber.isNotEmpty())) Intent(
+                    this@PersonTransactionActivity, PayPersonActivity::class.java
+                ) else Intent(this@PersonTransactionActivity, UnregisteredPayActivity::class.java)
 
             val userData = IndividualSearchUserData(
                 paymaartId = paymaartID,
-                phoneNumber = phone,
+                phoneNumber = phoneNumber,
                 viewType = "",
                 countryCode = countryCode,
                 name = userName,
-                membership = ""
+                membership = "",
+                profilePicture = profilePicture
             )
             i.putExtra(Constants.USER_DATA, userData)
             startActivity(i)
         }
     }
 
-    private fun setupView() {
+    private fun setupRecyclerView() {
         binding.paymentListToolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-        binding.paymentListReceiverName.text = userName
-        binding.paymentListReceiverPaymaartId.text = paymaartID
 
         val layoutManager = LinearLayoutManager(this)
         layoutManager.stackFromEnd = false
@@ -107,21 +107,56 @@ class PersonTransactionActivity : BaseActivity() {
 
     }
 
+    private fun setUpLayout() {
+        binding.paymentListReceiverName.text = userName
+
+        val paymaartIdOrPhone = paymaartID.ifEmpty {
+            if (phoneNumber.startsWith("+")) phoneNumber.replace(
+                " ", ""
+            ) else "+265$phoneNumber".replace(" ", "")
+        }
+        binding.paymentListReceiverPaymaartId.text = paymaartIdOrPhone
+
+        if (profilePicture.isNotEmpty()) {
+            binding.paymentListIconNameInitials.visibility = View.GONE
+            binding.paymentListIconImage.visibility = View.VISIBLE
+            Glide.with(this).load(BuildConfig.CDN_BASE_URL + profilePicture).centerCrop()
+                .into(binding.paymentListIconImage)
+        } else {
+            binding.paymentListIconImage.visibility = View.GONE
+            binding.paymentListIconNameInitials.apply {
+                visibility = View.VISIBLE
+                text = getInitials(userName)
+            }
+        }
+    }
+
     private fun getPersonTransactions() {
         showLoader()
         scope.launch {
             val idToken = fetchIdToken()
+
+            val paymaartIdOrPhone = paymaartID.ifEmpty {
+                if (phoneNumber.startsWith("+")) phoneNumber.replace(
+                    " ", ""
+                ) else "+265$phoneNumber".replace(" ", "")
+            }
+
             val personTransactionHandler = ApiClient.apiService.viewPersonTransactionHistory(
-                header = idToken, paymaartId = paymaartID
+                header = idToken, paymaartId = paymaartIdOrPhone
             )
 
             personTransactionHandler.enqueue(object : Callback<PersonTransactions> {
                 override fun onResponse(
                     call: Call<PersonTransactions>, response: Response<PersonTransactions>
                 ) {
-                    if (response.isSuccessful && response.body() != null) {
-                        val transactions = response.body()?.transactions
-                        if (transactions.isNullOrEmpty()) {
+                    val body = response.body()
+                    if (response.isSuccessful && body != null) {
+                        body.fullName?.let { userName = it }
+                        setUpLayout()
+
+                        val transactions = body.transactions
+                        if (transactions.isEmpty()) {
                             showEmptyScreen()
                         } else {
                             hideLoader()
@@ -168,16 +203,17 @@ class PersonTransactionActivity : BaseActivity() {
         var uniqueDate: String = getFormattedDate(transactions[0].createdAt)
         transactions.forEachIndexed { index, transaction ->
             val currentMessageDate = getFormattedDate(transaction.createdAt)
+            "CurrentMessage".showLogE(currentMessageDate)
             if (currentMessageDate != uniqueDate) {
                 uniqueDate = currentMessageDate
                 groupedMessages.add(transactions[index - 1].copy(showDate = true))
             }
             groupedMessages.add(transaction.copy(showDate = false))
         }
-        "Response".showLogE(groupedMessages.last().showDate)
         if (!groupedMessages.last().showDate) {
             groupedMessages.add(groupedMessages.last().copy(showDate = true))
         }
+        "GroupedMessage".showLogE(groupedMessages)
         return groupedMessages
     }
 

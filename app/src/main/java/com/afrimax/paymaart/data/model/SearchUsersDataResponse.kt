@@ -25,13 +25,15 @@ data class IndividualSearchUserData(
     @SerializedName("phone_number")
     val phoneNumber: String,
     val membership:String? = "",
-    val viewType: String? = "" //viewType is required to show pager lottie
+    val viewType: String? = "", //viewType is required to show pager lottie
+    val profilePicture: String? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
+        parcel.readString(),
         parcel.readString(),
         parcel.readString()
     ) {
@@ -44,6 +46,7 @@ data class IndividualSearchUserData(
         parcel.writeString(phoneNumber)
         parcel.writeString(membership)
         parcel.writeString(viewType)
+        parcel.writeString(profilePicture)
     }
 
     override fun describeContents(): Int {

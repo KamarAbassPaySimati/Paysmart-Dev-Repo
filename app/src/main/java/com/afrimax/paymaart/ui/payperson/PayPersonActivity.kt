@@ -14,12 +14,12 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
+import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.IndividualSearchUserData
 import com.afrimax.paymaart.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paymaart.data.model.PayToUnRegisteredPersonRequest
-import com.afrimax.paymaart.data.model.PayUnRegisteredPersonResponse
 import com.afrimax.paymaart.databinding.ActivityPayPersonBinding
 import com.afrimax.paymaart.ui.BaseActivity
 import com.afrimax.paymaart.ui.membership.MembershipPlanModel
@@ -27,7 +27,9 @@ import com.afrimax.paymaart.ui.payment.PaymentSuccessfulActivity
 import com.afrimax.paymaart.ui.utils.bottomsheets.TotalReceiptSheet
 import com.afrimax.paymaart.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paymaart.util.Constants
+import com.afrimax.paymaart.util.getInitials
 import com.airbnb.lottie.LottieAnimationView
+import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
 
@@ -61,14 +63,22 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
     }
 
     private fun setUpLayout() {
-
-        val nameList = userData.name.uppercase().split(" ")
-        val shortName = "${nameList[0][0]}${nameList[1][0]}${nameList[2][0]}"
-        b.payPersonActivityShortNameTV.text = shortName
-
+        if (userData.profilePicture.isNullOrEmpty()) {
+            b.payPersonActivityShortNameTV.apply {
+                visibility = View.VISIBLE
+                text = getInitials(userData.name)
+            }
+        } else {
+            b.payPersonActivityProfileIV.also {
+                it.visibility = View.VISIBLE
+                Glide.with(this).load(BuildConfig.CDN_BASE_URL + userData.profilePicture)
+                    .centerCrop().into(it)
+            }
+        }
         b.payPersonActivityNameTV.text = userData.name
         b.payPersonActivityPaymaartIdTV.text = userData.paymaartId
     }
+
 
     private fun setUpListeners() {
 
@@ -189,20 +199,31 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
         if (isValid) {
             //Valid amount
             hideKeyboard(this@PayPersonActivity)
-            if (userData.paymaartId.isNotEmpty() && userData.phoneNumber.isNotEmpty()) getTaxAndVatForRegisteredApi(
-                amount = amount.toDouble()
-            )
-            else getTaxAndVatForUnRegisteredApi(amount = amount.toDouble())
+            if (userData.paymaartId.isEmpty() && userData.phoneNumber.isNotEmpty()) {
+                //unregistered
+                val phone = if (userData.phoneNumber.startsWith("+")) userData.paymaartId.replace(
+                    " ", ""
+                ) else "+265${userData.phoneNumber}".replace(" ", "")
+
+                getTaxAndVatForUnRegisteredApi(amount = amount.toDouble(), phone)
+            } else if (userData.paymaartId.isNotEmpty() && userData.phoneNumber.isEmpty()) {
+                //unregistered
+                val phone = if (userData.paymaartId.startsWith("+")) userData.paymaartId.replace(
+                    " ", ""
+                ) else "+265${userData.paymaartId}".replace(" ", "")
+
+                getTaxAndVatForUnRegisteredApi(amount = amount.toDouble(), phone)
+            } else {
+                //registered
+                getTaxAndVatForRegisteredApi(amount = amount.toDouble())
+            }
         }
     }
 
-    private fun getTaxAndVatForUnRegisteredApi(amount: Double) {
+    private fun getTaxAndVatForUnRegisteredApi(amount: Double, phone: String) {
         showButtonLoader(
             b.payPersonActivitySendPaymentButton, b.payPersonActivitySendPaymentButtonLoaderLottie
         )
-        val phone = if (userData.phoneNumber.startsWith("+")) userData.phoneNumber.replace(
-            " ", ""
-        ) else "+265${userData.phoneNumber}".replace(" ", "")
 
         lifecycleScope.launch {
             val idToken = fetchIdToken()
@@ -228,6 +249,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
                 TotalReceiptSheet(
                     PayPersonUnRegisteredModel(
                         amount = body.data.totalAmount,
+                        enteredAmount = amount.toString(),
                         vat = body.data.vatAmount,
                         txnFee = body.data.grossTransactionFee,
                         phoneNumber = phone,
@@ -266,6 +288,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
                 TotalReceiptSheet(
                     PayPersonRegisteredModel(
                         amount = body.totalAmount.toString(),
+                        enteredAmount = amount.toString(),
                         vat = body.vat.toString(),
                         txnFee = body.transactionFee.toString(),
                         note = b.payPersonActivityAddNoteET.text.toString(),
