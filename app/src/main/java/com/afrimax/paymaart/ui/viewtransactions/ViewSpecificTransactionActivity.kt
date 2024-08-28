@@ -219,7 +219,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityNoteTV.text = transactionDetail.note
                 b.paymentReceiptActivityBalanceTV.text =
                     getFormattedAmount(transactionDetail.receiverClosingBalance)
-
+                b.paymentReceiptActivityFlagPaymentIV.visibility = View.GONE
             }
 
             PAYMAART -> {
