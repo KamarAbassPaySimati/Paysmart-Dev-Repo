@@ -97,7 +97,7 @@ fun <T> formatEpochTimeThree(timeStamp: T?): String {
     if (timeStamp == null) return ""
     val newTimeStamp = when (timeStamp) {
         is Long -> timeStamp
-        is String -> timeStamp.toLongOrNull() ?: 0L
+        is String -> timeStamp.toDoubleOrNull()?.toLong() ?: 0L
         is Double -> timeStamp.toLong()
         else -> 0L
     }

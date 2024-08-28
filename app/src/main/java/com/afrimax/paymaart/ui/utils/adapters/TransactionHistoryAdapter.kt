@@ -28,6 +28,7 @@ class TransactionHistoryAdapter(
         fun setView(transaction: IndividualTransactionHistory) {
             val isCurrentUserDebited =
                 transaction.senderId == userPaymaartId || transaction.enteredBy == userPaymaartId
+
             val amountPrefix = if (isCurrentUserDebited) "-" else "+"
             b.cardTransactionAmountDateTimeTV.text = formatEpochTimeThree(transaction.createdAt)
             b.cardTransactionAmountTV.text = context.getString(
@@ -55,9 +56,10 @@ class TransactionHistoryAdapter(
                     transaction.enteredBy ?: "", transaction.enteredByName ?: "", R.string.pay_in
                 )
 
-                REFUND -> setTransactionDetails(
-                    transaction.senderId, transaction.receiverName, R.string.refund
-                )
+                REFUND, PAY_UNREGISTERED_REFUND ->{
+                    setTransactionDetails(transaction.senderId, context.getString(R.string.refund), R.string.refund)
+                    b.cardTransactionPaymaartIdTV.visibility = View.GONE
+                }
 
                 INTEREST -> {
                     setImageTransaction(R.string.interest, R.drawable.ico_paymaart_icon)
@@ -91,14 +93,14 @@ class TransactionHistoryAdapter(
             }
         }
 
-        private fun setTransactionDetails(id: String, name: String, nameResId: Int) {
+        private fun setTransactionDetails(id: String?, name: String?, nameResId: Int) {
             b.cardTransactionNameTV.apply {
                 visibility = View.VISIBLE
                 text = context.getString(nameResId)
             }
             b.cardTransactionPaymaartIdTV.apply {
                 visibility = View.VISIBLE
-                text = id
+                text = id ?: "-"
             }
             b.cardTransactionShortNameTV.apply {
                 visibility = View.VISIBLE
@@ -119,20 +121,20 @@ class TransactionHistoryAdapter(
             }
         }
 
-        private fun setPaymaartTransactionType(name: String, userId: String, image: String?) {
+        private fun setPaymaartTransactionType(name: String?, userId: String?, image: String?) {
             b.cardTransactionNameTV.apply {
                 visibility = View.VISIBLE
-                text = name
+                text = name ?: "-"
             }
             b.cardTransactionPaymaartIdTV.apply {
                 visibility = View.VISIBLE
-                text = userId
+                text = userId ?: "-"
             }
             if (image.isNullOrEmpty()) {
                 b.cardTransactionIV.visibility = View.GONE
                 b.cardTransactionShortNameTV.apply {
                     visibility = View.VISIBLE
-                    text = getInitials(name)
+                    text = getInitials(name).ifEmpty { "-" }
                 }
             } else {
                 b.cardTransactionShortNameTV.visibility = View.GONE
@@ -212,5 +214,6 @@ class TransactionHistoryAdapter(
         const val CASH_OUT_REQUEST = "cashout_request"
         const val CASH_OUT_FAILED = "cashout_failed"
         const val PAY_UNREGISTERED = "pay_unregister"
+        const val PAY_UNREGISTERED_REFUND = "pay_unregister_refund"
     }
 }
