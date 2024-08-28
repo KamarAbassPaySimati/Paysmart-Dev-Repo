@@ -33,6 +33,7 @@ import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companio
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_IN
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_PERSON
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_UNREGISTERED
+import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_UNREGISTERED_REFUND
 import com.afrimax.paymaart.ui.utils.adapters.TransactionHistoryAdapter.Companion.REFUND
 import com.afrimax.paymaart.ui.utils.adapters.decoration.RecyclerViewDecoration
 import com.afrimax.paymaart.ui.utils.bottomsheets.TransactionHistorySheet
@@ -375,6 +376,7 @@ class TransactionHistoryListActivity : BaseActivity(), TransactionHistoryInterfa
         CASHOUT,
         PAY_IN,
         REFUND,
+        PAY_UNREGISTERED_REFUND,
         INTEREST,
         G2P_PAY_IN,
         CASH_OUT_REQUEST,
