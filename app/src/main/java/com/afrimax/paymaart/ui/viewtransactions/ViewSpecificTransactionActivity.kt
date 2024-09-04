@@ -6,13 +6,10 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
@@ -41,8 +38,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
-import java.time.Instant
-import java.time.ZoneId
 import java.util.Calendar
 
 class ViewSpecificTransactionActivity : BaseActivity() {
@@ -83,7 +78,8 @@ class ViewSpecificTransactionActivity : BaseActivity() {
 //        })
 
 
-        nextScreenResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        nextScreenResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 val data = result.data
                 if ((result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) && data != null) {
                     isFlagged = data.getBooleanExtra(Constants.FLAGGED_STATUS, false)
@@ -91,7 +87,8 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 }
             }
 
-        shareLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+        shareLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
                 b.paymentReceiptActivitySharePaymentIV.setOnClickListener { shareReceipt() }
             }
 
@@ -103,8 +100,9 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         }
 
         b.paymentReceiptActivityFlagPaymentIV.setOnClickListener {
-            nextScreenResultLauncher.launch(
-                Intent(this@ViewSpecificTransactionActivity, FlagTransactionActivity::class.java).apply {
+            nextScreenResultLauncher.launch(Intent(
+                this@ViewSpecificTransactionActivity, FlagTransactionActivity::class.java
+            ).apply {
                 putExtra(Constants.TRANSACTION_ID, paymentStatusData?.transactionId)
             })
         }
@@ -121,7 +119,8 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         lifecycleScope.launch {
             val idToken = fetchIdToken()
 
-            val getTransactionCall = ApiClient.apiService.getTransactionDetailsApi(idToken, transactionId)
+            val getTransactionCall =
+                ApiClient.apiService.getTransactionDetailsApi(idToken, transactionId)
 
             getTransactionCall.enqueue(object : Callback<GetTransactionDetailsResponse> {
                 override fun onResponse(
@@ -151,21 +150,29 @@ class ViewSpecificTransactionActivity : BaseActivity() {
     private fun setupReceiptScreen(transactionDetail: TransactionDetail?) {
         val commonView = transactionDetail?.toCommonView()
         if (transactionDetail?.flagged == true) makeTransactionFlagged()
-        when(transactionDetail?.transactionType) {
+        when (transactionDetail?.transactionType) {
             CASH_IN, CASHIN -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_in_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.cash_in_successful)
                 b.paymentReceiptActivityBalanceContainer.visibility = View.VISIBLE
-                b.paymentReceiptActivityBalanceTV.text = getString(R.string.amount_formatted, getFormattedAmount(transactionDetail.receiverClosingBalance))
+                b.paymentReceiptActivityBalanceTV.text = getString(
+                    R.string.amount_formatted,
+                    getFormattedAmount(transactionDetail.receiverClosingBalance)
+                )
             }
+
             CASH_OUT, CASHOUT -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_out_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.cash_out_successful)
                 b.paymentReceiptActivityBalanceContainer.visibility = View.VISIBLE
-                b.paymentReceiptActivityBalanceTV.text = getString(R.string.amount_formatted, getFormattedAmount(transactionDetail.receiverClosingBalance))
+                b.paymentReceiptActivityBalanceTV.text = getString(
+                    R.string.amount_formatted,
+                    getFormattedAmount(transactionDetail.receiverClosingBalance)
+                )
             }
+
             AFRIMAX -> {
                 setupCommonView(commonView)
                 if (transactionDetail.extras != null) {
@@ -173,42 +180,53 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                     b.paymentReceiptActivityToAfrimaxNameContainer.visibility = View.VISIBLE
                     b.paymentReceiptActivityToAfrimaxIdContainer.visibility = View.VISIBLE
                     b.paymentReceiptActivityToAfrimaxNameTV.text = extraModel.afrimaxCustomerName
-                    b.paymentReceiptActivityToAfrimaxIdTV.text = extraModel.afrimaxCustomerId.toString()
-                    if (!extraModel.afrimaxPlanName.isNullOrEmpty() ){
+                    b.paymentReceiptActivityToAfrimaxIdTV.text =
+                        extraModel.afrimaxCustomerId.toString()
+                    if (!extraModel.afrimaxPlanName.isNullOrEmpty()) {
                         b.paymentReceiptActivityPlanContainer.visibility = View.VISIBLE
                         b.paymentReceiptActivityPlanTV.text = extraModel.afrimaxPlanName
                     }
                 }
             }
+
             PAY_IN -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.pay_in_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.pay_in_successful)
                 b.paymentReceiptActivityBalanceContainer.visibility = View.VISIBLE
-                b.paymentReceiptActivityBalanceTV.text = getString(R.string.amount_formatted, getFormattedAmount(transactionDetail.receiverClosingBalance))
+                b.paymentReceiptActivityBalanceTV.text = getString(
+                    R.string.amount_formatted,
+                    getFormattedAmount(transactionDetail.receiverClosingBalance)
+                )
                 b.paymentReceiptActivityFromPaymaartIdTV.text = transactionDetail.enteredBy
                 b.paymentReceiptActivityFromPaymaartNameTV.text = transactionDetail.enteredByName
             }
-            PAY_PERSON -> {
+
+            PAY_PERSON, PAY_UNREGISTERED -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityNoteContainer.visibility = View.VISIBLE
-                b.paymentReceiptActivityNoteTV.text = if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
+                b.paymentReceiptActivityNoteTV.text =
+                    if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value)
             }
-            REFUND -> {
+
+            REFUND, PAY_UNREGISTERED_REFUND -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.refund_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.refund_successful)
                 b.paymentReceiptActivityNoteContainer.visibility = View.VISIBLE
                 b.paymentReceiptActivityBalanceContainer.visibility = View.VISIBLE
                 b.paymentReceiptActivityNoteTV.text = transactionDetail.note
-                b.paymentReceiptActivityBalanceTV.text = getFormattedAmount(transactionDetail.receiverClosingBalance)
-
+                b.paymentReceiptActivityBalanceTV.text =
+                    getFormattedAmount(transactionDetail.receiverClosingBalance)
+                b.paymentReceiptActivityFlagPaymentIV.visibility = View.GONE
             }
+
             PAYMAART -> {
                 setupCommonView(commonView)
-                val membershipData = Gson().fromJson(transactionDetail.membershipData, Membership::class.java)
-                val membershipName = when(membershipData.membershipName) {
+                val membershipData =
+                    Gson().fromJson(transactionDetail.membershipData, Membership::class.java)
+                val membershipName = when (membershipData.membershipName) {
                     "prime" -> getString(R.string.prime)
                     "primex" -> getString(R.string.primeX)
                     else -> getString(R.string.go)
@@ -216,9 +234,17 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 val membershipValidity = membershipData.membershipShipValidity.toString()
                 val membershipStart = formatEpochTimeTwo(membershipData.membershipStart)
                 val membershipExpiry = formatEpochTimeTwo(membershipData.membershipExpiry)
-                b.paymentReceiptActivityMembershipContainer.visibility = if (membershipData.membershipName == null) View.GONE else View.VISIBLE
-                b.paymentReceiptActivityMembershipTV.text = getString(R.string.formatted_membership_value_two, membershipName, membershipValidity, membershipStart, membershipExpiry)
+                b.paymentReceiptActivityMembershipContainer.visibility =
+                    if (membershipData.membershipName == null) View.GONE else View.VISIBLE
+                b.paymentReceiptActivityMembershipTV.text = getString(
+                    R.string.formatted_membership_value_two,
+                    membershipName,
+                    membershipValidity,
+                    membershipStart,
+                    membershipExpiry
+                )
             }
+
             INTEREST -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityFromPaymaartNameTV.text = getString(R.string.trust_acc_int)
@@ -226,29 +252,47 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.interest_value)
                 b.paymentReceiptActivityBalanceContainer.visibility = View.VISIBLE
                 b.paymentReceiptActivityBalanceTVKey.text = getString(R.string.interest_period)
-                b.paymentReceiptActivityBalanceTV.text = getString(R.string.interest_period_formatted, getQuarterEndDate(transactionDetail.createdAt))
+                b.paymentReceiptActivityBalanceTV.text = getString(
+                    R.string.interest_period_formatted,
+                    getQuarterEndDate(transactionDetail.createdAt)
+                )
                 b.paymentReceiptActivityVatInclContainer.visibility = View.VISIBLE
-                b.paymentReceiptActivityVatInclTV.text = getString(R.string.amount_formatted, getFormattedAmount(transactionDetail.vat))
+                b.paymentReceiptActivityVatInclTV.text =
+                    getString(R.string.amount_formatted, getFormattedAmount(transactionDetail.vat))
 
             }
+
             G2P_PAY_IN -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.g2p_pay_in_successful)
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.g2p_pay_in_value)
-                b.paymentReceiptActivityBalanceTV.text = getString(R.string.amount_formatted, getFormattedAmount(transactionDetail.receiverClosingBalance))
+                b.paymentReceiptActivityBalanceTV.text = getString(
+                    R.string.amount_formatted,
+                    getFormattedAmount(transactionDetail.receiverClosingBalance)
+                )
             }
+
             CASH_OUT_REQUEST -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_out_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.cash_out_requested)
-                b.paymentReceiptActivityStatusContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.paymentScreenOrange))
+                b.paymentReceiptActivityStatusContainer.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this, R.color.paymentScreenOrange
+                    )
+                )
                 b.paymentReceiptActivityFlagPaymentIV.visibility = View.GONE
             }
+
             CASH_OUT_FAILED -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_out_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.cash_out_failed)
-                b.paymentReceiptActivityStatusContainer.setBackgroundColor(ContextCompat.getColor(this, R.color.errorRed))
+                b.paymentReceiptActivityStatusContainer.setBackgroundColor(
+                    ContextCompat.getColor(
+                        this, R.color.errorRed
+                    )
+                )
                 b.paymentReceiptActivityFlagPaymentIV.visibility = View.GONE
             }
         }
@@ -259,14 +303,16 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         b.paymentReceiptActivityFromPaymaartIdTV.text = data?.fromPaymaartID
         b.paymentReceiptActivityToPaymaartNameTV.text = data?.toPaymaartName
         b.paymentReceiptActivityToPaymaartIdTV.text = data?.toPaymaartId
-        b.paymentReceiptActivityPaymentValueTV.text = getString(R.string.amount_formatted, getFormattedAmount(data?.txnValue))
-        b.paymentReceiptActivityTxnFeeTV.text = getString(R.string.amount_formatted, getFormattedAmount(data?.txnFee))
-        b.paymentReceiptActivityVatInclTV.text = getString(R.string.amount_formatted, getFormattedAmount(data?.vatIncluded))
+        b.paymentReceiptActivityPaymentValueTV.text =
+            getString(R.string.amount_formatted, getFormattedAmount(data?.txnValue))
+        b.paymentReceiptActivityTxnFeeTV.text =
+            getString(R.string.amount_formatted, getFormattedAmount(data?.txnFee))
+        b.paymentReceiptActivityVatInclTV.text =
+            getString(R.string.amount_formatted, getFormattedAmount(data?.vatIncluded))
         b.paymentReceiptActivityTxnIdTV.text = data?.txnId
         b.paymentReceiptActivityDateTimeTV.text = formatEpochTime(data?.dateTime)
 
     }
-
 
 
     private fun makeTransactionFlagged() {
@@ -323,6 +369,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         }
         return uri
     }
+
     companion object {
         const val CASHIN = "cashin"
         const val CASH_IN = "cash_in"
@@ -331,7 +378,9 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         const val AFRIMAX = "afrimax"
         const val PAY_IN = "pay_in"
         const val PAY_PERSON = "pay_person"
+        const val PAY_UNREGISTERED = "pay_unregister"
         const val REFUND = "refund"
+        const val PAY_UNREGISTERED_REFUND = "pay_unregister_refund"
         const val PAYMAART = "paymaart"
         const val INTEREST = "interest"
         const val G2P_PAY_IN = "g2p_pay_in"
@@ -339,6 +388,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         const val CASH_OUT_FAILED = "cashout_failed"
     }
 }
+
 data class CommonViewData(
     val fromPaymaartName: String,
     val fromPaymaartID: String,
@@ -354,23 +404,23 @@ data class CommonViewData(
 )
 
 fun TransactionDetail.toCommonView() = CommonViewData(
-    fromPaymaartName = this.senderName ?: "",
-    fromPaymaartID = this.senderId ?: "",
-    toPaymaartName = this.receiverName ?: "",
-    toPaymaartId = this.receiverId ?: "",
-    txnValue = this.transactionAmount,
-    txnFee = this.transactionFee ?: "",
-    vatIncluded = this.vat ?: "",
+    fromPaymaartName = this.senderName ?: "-",
+    fromPaymaartID = this.senderId ?: "-",
+    toPaymaartName = this.receiverName ?: "-",
+    toPaymaartId = this.receiverId ?: "-",
+    txnValue = this.transactionAmount ?: "-",
+    txnFee = this.transactionFee ?: "-",
+    vatIncluded = this.vat ?: "-",
     txnId = this.transactionId,
-    dateTime = this.createdAt!!,
-    balance = this.receiverClosingBalance ?: "",
+    dateTime = this.createdAt ?: 0.0,
+    balance = this.receiverClosingBalance ?: "-",
     transactionType = this.transactionType
 )
 
 
 fun <T> getQuarterEndDate(timestamp: T?): String {
     if (timestamp == null) return ""
-    val newTimeStamp = when(timestamp) {
+    val newTimeStamp = when (timestamp) {
         is String -> timestamp.toLong()
         is Long -> timestamp
         is Double -> timestamp.toLong()

@@ -594,6 +594,7 @@
     <string name="please_enter_amount">Please enter amount</string>
     <string name="minimum_amount_is_1_mwk">Minimum amount is 1.00 MWK</string>
     <string name="minimum_amount_is_500_mwk">Minimum amount is 500.00 MWK</string>
+    <string name="minimum_amount_is_100_mwk">Minimum amount is 100.00 MWK</string>
     <string name="invalid_amount">Invalid amount</string>
     <string name="please_choose_a_plan">Please a choose a plan</string>
     <string name="send_payment_subtext_pay_afrimax">Once confirmed, credits sent to Afrimax cannot be reversed.</string>
