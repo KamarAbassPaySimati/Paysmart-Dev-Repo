@@ -70,14 +70,14 @@ class HomeScreenIconAdapter(
                         text = getInitials(transactionList[position].enteredByName)
                     }
                 }
-                REFUND -> {
+                REFUND, PAY_UNREGISTERED_REFUND -> {
                     binding.iconName.apply {
                         visibility = View.VISIBLE
                         text = holder.itemView.context.getString(R.string.refund)
                     }
                     binding.iconNameInitials.apply {
                         visibility = View.VISIBLE
-                        text = getInitials(transactionList[position].senderName)
+                        text = getInitials(context.getString(R.string.refund))
                     }
                 }
                 INTEREST -> {
@@ -200,5 +200,6 @@ class HomeScreenIconAdapter(
         const val CASH_OUT_REQUEST = "cashout_request"
         const val CASH_OUT_FAILED = "cashout_failed"
         const val PAY_UNREGISTERED = "pay_unregister"
+        const val PAY_UNREGISTERED_REFUND = "pay_unregister_refund"
     }
 }

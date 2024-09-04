@@ -29,7 +29,7 @@ data class TransactionDetail(
     @SerializedName("sender_id") val senderId: String? = "",
     @SerializedName("sender_name") val senderName: String? = "",
     @SerializedName("sender_profile_pic") val senderProfilePic: String? = null,
-    @SerializedName("transaction_amount") val transactionAmount: String,
+    @SerializedName("transaction_amount") val transactionAmount: String? = null,
     @SerializedName("transaction_code") val transactionCode: String = "",
     @SerializedName("transaction_fee") val transactionFee: String? = null,
     @SerializedName("transaction_id") val transactionId: String,

@@ -39,6 +39,8 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
 
     private lateinit var userData: IndividualSearchUserData
 
+    private var isRegistered = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         b = ActivityPayPersonBinding.inflate(layoutInflater)
@@ -60,6 +62,8 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
 
     private fun initViews() {
         userData = intent.parcelable<IndividualSearchUserData>(Constants.USER_DATA)!!
+        if (userData.paymaartId.isNotEmpty() && userData.phoneNumber.isNotEmpty()) isRegistered =
+            true
     }
 
     private fun setUpLayout() {
@@ -76,7 +80,8 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
             }
         }
         b.payPersonActivityNameTV.text = userData.name
-        b.payPersonActivityPaymaartIdTV.text = userData.paymaartId
+        b.payPersonActivityPaymaartIdTV.text =
+            if (isRegistered) userData.paymaartId else userData.phoneNumber
     }
 
 
@@ -182,10 +187,18 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
                 b.payPersonActivityPaymentErrorTV.text = getString(R.string.please_enter_amount)
             }
 
-            amount.toDouble() < 1.0 -> {
+            isRegistered && amount.toDouble() < 100.0 -> {
                 isValid = false
                 b.payPersonActivityPaymentErrorBox.visibility = View.VISIBLE
-                b.payPersonActivityPaymentErrorTV.text = getString(R.string.minimum_amount_is_1_mwk)
+                b.payPersonActivityPaymentErrorTV.text =
+                    getString(R.string.minimum_amount_is_100_mwk)
+            }
+
+            !isRegistered && amount.toDouble() < 500.0 -> {
+                isValid = false
+                b.payPersonActivityPaymentErrorBox.visibility = View.VISIBLE
+                b.payPersonActivityPaymentErrorTV.text =
+                    getString(R.string.minimum_amount_is_500_mwk)
             }
 
             mainDigits.length > 7 || decimalDigits.length > 2 -> {
@@ -201,7 +214,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
             hideKeyboard(this@PayPersonActivity)
             if (userData.paymaartId.isEmpty() && userData.phoneNumber.isNotEmpty()) {
                 //unregistered
-                val phone = if (userData.phoneNumber.startsWith("+")) userData.paymaartId.replace(
+                val phone = if (userData.phoneNumber.startsWith("+")) userData.phoneNumber.replace(
                     " ", ""
                 ) else "+265${userData.phoneNumber}".replace(" ", "")
 
