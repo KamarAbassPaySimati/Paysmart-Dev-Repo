@@ -21,8 +21,6 @@ import android.util.Base64
 import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -40,6 +38,7 @@ import androidx.core.view.isVisible
 import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.common.presentation.ui.text_field.verify_phone.VerifyPhoneField
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
@@ -70,6 +69,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -109,6 +109,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         initViews()
         setUpLayout()
         setupListeners()
+        setUpPhoneField()
         retrieveSecurityQuestionsApi()
     }
 
@@ -124,7 +125,9 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             override fun onClick(textView: View) {
                 val termsAndConditionsIntent =
                     Intent(this@RegisterActivity, WebViewActivity::class.java)
-                termsAndConditionsIntent.putExtra(Constants.TYPE, Constants.TERMS_AND_CONDITIONS_TYPE)
+                termsAndConditionsIntent.putExtra(
+                    Constants.TYPE, Constants.TERMS_AND_CONDITIONS_TYPE
+                )
                 termsAndConditionsIntent.putExtra(Constants.ANIMATE, true)
                 val options =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(this@RegisterActivity)
@@ -139,8 +142,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
         val clickableSpanPrivacyPolicy: ClickableSpan = object : ClickableSpan() {
             override fun onClick(textView: View) {
-                val privacyPolicyIntent =
-                    Intent(this@RegisterActivity, WebViewActivity::class.java)
+                val privacyPolicyIntent = Intent(this@RegisterActivity, WebViewActivity::class.java)
                 privacyPolicyIntent.putExtra(Constants.TYPE, Constants.PRIVACY_POLICY_TYPE)
                 privacyPolicyIntent.putExtra(Constants.ANIMATE, true)
                 val options =
@@ -164,10 +166,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
     private fun initViews() {
         guideSheet = GuideBottomSheet()
-        b.onboardRegistrationActivityCountryCodeDropDownIV.visibility = View.VISIBLE
-        val adapter = ArrayAdapter(this, R.layout.spinner_country_code, items)
-        setSpinnerDropdownHeight(b.onboardRegistrationActivityCountryCodeSpinner, 800, 150)
-        b.onboardRegistrationActivityCountryCodeSpinner.adapter = adapter
 
         fileResultLauncher =
             registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
@@ -180,7 +178,9 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             }
     }
 
-    private fun setSpinnerDropdownHeight(spinner: AppCompatSpinner, height: Int, verticalOffset: Int) {
+    private fun setSpinnerDropdownHeight(
+        spinner: AppCompatSpinner, height: Int, verticalOffset: Int
+    ) {
         try {
             val popup = AppCompatSpinner::class.java.getDeclaredField("mPopup")
             popup.isAccessible = true
@@ -194,28 +194,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
     private fun setupListeners() {
 
-        b.onboardRegistrationActivityCountryCodeTV.setOnClickListener {
-            b.onboardRegistrationActivityCountryCodeSpinner.performClick()
-        }
-        b.onboardRegistrationActivityCountryCodeSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    p0: AdapterView<*>?, p1: View?, position: Int, p3: Long,
-                ) {
-                    if (b.onboardRegistrationActivityPhoneET.text.toString()
-                            .isNotEmpty()
-                    ) b.onboardRegistrationActivityPhoneET.text!!.clear()
-                    isPhoneVerified = false
-                    b.onboardRegistrationActivityCountryCodeTV.text = items[position]
-                    b.onboardRegistrationActivityPhoneVerifyButton.visibility = View.VISIBLE
-                    b.onboardRegistrationActivityPhoneVerifiedTV.visibility = View.GONE
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                }
-
-            }
-
         b.onboardRegistrationActivityBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -225,15 +203,25 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         b.onboardRegistrationActivityCameraIV.setOnClickListener {
-            if (isPicUploaded){
+            if (isPicUploaded) {
                 profilePicUri = null
                 isPicUploaded = false
-                b.onboardRegistrationActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+                b.onboardRegistrationActivityCameraIV.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this, R.drawable.ic_camera
+                    )
+                )
                 b.onboardRegistrationActivityProfileIV.apply {
-                    setImageDrawable(ContextCompat.getDrawable(this@RegisterActivity, R.drawable.ic_no_image))
-                    background = ContextCompat.getDrawable(this@RegisterActivity, R.drawable.dashed_outline_background)
+                    setImageDrawable(
+                        ContextCompat.getDrawable(
+                            this@RegisterActivity, R.drawable.ic_no_image
+                        )
+                    )
+                    background = ContextCompat.getDrawable(
+                        this@RegisterActivity, R.drawable.dashed_outline_background
+                    )
                 }
-            }else{
+            } else {
                 launchFilePicker()
             }
         }
@@ -242,12 +230,8 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             validateFieldsForEmailOtp()
         }
 
-        b.onboardRegistrationActivityPhoneVerifyButton.setOnClickListener {
-            validateFieldsForPhoneOtp()
-        }
-
-        b.onboardRegistrationActivityPhoneET.setOnClickListener { _ ->
-            b.onboardRegistrationActivityPhoneET.setSelection(b.onboardRegistrationActivityPhoneET.text!!.length)
+        b.onboardRegistrationActivityPhoneTF.apply {
+            setVerifyButtonClickListener { validateFieldsForPhoneOtp() }
         }
 
         b.onboardRegistrationActivityGuideButton.setOnClickListener {
@@ -268,6 +252,21 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             if (isChecked) b.onboardRegistrationActivityTnCPrivacyPolicyWarningTV.visibility =
                 View.GONE
             else b.onboardRegistrationActivityTnCPrivacyPolicyWarningTV.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setUpPhoneField() {
+        b.onboardRegistrationActivityPhoneTF.apply {
+            setCountryCodes(ArrayList<String>().apply {
+                add("+1")
+                add("+27")
+                add("+39")
+                add("+44")
+                add("+46")
+                add("+91")
+                add("+234")
+                add("+265")
+            })
         }
     }
 
@@ -298,7 +297,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             b.onboardRegistrationActivityLastNameET, b.onboardRegistrationActivityLastNameWarningTV
         )
         configureEditTextEmailChangeListener()
-        configureEditTextPhoneChangeListener()
         configureEditTextSecurityQuestionChangeListeners(b.onboardRegistrationActivitySecurityQuestion1ET)
         configureEditTextSecurityQuestionChangeListeners(b.onboardRegistrationActivitySecurityQuestion2ET)
         configureEditTextSecurityQuestionChangeListeners(b.onboardRegistrationActivitySecurityQuestion3ET)
@@ -356,40 +354,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         })
     }
 
-    private fun configureEditTextPhoneChangeListener() {
-        b.onboardRegistrationActivityPhoneET.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                //If they change phone they have to verify it again
-                isPhoneVerified = false
-                if (b.onboardRegistrationActivityPhoneVerifiedTV.visibility == View.VISIBLE) {
-                    b.onboardRegistrationActivityPhoneVerifyButton.visibility = View.VISIBLE
-                    b.onboardRegistrationActivityPhoneVerifiedTV.visibility = View.GONE
-                }
-
-                //Remove any warning text
-                if (b.onboardRegistrationActivityPhoneET.text.toString().isEmpty()) {
-                    b.onboardRegistrationActivityPhoneWarningTV.visibility = View.VISIBLE
-                    b.onboardRegistrationActivityPhoneBox.background = ContextCompat.getDrawable(
-                        this@RegisterActivity, R.drawable.edit_text_error_background
-                    )
-                } else {
-                    b.onboardRegistrationActivityPhoneWarningTV.visibility = View.GONE
-                    b.onboardRegistrationActivityPhoneBox.background = ContextCompat.getDrawable(
-                        this@RegisterActivity, R.drawable.edit_text_focused_background
-                    )
-                }
-            }
-        })
-    }
-
     private fun configureEditTextEmailChangeListener() {
         b.onboardRegistrationActivityEmailET.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -439,9 +403,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         configureEmailEditTextFocusListener(
             b.onboardRegistrationActivityEmailET, b.onboardRegistrationActivityEmailWarningTV
         )
-        configurePhoneEditTextFocusListener(
-            b.onboardRegistrationActivityPhoneET, b.onboardRegistrationActivityPhoneWarningTV
-        )
+
         configureEditTextSecurityQuestionFocusListeners(
             b.onboardRegistrationActivitySecurityQuestion1ET,
             b.onboardRegistrationActivitySecurityQuestionTV
@@ -486,21 +448,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             else if (warningTV.isVisible) b.onboardRegistrationActivityEmailBox.background =
                 errorDrawable
             else b.onboardRegistrationActivityEmailBox.background = notInFocusDrawable
-        }
-    }
-
-    private fun configurePhoneEditTextFocusListener(
-        et: EditText, warningTV: TextView,
-    ) {
-        val focusDrawable = ContextCompat.getDrawable(this, R.drawable.edit_text_focused_background)
-        val errorDrawable = ContextCompat.getDrawable(this, R.drawable.edit_text_error_background)
-        val notInFocusDrawable = ContextCompat.getDrawable(this, R.drawable.edit_text_background)
-
-        et.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) b.onboardRegistrationActivityPhoneBox.background = focusDrawable
-            else if (warningTV.isVisible) b.onboardRegistrationActivityPhoneBox.background =
-                errorDrawable
-            else b.onboardRegistrationActivityPhoneBox.background = notInFocusDrawable
         }
     }
 
@@ -573,21 +520,14 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             }
         }
 
-        if (!validatePhone(
-                b.onboardRegistrationActivityPhoneET, b.onboardRegistrationActivityPhoneWarningTV
-            )
-        ) {
+        if (!validatePhone(b.onboardRegistrationActivityPhoneTF)) {
             isValid = false
-            if (focusView == null) focusView = b.onboardRegistrationActivityPhoneET
+            if (focusView == null) focusView = b.onboardRegistrationActivityPhoneTF
         } else {
             if (!isPhoneVerified) {
                 isValid = false
-                if (focusView == null) focusView = b.onboardRegistrationActivityPhoneET
-                b.onboardRegistrationActivityPhoneWarningTV.visibility = View.VISIBLE
-                b.onboardRegistrationActivityPhoneWarningTV.text =
-                    ContextCompat.getString(this, R.string.please_verify_phone)
-            } else {
-                b.onboardRegistrationActivityPhoneWarningTV.visibility = View.GONE
+                if (focusView == null) focusView = b.onboardRegistrationActivityPhoneTF
+                b.onboardRegistrationActivityPhoneTF.showWarning(getString(R.string.please_verify_phone))
             }
         }
 
@@ -606,17 +546,17 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         if (isValid) {
-            showButtonLoader(b.onboardRegistrationActivitySubmitButton, b.onboardRegistrationActivitySubmitButtonLoaderLottie)
+            showButtonLoader(
+                b.onboardRegistrationActivitySubmitButton,
+                b.onboardRegistrationActivitySubmitButtonLoaderLottie
+            )
             lifecycleScope.launch {
-                recaptchaClient
-                    .execute(RecaptchaAction.SIGNUP)
-                    .onSuccess { _ ->
-                        registerCustomer()
-                    }
-                    .onFailure { exception ->
-                        "Response".showLogE(exception.message ?: "")
-                        showToast(getString(R.string.default_error_toast))
-                    }
+                recaptchaClient.execute(RecaptchaAction.SIGNUP).onSuccess { _ ->
+                    registerCustomer()
+                }.onFailure { exception ->
+                    "Response".showLogE(exception.message ?: "")
+                    showToast(getString(R.string.default_error_toast))
+                }
             }
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
@@ -628,12 +568,13 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         //If registering  a customer check for profile picture
 //        val profilePic = if (profilePicUri != null) "$profilePicUri" else ""
         val profilePic = if (profilePicUri != null) profilePicBaseString else ""
-        val makeVisible = profilePic.isNotEmpty() && b.onboardRegistrationActivityMakeVisibleCB.isChecked
+        val makeVisible =
+            profilePic.isNotEmpty() && b.onboardRegistrationActivityMakeVisibleCB.isChecked
         val firstName = b.onboardRegistrationActivityFirstNameET.text.toString()
         val middleName = b.onboardRegistrationActivityMiddleNameET.text.toString()
         val lastName = b.onboardRegistrationActivityLastNameET.text.toString()
-        val countryCode = b.onboardRegistrationActivityCountryCodeSpinner.selectedItem.toString()
-        val phoneNumber = b.onboardRegistrationActivityPhoneET.text.toString().replace(" ", "")
+        val countryCode = b.onboardRegistrationActivityPhoneTF.countryCode
+        val phoneNumber = b.onboardRegistrationActivityPhoneTF.text.replace(" ", "")
         val email = b.onboardRegistrationActivityEmailET.text.toString()
 
         val securityQuestions = obtainSecurityQuestionAnswers()
@@ -669,8 +610,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                         )
                         showToast(body.message)
                         val i = Intent(
-                            this@RegisterActivity,
-                            RegistrationSuccessfulActivity::class.java
+                            this@RegisterActivity, RegistrationSuccessfulActivity::class.java
                         )
                         i.putExtra(Constants.INTENT_DATA_EMAIL, email)
                         startActivity(i)
@@ -684,8 +624,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                             getString(R.string.submit)
                         )
                         val errorResponse: DefaultResponse = Gson().fromJson(
-                            response.errorBody()!!.string(),
-                            DefaultResponse::class.java
+                            response.errorBody()!!.string(), DefaultResponse::class.java
                         )
                         showToast(errorResponse.message)
                     }
@@ -709,7 +648,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     private fun showButtonLoader(
         actionButton: AppCompatButton, loaderLottie: LottieAnimationView,
     ) {
-        actionButton.text = ""
+        actionButton.text = getString(R.string.empty_string)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
@@ -816,22 +755,19 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
         if (isValid) {
             lifecycleScope.launch {
-                recaptchaClient
-                    .execute(RecaptchaAction.SIGNUP)
-                    .onSuccess { token ->
-                        sendOtp(Constants.OTP_EMAIL_TYPE)
-                    }
-                    .onFailure { exception ->
-                        "Response".showLogE(exception.message ?: "")
-                        showToast(getString(R.string.default_error_toast))
-                    }
+                recaptchaClient.execute(RecaptchaAction.SIGNUP).onSuccess { token ->
+                    sendOtp(Constants.OTP_EMAIL_TYPE)
+                }.onFailure { exception ->
+                    "Response".showLogE(exception.message ?: "")
+                    showToast(getString(R.string.default_error_toast))
+                }
             }
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
     }
 
-    private fun validateFieldsForPhoneOtp() {
+    private fun validateFieldsForPhoneOtp(): Job? {
         var isValid = true
         var focusView: View? = null
 
@@ -872,29 +808,24 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             b.onboardRegistrationActivityEmailWarningTV.visibility = View.GONE
         }
 
-        if (!validatePhone(
-                b.onboardRegistrationActivityPhoneET, b.onboardRegistrationActivityPhoneWarningTV
-            )
-        ) {
+        if (!validatePhone(b.onboardRegistrationActivityPhoneTF)) {
             isValid = false
-            if (focusView == null) focusView = b.onboardRegistrationActivityPhoneET
+            if (focusView == null) focusView = b.onboardRegistrationActivityPhoneTF
         }
 
         if (isValid) {
-            lifecycleScope.launch {
-                recaptchaClient
-                    .execute(RecaptchaAction.SIGNUP)
-                    .onSuccess { token ->
-                        sendOtp(Constants.OTP_SMS_TYPE)
-                    }
-                    .onFailure { exception ->
-                        "Response".showLogE(exception.message ?: "")
-                        showToast(getString(R.string.default_error_toast))
-                    }
+            return lifecycleScope.launch {
+                recaptchaClient.execute(RecaptchaAction.SIGNUP).onSuccess { token ->
+                    sendOtp(Constants.OTP_SMS_TYPE)
+                }.onFailure { exception ->
+                    "Response".showLogE(exception.message ?: "")
+                    showToast(getString(R.string.default_error_toast))
+                }
             }
         } else {
             focusView!!.parent.requestChildFocus(focusView, focusView)
         }
+        return null
     }
 
 
@@ -912,10 +843,8 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             }
 
             Constants.OTP_SMS_TYPE -> {
-                value = b.onboardRegistrationActivityPhoneET.text.toString()
-                b.onboardRegistrationActivityPhoneVerifyPB.visibility = View.VISIBLE
-                b.onboardRegistrationActivityPhoneVerifyButton.visibility = View.GONE
-                countryCode = b.onboardRegistrationActivityCountryCodeSpinner.selectedItem.toString()
+                value = b.onboardRegistrationActivityPhoneTF.text
+                countryCode = b.onboardRegistrationActivityPhoneTF.countryCode
             }
         }
 
@@ -956,10 +885,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                                     bundle.putString(Constants.TYPE, Constants.OTP_SMS_TYPE)
                                     bundle.putString(Constants.OTP_VALUE, value)
                                     bundle.putString(Constants.OTP_COUNTRY_CODE, countryCode)
-                                    b.onboardRegistrationActivityPhoneVerifyPB.visibility =
-                                        View.GONE
-                                    b.onboardRegistrationActivityPhoneVerifyButton.visibility =
-                                        View.VISIBLE
                                 }
                             }
                             bundle.putString(Constants.OTP_FIRST_NAME, firstName)
@@ -968,8 +893,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                             bundle.putString(Constants.OTP_TOKEN, body.token)
                             verificationBottomSheet.arguments = bundle
                             verificationBottomSheet.show(
-                                supportFragmentManager,
-                                VerificationBottomSheet.TAG
+                                supportFragmentManager, VerificationBottomSheet.TAG
                             )
                         }
 
@@ -989,11 +913,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                                 }
 
                                 Constants.OTP_SMS_TYPE -> {
-                                    showPhoneWarning(errorResponse.message)
-                                    b.onboardRegistrationActivityPhoneVerifyPB.visibility =
-                                        View.GONE
-                                    b.onboardRegistrationActivityPhoneVerifyButton.visibility =
-                                        View.VISIBLE
+                                    b.onboardRegistrationActivityPhoneTF.showWarning(errorResponse.message)
                                 }
                             }
                         }
@@ -1011,9 +931,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                             }
 
                             Constants.OTP_SMS_TYPE -> {
-                                b.onboardRegistrationActivityPhoneVerifyPB.visibility = View.GONE
-                                b.onboardRegistrationActivityPhoneVerifyButton.visibility =
-                                    View.VISIBLE
+                                //
                             }
                         }
                     }
@@ -1028,7 +946,8 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         var isValid = true
         if (nameEditText.text.isEmpty()) {
             warningText.visibility = View.VISIBLE
-            nameEditText.background = ContextCompat.getDrawable(this, R.drawable.edit_text_error_background)
+            nameEditText.background =
+                ContextCompat.getDrawable(this, R.drawable.edit_text_error_background)
             isValid = false
         } else {
             warningText.visibility = View.GONE
@@ -1067,33 +986,20 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             ContextCompat.getDrawable(this, R.drawable.edit_text_error_background)
     }
 
-    private fun validatePhone(phoneEditText: EditText, warningText: TextView): Boolean {
+    private fun validatePhone(phoneEditText: VerifyPhoneField): Boolean {
         var isValid = true
         when {
-            phoneEditText.text!!.isEmpty() -> {
-                showPhoneWarning(getString(R.string.required_field))
+            phoneEditText.text.isEmpty() -> {
+                b.onboardRegistrationActivityPhoneTF.showWarning(getString(R.string.required_field))
                 isValid = false
             }
 
-            phoneEditText.text.toString().replace(" ", "").length < 8 -> {
-                showPhoneWarning(getString(R.string.invalid_phone))
+            phoneEditText.text.replace(" ", "").length < 8 -> {
+                b.onboardRegistrationActivityPhoneTF.showWarning(getString(R.string.invalid_phone))
                 isValid = false
-            }
-
-            else -> {
-                warningText.visibility = View.GONE
-                b.onboardRegistrationActivityPhoneBox.background =
-                    ContextCompat.getDrawable(this, R.drawable.edit_text_background)
             }
         }
         return isValid
-    }
-
-    private fun showPhoneWarning(warning: String) {
-        b.onboardRegistrationActivityPhoneWarningTV.visibility = View.VISIBLE
-        b.onboardRegistrationActivityPhoneWarningTV.text = warning
-        b.onboardRegistrationActivityPhoneBox.background =
-            ContextCompat.getDrawable(this, R.drawable.edit_text_error_background)
     }
 
     private fun validateSecurityQuestions(): Boolean {
@@ -1162,9 +1068,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
             override fun onFailure(call: Call<SecurityQuestionsResponse>, t: Throwable) {
                 Toast.makeText(
-                    this@RegisterActivity,
-                    R.string.default_error_toast,
-                    Toast.LENGTH_LONG
+                    this@RegisterActivity, R.string.default_error_toast, Toast.LENGTH_LONG
                 ).show()
             }
 
@@ -1216,10 +1120,18 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     }
 
     private suspend fun populateSelectedFile(uri: Uri) {
-        if (isPicUploaded){
-            b.onboardRegistrationActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_delete))
-        }else{
-            b.onboardRegistrationActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+        if (isPicUploaded) {
+            b.onboardRegistrationActivityCameraIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this, R.drawable.ic_delete
+                )
+            )
+        } else {
+            b.onboardRegistrationActivityCameraIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this, R.drawable.ic_camera
+                )
+            )
         }
         profilePicUri = uri
         val stream = contentResolver.openInputStream(uri)
@@ -1227,15 +1139,15 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             withContext(Dispatchers.IO) {
                 val bitmap = BitmapFactory.decodeStream(stream)
                 val resizedAndCompressedImage = resizeAndCompressImage(bitmap)
-                val rotatedBitmap = rotateBitmapIfNeeded(this@RegisterActivity, resizedAndCompressedImage, uri)
+                val rotatedBitmap =
+                    rotateBitmapIfNeeded(this@RegisterActivity, resizedAndCompressedImage, uri)
                 val base64String = bitmapToBase64(rotatedBitmap)
                 profilePicBaseString = base64String
                 val imageByteArray = base64ToByteArray(base64String)
                 val imageBitmap = byteArrayToBitmap(imageByteArray)
                 if (stream.available() < (10 * 1024 * 1024)) {
                     runOnUiThread {
-                        Glide.with(this@RegisterActivity)
-                            .load(imageBitmap)
+                        Glide.with(this@RegisterActivity).load(imageBitmap)
                             .placeholder(R.drawable.ic_no_image)
                             .into(b.onboardRegistrationActivityProfileIV)
                     }
@@ -1258,7 +1170,9 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     private fun bitmapToBase64(bitmap: Bitmap): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
         try {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream) // 80 is the quality percentage
+            bitmap.compress(
+                Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream
+            ) // 80 is the quality percentage
             val byteArray = byteArrayOutputStream.toByteArray()
             return Base64.encodeToString(byteArray, Base64.NO_WRAP).trimEnd('=')
         } finally {
@@ -1305,7 +1219,8 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         val croppedBitmap = Bitmap.createBitmap(bitmap, cropX, cropY, newWidth, newHeight)
 
         // Resize the cropped bitmap to the new dimensions
-        val resizedBitmap = Bitmap.createScaledBitmap(croppedBitmap, resizedWidth, resizedHeight, true)
+        val resizedBitmap =
+            Bitmap.createScaledBitmap(croppedBitmap, resizedWidth, resizedHeight, true)
 
         // Compress the resized bitmap to a byte array
         val byteArrayOutputStream = ByteArrayOutputStream()
@@ -1333,8 +1248,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             inputStream?.let {
                 ei = ExifInterface(it)
                 orientation = ei.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL
+                    ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL
                 )
             }
         } catch (e: IOException) {
@@ -1356,7 +1270,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         matrix.postRotate(degrees)
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
-
 
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
@@ -1404,7 +1317,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     override fun onPhoneVerified(recordId: String) {
         isPhoneVerified = true
         phoneRecordId = recordId
-        b.onboardRegistrationActivityPhoneVerifyButton.visibility = View.GONE
-        b.onboardRegistrationActivityPhoneVerifiedTV.visibility = View.VISIBLE
+        b.onboardRegistrationActivityPhoneTF.isPhoneVerified = true
     }
 }

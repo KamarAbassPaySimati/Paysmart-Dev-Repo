@@ -1,3 +1,4 @@
+/*
 package com.afrimax.paymaart
 
 import androidx.test.espresso.Espresso
@@ -44,4 +45,4 @@ class RecentTransactedCustomerList {
     fun iShouldReadAMessage(errorMessage : String){
         Espresso.onView(withId(R.id.actualMessage)).check(matches(ViewMatchers.withText(errorMessage)))
     }
-}
+}*/

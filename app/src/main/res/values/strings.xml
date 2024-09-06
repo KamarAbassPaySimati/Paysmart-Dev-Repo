@@ -1,4 +1,42 @@
 <resources>
+
+    <!--    Error messages mapped to enums-->
+
+    <string name="error_no_response">No response received from the server.</string>
+    <string name="error_no_internet">No internet connection available.</string>
+    <string name="error_request_timeout">The request has timed out.</string>
+    <string name="error_internal_error">Internal server is not responding</string>
+    <string name="error_payload_too_large">The payload is too large to process.</string>
+    <string name="error_unknown">An unknown error has occurred.</string>
+    <string name="error_not_data_found">No data found.</string>
+    <string name="unable_to_upload">Unable to upload file at the moment.</string>
+    <string name="file_not_found">The requested file not found</string>
+    <string name="conflict_found">There is a conflict found</string>
+    <string name="unable_to_access_file">Unable to access the file.</string>
+    <string name="permission_denied">Permission denied to access the file.</string>
+    <string name="io_error">An input/output error occurred while accessing the file.</string>
+    <string name="insufficient_storage">There is not enough storage available to complete the operation.</string>
+    <string name="invalid_uri">The provided URI is invalid or does not point to a valid file.</string>
+    <string name="unsupported_file_type">The file type is not supported.</string>
+    <string name="security_exception">A security exception occurred while accessing the file.</string>
+    <string name="file_too_large">The file size is too large for the operation.</string>
+    <string name="file_already_exists">A file with the specified name already exists.</string>
+    <string name="error_un_authorized">You are not authorized to perform this operation.</string>
+    <string name="error_bad_request">Bad request.</string>
+    <string name="error_too_long">The input is too long. Please shorten it.</string>
+    <string name="error_too_small">The input is too short. Please provide more information.</string>
+    <string name="error_blank">Required field.</string>
+    <string name="error_invalid">The input is invalid. Please check and try again.</string>
+    <string name="error_unsupported_file">The file format is unsupported. Please use a different file.</string>
+    <string name="error_not_verified">The input is not verified</string>
+
+
+    <string name="email_already_exists">Email already exists</string>
+    <string name="phone_already_exists">Phone number already exists</string>
+    <string name="title">Title</string>
+    <string name="hint">Hint</string>
+    <string name="button">Button</string>
+
     <string name="app_name">Paymaart</string>
     <string name="paymaart_logo_at_the_splashscreen">Paymaart Logo at the SplashScreen</string>
     <string name="intro_text">Elevate your spending game with fast, secure, free e-payments</string>

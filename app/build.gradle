@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id "jacoco"
     alias(libs.plugins.firebase.crashlytics)
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+    id 'kotlin-parcelize'
 }
 
 tasks.register('jacocoTestReport', JacocoReport) {
@@ -186,6 +189,7 @@ dependencies {
 
     //Viewmodel
     implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.fragment.ktx
 
     //Glide
     implementation libs.glide
@@ -256,4 +260,17 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation libs.app.update
     implementation libs.app.update.ktx
+
+    //Orbit for state handling
+    implementation libs.orbit.core
+    implementation libs.orbit.viewmodel
+
+    //Dagger Hilt for dependency injection
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes true
 }

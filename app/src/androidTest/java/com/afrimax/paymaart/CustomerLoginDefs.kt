@@ -131,7 +131,7 @@ class CustomerLoginDefs {
 
     @When("I enter my previously registered phone number")
     fun enterPhoneNumber() {
-        Espresso.onView(withId(R.id.loginActivityPhoneET))
+        Espresso.onView(withId(R.id.loginActivityPhoneTF))
             .perform(
                 ViewActions.scrollTo(),
                 ViewActions.typeText(phoneNumber),
@@ -171,7 +171,7 @@ class CustomerLoginDefs {
 
     @When("I enter phone number {string}")
     fun enterPhoneNumber(phoneNumber: String) {
-        Espresso.onView(withId(R.id.loginActivityPhoneET))
+        Espresso.onView(withId(R.id.loginActivityPhoneTF))
             .perform(
                 ViewActions.scrollTo(),
                 ViewActions.typeText(phoneNumber),

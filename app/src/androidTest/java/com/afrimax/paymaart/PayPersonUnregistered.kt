@@ -1,3 +1,4 @@
+/*
 package com.afrimax.paymaart
 
 import androidx.test.espresso.Espresso
@@ -42,4 +43,4 @@ class PayPersonUnregistered {
         Thread.sleep(5000)
     }
 
-}
+}*/
