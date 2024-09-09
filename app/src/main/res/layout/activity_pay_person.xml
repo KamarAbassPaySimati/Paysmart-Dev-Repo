@@ -59,16 +59,16 @@
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/payPersonActivityProfileIV"
                     android:layout_width="96dp"
-                    app:shapeAppearanceOverlay="@style/profileImagePreview"
                     android:layout_height="0dp"
-                    android:scaleType="centerCrop"
                     android:contentDescription="@string/image_description"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/ic_no_image"
+                    android:visibility="gone"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="gone"/>
+                    app:shapeAppearanceOverlay="@style/profileImagePreview" />
 
                 <TextView
                     android:id="@+id/payPersonActivityShortNameTV"
@@ -80,12 +80,13 @@
                     android:text="@string/mwk"
                     android:textColor="@color/primaryColor"
                     android:textSize="24sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="gone"/>
+                    tools:visibility="visible" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -114,6 +115,17 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/inter_regular"
                 android:text="@string/paymaart_id"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/payPersonActivityPhoneNumberTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/phone_number"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="14sp" />

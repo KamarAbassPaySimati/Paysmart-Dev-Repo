@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paymaart.BuildConfig
+import com.afrimax.paymaart.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paymaart.data.model.PayPerson
 import com.afrimax.paymaart.databinding.PayPersonAdapterViewBinding
 import com.afrimax.paymaart.util.getInitials
@@ -41,18 +42,20 @@ class PayPersonListAdapter(private val contacts: List<PayPerson>) :
                 //registered customer
                 binding.payPersonUserPhoneNumber.visibility = View.VISIBLE
                 binding.payPersonUserPhoneNumber.text =
-                    contact.let { it.countryCode + " " + formattedPhoneNumber(it.phoneNumber) }
+                    contact.let { PhoneNumberFormatter.formatWholeNumber(it.countryCode + it.phoneNumber) }
 
                 binding.payPersonUserId.visibility = View.VISIBLE
                 binding.payPersonUserId.text = contact.paymaartId
             } else if (contact.phoneNumber.isNullOrEmpty() && !contact.paymaartId.isNullOrEmpty()) {
                 //Unregistered customer
                 binding.payPersonUserPhoneNumber.visibility = View.VISIBLE
-                binding.payPersonUserPhoneNumber.text = formattedPhoneNumber(contact.paymaartId)
+                binding.payPersonUserPhoneNumber.text =
+                    PhoneNumberFormatter.formatWholeNumber(contact.paymaartId)
             } else if (contact.paymaartId.isNullOrEmpty() && !contact.phoneNumber.isNullOrEmpty()) {
                 //Unregistered customer
                 binding.payPersonUserPhoneNumber.visibility = View.VISIBLE
-                binding.payPersonUserPhoneNumber.text = formattedPhoneNumber(contact.phoneNumber)
+                binding.payPersonUserPhoneNumber.text =
+                    PhoneNumberFormatter.formatWholeNumber(contact.phoneNumber)
             }
 
             if (contacts[position].profilePicture.isNullOrEmpty()) {

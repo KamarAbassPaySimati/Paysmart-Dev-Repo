@@ -2,8 +2,6 @@ package com.afrimax.paymaart.common.presentation.ui.text_field.phone
 
 import android.content.Context
 import android.text.InputFilter
-import android.text.InputFilter.AllCaps
-import android.text.Spanned
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +11,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paymaart.common.presentation.utils.UiDrawable
@@ -41,24 +40,25 @@ class PhoneField @JvmOverloads constructor(
     private lateinit var arrayAdapter: ArrayAdapter<String>
 
     init {
+        post {
+            if (!isInEditMode) {
+                val lifecycleOwner =
+                    if (cxt is LifecycleOwner) cxt else findViewTreeLifecycleOwner()
 
-        if (!isInEditMode) {
-            require(cxt is ViewModelStoreOwner && cxt is LifecycleOwner)
+                vm = ViewModelProvider(this)[PhoneFieldViewModel::class.java]
+                lifecycleOwner?.let { vm.observe(lifecycleOwner, state = ::observeState) }
 
-            vm = ViewModelProvider(this)[PhoneFieldViewModel::class.java]
-            vm.observe(cxt, state = ::observeState)
+                //Perform all the UI setup here
+                setUpTextField()
+                setUpDropDown()
+            }
 
-            //Perform all the UI setup here
-            setUpTextField()
-            setUpDropDown()
+            //enable focus & text change listeners
+            isTextWatcherEnabled = true
+            isFocusListenerEnabled = true
+
+            initializeWithAttributes(attrs)
         }
-
-        //enable focus & text change listeners
-        isTextWatcherEnabled = true
-        isFocusListenerEnabled = true
-
-        initializeWithAttributes(attrs)
-
     }
 
     private fun initializeWithAttributes(attrs: AttributeSet?) {
@@ -70,7 +70,7 @@ class PhoneField @JvmOverloads constructor(
             val hintText = typedArray.getString(R.styleable.PhoneField_hintText)
                 ?: context.getString(R.string.hint)
             val digits = typedArray.getString(R.styleable.PhoneField_android_digits)
-            val textTransformation = typedArray.getInt(R.styleable.PhoneField_textTransformation, 0)
+
             isWarningTextEnabled =
                 typedArray.getBoolean(R.styleable.PhoneField_isWarningTextEnabled, true)
 
@@ -82,29 +82,8 @@ class PhoneField @JvmOverloads constructor(
                     })
                 }
 
-                // Apply text transformation based on the attribute value
-                when (textTransformation) {
-                    TEXT_CAPITAL_LETTERS -> b.phoneFieldET.filters += AllCaps()
-                    TEXT_SMALL_LETTERS -> b.phoneFieldET.filters += object : AllCaps() {
-                        override fun filter(
-                            source: CharSequence?,
-                            start: Int,
-                            end: Int,
-                            dest: Spanned?,
-                            dstart: Int,
-                            dend: Int
-                        ): CharSequence {
-                            return source!!.filterNot { char -> char.isWhitespace() }.toString()
-                                .lowercase()
-                        }
-                    }
-                }
+                vm(PhoneFieldIntent.SetInitialData(title = titleText, hint = hintText))
 
-                vm.invoke(
-                    PhoneFieldIntent.SetInitialData(
-                        title = titleText, hint = hintText
-                    )
-                )
             } else {
                 b.phoneFieldTitleTV.text = titleText
                 b.phoneFieldET.hint = hintText
@@ -144,7 +123,9 @@ class PhoneField @JvmOverloads constructor(
                 if (isFocusListenerEnabled) {
                     when {
                         vm.currentState.showWarning -> vm(
-                            PhoneFieldIntent.SetBackground(errorDrawable)
+                            PhoneFieldIntent.SetBackground(
+                                errorDrawable
+                            )
                         )
 
                         hasFocus -> vm(PhoneFieldIntent.SetBackground(focusDrawable))
@@ -159,7 +140,7 @@ class PhoneField @JvmOverloads constructor(
 
                     if (before != 1) updatedText = PhoneNumberFormatter.format(
                         countryCode = countryCode, phoneNumber = updatedText
-                    )
+                    ) ?: updatedText
 
                     vm(PhoneFieldIntent.SetText(text = updatedText))
                 }
@@ -258,9 +239,7 @@ class PhoneField @JvmOverloads constructor(
 
 
     fun showWarning(warningText: String) {
-        if (warningText.isNotEmpty()) {
-            vm.invoke(PhoneFieldIntent.ShowWarning(warningText))
-        }
+        if (warningText.isNotEmpty()) vm.invoke(PhoneFieldIntent.ShowWarning(warningText))
     }
 
     fun addTextChangeListener(
@@ -292,10 +271,8 @@ class PhoneField @JvmOverloads constructor(
 
 
     companion object {
-        const val TEXT_SMALL_LETTERS = 1
-        const val TEXT_CAPITAL_LETTERS = 2
 
-        //Along with phone number length required space is also considered
+        //Along with phone number length required for space is also considered
         private val countryCodeMap = mapOf(
             "+91" to 10 + 1,  // India - Mobile and landline numbers
             "+44" to 11 + 1,  // United Kingdom - Mobile numbers are 11 digits; landline and other numbers are 10 digits

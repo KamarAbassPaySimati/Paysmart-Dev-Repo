@@ -167,7 +167,7 @@ class VerifyPhoneField @JvmOverloads constructor(
 
                     if (before != 1) updatedText = PhoneNumberFormatter.format(
                         countryCode = countryCode, phoneNumber = updatedText
-                    )
+                    ) ?: updatedText
 
                     vm(VerifyPhoneFieldIntent.SetText(text = updatedText))
                 }
