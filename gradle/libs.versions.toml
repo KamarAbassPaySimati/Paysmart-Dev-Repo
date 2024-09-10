@@ -42,15 +42,21 @@ xmlbeans = "5.1.0"
 dotenv = "4.0.0"
 zoomlayout = "1.9.0"
 lifecycleLivedataKtx = "2.8.1"
-fragmentKtx = "1.5.6"
+fragmentKtx = "1.8.3"
 recaptchaVersion = "18.5.1"
 googleGmsGoogleServices = "4.4.2"
 firebaseMessaging = "24.0.0"
 lifecycleProcess = "2.8.3"
 firebaseVersion = "3.0.2"
 googleGmsGoogleServicesVersion = "4.4.2"
+hiltAndroid = "2.51"
+orbitViewmodel = "4.3.1"
 
 [libraries]
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
+orbit-core = { module = "org.orbit-mvi:orbit-core", version.ref = "orbitViewmodel" }
+orbit-viewmodel = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbitViewmodel" }
 aalto-xml = { module = "com.fasterxml:aalto-xml", version.ref = "aaltoXml" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraCamera2" }
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "cameraCamera2" }

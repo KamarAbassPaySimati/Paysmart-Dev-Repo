@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/basicTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/basicTextFieldTitleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_medium"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="14sp"
+            tools:text="Title" />
+
+        <EditText
+            android:id="@+id/basicTextFieldET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:autofillHints=""
+            android:background="@drawable/bg_edit_text_unfocused"
+            android:ellipsize="end"
+            android:fontFamily="@font/inter_regular"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName|textCapSentences"
+            android:maxLength="100"
+            android:padding="12dp"
+            android:singleLine="true"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textColorHint="@color/editTextHint"
+            android:textSize="14sp"
+            tools:hint="@string/hint"
+            tools:ignore="LabelFor" />
+
+        <TextView
+            android:id="@+id/basicTextFieldWarningTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/required_field"
+            android:textColor="@color/accentNegative"
+            android:textSize="14sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+</merge>
