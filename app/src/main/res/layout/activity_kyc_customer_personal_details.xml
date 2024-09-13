@@ -501,7 +501,7 @@
 
                             </RelativeLayout>
 
-                            <com.afrimax.paysimati.util.PhoneEditText
+                            <com.afrimax.paymaart.util.PhoneEditText
                                 android:id="@+id/kycYourPersonalDetailsActivityPhoneET"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

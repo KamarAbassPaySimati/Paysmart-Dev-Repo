@@ -245,7 +245,7 @@
                             android:layoutDirection="rtl"
                             android:minHeight="0dp"
                             android:padding="16dp"
-                            android:text="@string/pay_paysimati"
+                            android:text="@string/pay_paymaart"
                             android:textColor="@color/primaryFontColor"
                             android:textSize="16sp"
                             app:buttonIconTint="@color/white"

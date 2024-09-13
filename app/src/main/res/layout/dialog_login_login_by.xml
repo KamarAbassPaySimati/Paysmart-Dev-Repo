@@ -51,7 +51,7 @@
         android:paddingTop="16dp"
         android:paddingEnd="72dp"
         android:paddingBottom="16dp"
-        android:text="@string/paysimati_id"
+        android:text="@string/paymaart_id"
         android:textColor="@color/black"
         android:textSize="14sp"
         app:drawableStartCompat="@drawable/ico_login_by_paymaart" />

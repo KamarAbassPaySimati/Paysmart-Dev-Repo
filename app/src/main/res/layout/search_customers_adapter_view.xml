@@ -68,7 +68,7 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/inter_regular"
                     android:maxLines="1"
-                    android:text="@string/paysimati_id"
+                    android:text="@string/paymaart_id"
                     android:textColor="@color/neutralGrey"
                     android:textSize="@dimen/_12sdp"
                     app:drawableStartCompat="@drawable/ico_user_search_result" />

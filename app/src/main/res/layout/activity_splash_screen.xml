@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:contentDescription="@string/paysimati_logo_at_the_splashscreen"
-        android:src="@drawable/image_paysimati_splash_logo" />
+        android:contentDescription="@string/paymaart_logo_at_the_splashscreen"
+        android:src="@drawable/image_paymaart_splash_logo" />
 
 
     <com.google.android.material.progressindicator.LinearProgressIndicator

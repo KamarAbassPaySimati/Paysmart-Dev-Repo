@@ -69,15 +69,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:contentDescription="@string/paysimati_logo"
-                        android:src="@drawable/image_paysimati_logo" />
+                        android:contentDescription="@string/paymaart_logo"
+                        android:src="@drawable/image_paymaart_logo" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/inter_regular"
-                        android:text="@string/thank_you_for_using_paysimati"
+                        android:text="@string/thank_you_for_using_paymaart"
                         android:textColor="@color/neutralGrey"
                         android:textSize="12sp" />
 
@@ -111,7 +111,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_regular"
-                                android:text="@string/paysimati_name"
+                                android:text="@string/paymaart_name"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp" />
 
@@ -121,7 +121,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_regular"
-                                android:text="@string/paysimati_name"
+                                android:text="@string/paymaart_name"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp" />
 
@@ -140,7 +140,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_regular"
-                                android:text="@string/paysimati_id"
+                                android:text="@string/paymaart_id"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp" />
 
@@ -150,7 +150,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_regular"
-                                android:text="@string/paysimati_id"
+                                android:text="@string/paymaart_id"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp" />
 
@@ -178,7 +178,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_regular"
-                                android:text="@string/paysimati_name"
+                                android:text="@string/paymaart_name"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp" />
 
@@ -188,7 +188,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_regular"
-                                android:text="@string/paysimati_name"
+                                android:text="@string/paymaart_name"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp" />
 
@@ -207,7 +207,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_regular"
-                                android:text="@string/paysimati_id"
+                                android:text="@string/paymaart_id"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp" />
 
@@ -217,7 +217,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_regular"
-                                android:text="@string/paysimati_id"
+                                android:text="@string/paymaart_id"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp" />
 

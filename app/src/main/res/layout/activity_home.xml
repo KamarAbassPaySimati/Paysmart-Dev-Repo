@@ -36,8 +36,8 @@
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="16dp"
-                        android:contentDescription="@string/paysimati_logo"
-                        android:src="@drawable/image_paysimati_logo" />
+                        android:contentDescription="@string/paymaart_logo"
+                        android:src="@drawable/image_paymaart_logo" />
 
                     <ImageView
                         android:id="@+id/homeActivityMenuIcon"
@@ -103,7 +103,7 @@
                             android:ellipsize="end"
                             android:fontFamily="@font/inter_regular"
                             android:maxLines="1"
-                            android:text="@string/paysimati_id_formatted"
+                            android:text="@string/paymaart_id_formatted"
                             android:textColor="@color/white"
                             android:textSize="14sp" />
 
@@ -248,7 +248,7 @@
                                 android:drawablePadding="12dp"
                                 android:fontFamily="@font/inter_regular"
                                 android:gravity="center_horizontal"
-                                android:text="@string/paysimati"
+                                android:text="@string/paymaart"
                                 android:textAllCaps="false"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="14sp"
