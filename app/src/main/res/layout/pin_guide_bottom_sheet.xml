@@ -21,7 +21,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:fontFamily="@font/inter_regular"
-            android:text="@string/paysimati_pin_guide"
+            android:text="@string/paymaart_pin_guide"
             android:textColor="@color/accentPositive"
             android:textSize="16sp"
             tools:ignore="RelativeOverlap" />
