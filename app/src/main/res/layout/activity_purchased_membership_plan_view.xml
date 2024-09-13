@@ -40,7 +40,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginTop="32dp"
-                android:contentDescription="@string/paymaart"
+                android:contentDescription="@string/paysimati"
                 android:src="@drawable/ic_paymaart_logo_vertical"
                 app:layout_constraintBottom_toTopOf="@id/purchasedMembershipPlanErrorTV"
                 app:layout_constraintEnd_toEndOf="parent"

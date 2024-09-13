@@ -27,18 +27,18 @@ tasks.register('jacocoTestReport', JacocoReport) {
 }
 
 android {
-    namespace 'com.afrimax.paymaart'
+    namespace 'com.afrimax.paysimati'
     compileSdk 34
 
     defaultConfig {
-        applicationId 'com.afrimax.paymaart'
+        applicationId 'com.afrimax.paysimati'
         minSdk 24
         targetSdk 34
         versionCode 19
         versionName "1.0"
 
-        testApplicationId 'com.afrimax.paymaart'
-        testInstrumentationRunner 'com.afrimax.paymaart.TestJunitRunner'
+        testApplicationId 'com.afrimax.paysimati'
+        testInstrumentationRunner 'com.afrimax.paysimati.TestJunitRunner'
     }
 
     signingConfigs {
