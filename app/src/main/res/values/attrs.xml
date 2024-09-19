@@ -35,7 +35,7 @@
         <attr name="warningText" />
         <attr name="android:digits" />
         <attr name="isWarningTextEnabled" />
-        <attr name="textTransformation" />
+        <attr name="isOptionalField" />
     </declare-styleable>
 
     <declare-styleable name="PhoneField">
