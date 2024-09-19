@@ -39,6 +39,7 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
 import com.afrimax.paymaart.common.presentation.ui.text_field.verify_phone.VerifyPhoneField
+import com.afrimax.paymaart.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.CreateUserRequestBody
 import com.afrimax.paymaart.data.model.CreateUserResponse
@@ -66,6 +67,7 @@ import com.google.android.recaptcha.RecaptchaAction
 import com.google.android.recaptcha.RecaptchaClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -79,13 +81,13 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.UUID
 
+@AndroidEntryPoint
 class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     private lateinit var b: ActivityRegisterBinding
     private lateinit var fileResultLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var guideSheet: BottomSheetDialogFragment
     private lateinit var verificationBottomSheet: BottomSheetDialogFragment
     private var isEmailVerified = false
-    private var isPhoneVerified = false
     private var emailRecordId = ""
     private var phoneRecordId = ""
     private var profilePicUri: Uri? = null
@@ -524,7 +526,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
             isValid = false
             if (focusView == null) focusView = b.onboardRegistrationActivityPhoneTF
         } else {
-            if (!isPhoneVerified) {
+            if (!b.onboardRegistrationActivityPhoneTF.isPhoneVerified) {
                 isValid = false
                 if (focusView == null) focusView = b.onboardRegistrationActivityPhoneTF
                 b.onboardRegistrationActivityPhoneTF.showWarning(getString(R.string.please_verify_phone))
@@ -994,7 +996,9 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                 isValid = false
             }
 
-            phoneEditText.text.replace(" ", "").length < 8 -> {
+            !PhoneNumberFormatter.isValidPhoneNumber(
+                phoneEditText.countryCode, phoneEditText.text
+            ) -> {
                 b.onboardRegistrationActivityPhoneTF.showWarning(getString(R.string.invalid_phone))
                 isValid = false
             }
@@ -1315,7 +1319,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     }
 
     override fun onPhoneVerified(recordId: String) {
-        isPhoneVerified = true
         phoneRecordId = recordId
         b.onboardRegistrationActivityPhoneTF.isPhoneVerified = true
     }

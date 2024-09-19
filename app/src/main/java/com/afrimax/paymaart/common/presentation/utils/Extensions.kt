@@ -3,6 +3,8 @@ package com.afrimax.paymaart.common.presentation.utils
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
+import android.content.res.TypedArray
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
@@ -134,9 +136,9 @@ fun EditText.setOnTextChangedListener(
 ) {
 
     // Remove any existing TextWatcher
-    (getTag(id) as? TextWatcher)?.let {
+ /*   (getTag(id) as? TextWatcher)?.let {
         removeTextChangedListener(it)
-    }
+    }*/
 
     // Create a new TextWatcher
     val watcher = object : TextWatcher {
@@ -157,7 +159,7 @@ fun EditText.setOnTextChangedListener(
     addTextChangedListener(watcher)
 
     // Store the TextWatcher as a tag to manage it later
-    setTag(id, watcher)
+   // setTag(id, watcher)
 }
 
 /**This extension simplifies the initialization of a BottomSheetFragment with arguments,
@@ -200,5 +202,21 @@ fun Spinner.setOnItemSelectedListener(
         override fun onNothingSelected(parent: AdapterView<*>) {
             onNothingSelected(parent)
         }
+    }
+}
+
+/**This is an inline, generic function for retrieving a specified attribute from a TypedArray.
+ * It allows you to obtain attributes of various types (String, Int, Boolean, and Float)
+ * in a type-safe manner, while also providing a default value if the attribute is not found.*/
+inline fun <reified T> TypedArray.getAttr(
+    index: Int, defaultValue: T
+): T {
+    return when (T::class) {
+        String::class -> getString(index) as? T ?: defaultValue
+        Int::class -> getInt(index, defaultValue as Int) as T
+        Boolean::class -> getBoolean(index, defaultValue as Boolean) as T
+        Float::class -> getFloat(index, defaultValue as Float) as T
+        Drawable::class -> getDrawable(index) as T ?: defaultValue
+        else -> throw IllegalArgumentException("Unsupported attribute type")
     }
 }
