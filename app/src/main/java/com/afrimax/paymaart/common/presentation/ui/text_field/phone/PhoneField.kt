@@ -4,116 +4,98 @@ import android.content.Context
 import android.text.InputFilter
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.LinearLayout
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.core.view.isVisible
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.common.domain.utils.then
+import com.afrimax.paymaart.common.presentation.utils.DrawableManager
 import com.afrimax.paymaart.common.presentation.utils.PhoneNumberFormatter
-import com.afrimax.paymaart.common.presentation.utils.UiDrawable
-import com.afrimax.paymaart.common.presentation.utils.UiText
-import com.afrimax.paymaart.common.presentation.utils.currentState
+import com.afrimax.paymaart.common.presentation.utils.getAttr
 import com.afrimax.paymaart.common.presentation.utils.setOnItemSelectedListener
 import com.afrimax.paymaart.common.presentation.utils.setOnTextChangedListener
 import com.afrimax.paymaart.databinding.ComponentPhoneFieldBinding
-import org.orbitmvi.orbit.viewmodel.observe
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class PhoneField @JvmOverloads constructor(
     private val cxt: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(cxt, attrs, defStyleAttr), ViewModelStoreOwner {
-
-    override val viewModelStore: ViewModelStore = ViewModelStore()
+) : LinearLayout(cxt, attrs, defStyleAttr) {
 
     private var b: ComponentPhoneFieldBinding = ComponentPhoneFieldBinding.inflate(
         LayoutInflater.from(cxt), this
     )
-    private lateinit var vm: PhoneFieldViewModel
 
+    //XML attributes with default values
+    private var titleText: String = cxt.getString(R.string.title)
+    private var hintText: String = cxt.getString(R.string.hint)
+    private var isWarningTextEnabled = true
+    private var isOptionalField = false
+
+    //Other variables
+    private var countryCodes: ArrayList<String> = ArrayList<String>().apply { add("+265") }
     private var isTextWatcherEnabled = false
     private var isFocusListenerEnabled = false
-    private var isWarningTextEnabled = true
+    private var arrayAdapter: ArrayAdapter<String> =
+        ArrayAdapter(cxt, R.layout.spinner_country_code, countryCodes)
 
-    private lateinit var arrayAdapter: ArrayAdapter<String>
+    @Inject
+    lateinit var drawableManager: DrawableManager
 
     init {
+        // Obtain the styled attributes defined in XML for the component
+        val tArray = cxt.obtainStyledAttributes(attrs, R.styleable.PhoneField, 0, 0)
+
+        // Retrieve XML attributes from the TypedArray and assign default values if not found
+        tArray.run {
+            titleText = getAttr(R.styleable.PhoneField_titleText, titleText)
+            hintText = getAttr(R.styleable.PhoneField_hintText, hintText)
+            isWarningTextEnabled =
+                getAttr(R.styleable.PhoneField_isWarningTextEnabled, isWarningTextEnabled)
+            isOptionalField = getAttr(R.styleable.PhoneField_isOptionalField, isOptionalField)
+        }
+
+        // The post block ensures that the following code is executed only at runtime (not during layout preview)
         post {
-            if (!isInEditMode) {
-                val lifecycleOwner =
-                    if (cxt is LifecycleOwner) cxt else findViewTreeLifecycleOwner()
-
-                vm = ViewModelProvider(this)[PhoneFieldViewModel::class.java]
-                lifecycleOwner?.let { vm.observe(lifecycleOwner, state = ::observeState) }
-
-                //Perform all the UI setup here
-                setUpTextField()
-                setUpDropDown()
-            }
+            //Perform all the UI setup here
+            setUpTitle()
+            setUpTextField()
+            setUpDropDown()
 
             //enable focus & text change listeners
             isTextWatcherEnabled = true
             isFocusListenerEnabled = true
-
-            initializeWithAttributes(attrs)
         }
-    }
 
-    private fun initializeWithAttributes(attrs: AttributeSet?) {
-        attrs.let { attributes ->
-            val typedArray = cxt.obtainStyledAttributes(attributes, R.styleable.PhoneField, 0, 0)
-
-            val titleText = typedArray.getString(R.styleable.PhoneField_titleText)
-                ?: context.getString(R.string.title)
-            val hintText = typedArray.getString(R.styleable.PhoneField_hintText)
-                ?: context.getString(R.string.hint)
-            val digits = typedArray.getString(R.styleable.PhoneField_android_digits)
-
-            isWarningTextEnabled =
-                typedArray.getBoolean(R.styleable.PhoneField_isWarningTextEnabled, true)
-
-            if (!isInEditMode) {
-                if (!digits.isNullOrEmpty()) {
-                    // Set the digits filter using the default android:digits attribute
-                    b.phoneFieldET.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
-                        source?.filter { digits.contains(it) }
-                    })
-                }
-
-                vm(PhoneFieldIntent.SetInitialData(title = titleText, hint = hintText))
-
-            } else {
-                b.phoneFieldTitleTV.text = titleText
-                b.phoneFieldET.hint = hintText
-                if (isWarningTextEnabled) b.phoneFieldWarningTV.visibility =
-                    View.VISIBLE else b.phoneFieldWarningTV.visibility = View.GONE
-            }
-
-            typedArray.recycle()
+        // This block is executed when in layout editor mode (for design-time preview purposes)
+        isInEditMode.then {
+            showDisplayData()
         }
+
+        // Always recycle the TypedArray after using it to free up resources
+        tArray.recycle()
     }
 
-    /**Observe changes in the State using Orbit StateFlow*/
-    private fun observeState(state: PhoneFieldState) {
-        modifyTitle(state.title)
-        modifyDropDown(state.countryCodes)
-        modifyTextField(state.text, state.hint)
-        modifyBackground(state.background)
-        modifyWarning(state.warningText, state.showWarning)
+    private fun showDisplayData() {
+        b.phoneFieldTitleTV.text = titleText
+        b.phoneFieldET.hint = hintText
+        b.phoneFieldWarningTV.visibility = if (isWarningTextEnabled) VISIBLE else GONE
     }
-
 
     // ====================================================================
     //                        INITIAL SETUP
     // ====================================================================
 
-    private fun setUpTextField() {
-        val focusDrawable = UiDrawable.Resource(R.drawable.bg_edit_text_focused)
-        val errorDrawable = UiDrawable.Resource(R.drawable.bg_edit_text_error)
-        val notInFocusDrawable = UiDrawable.Resource(R.drawable.bg_edit_text_unfocused)
+    private fun setUpTitle() {
+        b.phoneFieldTitleTV.apply {
+            text = titleText
+        }
+    }
 
+    private fun setUpTextField() {
         b.phoneFieldET.apply {
             setOnClickListener { _ ->
                 setSelection(text.length)
@@ -121,36 +103,21 @@ class PhoneField @JvmOverloads constructor(
 
             setOnFocusChangeListener { _, hasFocus ->
                 if (isFocusListenerEnabled) {
-                    when {
-                        vm.currentState.showWarning -> vm(
-                            PhoneFieldIntent.SetBackground(
-                                errorDrawable
-                            )
-                        )
-
-                        hasFocus -> vm(PhoneFieldIntent.SetBackground(focusDrawable))
-                        else -> vm(PhoneFieldIntent.SetBackground(notInFocusDrawable))
+                    b.phoneFieldBox.background = when {
+                        b.phoneFieldWarningTV.isVisible -> drawableManager.errorDrawable
+                        hasFocus -> drawableManager.focusDrawable
+                        else -> drawableManager.notInFocusDrawable
                     }
                 }
             }
 
-            setOnTextChangedListener(onTextChanged = { text, _, before, _ ->
-                if (isTextWatcherEnabled) {
-                    var updatedText = text.toString()
-
-                    if (before != 1) updatedText = PhoneNumberFormatter.format(
-                        countryCode = countryCode, phoneNumber = updatedText
-                    ) ?: updatedText
-
-                    vm(PhoneFieldIntent.SetText(text = updatedText))
-                }
+            setOnTextChangedListener(onTextChanged = { txt, _, before, _ ->
+                textFieldTextChangeListener(before, txt.toString())
             })
         }
     }
 
     private fun setUpDropDown() {
-        arrayAdapter =
-            ArrayAdapter(cxt, R.layout.spinner_country_code, vm.currentState.countryCodes)
         b.phoneFieldCountryCodeSpinner.apply {
             adapter = arrayAdapter
 
@@ -161,62 +128,8 @@ class PhoneField @JvmOverloads constructor(
                 b.phoneFieldET.filters = getPhoneNumberLength(selectedCountryCode)
                 b.phoneFieldET.text?.clear()
 
-                vm(PhoneFieldIntent.ChangeCountryCode(countryCode = selectedCountryCode))
+                countryCode = selectedCountryCode
             })
-        }
-    }
-
-    // ====================================================================
-    //                        STATE MODIFICATIONS
-    // ====================================================================
-
-    private fun modifyTitle(title: UiText) {
-        b.phoneFieldTitleTV.apply {
-            if (text.isEmpty()) text = title.asString(cxt)
-        }
-    }
-
-    private fun modifyDropDown(countryCodes: ArrayList<String>) {
-        val currentItemCount = b.phoneFieldCountryCodeSpinner.adapter.count
-        if (countryCodes.size != currentItemCount) { //Avoid re rendering UI
-            arrayAdapter.clear()
-            arrayAdapter.addAll(countryCodes)
-            arrayAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun modifyTextField(txt: UiText, hintText: UiText) {
-        b.phoneFieldET.apply {
-            if (hint.isNullOrEmpty()) hint = hintText.asString(cxt)
-
-            val newText = txt.asString(cxt)
-            if (newText != text.toString()) {
-                isTextWatcherEnabled = false
-                setText(newText)
-                setSelection(newText.length)
-                isTextWatcherEnabled = true
-            }
-        }
-    }
-
-    private fun modifyBackground(background: UiDrawable) {
-        b.phoneFieldBox.apply {
-            this.background = background.asDrawable(cxt)
-        }
-    }
-
-    private fun modifyWarning(warningText: UiText, showWarning: Boolean) {
-        if (isWarningTextEnabled) {
-            if (showWarning) {
-                b.phoneFieldWarningTV.apply {
-                    visibility = View.VISIBLE
-                    text = warningText.asString(cxt)
-                }
-            } else {
-                b.phoneFieldWarningTV.apply {
-                    visibility = View.GONE
-                }
-            }
         }
     }
 
@@ -224,6 +137,45 @@ class PhoneField @JvmOverloads constructor(
     //                        HELPER FUNCTIONS
     // ====================================================================
 
+    private fun EditText.textFieldTextChangeListener(before: Int, txt: String) {
+        if (isTextWatcherEnabled) {
+            isTextWatcherEnabled = false
+            if (before != 1) {
+                b.phoneFieldBox.background = drawableManager.focusDrawable
+                b.phoneFieldWarningTV.visibility = GONE
+                val updatedText =
+                    PhoneNumberFormatter.format(countryCode = countryCode, phoneNumber = txt) ?: txt
+                setText(updatedText)
+                setSelection(updatedText.length)
+            } else {
+                if (txt.isEmpty() && !isOptionalField) {
+                    b.phoneFieldBox.background = drawableManager.errorDrawable
+                    b.phoneFieldWarningTV.apply {
+                        visibility = VISIBLE
+                        text = cxt.getString(R.string.required_field)
+                    }
+                }
+            }
+
+            isTextWatcherEnabled = true
+        }
+    }
+
+    private fun EditText.insertCustomText(value: String) {
+        setText(value)
+        setSelection(value.length)
+        when {
+            isFocused -> {
+                b.phoneFieldBox.background = drawableManager.focusDrawable
+                b.phoneFieldWarningTV.visibility = GONE
+            }
+
+            else -> {
+                b.phoneFieldBox.background = drawableManager.notInFocusDrawable
+                b.phoneFieldWarningTV.visibility = GONE
+            }
+        }
+    }
 
     private fun getPhoneNumberLength(countryCode: String): Array<InputFilter.LengthFilter> {
         val maxLength = countryCodeMap.getOrDefault(countryCode, 9)
@@ -234,39 +186,66 @@ class PhoneField @JvmOverloads constructor(
     //                        PUBLIC METHODS & PROPERTIES
     // ====================================================================
 
-    val text: String get() = vm.currentState.text.asString(cxt)
-    val countryCode: String get() = vm.currentState.currentCountryCode
+    var text: String
+        get() = b.phoneFieldET.text.toString().replace(" ", "")
+        set(value) {
+            isTextWatcherEnabled = false
+            b.phoneFieldET.insertCustomText(value)
+            isTextWatcherEnabled = true
+        }
+
+    var title: String
+        get() = b.phoneFieldTitleTV.text.toString()
+        set(value) {
+            b.phoneFieldTitleTV.text = value
+        }
+
+    var countryCode: String = countryCodes[0]
 
 
     fun showWarning(warningText: String) {
-        if (warningText.isNotEmpty()) vm.invoke(PhoneFieldIntent.ShowWarning(warningText))
+        if (warningText.isNotEmpty()) {
+            b.phoneFieldWarningTV.apply {
+                visibility = VISIBLE
+                text = warningText
+            }
+            b.phoneFieldBox.background = drawableManager.errorDrawable
+        }
     }
 
+
     fun addTextChangeListener(
-        afterTextChanged: (String) -> Unit,
+        afterTextChanged: (String) -> Unit = { _ -> },
         beforeTextChanged: (CharSequence, Int, Int, Int) -> Unit = { _, _, _, _ -> },
         onTextChanged: (CharSequence, Int, Int, Int) -> Unit = { _, _, _, _ -> }
     ) {
         b.phoneFieldET.apply {
-            setOnTextChangedListener(
-                afterTextChanged = afterTextChanged,
-                beforeTextChanged = beforeTextChanged,
-                onTextChanged = onTextChanged
-            )
+            setOnTextChangedListener(afterTextChanged = { txt ->
+                if (isTextWatcherEnabled) {
+                    isTextWatcherEnabled = false
+                    afterTextChanged(txt)
+                    isTextWatcherEnabled = true
+                }
+            }, beforeTextChanged = { txt, start, count, after ->
+                if (isTextWatcherEnabled) {
+                    isTextWatcherEnabled = false
+                    beforeTextChanged(txt, start, count, after)
+                    isTextWatcherEnabled = true
+                }
+            }, onTextChanged = { txt, start, before, count ->
+                if (isTextWatcherEnabled) {
+                    isTextWatcherEnabled = false
+                    onTextChanged(txt, start, before, count)
+                    isTextWatcherEnabled = true
+                }
+            })
         }
     }
 
-    fun setText(text: String) {
-        vm.invoke(PhoneFieldIntent.SetText(text))
-    }
-
-
-    fun setTitle(title: String) {
-        vm.invoke(PhoneFieldIntent.SetTitle(title = title))
-    }
-
     fun setCountryCodes(countryCodes: ArrayList<String>) {
-        vm.invoke(PhoneFieldIntent.SetCountryCodeList(countryCodes = countryCodes))
+        arrayAdapter.clear()
+        arrayAdapter.addAll(countryCodes)
+        arrayAdapter.notifyDataSetChanged()
     }
 
 
@@ -275,14 +254,13 @@ class PhoneField @JvmOverloads constructor(
         //Along with phone number length required for space is also considered
         private val countryCodeMap = mapOf(
             "+91" to 10 + 1,  // India - Mobile and landline numbers
-            "+44" to 11 + 1,  // United Kingdom - Mobile numbers are 11 digits; landline and other numbers are 10 digits
-            "+1" to 11 + 2,   // United States/Canada - Mobile and landline numbers are 11 digits (including the country code)
-            "+234" to 11 + 1, // Nigeria - Mobile numbers are typically 11 digits
+            "+44" to 10 + 1,  // United Kingdom - Mobile numbers are 10 digits; landline and other numbers are 10 digits
+            "+1" to 10 + 2,   // United States/Canada - Mobile and landline numbers are 10 digits (including the country code)
+            "+234" to 10 + 1, // Nigeria - Mobile numbers are typically 10 digits
             "+39" to 10 + 2,  // Italy - Mobile numbers are 10 digits
             "+265" to 9 + 2,  // Malawi - Mobile numbers are 9 digits
-            "+27" to 10 + 2,  // South Africa - Mobile numbers are 10 digits
-            "+46" to 10 + 3   // Sweden - Mobile numbers are 10 digits
+            "+27" to 9 + 2,  // South Africa - Mobile numbers are 9 digits
+            "+46" to 9 + 3   // Sweden - Mobile numbers are 9 digits
         )
     }
-
 }

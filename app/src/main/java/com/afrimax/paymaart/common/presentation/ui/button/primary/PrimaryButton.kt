@@ -4,79 +4,65 @@ import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.R
-import com.afrimax.paymaart.common.presentation.utils.UiText
+import com.afrimax.paymaart.common.domain.utils.then
+import com.afrimax.paymaart.common.presentation.utils.getAttr
 import com.afrimax.paymaart.databinding.ComponentPrimaryButtonBinding
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.viewmodel.observe
 
 class PrimaryButton @JvmOverloads constructor(
     private val cxt: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0,
-) : FrameLayout(cxt, attrs, defStyleAttr), ViewModelStoreOwner {
-
-    override val viewModelStore: ViewModelStore = ViewModelStore()
+) : FrameLayout(cxt, attrs, defStyleAttr) {
 
     private var b: ComponentPrimaryButtonBinding = ComponentPrimaryButtonBinding.inflate(
         LayoutInflater.from(cxt), this
     )
 
-    private lateinit var vm: PrimaryButtonViewModel
+    //XML attributes with default values
+    private var buttonText: String = cxt.getString(R.string.button)
 
     init {
+        // Obtain the styled attributes defined in XML for the component
+        val tArray = cxt.obtainStyledAttributes(attrs, R.styleable.PrimaryButton, 0, 0)
 
-        if (!isInEditMode) {
-            require(cxt is ViewModelStoreOwner && cxt is LifecycleOwner)
+        // Retrieve XML attributes from the TypedArray and assign default values if not found
+        tArray.run {
+            buttonText = getAttr(R.styleable.PrimaryButton_buttonText, buttonText)
+        }
 
-            vm = ViewModelProvider(this)[PrimaryButtonViewModel::class.java]
-            vm.observe(cxt, state = ::observeState)
-
+        // The post block ensures that the following code is executed only at runtime (not during layout preview)
+        post {
             //Perform all the UI setup here
-
+            setUpButton()
         }
 
-        initializeWithAttributes(attrs)
-    }
-
-    private fun initializeWithAttributes(attrs: AttributeSet?) {
-        attrs.let { attributes ->
-            val typedArray = cxt.obtainStyledAttributes(attributes, R.styleable.PrimaryButton, 0, 0)
-
-            val buttonText = typedArray.getString(R.styleable.PrimaryButton_buttonText)
-                ?: context.getString(R.string.button)
-
-            if (!isInEditMode) {
-                vm.invoke(PrimaryButtonIntent.SetInitialData(buttonText = buttonText))
-            } else {
-                b.primaryButton.text = buttonText
-            }
-
-            typedArray.recycle()
+        // This block is executed when in layout editor mode (for design-time preview purposes)
+        isInEditMode.then {
+            showDisplayData()
         }
+
+        // Always recycle the TypedArray after using it to free up resources
+        tArray.recycle()
+
     }
 
-    /**Observe changes in the State using Orbit StateFlow*/
-    private fun observeState(state: PrimaryButtonState) {
-        modifyButtonText(state.currentButtonText)
-        modifyButtonLoader(state.showLoader)
+    private fun showDisplayData() {
+        b.primaryButton.text = buttonText
     }
 
+    // ====================================================================
+    //                        INITIAL SETUP
+    // ====================================================================
 
-    private fun modifyButtonText(buttonText: UiText) {
-        b.primaryButton.text = buttonText.asString(cxt)
-    }
-
-    private fun modifyButtonLoader(showLoader: Boolean) {
-        if (showLoader) b.primaryButtonLoader.visibility = View.VISIBLE
-        else b.primaryButtonLoader.visibility = View.GONE
+    private fun setUpButton() {
+        b.primaryButton.apply {
+            text = buttonText
+        }
     }
 
     fun setOnClickListener(listener: () -> Job?) {
@@ -84,7 +70,8 @@ class PrimaryButton @JvmOverloads constructor(
             if (cxt is LifecycleOwner) {
                 cxt.lifecycleScope.launch {
                     // Show the loader
-                    vm.invoke(PrimaryButtonIntent.ChangeButtonLoaderStatus(isVisible = true))
+                    b.primaryButtonLoader.visibility = VISIBLE
+                    b.primaryButton.text = cxt.getString(R.string.empty_string)
 
                     if (cxt is Activity) {
                         cxt.window.setFlags(
@@ -94,13 +81,13 @@ class PrimaryButton @JvmOverloads constructor(
                     }
 
                     // Execute the listener and await its completion
-                    val job = listener()
-                    job?.join()  // Wait for the API call to complete
+                    listener()?.join()  // Wait for the API call to complete
 
                     if (cxt is Activity) cxt.window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
 
                     // Hide the loader after execution
-                    vm.invoke(PrimaryButtonIntent.ChangeButtonLoaderStatus(isVisible = false))
+                    b.primaryButtonLoader.visibility = GONE
+                    b.primaryButton.text = buttonText
 
                 }
             }

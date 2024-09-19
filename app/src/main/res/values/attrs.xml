@@ -10,6 +10,7 @@
             <enum name="Small" value="1" />
             <enum name="Caps" value="2" />
         </attr>
+        <attr name="isOptionalField" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="Button">
@@ -24,6 +25,7 @@
         <attr name="android:digits" />
         <attr name="isWarningTextEnabled" />
         <attr name="textTransformation" />
+        <attr name="isOptionalField" />
     </declare-styleable>
 
     <declare-styleable name="VerifyPhoneField">
@@ -43,6 +45,7 @@
         <attr name="warningText" />
         <attr name="android:digits" />
         <attr name="isWarningTextEnabled" />
+        <attr name="isOptionalField" />
     </declare-styleable>
 
     <declare-styleable name="PrimaryButton">

@@ -354,13 +354,13 @@ class VerifyPhoneField @JvmOverloads constructor(
         //Along with phone number length required space is also considered
         private val countryCodeMap = mapOf(
             "+91" to 10 + 1,  // India - Mobile and landline numbers
-            "+44" to 11 + 1,  // United Kingdom - Mobile numbers are 11 digits; landline and other numbers are 10 digits
-            "+1" to 11 + 2,   // United States/Canada - Mobile and landline numbers are 11 digits (including the country code)
-            "+234" to 11 + 1, // Nigeria - Mobile numbers are typically 11 digits
+            "+44" to 10 + 1,  // United Kingdom - Mobile numbers are 10 digits; landline and other numbers are 10 digits
+            "+1" to 10 + 2,   // United States/Canada - Mobile and landline numbers are 10 digits (including the country code)
+            "+234" to 10 + 1, // Nigeria - Mobile numbers are typically 10 digits
             "+39" to 10 + 2,  // Italy - Mobile numbers are 10 digits
             "+265" to 9 + 2,  // Malawi - Mobile numbers are 9 digits
-            "+27" to 10 + 2,  // South Africa - Mobile numbers are 10 digits
-            "+46" to 10 + 3   // Sweden - Mobile numbers are 10 digits
+            "+27" to 9 + 2,  // South Africa - Mobile numbers are 9 digits
+            "+46" to 9 + 3   // Sweden - Mobile numbers are 9 digits
         )
     }
 }
