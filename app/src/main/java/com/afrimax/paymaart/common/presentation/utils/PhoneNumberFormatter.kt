@@ -7,7 +7,7 @@ object PhoneNumberFormatter {
         "+44" to 10,  // United Kingdom - Mobile numbers are 10 digits; landline and other numbers are 10 digits
         "+1" to 10,   // United States/Canada - Mobile and landline numbers are 10 digits (including the country code)
         "+234" to 10, // Nigeria - Mobile numbers are typically 10 digits
-        "+39" to 9,  // Italy - Mobile numbers are 10 digits
+        "+39" to 10,  // Italy - Mobile numbers are 10 digits
         "+265" to 9,  // Malawi - Mobile numbers are 9 digits
         "+27" to 9,  // South Africa - Mobile numbers are 9 digits
         "+46" to 9   // Sweden - Mobile numbers are 9 digits
