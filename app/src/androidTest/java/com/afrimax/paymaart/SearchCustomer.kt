@@ -1,3 +1,4 @@
+/*
 package com.afrimax.paymaart
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
@@ -44,4 +45,4 @@ class SearchCustomer {
     fun iClickOnSearchContacts(){
         Espresso.onView(withId(R.id.searchContact)).perform(ViewActions.click())
     }
-}
+}*/

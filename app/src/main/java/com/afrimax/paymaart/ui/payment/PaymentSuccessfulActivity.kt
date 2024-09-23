@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paymaart.data.model.CashOutResponse
 import com.afrimax.paymaart.data.model.PayAfrimaxResponse
 import com.afrimax.paymaart.data.model.PayToRegisteredPersonResponse
@@ -223,7 +224,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
         binding.paymentSuccessfulPaymaartIdValue.text = model.fromId
         binding.paymentSuccessfulToPaymaartNameValue.text = model.toName
         binding.paymentSuccessfulToPaymaartIdValue.text = model.toId
-        binding.paymentSuccessfulToPhoneNumberValue.text = model.toPhoneNumber
+        binding.paymentSuccessfulToPhoneNumberValue.text = PhoneNumberFormatter.formatWholeNumber(model.toPhoneNumber)
         binding.paymentSuccessfulTxnValue.text =
             getString(R.string.amount_formatted, getFormattedAmount(model.transactionAmount))
         binding.paymentSuccessfulTxnFeeValue.text =

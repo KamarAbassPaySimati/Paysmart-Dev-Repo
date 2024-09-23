@@ -147,108 +147,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp">
 
-                <LinearLayout
-                    android:id="@+id/loginActivityPhoneContainer"
+                <com.afrimax.paymaart.common.presentation.ui.text_field.phone.PhoneField
+                    android:id="@+id/loginActivityPhoneTF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/inter_medium"
-                        android:text="@string/phone"
-                        android:textColor="@color/neutralGreyPrimaryText"
-                        android:textSize="14sp" />
-
-                    <androidx.appcompat.widget.AppCompatSpinner
-                        android:id="@+id/loginActivityCountryCodeSpinner"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:background="@color/offWhite"
-                        android:gravity="center"
-                        android:maxHeight="100dp"
-                        android:popupBackground="@drawable/spinner_background"
-                        android:spinnerMode="dropdown"
-                        android:visibility="visible" />
-
-                    <RelativeLayout
-                        android:id="@+id/loginActivityPhoneBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_edit_text_unfocused">
-
-                        <RelativeLayout
-                            android:id="@+id/loginActivityCountryCodeContainer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="1dp"
-                            android:layout_marginBottom="1dp">
-
-                            <TextView
-                                android:id="@+id/loginActivityCountryCodeTV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="4dp"
-                                android:fontFamily="@font/inter_regular"
-                                android:text="@string/country_code"
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:visibility="visible" />
-
-                            <ImageView
-                                android:id="@+id/loginActivityCountryCodeDropDownIV"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_toEndOf="@+id/loginActivityCountryCodeTV"
-                                android:contentDescription="@string/drop_down_button_data"
-                                android:src="@drawable/ic_drop_down" />
-
-
-                        </RelativeLayout>
-
-                        <com.afrimax.paymaart.util.PhoneEditText
-                            android:id="@+id/loginActivityPhoneET"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_toEndOf="@+id/loginActivityCountryCodeContainer"
-                            android:autofillHints=""
-                            android:background="@android:color/transparent"
-                            android:digits="0123456789 "
-                            android:ellipsize="end"
-                            android:fontFamily="@font/inter_regular"
-                            android:hint="@string/enter_phone_number"
-                            android:importantForAutofill="no"
-                            android:inputType="phone"
-                            android:maxLength="15"
-                            android:maxLines="1"
-                            android:padding="12dp"
-                            android:textColor="@color/neutralGreyPrimaryText"
-                            android:textColorHint="@color/editTextHint"
-                            android:textSize="14sp" />
-
-                    </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/loginActivityPhoneWarningTV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/inter_medium"
-                        android:text="@string/required_field"
-                        android:textColor="@color/accentNegative"
-                        android:textSize="14sp"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
-
-                </LinearLayout>
+                    android:visibility="visible"
+                    app:hintText="@string/enter_phone_number"
+                    app:titleText="@string/phone_number" />
 
                 <LinearLayout
                     android:id="@+id/loginActivityEmailContainer"

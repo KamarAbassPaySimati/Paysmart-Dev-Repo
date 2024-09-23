@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paymaart.data.model.IndividualTransactionHistory
 import com.afrimax.paymaart.databinding.CardPagerLoaderBinding
 import com.afrimax.paymaart.databinding.TransactionListViewBinding
@@ -86,7 +87,7 @@ class TransactionHistoryAdapter(
                     //Using this because
                     setPaymaartTransactionType(
                         transaction.receiverName,
-                        transaction.receiverId,
+                        PhoneNumberFormatter.formatWholeNumber(transaction.receiverId),
                         transaction.receiverProfilePic
                     )
                 }

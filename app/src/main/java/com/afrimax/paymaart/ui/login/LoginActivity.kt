@@ -10,8 +10,6 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -25,8 +23,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
-import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.common.presentation.ui.text_field.phone.PhoneField
 import com.afrimax.paymaart.databinding.ActivityLoginBinding
 import com.afrimax.paymaart.ui.password.ForgotPasswordPinActivity
 import com.afrimax.paymaart.ui.register.RegisterActivity
@@ -34,19 +32,19 @@ import com.afrimax.paymaart.ui.utils.bottomsheets.LoginLoginByDialog
 import com.afrimax.paymaart.ui.utils.interfaces.LoginByDialogInterface
 import com.afrimax.paymaart.util.Constants
 import com.afrimax.paymaart.util.LoginPinTransformation
-import com.afrimax.paymaart.util.countries
 import com.afrimax.paymaart.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
 import com.amplifyframework.auth.cognito.options.AuthFlowType
 import com.amplifyframework.auth.result.step.AuthSignInStep
 import com.amplifyframework.core.Amplify
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
     private lateinit var b: ActivityLoginBinding
     private var isPinSelected = true
     private var isPasswordSelected = false
-    private val items = countries.map { it.dialCode }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
@@ -63,17 +61,16 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
         initViews()
         setUpListeners()
+        setUpPhoneField()
     }
 
     private fun initViews() {
         b.loginActivityPinET.transformationMethod = LoginPinTransformation()
-        val adapter = ArrayAdapter(this, R.layout.spinner_country_code, items)
-        setSpinnerDropdownHeight(b.loginActivityCountryCodeSpinner, 800, 150)
-        b.loginActivityCountryCodeSpinner.adapter = adapter
-
     }
 
-    private fun setSpinnerDropdownHeight(spinner: AppCompatSpinner, height: Int, verticalOffset: Int) {
+    private fun setSpinnerDropdownHeight(
+        spinner: AppCompatSpinner, height: Int, verticalOffset: Int
+    ) {
         try {
             val popup = AppCompatSpinner::class.java.getDeclaredField("mPopup")
             popup.isAccessible = true
@@ -90,25 +87,25 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        b.loginActivityCountryCodeTV.setOnClickListener {
-            b.loginActivityCountryCodeSpinner.performClick()
-        }
+        /*  b.loginActivityCountryCodeTV.setOnClickListener {
+              b.loginActivityCountryCodeSpinner.performClick()
+          }
 
-        b.loginActivityCountryCodeSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    p0: AdapterView<*>?, p1: View?, position: Int, p3: Long
-                ) {
-                    b.loginActivityCountryCodeTV.text = items[position]
-                    if (b.loginActivityPhoneET.text.toString()
-                            .isNotEmpty()
-                    ) b.loginActivityPhoneET.text!!.clear()
-                }
+          b.loginActivityCountryCodeSpinner.onItemSelectedListener =
+              object : AdapterView.OnItemSelectedListener {
+                  override fun onItemSelected(
+                      p0: AdapterView<*>?, p1: View?, position: Int, p3: Long
+                  ) {
+                      b.loginActivityCountryCodeTV.text = items[position]
+                      if (b.loginActivityPhoneET.text.toString()
+                              .isNotEmpty()
+                      ) b.loginActivityPhoneET.text!!.clear()
+                  }
 
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    //
-                }
-            }
+                  override fun onNothingSelected(p0: AdapterView<*>?) {
+                      //
+                  }
+              }*/
 
         b.loginActivityPinButton.setOnClickListener {
             onClickPinButton()
@@ -166,42 +163,57 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
     }
 
+    private fun setUpPhoneField() {
+        b.loginActivityPhoneTF.apply {
+            setCountryCodes(ArrayList<String>().apply {
+                add("+1")
+                add("+27")
+                add("+39")
+                add("+44")
+                add("+46")
+                add("+91")
+                add("+234")
+                add("+265")
+            })
+        }
+    }
+
     private fun setUpEditTextChangeListeners() {
-        configureEditTextPhoneChangeListener()
+        //   configureEditTextPhoneChangeListener()
         configureEditTextEmailChangeListener()
         configureEditTextPaymaartIdChangeListener()
         configureEditTextPinChangeListener()
         configureEditTextPasswordChangeListener()
     }
 
-    private fun configureEditTextPhoneChangeListener() {
-        b.loginActivityPhoneET.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                //Remove any error warning text while typing
-                if (b.loginActivityPhoneET.text.toString().isEmpty()) {
-                    b.loginActivityPhoneWarningTV.visibility = View.VISIBLE
-                    b.loginActivityPhoneWarningTV.text = getString(R.string.required_field)
-                    b.loginActivityPhoneBox.background = ContextCompat.getDrawable(
-                        this@LoginActivity, R.drawable.bg_edit_text_error
-                    )
-                } else {
-                    b.loginActivityPhoneWarningTV.visibility = View.GONE
-                    b.loginActivityPhoneBox.background = ContextCompat.getDrawable(
-                        this@LoginActivity, R.drawable.bg_edit_text_focused
-                    )
+    /*    private fun configureEditTextPhoneChangeListener() {
+            b.loginActivityPhoneET.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    //
                 }
-            }
 
-        })
-    }
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    //
+                }
+
+                override fun afterTextChanged(p0: Editable?) {
+                    //Remove any error warning text while typing
+                    if (b.loginActivityPhoneET.text.toString().isEmpty()) {
+                        b.loginActivityPhoneWarningTV.visibility = View.VISIBLE
+                        b.loginActivityPhoneWarningTV.text = getString(R.string.required_field)
+                        b.loginActivityPhoneBox.background = ContextCompat.getDrawable(
+                            this@LoginActivity, R.drawable.bg_edit_text_error
+                        )
+                    } else {
+                        b.loginActivityPhoneWarningTV.visibility = View.GONE
+                        b.loginActivityPhoneBox.background = ContextCompat.getDrawable(
+                            this@LoginActivity, R.drawable.bg_edit_text_focused
+                        )
+                    }
+                }
+
+            })
+        }*/
 
     private fun configureEditTextEmailChangeListener() {
         b.loginActivityEmailET.addTextChangedListener(object : TextWatcher {
@@ -318,24 +330,24 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
     }
 
     private fun setUpEditTextFocusListeners() {
-        configurePhoneEditTextFocusListener()
+        //    configurePhoneEditTextFocusListener()
         configureEmailEditTextFocusListener()
         configurePaymaartIdEditTextFocusListener()
         configurePasswordEditTextFocusListener()
     }
 
-    private fun configurePhoneEditTextFocusListener() {
-        val focusDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_focused)
-        val errorDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_error)
-        val notInFocusDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+    /*    private fun configurePhoneEditTextFocusListener() {
+            val focusDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_focused)
+            val errorDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_error)
+            val notInFocusDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
 
-        b.loginActivityPhoneET.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) b.loginActivityPhoneBox.background = focusDrawable
-            else if (b.loginActivityPhoneWarningTV.isVisible) b.loginActivityPhoneBox.background =
-                errorDrawable
-            else b.loginActivityPhoneBox.background = notInFocusDrawable
-        }
-    }
+            b.loginActivityPhoneET.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) b.loginActivityPhoneBox.background = focusDrawable
+                else if (b.loginActivityPhoneWarningTV.isVisible) b.loginActivityPhoneBox.background =
+                    errorDrawable
+                else b.loginActivityPhoneBox.background = notInFocusDrawable
+            }
+        }*/
 
     private fun configureEmailEditTextFocusListener() {
         val focusDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_focused)
@@ -442,20 +454,19 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
     private fun clearAllFields() {
         if (!b.loginActivityPinET.text.isNullOrBlank()) b.loginActivityPinET.text!!.clear()
         if (!b.loginActivityPasswordET.text.isNullOrBlank()) b.loginActivityPasswordET.text!!.clear()
-        if (!b.loginActivityPhoneET.text.isNullOrBlank()) b.loginActivityPhoneET.text!!.clear()
+        //   if (!b.loginActivityPhoneET.text.isNullOrBlank()) b.loginActivityPhoneET.text!!.clear()
         if (!b.loginActivityEmailET.text.isNullOrBlank()) b.loginActivityEmailET.text!!.clear()
         if (!b.loginActivityPaymaartIdET.text.isNullOrBlank()) b.loginActivityPaymaartIdET.text!!.clear()
 
 
         //Also clear all the warnings
-        b.loginActivityPhoneWarningTV.visibility = View.GONE
+        //  b.loginActivityPhoneWarningTV.visibility = View.GONE
         b.loginActivityEmailWarningTV.visibility = View.GONE
         b.loginActivityPaymaartIdWarningTV.visibility = View.GONE
         b.loginActivityPinWarningTV.visibility = View.GONE
         b.loginActivityPasswordWarningTV.visibility = View.GONE
 
-        b.loginActivityPhoneBox.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+        // b.loginActivityPhoneBox.background = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
         b.loginActivityEmailET.background =
             ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
         b.loginActivityPaymaartIdBox.background =
@@ -468,7 +479,7 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
         when (selectionId) {
             Constants.SELECTION_PHONE_NUMBER -> {
                 b.loginActivityLoginByTV.text = getString(R.string.phone)
-                b.loginActivityPhoneContainer.visibility = View.VISIBLE
+                b.loginActivityPhoneTF.visibility = View.VISIBLE
                 b.loginActivityEmailContainer.visibility = View.GONE
                 b.loginActivityPaymaartIdContainer.visibility = View.GONE
 
@@ -478,7 +489,7 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
             Constants.SELECTION_EMAIL -> {
                 b.loginActivityLoginByTV.text = getString(R.string.email)
-                b.loginActivityPhoneContainer.visibility = View.GONE
+                b.loginActivityPhoneTF.visibility = View.GONE
                 b.loginActivityEmailContainer.visibility = View.VISIBLE
                 b.loginActivityPaymaartIdContainer.visibility = View.GONE
 
@@ -488,7 +499,7 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
             Constants.SELECTION_PAYMAART_ID -> {
                 b.loginActivityLoginByTV.text = getString(R.string.paymaart_id)
-                b.loginActivityPhoneContainer.visibility = View.GONE
+                b.loginActivityPhoneTF.visibility = View.GONE
                 b.loginActivityEmailContainer.visibility = View.GONE
                 b.loginActivityPaymaartIdContainer.visibility = View.VISIBLE
 
@@ -499,12 +510,12 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
     }
 
     private fun validateFieldsForSubmit() {
-        var loginByField: EditText? = null
-        var passCodeField: EditText? = null
+        var loginByField: Any? = null
+        var passCodeField: Any? = null
 
         val loginBy = b.loginActivityLoginByTV.text.toString()
         when (loginBy) {
-            getString(R.string.phone) -> loginByField = b.loginActivityPhoneET
+            getString(R.string.phone) -> loginByField = b.loginActivityPhoneTF
             getString(R.string.email) -> loginByField = b.loginActivityEmailET
             getString(R.string.paymaart_id) -> loginByField = b.loginActivityPaymaartIdET
         }
@@ -515,10 +526,10 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
         if (loginByField != null && passCodeField != null) {
             //There are 6 possible combinations
             when {
-                (loginByField == b.loginActivityPhoneET && passCodeField == b.loginActivityPinET) -> validatePhoneAndPin()
+                (loginByField == b.loginActivityPhoneTF && passCodeField == b.loginActivityPinET) -> validatePhoneAndPin()
                 (loginByField == b.loginActivityEmailET && passCodeField == b.loginActivityPinET) -> validateEmailAndPin()
                 (loginByField == b.loginActivityPaymaartIdET && passCodeField == b.loginActivityPinET) -> validatePaymaartIdAndPin()
-                (loginByField == b.loginActivityPhoneET && passCodeField == b.loginActivityPasswordET) -> validatePhoneAndPassword()
+                (loginByField == b.loginActivityPhoneTF && passCodeField == b.loginActivityPasswordET) -> validatePhoneAndPassword()
                 (loginByField == b.loginActivityEmailET && passCodeField == b.loginActivityPasswordET) -> validateEmailAndPassword()
                 (loginByField == b.loginActivityPaymaartIdET && passCodeField == b.loginActivityPasswordET) -> validatePaymaartIdAndPassword()
             }
@@ -549,34 +560,35 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
             ContextCompat.getDrawable(this, R.drawable.bg_edit_text_error)
     }
 
-    private fun validatePhone(phoneEditText: EditText, warningText: TextView): Boolean {
+    private fun validatePhone(phoneEditText: PhoneField): Boolean {
         var isValid = true
         when {
-            phoneEditText.text!!.isEmpty() -> {
-                showPhoneWarning(getString(R.string.required_field))
+            phoneEditText.text.isEmpty() -> {
+                b.loginActivityPhoneTF.showWarning(getString(R.string.required_field))
+                // showPhoneWarning(getString(R.string.required_field))
                 isValid = false
             }
 
-            phoneEditText.text.toString().replace(" ", "").length < 8 -> {
-                showPhoneWarning(getString(R.string.invalid_phone))
+            phoneEditText.text.replace(" ", "").length < 8 -> {
+                b.loginActivityPhoneTF.showWarning(getString(R.string.invalid_phone))
+                //showPhoneWarning(getString(R.string.invalid_phone))
                 isValid = false
             }
 
-            else -> {
-                warningText.visibility = View.GONE
-                b.loginActivityPhoneBox.background =
-                    ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-            }
+            /* else -> {
+                 warningText.visibility = View.GONE
+                 b.loginActivityPhoneBox.background = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+             }*/
         }
         return isValid
     }
 
-    private fun showPhoneWarning(warning: String) {
-        b.loginActivityPhoneWarningTV.visibility = View.VISIBLE
-        b.loginActivityPhoneWarningTV.text = warning
-        b.loginActivityPhoneBox.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_error)
-    }
+    /*    private fun showPhoneWarning(warning: String) {
+            b.loginActivityPhoneWarningTV.visibility = View.VISIBLE
+            b.loginActivityPhoneWarningTV.text = warning
+            b.loginActivityPhoneBox.background =
+                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_error)
+        }*/
 
     private fun validateEmail(emailEditText: EditText, warningText: TextView): Boolean {
         var isValid = true
@@ -654,11 +666,11 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
 
     private fun validatePhoneAndPin() {
-        val isValidPhone = validatePhone(b.loginActivityPhoneET, b.loginActivityPhoneWarningTV)
+        val isValidPhone = validatePhone(b.loginActivityPhoneTF)
         val isValidPin = validatePin(b.loginActivityPinET, b.loginActivityPinWarningTV)
 
         if (isValidPhone && isValidPin) {
-            val phone = getCountryCode() + b.loginActivityPhoneET.text.toString().replace(" ", "")
+            val phone = getCountryCode() + b.loginActivityPhoneTF.text.replace(" ", "")
             val pin = b.loginActivityPinET.text.toString()
             amplifyStartLogIn(phone, pin, Constants.SELECTION_PHONE_NUMBER, Constants.SELECTION_PIN)
         }
@@ -692,12 +704,12 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
     }
 
     private fun validatePhoneAndPassword() {
-        val isValidPhone = validatePhone(b.loginActivityPhoneET, b.loginActivityPhoneWarningTV)
+        val isValidPhone = validatePhone(b.loginActivityPhoneTF)
         val isValidPassword =
             validatePassword(b.loginActivityPasswordET, b.loginActivityPasswordWarningTV)
 
         if (isValidPhone && isValidPassword) {
-            val phone = getCountryCode() + b.loginActivityPhoneET.text.toString().replace(" ", "")
+            val phone = getCountryCode() + b.loginActivityPhoneTF.text.replace(" ", "")
             val password = b.loginActivityPasswordET.text.toString()
             amplifyStartLogIn(
                 phone, password, Constants.SELECTION_PHONE_NUMBER, Constants.SELECTION_PASSWORD
@@ -726,7 +738,8 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
             validatePassword(b.loginActivityPasswordET, b.loginActivityPasswordWarningTV)
 
         if (isValidPaymaartId && isValidPassword) {
-            val paymaartId =  getString(R.string.paymaart_code) + b.loginActivityPaymaartIdET.text.toString()
+            val paymaartId =
+                getString(R.string.paymaart_code) + b.loginActivityPaymaartIdET.text.toString()
             val password = b.loginActivityPasswordET.text.toString()
             amplifyStartLogIn(
                 paymaartId, password, Constants.SELECTION_PAYMAART_ID, Constants.SELECTION_PASSWORD
@@ -785,8 +798,7 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
             }) { error ->
                 "Response".showLogE(error)
                 runOnUiThread {
-                    hideButtonLoader()
-                    when (loginBy) {
+                    hideButtonLoader()/*when (loginBy) {
                         Constants.SELECTION_PHONE_NUMBER -> b.loginActivityPhoneBox.background =
                             ContextCompat.getDrawable(this, R.drawable.bg_edit_text_error)
 
@@ -795,7 +807,7 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
                         Constants.SELECTION_PAYMAART_ID -> b.loginActivityPaymaartIdBox.background =
                             ContextCompat.getDrawable(this, R.drawable.bg_edit_text_error)
-                    }
+                    }*/
                     val warning =
                         if (error.recoverySuggestion.contains("User locked")) getString(R.string.account_blocked)
                         else getString(R.string.invalid_credentials)
@@ -822,13 +834,13 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
 
 
     private fun getCountryCode(): String {
-        return b.loginActivityCountryCodeSpinner.selectedItem.toString()
+        return b.loginActivityPhoneTF.countryCode
     }
 
     private fun showButtonLoader(
         actionButton: AppCompatButton, loaderLottie: LottieAnimationView
     ) {
-        actionButton.text = ""
+        actionButton.text = getString(R.string.empty_string)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE

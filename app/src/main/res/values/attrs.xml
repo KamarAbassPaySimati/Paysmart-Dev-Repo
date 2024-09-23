@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TextField">
+        <attr name="titleText" format="string" />
+        <attr name="hintText" format="string" />
+        <attr name="contentText" format="string" />
+        <attr name="warningText" format="string" />
+        <attr name="isWarningTextEnabled" format="boolean" />
+        <attr name="textTransformation" format="enum">
+            <enum name="Small" value="1" />
+            <enum name="Caps" value="2" />
+        </attr>
+        <attr name="isOptionalField" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="Button">
+        <attr name="buttonText" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="BasicTextField">
+        <attr name="titleText" />
+        <attr name="hintText" />
+        <attr name="contentText" />
+        <attr name="warningText" />
+        <attr name="android:digits" />
+        <attr name="isWarningTextEnabled" />
+        <attr name="textTransformation" />
+        <attr name="isOptionalField" />
+    </declare-styleable>
+
+    <declare-styleable name="VerifyPhoneField">
+        <attr name="titleText" />
+        <attr name="hintText" />
+        <attr name="contentText" />
+        <attr name="warningText" />
+        <attr name="android:digits" />
+        <attr name="isWarningTextEnabled" />
+        <attr name="isOptionalField" />
+    </declare-styleable>
+
+    <declare-styleable name="PhoneField">
+        <attr name="titleText" />
+        <attr name="hintText" />
+        <attr name="contentText" />
+        <attr name="warningText" />
+        <attr name="android:digits" />
+        <attr name="isWarningTextEnabled" />
+        <attr name="isOptionalField" />
+    </declare-styleable>
+
+    <declare-styleable name="PrimaryButton">
+        <attr name="buttonText" />
+    </declare-styleable>
+
+</resources>
