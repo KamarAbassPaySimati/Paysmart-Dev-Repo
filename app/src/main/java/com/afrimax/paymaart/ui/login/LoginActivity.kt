@@ -38,7 +38,9 @@ import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
 import com.amplifyframework.auth.cognito.options.AuthFlowType
 import com.amplifyframework.auth.result.step.AuthSignInStep
 import com.amplifyframework.core.Amplify
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
     private lateinit var b: ActivityLoginBinding
     private var isPinSelected = true

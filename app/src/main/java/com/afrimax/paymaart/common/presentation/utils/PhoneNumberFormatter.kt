@@ -2,6 +2,18 @@ package com.afrimax.paymaart.common.presentation.utils
 
 object PhoneNumberFormatter {
 
+    private val countryCodeMap = mapOf(
+        "+91" to 10,  // India - Mobile and landline numbers
+        "+44" to 10,  // United Kingdom - Mobile numbers are 10 digits; landline and other numbers are 10 digits
+        "+1" to 10,   // United States/Canada - Mobile and landline numbers are 10 digits (including the country code)
+        "+234" to 10, // Nigeria - Mobile numbers are typically 10 digits
+        "+39" to 10,  // Italy - Mobile numbers are 10 digits
+        "+265" to 9,  // Malawi - Mobile numbers are 9 digits
+        "+27" to 9,  // South Africa - Mobile numbers are 9 digits
+        "+46" to 9   // Sweden - Mobile numbers are 9 digits
+    )
+
+
     fun format(countryCode: String?, phoneNumber: String?): String? {
         if (countryCode != null && phoneNumber != null) {
             val digits = phoneNumber.replace(" ", "")
@@ -62,6 +74,14 @@ object PhoneNumberFormatter {
         return null
     }
 
+    fun isValidPhoneNumber(countryCode: String, phoneNumber: String): Boolean {
+        return countryCodeMap.getOrDefault(countryCode, -1) == phoneNumber.length
+    }
+
+    // ====================================================================
+    //                        HELPER FUNCTIONS
+    // ====================================================================
+
     private fun formatWithCountryCode(
         countryCode: String, phoneNumber: String, formatter: (String) -> String
     ): String {
@@ -86,14 +106,17 @@ object PhoneNumberFormatter {
 
     private fun formatUSPhoneNumber(digits: String): String {
         return when {
-            digits.length > 6 -> "${digits.substring(0, 3)} ${
-                digits.substring(
-                    3, 6
-                )
-            } ${digits.substring(6)}"
+            digits.length > 6 -> {
+                "${digits.substring(0, 3)} ${digits.substring(3, 6)} ${digits.substring(6)}"
+            }
 
-            digits.length > 3 -> "${digits.substring(0, 3)} ${digits.substring(3)}"
-            else -> digits
+            digits.length > 3 -> {
+                "${digits.substring(0, 3)} ${digits.substring(3)}"
+            }
+
+            else -> {
+                digits
+            }
         }
     }
 

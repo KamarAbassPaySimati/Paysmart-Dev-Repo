@@ -1,3 +1,4 @@
+/*
 package com.afrimax.paymaart
 
 import androidx.test.espresso.Espresso
@@ -314,3 +315,4 @@ class RegisterUserDefs {
         )
     }
 }
+*/

@@ -6,227 +6,238 @@ import android.text.InputFilter.AllCaps
 import android.text.Spanned
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
+import android.widget.EditText
 import android.widget.LinearLayout
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.core.view.isVisible
 import com.afrimax.paymaart.R
-import com.afrimax.paymaart.common.presentation.utils.UiDrawable
-import com.afrimax.paymaart.common.presentation.utils.UiText
-import com.afrimax.paymaart.common.presentation.utils.currentState
+import com.afrimax.paymaart.common.domain.utils.then
+import com.afrimax.paymaart.common.presentation.utils.DrawableManager
+import com.afrimax.paymaart.common.presentation.utils.getAttr
 import com.afrimax.paymaart.common.presentation.utils.setOnTextChangedListener
 import com.afrimax.paymaart.databinding.ComponentBasicTextFieldBinding
-
 import dagger.hilt.android.AndroidEntryPoint
-import org.orbitmvi.orbit.viewmodel.observe
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BasicTextField @JvmOverloads constructor(
     private val cxt: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : LinearLayout(cxt, attrs, defStyleAttr), ViewModelStoreOwner {
-
-    override val viewModelStore: ViewModelStore = ViewModelStore()
+) : LinearLayout(cxt, attrs, defStyleAttr) {
 
     private var b: ComponentBasicTextFieldBinding = ComponentBasicTextFieldBinding.inflate(
         LayoutInflater.from(cxt), this
     )
-    private lateinit var vm: BasicTextFieldViewModel
+
+    //XML attributes with default values
+    private var isWarningTextEnabled: Boolean = true
+    private var titleText: String = cxt.getString(R.string.title)
+    private var hintText: String = cxt.getString(R.string.hint)
+    private var digits: String? = null
+    private var textTransformation: Int? = 0
+    private var isOptionalField: Boolean = false
 
     private var isTextWatcherEnabled = false
     private var isFocusListenerEnabled = false
-    private var isWarningTextEnabled = true
 
+    @Inject
+    lateinit var drawableManager: DrawableManager
 
     init {
+        // Obtain the styled attributes defined in XML for the component
+        val tArray = cxt.obtainStyledAttributes(attrs, R.styleable.BasicTextField, 0, 0)
 
-        if (!isInEditMode) {
-            require(cxt is ViewModelStoreOwner && cxt is LifecycleOwner)
-
-            vm = ViewModelProvider(this)[BasicTextFieldViewModel::class.java]
-            vm.observe(cxt, state = ::observeState)
-
-            //Perform all the UI setup here
-            setUpFocusListener()
-            setUpTextChangeListener()
-        }
-
-        //enable focus & text change listeners
-        isTextWatcherEnabled = true
-        isFocusListenerEnabled = true
-
-        initializeWithAttributes(attrs)
-
-    }
-
-    private fun initializeWithAttributes(attrs: AttributeSet?) {
-        attrs.let { attributes ->
-            val typedArray =
-                cxt.obtainStyledAttributes(attributes, R.styleable.BasicTextField, 0, 0)
-
-            val titleText = typedArray.getString(R.styleable.BasicTextField_titleText)
-                ?: context.getString(R.string.title)
-            val hintText = typedArray.getString(R.styleable.BasicTextField_hintText)
-                ?: context.getString(R.string.hint)
-            val digits = typedArray.getString(R.styleable.BasicTextField_android_digits)
-            val textTransformation =
-                typedArray.getInt(R.styleable.BasicTextField_textTransformation, 0)
+        // Retrieve XML attributes from the TypedArray and assign default values if not found
+        tArray.run {
+            titleText = getAttr(R.styleable.BasicTextField_titleText, titleText)
+            hintText = getAttr(R.styleable.BasicTextField_hintText, hintText)
+            digits = getAttr(R.styleable.BasicTextField_android_digits, digits)
+            textTransformation =
+                getAttr(R.styleable.BasicTextField_textTransformation, textTransformation)
             isWarningTextEnabled =
-                typedArray.getBoolean(R.styleable.BasicTextField_isWarningTextEnabled, true)
-
-            if (!isInEditMode) {
-                if (!digits.isNullOrEmpty()) {
-                    // Set the digits filter using the default android:digits attribute
-                    b.basicTextFieldET.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
-                        source?.filter { digits.contains(it) }
-                    })
-                }
-
-                // Apply text transformation based on the attribute value
-                when (textTransformation) {
-                    TEXT_CAPITAL_LETTERS -> b.basicTextFieldET.filters += AllCaps()
-                    TEXT_SMALL_LETTERS -> b.basicTextFieldET.filters += object : AllCaps() {
-                        override fun filter(
-                            source: CharSequence?,
-                            start: Int,
-                            end: Int,
-                            dest: Spanned?,
-                            dstart: Int,
-                            dend: Int
-                        ): CharSequence {
-                            return source!!.filterNot { char -> char.isWhitespace() }.toString()
-                                .lowercase()
-                        }
-                    }
-                }
-
-                vm.invoke(
-                    BasicTextFieldIntent.SetInitialData(
-                        title = titleText, hint = hintText
-                    )
-                )
-            } else {
-                b.basicTextFieldTitleTV.text = titleText
-                b.basicTextFieldET.hint = hintText
-                if (isWarningTextEnabled) b.basicTextFieldWarningTV.visibility =
-                    View.VISIBLE else b.basicTextFieldWarningTV.visibility = View.GONE
-            }
-
-            typedArray.recycle()
+                getAttr(R.styleable.BasicTextField_isWarningTextEnabled, isWarningTextEnabled)
+            isOptionalField = getAttr(R.styleable.BasicTextField_isOptionalField, isOptionalField)
         }
-    }
 
-    /**Observe changes in the State using Orbit StateFlow*/
-    private fun observeState(state: BasicTextFieldState) {
-        modifyTitle(state.title)
-        modifyTextField(state.text, state.hint)
-        modifyBackground(state.background)
-        modifyWarning(state.warningText, state.showWarning)
-    }
+        // The post block ensures that the following code is executed only at runtime (not during layout preview)
+        post {
+            //Perform all the UI setup here
+            setUpTitle()
+            setUpTextField()
 
-    private fun setUpFocusListener() {
-        val focusDrawable = UiDrawable.Resource(R.drawable.bg_edit_text_focused)
-        val errorDrawable = UiDrawable.Resource(R.drawable.bg_edit_text_error)
-        val notInFocusDrawable = UiDrawable.Resource(R.drawable.bg_edit_text_unfocused)
-
-        b.basicTextFieldET.apply {
-            setOnFocusChangeListener { _, hasFocus ->
-                if (isFocusListenerEnabled) {
-                    when {
-                        vm.currentState.showWarning -> vm.invoke(
-                            BasicTextFieldIntent.SetBackground(
-                                errorDrawable
-                            )
-                        )
-
-                        hasFocus -> vm.invoke(BasicTextFieldIntent.SetBackground(focusDrawable))
-                        else -> vm.invoke(BasicTextFieldIntent.SetBackground(notInFocusDrawable))
-                    }
-                }
-            }
+            //enable focus & text change listeners
+            isTextWatcherEnabled = true
+            isFocusListenerEnabled = true
         }
-    }
 
-    private fun setUpTextChangeListener() {
-        b.basicTextFieldET.apply {
-            setOnTextChangedListener(afterTextChanged = { text ->
-                if (isTextWatcherEnabled) vm.invoke(BasicTextFieldIntent.SetText(text = text))
-            })
+        // This block is executed when in layout editor mode (for design-time preview purposes)
+        isInEditMode.then {
+            showDisplayData()
         }
+
+        // Always recycle the TypedArray after using it to free up resources
+        tArray.recycle()
     }
 
-    private fun modifyTitle(title: UiText) {
+    private fun showDisplayData() {
+        b.basicTextFieldTitleTV.text = titleText
+        b.basicTextFieldET.hint = hintText
+        b.basicTextFieldWarningTV.visibility = if (isWarningTextEnabled) VISIBLE else GONE
+    }
+
+
+    // ====================================================================
+    //                        INITIAL SETUP
+    // ====================================================================
+
+    private fun setUpTitle() {
         b.basicTextFieldTitleTV.apply {
-            text = title.asString(cxt)
+            text = titleText
         }
     }
 
-    private fun modifyTextField(txt: UiText, hintText: UiText) {
+    private fun setUpTextField() {
         b.basicTextFieldET.apply {
-            if (hint.isNullOrEmpty()) hint = hintText.asString(cxt)
+            hint = hintText
 
-            val newText = txt.asString(cxt)
-            if (newText != text.toString()) {
-                isTextWatcherEnabled = false
-                setText(newText)
-                setSelection(newText.length)
-                isTextWatcherEnabled = true
+            setOnFocusChangeListener { _, hasFocus ->
+                textFieldFocusListener(hasFocus)
+            }
+
+            setOnTextChangedListener(onTextChanged = { txt, _, before, _ ->
+                textFieldTextChangeListener(before, txt.toString())
+            })
+
+            digits?.let { d ->
+                filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
+                    source?.filter { d.contains(it) }
+                })
+            }
+
+            // Apply text transformation based on the attribute value
+            when (textTransformation) {
+                TEXT_CAPITAL_LETTERS -> filters += AllCaps()
+                TEXT_SMALL_LETTERS -> filters += object : AllCaps() {
+                    override fun filter(
+                        source: CharSequence?,
+                        start: Int,
+                        end: Int,
+                        dest: Spanned?,
+                        dstart: Int,
+                        dend: Int
+                    ): CharSequence {
+                        return source!!.filterNot { char -> char.isWhitespace() }.toString()
+                            .lowercase()
+                    }
+                }
             }
         }
     }
 
-    private fun modifyBackground(background: UiDrawable) {
-        b.basicTextFieldET.apply {
-            this.background = background.asDrawable(cxt)
+    // ====================================================================
+    //                        HELPER FUNCTIONS
+    // ====================================================================
+
+    private fun EditText.textFieldFocusListener(hasFocus: Boolean) {
+        if (isFocusListenerEnabled) {
+            background = when {
+                b.basicTextFieldWarningTV.isVisible -> drawableManager.errorDrawable
+                hasFocus -> drawableManager.focusDrawable
+                else -> drawableManager.notInFocusDrawable
+            }
         }
     }
 
-    private fun modifyWarning(warningText: UiText, showWarning: Boolean) {
-        if (isWarningTextEnabled) {
-            if (showWarning) {
-                b.basicTextFieldWarningTV.apply {
-                    visibility = View.VISIBLE
-                    text = warningText.asString(cxt)
-                }
+    private fun EditText.textFieldTextChangeListener(before: Int, txt: String) {
+        if (isTextWatcherEnabled) {
+            isTextWatcherEnabled = false
+            if (before != 1) {
+                background = drawableManager.focusDrawable
+                b.basicTextFieldWarningTV.visibility = GONE
+                setText(txt)
+                setSelection(txt.length)
             } else {
-                b.basicTextFieldWarningTV.apply {
-                    visibility = View.GONE
+                if (txt.isEmpty() && !isOptionalField) {
+                    background = drawableManager.errorDrawable
+                    b.basicTextFieldWarningTV.apply {
+                        visibility = VISIBLE
+                        text = cxt.getString(R.string.required_field)
+                    }
                 }
+            }
+
+            isTextWatcherEnabled = true
+        }
+    }
+
+    private fun EditText.insertCustomText(value: String) {
+        setText(value)
+        setSelection(value.length)
+        when {
+            isFocused -> {
+                background = drawableManager.focusDrawable
+                b.basicTextFieldWarningTV.visibility = GONE
+            }
+
+            else -> {
+                background = drawableManager.notInFocusDrawable
+                b.basicTextFieldWarningTV.visibility = GONE
             }
         }
     }
+
+    // ====================================================================
+    //                        PUBLIC PROPERTIES & METHODS
+    // ====================================================================
+
+    var text: String
+        get() = b.basicTextFieldET.text.toString()
+        set(value) {
+            isTextWatcherEnabled = false
+            b.basicTextFieldET.insertCustomText(value)
+            isTextWatcherEnabled = true
+        }
+
+    var title: String
+        get() = b.basicTextFieldTitleTV.text.toString()
+        set(value) {
+            b.basicTextFieldTitleTV.text = value
+        }
 
     fun showWarning(warningText: String) {
         if (warningText.isNotEmpty()) {
-            vm.invoke(BasicTextFieldIntent.ShowWarning(warningText))
+            b.basicTextFieldWarningTV.apply {
+                visibility = VISIBLE
+                text = warningText
+            }
+            b.basicTextFieldET.background = drawableManager.errorDrawable
         }
     }
 
     fun addTextChangeListener(
-        afterTextChanged: (String) -> Unit,
+        afterTextChanged: (String) -> Unit = { _ -> },
         beforeTextChanged: (CharSequence, Int, Int, Int) -> Unit = { _, _, _, _ -> },
         onTextChanged: (CharSequence, Int, Int, Int) -> Unit = { _, _, _, _ -> }
     ) {
         b.basicTextFieldET.apply {
-            setOnTextChangedListener(
-                afterTextChanged = afterTextChanged,
-                beforeTextChanged = beforeTextChanged,
-                onTextChanged = onTextChanged
-            )
+            setOnTextChangedListener(afterTextChanged = { txt ->
+                if (isTextWatcherEnabled) {
+                    isTextWatcherEnabled = false
+                    afterTextChanged(txt)
+                    isTextWatcherEnabled = true
+                }
+            }, beforeTextChanged = { txt, start, count, after ->
+                if (isTextWatcherEnabled) {
+                    isTextWatcherEnabled = false
+                    beforeTextChanged(txt, start, count, after)
+                    isTextWatcherEnabled = true
+                }
+            }, onTextChanged = { txt, start, before, count ->
+                if (isTextWatcherEnabled) {
+                    isTextWatcherEnabled = false
+                    onTextChanged(txt, start, before, count)
+                    isTextWatcherEnabled = true
+                }
+            })
         }
-    }
-
-    fun setText(text: String) {
-        vm.invoke(BasicTextFieldIntent.SetText(text))
-    }
-
-    fun getText(): String {
-        return vm.currentState.text.asString(cxt)
-    }
-
-    fun setTitle(title: String) {
-        vm.invoke(BasicTextFieldIntent.SetTitle(title = title))
     }
 
     companion object {

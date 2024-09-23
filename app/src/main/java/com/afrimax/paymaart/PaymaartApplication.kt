@@ -20,10 +20,12 @@ import com.amplifyframework.storage.s3.AWSS3StoragePlugin
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
+@HiltAndroidApp
 class PaymaartApplication: Application() {
     private var subscriptionToken: SubscriptionToken? = null
     private lateinit var authCalls: AuthCalls
