@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/phoneFieldContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/phoneFieldTitleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/phone"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="14sp" />
+
+        <RelativeLayout
+            android:id="@+id/phoneFieldBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_edit_text_unfocused">
+
+            <RelativeLayout
+                android:id="@+id/phoneFieldCountryCodeContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/phoneFieldCountryCodeSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@color/editTextBg"
+                    android:gravity="center"
+                    android:popupBackground="@color/editTextBg"
+                    android:spinnerMode="dropdown" />
+
+                <ImageView
+                    android:id="@+id/phoneFieldCountryCodeDropDownIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/phoneFieldCountryCodeSpinner"
+                    android:contentDescription="@string/drop_down_button_data"
+                    android:src="@drawable/ic_drop_down" />
+
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/phoneFieldET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/phoneFieldCountryCodeContainer"
+                android:autofillHints=""
+                android:background="@color/transparent"
+                android:digits="0123456789 "
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_regular"
+                android:hint="@string/enter_phone_number"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:maxLength="11"
+                android:maxLines="1"
+                android:padding="12dp"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textColorHint="@color/editTextHint"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/phoneFieldWarningTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/required_field"
+            android:textColor="@color/accentNegative"
+            android:textSize="14sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+</merge>

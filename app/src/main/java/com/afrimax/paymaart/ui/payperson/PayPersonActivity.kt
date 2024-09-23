@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
+import android.view.View.GONE
 import android.view.WindowManager
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityOptionsCompat
@@ -16,6 +17,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.IndividualSearchUserData
 import com.afrimax.paymaart.data.model.PayToRegisteredPersonRequest
@@ -80,8 +82,18 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
             }
         }
         b.payPersonActivityNameTV.text = userData.name
-        b.payPersonActivityPaymaartIdTV.text =
-            if (isRegistered) userData.paymaartId else userData.phoneNumber
+        if (userData.phoneNumber.isBlank()) {
+            //Unregistered
+            b.payPersonActivityPhoneNumberTV.visibility = GONE
+            b.payPersonActivityPaymaartIdTV.text =
+                PhoneNumberFormatter.formatWholeNumber(userData.paymaartId)
+        } else {
+            //registered
+            b.payPersonActivityPaymaartIdTV.text = userData.paymaartId
+            b.payPersonActivityPhoneNumberTV.text =
+                PhoneNumberFormatter.formatWholeNumber(userData.countryCode + userData.phoneNumber)
+        }
+
     }
 
 

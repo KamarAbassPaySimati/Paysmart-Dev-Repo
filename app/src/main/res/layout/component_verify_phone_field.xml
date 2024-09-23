@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/verifyPhoneFieldContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/verifyPhoneFieldTitleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/phone"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="14sp" />
+
+        <RelativeLayout
+            android:id="@+id/verifyPhoneFieldPhoneBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_edit_text_unfocused">
+
+            <RelativeLayout
+                android:id="@+id/verifyPhoneFieldCountryCodeContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/verifyPhoneFieldCountryCodeSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/editTextBg"
+                    android:gravity="center"
+                    android:popupBackground="@color/editTextBg"
+                    android:spinnerMode="dropdown" />
+
+                <ImageView
+                    android:id="@+id/verifyPhoneFieldCountryCodeDropDownIV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/verifyPhoneFieldCountryCodeSpinner"
+                    android:contentDescription="@string/drop_down_button_data"
+                    android:src="@drawable/ic_drop_down" />
+
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/verifyPhoneFieldET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/verifyPhoneFieldPhoneVerifyContainer"
+                android:layout_toEndOf="@+id/verifyPhoneFieldCountryCodeContainer"
+                android:autofillHints=""
+                android:background="@color/transparent"
+                android:digits="0123456789 "
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_regular"
+                android:hint="@string/enter_phone_number"
+                android:imeOptions="actionNext"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:longClickable="false"
+                android:maxLines="1"
+                android:padding="12dp"
+                android:singleLine="true"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textColorHint="@color/editTextHint"
+                android:textSize="14sp"
+                tools:ignore="TextFields" />
+
+            <FrameLayout
+                android:id="@+id/verifyPhoneFieldPhoneVerifyContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/verifyPhoneFieldPhoneVerifyButton"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:background="@drawable/selector_bg_verify_button"
+                    android:fontFamily="@font/inter_regular"
+                    android:text="@string/verify"
+                    android:textColor="@color/selector_text_verify_button"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/verifyPhoneFieldPhoneVerifyPB"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:indeterminate="true"
+                    android:visibility="gone"
+                    app:indicatorColor="@color/primaryColor"
+                    app:indicatorSize="24dp"
+                    app:trackColor="@color/primaryLighter"
+                    app:trackCornerRadius="16dp"
+                    app:trackThickness="3dp" />
+
+
+                <TextView
+                    android:id="@+id/verifyPhoneFieldPhoneVerifiedTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:gravity="center_vertical"
+                    android:text="@string/verified"
+                    android:textColor="@color/accentPositive"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    app:drawableStartCompat="@drawable/ico_done_green" />
+
+
+            </FrameLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/verifyPhoneFieldWarningTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/required_field"
+            android:textColor="@color/accentNegative"
+            android:textSize="14sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+</merge>

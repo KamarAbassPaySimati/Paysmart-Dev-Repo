@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afrimax.paymaart.BuildConfig
 import com.afrimax.paymaart.R
+import com.afrimax.paymaart.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paymaart.data.ApiClient
 import com.afrimax.paymaart.data.model.IndividualSearchUserData
 import com.afrimax.paymaart.data.model.PersonTransactions
@@ -110,11 +111,13 @@ class PersonTransactionActivity : BaseActivity() {
     private fun setUpLayout() {
         binding.paymentListReceiverName.text = userName
 
-        val paymaartIdOrPhone = paymaartID.ifEmpty {
-            if (phoneNumber.startsWith("+")) phoneNumber.replace(
-                " ", ""
-            ) else "+265$phoneNumber".replace(" ", "")
-        }
+     /*   val paymaartIdOrPhone = paymaartID.ifEmpty {
+            if (phoneNumber.startsWith("+")) PhoneNumberFormatter.formatWholeNumber(phoneNumber) else PhoneNumberFormatter.formatWholeNumber(
+                "+265$phoneNumber"
+            )
+        }*/
+
+        val paymaartIdOrPhone = if(paymaartID.startsWith("CMR")) paymaartID else PhoneNumberFormatter.formatWholeNumber(paymaartID)
         binding.paymentListReceiverPaymaartId.text = paymaartIdOrPhone
 
         if (profilePicture.isNotEmpty()) {
