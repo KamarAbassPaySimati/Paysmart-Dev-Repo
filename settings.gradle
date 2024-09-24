@@ -21,5 +21,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Paymaart"
+rootProject.name = "PaySimati"
 include ':app'
