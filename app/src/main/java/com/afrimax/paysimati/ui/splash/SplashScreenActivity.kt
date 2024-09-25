@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.animation.DecelerateInterpolator
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -31,6 +30,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 private const val PROGRESS = "progress"
+
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : BaseActivity() {
     private lateinit var binding: ActivitySplashScreenBinding
@@ -39,6 +39,7 @@ class SplashScreenActivity : BaseActivity() {
     private lateinit var action: String
     private lateinit var authCalls: AuthCalls
     private var transactionId: String = ""
+
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +65,7 @@ class SplashScreenActivity : BaseActivity() {
         validateUserAuth()
     }
 
-    private fun startInitialAnimator(){
+    private fun startInitialAnimator() {
         animator1.apply {
             duration = 3000
             setAutoCancel(true)
@@ -87,8 +88,7 @@ class SplashScreenActivity : BaseActivity() {
             override fun onAnimationEnd(p0: Animator) {
                 if (isLoggedIn) {
                     handleNavigation()
-                }
-                else startActivity(Intent(this@SplashScreenActivity, IntroActivity::class.java))
+                } else startActivity(Intent(this@SplashScreenActivity, IntroActivity::class.java))
                 finish()
             }
 
@@ -109,7 +109,12 @@ class SplashScreenActivity : BaseActivity() {
             val paymaartId = retrievePaymaartId()
 
             animator1.cancel()
-            animator2 = ObjectAnimator.ofInt(binding.horizontalProgressBar, "progress", binding.horizontalProgressBar.progress, 100)
+            animator2 = ObjectAnimator.ofInt(
+                binding.horizontalProgressBar,
+                "progress",
+                binding.horizontalProgressBar.progress,
+                100
+            )
 
             if (amplifyLoginStatus && paymaartId.isNotEmpty()) {
                 startFinalAnim(true)
@@ -132,19 +137,26 @@ class SplashScreenActivity : BaseActivity() {
         }
     }
 
-    private fun handleNavigation(){
-        val targetIntent = when(action) {
-            NotificationNavigation.MEMBERSHIP_PLANS.screenName -> Intent(this@SplashScreenActivity, MembershipPlansActivity::class.java)
+    private fun handleNavigation() {
+        val targetIntent = when (action) {
+            NotificationNavigation.MEMBERSHIP_PLANS.screenName -> Intent(
+                this@SplashScreenActivity, MembershipPlansActivity::class.java
+            )
+
             NotificationNavigation.TRANSACTIONS.screenName -> {
-                Intent(this@SplashScreenActivity, ViewSpecificTransactionActivity::class.java).apply {
+                Intent(
+                    this@SplashScreenActivity, ViewSpecificTransactionActivity::class.java
+                ).apply {
                     putExtra(Constants.TRANSACTION_ID, transactionId)
                 }
-            }else -> Intent(this@SplashScreenActivity, HomeActivity::class.java)
+            }
+
+            else -> Intent(this@SplashScreenActivity, HomeActivity::class.java)
         }
         if (action.isNotEmpty() && targetIntent.component?.className != HomeActivity::class.java.name) {
             val mainActivity = Intent(this@SplashScreenActivity, HomeActivity::class.java)
             startActivities(arrayOf(mainActivity, targetIntent))
-        }else {
+        } else {
             startActivity(Intent(this@SplashScreenActivity, HomeActivity::class.java))
         }
     }
