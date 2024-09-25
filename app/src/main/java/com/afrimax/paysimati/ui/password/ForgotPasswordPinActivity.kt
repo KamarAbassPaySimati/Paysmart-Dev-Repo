@@ -62,7 +62,6 @@ class ForgotPasswordPinActivity : BaseActivity() {
     private lateinit var b: ActivityForgotPasswordPinBinding
     private lateinit var forgotCredentialType: String
     private lateinit var countDownTimer: CountDownTimer
-    private lateinit var recaptchaClient: RecaptchaClient
     private var paymaartId = ""
     private var encryptedOtp = ""
     private var securityQuestionId = ""
@@ -78,14 +77,14 @@ class ForgotPasswordPinActivity : BaseActivity() {
         val wic = WindowInsetsControllerCompat(window, window.decorView)
         wic.isAppearanceLightStatusBars = true
         wic.isAppearanceLightNavigationBars = true
-        recaptchaClient = RecaptchaManager.getClient()!!
         forgotCredentialType = intent.getStringExtra(Constants.FORGOT_CREDENTIAL_TYPE)
             ?: Constants.FORGOT_CREDENTIAL_PIN
 
         initViews()
         setUpListeners()
     }
-
+private val recaptchaClient: RecaptchaClient
+    get() = RecaptchaManager.getClient()!!
 
     private fun initViews() {
         showEmailView()
