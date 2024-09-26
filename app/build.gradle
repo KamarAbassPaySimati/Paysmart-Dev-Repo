@@ -34,7 +34,7 @@ android {
         applicationId 'com.afrimax.paysimati'
         minSdk 24
         targetSdk 34
-        versionCode 19
+        versionCode 20
         versionName "1.0"
 
         testApplicationId 'com.afrimax.paysimati'
@@ -86,7 +86,7 @@ android {
             buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
-            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY_CUSTOMER_ANDROID.value}\"")
             buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
             buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
             buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
@@ -106,7 +106,7 @@ android {
             buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
-            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY_CUSTOMER_ANDROID.value}\"")
             buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
             buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
             buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
@@ -126,7 +126,7 @@ android {
             buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
-            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY_CUSTOMER_ANDROID.value}\"")
             buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
             buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
             buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
@@ -145,7 +145,7 @@ android {
             buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
             buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
             buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
-            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY.value}\"")
+            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY_CUSTOMER_ANDROID.value}\"")
             buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
             buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
             buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
