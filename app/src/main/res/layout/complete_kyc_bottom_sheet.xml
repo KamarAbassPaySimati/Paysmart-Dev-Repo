@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/inter_regular"
-            android:text="@string/complete_this_now_for_full_access_to_paymaart_services"
+            android:text="@string/complete_this_now_for_full_access_to_paysimati_services"
             android:textAlignment="center"
             android:textColor="@color/neutralGrey"
             android:textSize="14sp" />

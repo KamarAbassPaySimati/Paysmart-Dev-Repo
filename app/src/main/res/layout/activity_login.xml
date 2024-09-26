@@ -45,8 +45,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:contentDescription="@string/paymaart_logo"
-                android:src="@drawable/image_paymaart_logo" />
+                android:contentDescription="@string/paysimati_logo"
+                android:src="@drawable/image_paysimati_logo" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -147,7 +147,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp">
 
-                <com.afrimax.paymaart.common.presentation.ui.text_field.phone.PhoneField
+                <com.afrimax.paysimati.common.presentation.ui.text_field.phone.PhoneField
                     android:id="@+id/loginActivityPhoneTF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -213,7 +213,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/inter_medium"
-                        android:text="@string/paymaart_id"
+                        android:text="@string/paysimati_id"
                         android:textColor="@color/neutralGreyPrimaryText"
                         android:textSize="14sp" />
 
@@ -232,7 +232,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="12dp"
                             android:fontFamily="@font/inter_regular"
-                            android:text="@string/paymaart_code"
+                            android:text="@string/paysimati_code"
                             android:textColor="@color/primaryColor"
                             android:textSize="14sp"
                             android:visibility="visible" />
@@ -248,7 +248,7 @@
                             android:digits="0123456789 "
                             android:ellipsize="end"
                             android:fontFamily="@font/inter_regular"
-                            android:hint="@string/enter_paymaart_id"
+                            android:hint="@string/enter_paysimati_id"
                             android:importantForAutofill="no"
                             android:inputType="phone"
                             android:maxLength="8"
