@@ -54,6 +54,7 @@ class SplashScreenActivity : BaseActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsController.isAppearanceLightStatusBars = false
         window.navigationBarColor = ContextCompat.getColor(this, R.color.primaryColor)
