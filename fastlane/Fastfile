@@ -19,7 +19,7 @@ platform :android do
   desc "Deploy a new version to the Google Play"
   lane :qa do
     gradle(task: 'clean')
-    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "com.afrimax.paymaart.qa")
+    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "com.afrimax.paysimati.qa")
     version_code_internal = version_codes_internal.first
     increment_version_code(
       version_code: version_code_internal+1,
@@ -31,14 +31,14 @@ platform :android do
       build_type: 'Release',
       print_command: false,
       properties: {
-          "android.injected.signing.store.file" => "paymaart_customer.jks",
+          "android.injected.signing.store.file" => "paysimati_customer.jks",
           "android.injected.signing.store.password" => ENV["KEYSTOR_PASSWORD"],
           "android.injected.signing.key.alias" => ENV["KEYSTOR_ALIAS"],
           "android.injected.signing.key.password" => ENV["KEYSTOR_PASSWORD"],
         }
     )
     sh("bash ../scripts/lambda_test.sh #{lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]}")
-    upload_to_play_store(package_name: "com.afrimax.paymaart.qa", track: "internal")
+    upload_to_play_store(package_name: "com.afrimax.paysimati.qa", track: "internal")
   end
 
   lane :develop do
@@ -49,7 +49,7 @@ platform :android do
       build_type: 'Release',
       print_command: false,
       properties: {
-          "android.injected.signing.store.file" => "paymaart_customer.jks",
+          "android.injected.signing.store.file" => "paysimati_customer.jks",
           "android.injected.signing.store.password" => ENV["KEYSTOR_PASSWORD"],
           "android.injected.signing.key.alias" => ENV["KEYSTOR_ALIAS"],
           "android.injected.signing.key.password" => ENV["KEYSTOR_PASSWORD"],
@@ -60,7 +60,7 @@ platform :android do
   desc "Deploy a new version to the Google Play"
   lane :preprod do
     gradle(task: 'clean')
-    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "com.afrimax.paymaart.preprod")
+    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "com.afrimax.paysimati.preprod")
     version_code_internal = version_codes_internal.first
     increment_version_code(
       version_code: version_code_internal+1,
@@ -72,19 +72,19 @@ platform :android do
       build_type: 'Release',
       print_command: false,
       properties: {
-          "android.injected.signing.store.file" => "paymaart_customer.jks",
+          "android.injected.signing.store.file" => "paysimati_customer.jks",
           "android.injected.signing.store.password" => ENV["KEYSTOR_PASSWORD"],
           "android.injected.signing.key.alias" => ENV["KEYSTOR_ALIAS"],
           "android.injected.signing.key.password" => ENV["KEYSTOR_PASSWORD"],
         }
       )
-    upload_to_play_store(package_name: "com.afrimax.paymaart.preprod", track: "internal")
+    upload_to_play_store(package_name: "com.afrimax.paysimati.preprod", track: "internal")
   end
 
   desc "Deploy a new version to the Google Play"
   lane :production do
     gradle(task: 'clean')
-    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "com.afrimax.paymaart")
+    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "ccom.afrimax.paysimati")
     version_code_internal = version_codes_internal.first
     increment_version_code(
       version_code: version_code_internal+1,
@@ -96,13 +96,13 @@ platform :android do
       build_type: 'Release',
       print_command: false,
       properties: {
-          "android.injected.signing.store.file" => "paymaart_customer.jks",
+          "android.injected.signing.store.file" => "paysimati_customer.jks",
           "android.injected.signing.store.password" => ENV["KEYSTOR_PASSWORD"],
           "android.injected.signing.key.alias" => ENV["KEYSTOR_ALIAS"],
           "android.injected.signing.key.password" => ENV["KEYSTOR_PASSWORD"],
         }
       )
-    upload_to_play_store(package_name: "com.afrimax.paymaart", track: "internal")
+    upload_to_play_store(package_name: "ccom.afrimax.paysimati", track: "internal")
   end
 
 end
