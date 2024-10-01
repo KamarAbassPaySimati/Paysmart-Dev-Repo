@@ -316,7 +316,10 @@ class ViewSpecificTransactionActivity : BaseActivity() {
     private fun setupCommonView(data: CommonViewData?) {
         b.paymentReceiptActivityFromPaymaartNameTV.text = data?.fromPaymaartName
         b.paymentReceiptActivityFromPaymaartIdTV.text = data?.fromPaymaartID
-        b.paymentReceiptActivityToPaymaartNameTV.text = data?.toPaymaartName
+
+        val receiverName = if(data?.toPaymaartName?.lowercase()?.trim() == "paymaart") getString(R.string.paysimati) else data?.toPaymaartName
+        b.paymentReceiptActivityToPaymaartNameTV.text = receiverName
+
         b.paymentReceiptActivityToPaymaartIdTV.text = data?.toPaymaartId
         b.paymentReceiptActivityToPhoneNumberValue.text = PhoneNumberFormatter.formatWholeNumber(data?.toPhoneNumber)
         b.paymentReceiptActivityPaymentValueTV.text =
