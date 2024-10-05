@@ -11,6 +11,7 @@ import android.os.Parcelable
 import android.transition.Slide
 import android.view.Gravity
 import android.view.View
+import android.view.View.GONE
 import android.view.animation.AccelerateInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -138,6 +139,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 binding.paymentSuccessfulMembershipValue.text =
                     getString(R.string.amount_formatted, getFormattedAmount(data.balance))
                 transactionId = data.transactionId ?: ""
+                binding.paymentSuccessfulFlagPayment.visibility = GONE
             }
 
             is PayUnRegisteredPersonResponse -> {
@@ -224,7 +226,8 @@ class PaymentSuccessfulActivity : BaseActivity() {
         binding.paymentSuccessfulPaymaartIdValue.text = model.fromId
         binding.paymentSuccessfulToPaymaartNameValue.text = model.toName
         binding.paymentSuccessfulToPaymaartIdValue.text = model.toId
-        binding.paymentSuccessfulToPhoneNumberValue.text = PhoneNumberFormatter.formatWholeNumber(model.toPhoneNumber)
+        binding.paymentSuccessfulToPhoneNumberValue.text =
+            PhoneNumberFormatter.formatWholeNumber(model.toPhoneNumber)
         binding.paymentSuccessfulTxnValue.text =
             getString(R.string.amount_formatted, getFormattedAmount(model.transactionAmount))
         binding.paymentSuccessfulTxnFeeValue.text =

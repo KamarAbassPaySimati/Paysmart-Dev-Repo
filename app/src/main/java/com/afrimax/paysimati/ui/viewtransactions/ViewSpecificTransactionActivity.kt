@@ -212,7 +212,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityNoteContainer.visibility = VISIBLE
                 b.paymentReceiptActivityNoteTV.text =
                     if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value_two)
             }
 
             PAY_UNREGISTERED -> {
@@ -222,7 +222,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityNoteContainer.visibility = VISIBLE
                 b.paymentReceiptActivityNoteTV.text =
                     if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value_two)
             }
 
             REFUND, PAY_UNREGISTERED_REFUND -> {
@@ -316,7 +316,10 @@ class ViewSpecificTransactionActivity : BaseActivity() {
     private fun setupCommonView(data: CommonViewData?) {
         b.paymentReceiptActivityFromPaymaartNameTV.text = data?.fromPaymaartName
         b.paymentReceiptActivityFromPaymaartIdTV.text = data?.fromPaymaartID
-        b.paymentReceiptActivityToPaymaartNameTV.text = data?.toPaymaartName
+
+        val receiverName = if(data?.toPaymaartName?.lowercase()?.trim() == "paymaart") getString(R.string.paysimati) else data?.toPaymaartName
+        b.paymentReceiptActivityToPaymaartNameTV.text = receiverName
+
         b.paymentReceiptActivityToPaymaartIdTV.text = data?.toPaymaartId
         b.paymentReceiptActivityToPhoneNumberValue.text = PhoneNumberFormatter.formatWholeNumber(data?.toPhoneNumber)
         b.paymentReceiptActivityPaymentValueTV.text =
