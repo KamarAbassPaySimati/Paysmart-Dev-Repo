@@ -343,7 +343,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="@font/inter_medium"
-                                android:text="@string/txn_value"
+                                android:text="@string/txn_value_two"
                                 android:textColor="@color/neutralGreyPrimaryText"
                                 android:textSize="16sp" />
 

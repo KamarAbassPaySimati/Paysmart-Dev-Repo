@@ -212,7 +212,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityNoteContainer.visibility = VISIBLE
                 b.paymentReceiptActivityNoteTV.text =
                     if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value_two)
             }
 
             PAY_UNREGISTERED -> {
@@ -222,7 +222,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityNoteContainer.visibility = VISIBLE
                 b.paymentReceiptActivityNoteTV.text =
                     if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value_two)
             }
 
             REFUND, PAY_UNREGISTERED_REFUND -> {
