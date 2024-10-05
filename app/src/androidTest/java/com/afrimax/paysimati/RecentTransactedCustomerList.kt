@@ -1,5 +1,5 @@
 /*
-package com.afrimax.paymaart
+package ccom.afrimax.paysimati
 
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions

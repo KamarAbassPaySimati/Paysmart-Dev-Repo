@@ -18,59 +18,62 @@ import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
 import kotlin.math.abs
 
-class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    inner class RefundRequestViewHolder(val binding: RefundRequestAdapterViewBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(refundRequest: RefundRequest){
-            binding.refundAdapterName.text = refundRequest.receiverName
+    inner class RefundRequestViewHolder(val binding: RefundRequestAdapterViewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(refundRequest: RefundRequest) {
+            val receiverName = if (refundRequest.receiverName?.lowercase()
+                    ?.trim() == "paymaart"
+            ) context.getString(R.string.paysimati) else refundRequest.receiverName
+            binding.refundAdapterName.text = receiverName
+
             binding.refundAdapterId.text = refundRequest.receiverId
             binding.refundAdapterDate.text = formatEpochTimeThree(refundRequest.createdAt)
             binding.refundAdapterTransactionId.text = refundRequest.transactionId
-            when(refundRequest.transactionType) {
+            when (refundRequest.transactionType) {
                 AFRIMAX -> {
                     binding.iconNameInitials.visibility = View.GONE
                     binding.iconImage.visibility = View.VISIBLE
-                    Glide
-                        .with(context)
-                        .load(R.drawable.ico_afrimax)
-                        .fitCenter()
+                    Glide.with(context).load(R.drawable.ico_afrimax).fitCenter()
                         .into(binding.iconImage)
                 }
+
                 PAYMAART -> {
                     binding.iconNameInitials.visibility = View.GONE
                     binding.iconImage.visibility = View.VISIBLE
-                    Glide
-                        .with(context)
-                        .load(R.drawable.ico_paymaart_icon)
-                        .fitCenter()
+                    Glide.with(context).load(R.drawable.ico_paymaart_icon).fitCenter()
                         .into(binding.iconImage)
                 }
+
                 else -> {
-                    if (refundRequest.profilePic.isNullOrEmpty()){
+                    if (refundRequest.profilePic.isNullOrEmpty()) {
                         binding.iconImage.visibility = View.GONE
                         binding.iconNameInitials.apply {
                             visibility = View.VISIBLE
                             text = getInitials(refundRequest.receiverName)
                         }
-                    }else{
+                    } else {
                         binding.iconNameInitials.visibility = View.GONE
                         binding.iconImage.visibility = View.VISIBLE
-                        Glide
-                            .with(context)
+                        Glide.with(context)
                             .load(BuildConfig.CDN_BASE_URL + refundRequest.profilePic)
                             .into(binding.iconImage)
                     }
                 }
             }
-            when(refundRequest.status){
+            when (refundRequest.status) {
                 PENDING -> {
-                    binding.refundRequestAmount.text = getFormattedAmount(abs(refundRequest.amount.toDouble()))
+                    binding.refundRequestAmount.text =
+                        getFormattedAmount(abs(refundRequest.amount.toDouble()))
                     binding.refundAdapterStatus.apply {
                         text = ContextCompat.getString(context, R.string.pending)
                         setTextColor(ContextCompat.getColor(context, R.color.pendingCardTextColor))
                         background = ContextCompat.getDrawable(context, R.drawable.pending_bg)
                     }
                 }
+
                 REJECTED -> {
                     binding.refundRequestAmount.text = getFormattedAmount(refundRequest.amount)
                     binding.refundAdapterStatus.apply {
@@ -79,6 +82,7 @@ class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>):
                         background = ContextCompat.getDrawable(context, R.drawable.error_bg)
                     }
                 }
+
                 else -> {
                     binding.refundRequestAmount.text = getFormattedAmount(refundRequest.amount)
                     binding.refundAdapterStatus.apply {
@@ -91,11 +95,12 @@ class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>):
         }
     }
 
-    inner class LoaderIconViewHolder(val binding: LoaderAdapterViewBinding): RecyclerView.ViewHolder(binding.root)
+    inner class LoaderIconViewHolder(val binding: LoaderAdapterViewBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun getItemViewType(position: Int): Int {
         val viewType = list[position].viewType
-        return when(viewType){
+        return when (viewType) {
             RecyclerViewType.LOADER -> LOADER
             else -> 1
         }
@@ -104,11 +109,16 @@ class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>):
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             LOADER -> {
-                val view = LoaderAdapterViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val view = LoaderAdapterViewBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
                 LoaderIconViewHolder(view)
             }
+
             else -> {
-                val view = RefundRequestAdapterViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                val view = RefundRequestAdapterViewBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
                 RefundRequestViewHolder(view)
             }
         }
@@ -118,14 +128,14 @@ class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>):
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val refundRequest = list[position]
-        when(holder) {
+        when (holder) {
             is RefundRequestViewHolder -> {
                 holder.bind(refundRequest)
             }
+
             is LoaderIconViewHolder -> {}
         }
     }
-
 
 
     companion object {
