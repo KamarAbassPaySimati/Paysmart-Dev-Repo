@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.IndividualSearchUserData
@@ -87,7 +88,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
         b.payPersonActivityPaymaartIdTV.apply {
             if (userData.paymaartId.isNotBlank()) {
                 visibility = VISIBLE
-                text = userData.paymaartId
+                text = PaymaartIdFormatter.formatCustomerId(userData.paymaartId)
             } else {
                 visibility = GONE
             }
