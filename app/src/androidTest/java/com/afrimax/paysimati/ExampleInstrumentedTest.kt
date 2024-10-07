@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("ccom.afrimax.paysimati.merchant", appContext.packageName)
+        assertEquals("com.afrimax.paysimati.merchant", appContext.packageName)
     }
 }
