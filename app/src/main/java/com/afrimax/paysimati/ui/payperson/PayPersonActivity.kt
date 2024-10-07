@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.WindowManager
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityOptionsCompat
@@ -82,16 +83,26 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
             }
         }
         b.payPersonActivityNameTV.text = userData.name
-        if (userData.phoneNumber.isBlank()) {
-            //Unregistered
-            b.payPersonActivityPhoneNumberTV.visibility = GONE
-            b.payPersonActivityPaymaartIdTV.text =
-                PhoneNumberFormatter.formatWholeNumber(userData.paymaartId)
-        } else {
-            //registered
-            b.payPersonActivityPaymaartIdTV.text = userData.paymaartId
-            b.payPersonActivityPhoneNumberTV.text =
-                PhoneNumberFormatter.formatWholeNumber(userData.countryCode + userData.phoneNumber)
+
+        b.payPersonActivityPaymaartIdTV.apply {
+            if (userData.paymaartId.isNotBlank()) {
+                visibility = VISIBLE
+                text = userData.paymaartId
+            } else {
+                visibility = GONE
+            }
+        }
+
+        b.payPersonActivityPhoneNumberTV.apply {
+            if (userData.phoneNumber.isNotBlank()) {
+                visibility = VISIBLE
+                text = if (userData.countryCode.isNotBlank()) PhoneNumberFormatter.format(
+                    userData.countryCode, userData.phoneNumber
+                )
+                else PhoneNumberFormatter.formatWholeNumber(userData.phoneNumber)
+            } else {
+                visibility = GONE
+            }
         }
 
     }

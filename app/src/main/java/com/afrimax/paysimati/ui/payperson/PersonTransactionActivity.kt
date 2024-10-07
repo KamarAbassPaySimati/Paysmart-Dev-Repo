@@ -117,7 +117,7 @@ class PersonTransactionActivity : BaseActivity() {
             )
         }*/
 
-        val paymaartIdOrPhone = if(paymaartID.startsWith("CMR")) paymaartID else PhoneNumberFormatter.formatWholeNumber(paymaartID)
+        val paymaartIdOrPhone = if(paymaartID.startsWith("CMR")) paymaartID else PhoneNumberFormatter.formatWholeNumber(phoneNumber)
         binding.paymentListReceiverPaymaartId.text = paymaartIdOrPhone
 
         if (profilePicture.isNotEmpty()) {
