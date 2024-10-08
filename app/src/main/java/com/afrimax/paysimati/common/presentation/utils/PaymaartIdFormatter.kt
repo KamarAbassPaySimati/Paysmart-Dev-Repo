@@ -23,7 +23,15 @@ object PaymaartIdFormatter {
             "${id.substring(0, 3)} ${id.substring(3, 7)} ${id.substring(7, 10)}"
         } else if (id.length == 8) {
             //Merchant account of paymaart only has 8 chars
-            "${id.substring(0,3)} ${id.substring(3, 7)} ${id.substring(7,8)}"
+            "${id.substring(0, 3)} ${id.substring(3, 7)} ${id.substring(7, 8)}"
+        } else {
+            id
+        }
+    }
+
+    fun formatAdminId(id: String): String {
+        return if (id.length == 8) {
+            "${id.substring(0, 4)} ${id.substring(4, 8)} ${id.substring(7, 11)}"
         } else {
             id
         }
@@ -35,6 +43,7 @@ object PaymaartIdFormatter {
             id.startsWith("AGT") -> formatAgentId(id)
             id.startsWith("CMR") -> formatCustomerId(id)
             id.startsWith("MCT") -> formatMerchantId(id)
+            id.startsWith("PMT") -> formatAdminId(id)
             else -> id
         }
     }
