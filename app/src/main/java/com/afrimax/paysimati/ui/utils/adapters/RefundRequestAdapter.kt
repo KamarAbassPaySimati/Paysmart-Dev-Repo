@@ -8,6 +8,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
+import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.model.RefundRequest
 import com.afrimax.paysimati.databinding.LoaderAdapterViewBinding
 import com.afrimax.paysimati.databinding.RefundRequestAdapterViewBinding
@@ -29,7 +31,13 @@ class RefundRequestAdapter(val context: Context, val list: List<RefundRequest>) 
             ) context.getString(R.string.paysimati) else refundRequest.receiverName
             binding.refundAdapterName.text = receiverName
 
-            binding.refundAdapterId.text = refundRequest.receiverId
+            var formattedPaymaartId = PaymaartIdFormatter.formatId(refundRequest.receiverId)
+            if (formattedPaymaartId == refundRequest.receiverId) {
+                //The provided value don't satisfy the conditions of a paymaart id, hence it can be phone number
+                formattedPaymaartId =
+                    PhoneNumberFormatter.formatWholeNumber(refundRequest.receiverId)
+            }
+            binding.refundAdapterId.text = formattedPaymaartId
             binding.refundAdapterDate.text = formatEpochTimeThree(refundRequest.createdAt)
             binding.refundAdapterTransactionId.text = refundRequest.transactionId
             when (refundRequest.transactionType) {

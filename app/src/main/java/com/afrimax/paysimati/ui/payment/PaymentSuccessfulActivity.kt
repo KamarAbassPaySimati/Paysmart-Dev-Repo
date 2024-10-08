@@ -23,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.model.CashOutResponse
 import com.afrimax.paysimati.data.model.PayAfrimaxResponse
@@ -223,9 +224,9 @@ class PaymentSuccessfulActivity : BaseActivity() {
 
     private fun setCommonView(model: CommonViewModel) {
         binding.paymentSuccessfulPaymaartNameValue.text = model.fromName
-        binding.paymentSuccessfulPaymaartIdValue.text = model.fromId
+        binding.paymentSuccessfulPaymaartIdValue.text = PaymaartIdFormatter.formatId(model.fromId)
         binding.paymentSuccessfulToPaymaartNameValue.text = model.toName
-        binding.paymentSuccessfulToPaymaartIdValue.text = model.toId
+        binding.paymentSuccessfulToPaymaartIdValue.text = PaymaartIdFormatter.formatId(model.toId)
         binding.paymentSuccessfulToPhoneNumberValue.text =
             PhoneNumberFormatter.formatWholeNumber(model.toPhoneNumber)
         binding.paymentSuccessfulTxnValue.text =
