@@ -31,7 +31,7 @@ object PaymaartIdFormatter {
 
     fun formatAdminId(id: String): String {
         return if (id.length == 8) {
-            "${id.substring(0, 4)} ${id.substring(4, 8)} ${id.substring(7, 11)}"
+            "${id.substring(0, 3)} ${id.substring(3, 7)} ${id.substring(7, 8)}"
         } else {
             id
         }
