@@ -84,7 +84,7 @@ platform :android do
   desc "Deploy a new version to the Google Play"
   lane :production do
     gradle(task: 'clean')
-    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "ccom.afrimax.paysimati")
+    version_codes_internal = google_play_track_version_codes(track: "internal", package_name: "com.afrimax.paysimati")
     version_code_internal = version_codes_internal.first
     increment_version_code(
       version_code: version_code_internal+1,
@@ -102,7 +102,7 @@ platform :android do
           "android.injected.signing.key.password" => ENV["KEYSTOR_PASSWORD"],
         }
       )
-    upload_to_play_store(package_name: "ccom.afrimax.paysimati", track: "internal")
+    upload_to_play_store(package_name: "com.afrimax.paysimati", track: "internal")
   end
 
 end
