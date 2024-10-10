@@ -14,6 +14,7 @@ import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.DefaultResponse
 import com.afrimax.paysimati.data.model.ViewUserData
@@ -101,7 +102,7 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         }
         b.viewSelfKycActivityShortNameTV.text = shortName
         b.viewSelfKycActivityNameTV.text = accountName
-        b.viewSelfKycActivityPaymaartIdTV.text = paymaartId
+        b.viewSelfKycActivityPaymaartIdTV.text = PaymaartIdFormatter.formatCustomerId(paymaartId)
         b.viewSelfKycActivityKycTypeTV.text = kycType
         setKycStatus()
 

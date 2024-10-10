@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.IndividualSearchUserData
@@ -111,13 +112,16 @@ class PersonTransactionActivity : BaseActivity() {
     private fun setUpLayout() {
         binding.paymentListReceiverName.text = userName
 
-     /*   val paymaartIdOrPhone = paymaartID.ifEmpty {
-            if (phoneNumber.startsWith("+")) PhoneNumberFormatter.formatWholeNumber(phoneNumber) else PhoneNumberFormatter.formatWholeNumber(
-                "+265$phoneNumber"
-            )
-        }*/
+        /*   val paymaartIdOrPhone = paymaartID.ifEmpty {
+               if (phoneNumber.startsWith("+")) PhoneNumberFormatter.formatWholeNumber(phoneNumber) else PhoneNumberFormatter.formatWholeNumber(
+                   "+265$phoneNumber"
+               )
+           }*/
 
-        val paymaartIdOrPhone = if(paymaartID.startsWith("CMR")) paymaartID else PhoneNumberFormatter.formatWholeNumber(phoneNumber)
+        val paymaartIdOrPhone =
+            if (paymaartID.startsWith("CMR")) PaymaartIdFormatter.formatId(paymaartID) else PhoneNumberFormatter.formatWholeNumber(
+                phoneNumber
+            )
         binding.paymentListReceiverPaymaartId.text = paymaartIdOrPhone
 
         if (profilePicture.isNotEmpty()) {

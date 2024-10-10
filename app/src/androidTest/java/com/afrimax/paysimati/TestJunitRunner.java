@@ -8,7 +8,7 @@ import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "features", glue = "ccom.afrimax.paysimati", monochrome = true)
+@CucumberOptions(features = "features", glue = "com.afrimax.paysimati", monochrome = true)
 public class TestJunitRunner extends CucumberAndroidJUnitRunner {
     @Override
     public void onCreate(final Bundle bundle) {

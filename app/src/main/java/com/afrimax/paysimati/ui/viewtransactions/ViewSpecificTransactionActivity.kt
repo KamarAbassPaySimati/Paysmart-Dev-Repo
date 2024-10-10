@@ -20,6 +20,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.Extra
@@ -201,7 +202,8 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                     R.string.amount_formatted,
                     getFormattedAmount(transactionDetail.receiverClosingBalance)
                 )
-                b.paymentReceiptActivityFromPaymaartIdTV.text = transactionDetail.enteredBy
+                b.paymentReceiptActivityFromPaymaartIdTV.text =
+                    PaymaartIdFormatter.formatId(transactionDetail.enteredBy)
                 b.paymentReceiptActivityFromPaymaartNameTV.text = transactionDetail.enteredByName
             }
 
@@ -315,13 +317,18 @@ class ViewSpecificTransactionActivity : BaseActivity() {
 
     private fun setupCommonView(data: CommonViewData?) {
         b.paymentReceiptActivityFromPaymaartNameTV.text = data?.fromPaymaartName
-        b.paymentReceiptActivityFromPaymaartIdTV.text = data?.fromPaymaartID
+        b.paymentReceiptActivityFromPaymaartIdTV.text =
+            PaymaartIdFormatter.formatId(data?.fromPaymaartID)
 
-        val receiverName = if(data?.toPaymaartName?.lowercase()?.trim() == "paymaart") getString(R.string.paysimati) else data?.toPaymaartName
+        val receiverName = if (data?.toPaymaartName?.lowercase()
+                ?.trim() == "paymaart"
+        ) getString(R.string.paysimati) else data?.toPaymaartName
         b.paymentReceiptActivityToPaymaartNameTV.text = receiverName
 
-        b.paymentReceiptActivityToPaymaartIdTV.text = data?.toPaymaartId
-        b.paymentReceiptActivityToPhoneNumberValue.text = PhoneNumberFormatter.formatWholeNumber(data?.toPhoneNumber)
+        b.paymentReceiptActivityToPaymaartIdTV.text =
+            PaymaartIdFormatter.formatId(data?.toPaymaartId)
+        b.paymentReceiptActivityToPhoneNumberValue.text =
+            PhoneNumberFormatter.formatWholeNumber(data?.toPhoneNumber)
         b.paymentReceiptActivityPaymentValueTV.text =
             getString(R.string.amount_formatted, getFormattedAmount(data?.txnValue))
         b.paymentReceiptActivityTxnFeeTV.text =
