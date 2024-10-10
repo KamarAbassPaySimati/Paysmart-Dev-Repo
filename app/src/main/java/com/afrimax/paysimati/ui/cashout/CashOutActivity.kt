@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.IndividualSearchUserData
 import com.afrimax.paysimati.data.model.TransactionDetailsResponse
@@ -24,7 +25,6 @@ import com.afrimax.paysimati.ui.utils.bottomsheets.TotalReceiptSheet
 import com.afrimax.paysimati.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paysimati.util.Constants
 import com.afrimax.paysimati.util.getInitials
-import com.afrimax.paysimati.util.showLogE
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,7 +62,7 @@ class CashOutActivity : BaseActivity(), SendPaymentInterface {
         b.selfCashOutActivityShortNameTV.text = getInitials(userData.name)
 
         b.selfCashOutActivityNameTV.text = userData.name
-        b.selfCashOutActivityPaymaartIdTV.text = userData.paymaartId
+        b.selfCashOutActivityPaymaartIdTV.text = PaymaartIdFormatter.formatId(userData.paymaartId)
     }
 
     private fun setUpListeners() {
@@ -170,21 +170,20 @@ class CashOutActivity : BaseActivity(), SendPaymentInterface {
         }
     }
 
-    private fun fetchTransactionDetails(amount: String){
+    private fun fetchTransactionDetails(amount: String) {
         showLoader()
         lifecycleScope.launch {
             val idToken = fetchIdToken()
             lifecycleScope.launch {
                 val transactionDetailsHandler = ApiClient.apiService.getTransactionDetails(
-                    idToken,
-                    amount
+                    idToken, amount
                 )
-                transactionDetailsHandler.enqueue(object: Callback<TransactionDetailsResponse>{
+                transactionDetailsHandler.enqueue(object : Callback<TransactionDetailsResponse> {
                     override fun onResponse(
                         call: Call<TransactionDetailsResponse>,
                         response: Response<TransactionDetailsResponse>,
                     ) {
-                        if (response.isSuccessful && response.body() != null){
+                        if (response.isSuccessful && response.body() != null) {
                             val data = response.body()!!.transactionDetails
                             val cashOutModel = CashOutModel(
                                 transactionFee = data.grossTransactionFee.toString(),
@@ -200,7 +199,9 @@ class CashOutActivity : BaseActivity(), SendPaymentInterface {
                         hideLoader()
                     }
 
-                    override fun onFailure(call: Call<TransactionDetailsResponse>, throwable: Throwable) {
+                    override fun onFailure(
+                        call: Call<TransactionDetailsResponse>, throwable: Throwable
+                    ) {
                         hideLoader()
                         showToast(getString(R.string.default_error_toast))
                     }
@@ -210,7 +211,7 @@ class CashOutActivity : BaseActivity(), SendPaymentInterface {
         }
     }
 
-    private fun showLoader(){
+    private fun showLoader() {
         b.selfCashOutActivityCompleteCashOutLoaderLottie.visibility = View.VISIBLE
         b.selfCashOutActivityCompleteCashOutButton.apply {
             isEnabled = false
@@ -228,7 +229,8 @@ class CashOutActivity : BaseActivity(), SendPaymentInterface {
 
 
     override fun onPaymentSuccess(successData: Any?) {
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this@CashOutActivity).toBundle()
+        val options =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(this@CashOutActivity).toBundle()
         startActivity(Intent(this@CashOutActivity, PaymentSuccessfulActivity::class.java).apply {
             putExtra(Constants.SUCCESS_PAYMENT_DATA, successData as Parcelable)
         }, options)

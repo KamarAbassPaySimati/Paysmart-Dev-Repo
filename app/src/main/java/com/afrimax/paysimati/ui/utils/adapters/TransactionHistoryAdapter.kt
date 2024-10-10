@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.model.IndividualTransactionHistory
 import com.afrimax.paysimati.databinding.CardPagerLoaderBinding
@@ -57,8 +58,10 @@ class TransactionHistoryAdapter(
                     transaction.enteredBy ?: "", transaction.enteredByName ?: "", R.string.pay_in
                 )
 
-                REFUND, PAY_UNREGISTERED_REFUND ->{
-                    setTransactionDetails(transaction.senderId, context.getString(R.string.refund), R.string.refund)
+                REFUND, PAY_UNREGISTERED_REFUND -> {
+                    setTransactionDetails(
+                        transaction.senderId, context.getString(R.string.refund), R.string.refund
+                    )
                     b.cardTransactionPaymaartIdTV.visibility = View.GONE
                 }
 
@@ -101,7 +104,7 @@ class TransactionHistoryAdapter(
             }
             b.cardTransactionPaymaartIdTV.apply {
                 visibility = View.VISIBLE
-                text = id ?: "-"
+                text = PaymaartIdFormatter.formatId(id) ?: "-"
             }
             b.cardTransactionShortNameTV.apply {
                 visibility = View.VISIBLE
@@ -129,7 +132,7 @@ class TransactionHistoryAdapter(
             }
             b.cardTransactionPaymaartIdTV.apply {
                 visibility = View.VISIBLE
-                text = userId ?: "-"
+                text = PaymaartIdFormatter.formatId(userId) ?: "-"
             }
             if (image.isNullOrEmpty()) {
                 b.cardTransactionIV.visibility = View.GONE

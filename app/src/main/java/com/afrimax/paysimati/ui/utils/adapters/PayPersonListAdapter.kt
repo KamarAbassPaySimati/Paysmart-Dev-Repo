@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.BuildConfig
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.model.PayPerson
 import com.afrimax.paysimati.databinding.PayPersonAdapterViewBinding
@@ -45,7 +46,7 @@ class PayPersonListAdapter(private val contacts: List<PayPerson>) :
                     contact.let { PhoneNumberFormatter.formatWholeNumber(it.countryCode + it.phoneNumber) }
 
                 binding.payPersonUserId.visibility = View.VISIBLE
-                binding.payPersonUserId.text = contact.paymaartId
+                binding.payPersonUserId.text = PaymaartIdFormatter.formatId(contact.paymaartId)
             } else if (contact.phoneNumber.isNullOrEmpty() && !contact.paymaartId.isNullOrEmpty()) {
                 //Unregistered customer
                 binding.payPersonUserPhoneNumber.visibility = View.VISIBLE

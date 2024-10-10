@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Visibility
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.data.model.IndividualSearchUserData
 import com.afrimax.paysimati.databinding.CardPagerLoaderBinding
 import com.afrimax.paysimati.databinding.SearchCustomersAdapterViewBinding
@@ -17,7 +17,8 @@ class SearchUsersAdapter(
 
     private var onClickListener: OnClickListener? = null
 
-    class SearchUsersViewHolder(b: SearchCustomersAdapterViewBinding) : RecyclerView.ViewHolder(b.root) {
+    class SearchUsersViewHolder(b: SearchCustomersAdapterViewBinding) :
+        RecyclerView.ViewHolder(b.root) {
         val cardUserSearchResult = b.cardUserSearchResult
         val cardUserSearchShortNameTV = b.cardUserSearchShortNameTV
         val cardUserSearchNameTV = b.cardUserSearchNameTV
@@ -57,18 +58,22 @@ class SearchUsersAdapter(
             val userData = userList[position]
 
             holder.cardUserSearchNameTV.text = userData.name
-            holder.cardUserSearchResultPaymaartIdTV.text = userData.paymaartId
+            holder.cardUserSearchResultPaymaartIdTV.text =
+                PaymaartIdFormatter.formatId(userData.paymaartId)
 
-           when (context) {
-               is CashOutSearchActivity -> {holder.cardUserSearchResultPhoneTV.visibility = View.GONE}
-               else -> {
-                   val formattedNumber = StringBuilder(userData.phoneNumber)
-                   formattedNumber.insert(2, ' ')
-                   formattedNumber.insert(6, ' ')
-                   val phone = "${userData.countryCode} $formattedNumber"
-                   holder.cardUserSearchResultPhoneTV.text = phone
-               }
-           }
+            when (context) {
+                is CashOutSearchActivity -> {
+                    holder.cardUserSearchResultPhoneTV.visibility = View.GONE
+                }
+
+                else -> {
+                    val formattedNumber = StringBuilder(userData.phoneNumber)
+                    formattedNumber.insert(2, ' ')
+                    formattedNumber.insert(6, ' ')
+                    val phone = "${userData.countryCode} $formattedNumber"
+                    holder.cardUserSearchResultPhoneTV.text = phone
+                }
+            }
 
             val nameList = userData.name.uppercase().split(" ")
             val shortName = "${nameList[0][0]}${nameList[1][0]}${nameList[2][0]}"
