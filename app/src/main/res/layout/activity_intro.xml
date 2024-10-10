@@ -35,7 +35,7 @@
         android:id="@+id/paymaart_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/image_paymaart_logo"
+        android:src="@drawable/image_paysimati_logo"
         android:contentDescription="@string/image_description"
         app:layout_constraintStart_toStartOf="@id/register_button"
         app:layout_constraintEnd_toEndOf="@id/register_button"
