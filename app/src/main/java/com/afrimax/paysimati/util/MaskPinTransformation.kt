@@ -3,7 +3,7 @@ package com.afrimax.paysimati.util
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 
-class LoginPinTransformation : PasswordTransformationMethod() {
+class MaskPinTransformation : PasswordTransformationMethod() {
     override fun getTransformation(source: CharSequence, view: View): CharSequence {
         return PasswordCharSequence(source)
     }

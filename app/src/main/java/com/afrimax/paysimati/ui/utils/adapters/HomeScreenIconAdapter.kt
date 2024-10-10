@@ -117,14 +117,11 @@ class HomeScreenIconAdapter(
                 AFRIMAX -> {
                     binding.iconName.apply {
                         visibility = View.VISIBLE
+                        text = context.getString(R.string.afrimax)
                     }
-                    binding.iconImage.also {
-                        it.visibility = View.VISIBLE
-                        Glide
-                            .with(holder.itemView.context)
-                            .load(R.drawable.ico_afrimax)
-                            .fitCenter()
-                            .into(it)
+                    binding.iconImage.apply {
+                        visibility = View.VISIBLE
+                        setImageDrawable(context.getDrawableExt(R.drawable.ico_afrimax))
                     }
                 }
                 PAY_PERSON -> {

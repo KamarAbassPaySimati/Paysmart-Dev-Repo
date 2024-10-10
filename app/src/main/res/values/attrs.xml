@@ -3,6 +3,7 @@
     <declare-styleable name="TextField">
         <attr name="titleText" format="string" />
         <attr name="hintText" format="string" />
+        <attr name="titleTint" format="color" />
         <attr name="contentText" format="string" />
         <attr name="warningText" format="string" />
         <attr name="isWarningTextEnabled" format="boolean" />
@@ -46,6 +47,12 @@
         <attr name="android:digits" />
         <attr name="isWarningTextEnabled" />
         <attr name="isOptionalField" />
+    </declare-styleable>
+
+    <declare-styleable name="AutoAcceptPinField">
+        <attr name="titleText" />
+        <attr name="titleTint" />
+        <attr name="isWarningTextEnabled" />
     </declare-styleable>
 
     <declare-styleable name="PrimaryButton">
