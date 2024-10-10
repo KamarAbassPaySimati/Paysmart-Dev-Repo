@@ -470,7 +470,7 @@
 
                     </LinearLayout>
 
-                    <com.afrimax.paymaart.common.presentation.ui.text_field.verify_phone.VerifyPhoneField
+                    <com.afrimax.paysimati.common.presentation.ui.text_field.verify_phone.VerifyPhoneField
                         android:id="@+id/onboardRegistrationActivityPhoneTF"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.afrimax.paysimati">
 
     <uses-feature android:name="android.hardware.camera.any" />
 
@@ -22,25 +23,25 @@
         <activity
             android:name=".ui.payperson.PayPersonActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:taskAffinity=".payment"/>
+            android:taskAffinity=".payment"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.payperson.UnregisteredPayActivity"
-            android:windowSoftInputMode="adjustResize"
             android:exported="false"
-            android:taskAffinity=".payment"/>
+            android:taskAffinity=".payment"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.payperson.PersonTransactionActivity"
             android:exported="false"
-            android:taskAffinity=".payment"/>
+            android:taskAffinity=".payment" />
         <activity
             android:name=".ui.payperson.ListPersonTransactionActivity"
             android:exported="false"
-            android:taskAffinity=".payment"/>
+            android:taskAffinity=".payment" />
         <activity
             android:name=".ui.viewtransactions.ViewSpecificTransactionActivity"
             android:exported="false"
-            android:taskAffinity=".payment"/>
+            android:taskAffinity=".payment" />
         <activity
             android:name=".ui.webview.HelpCenterActivity"
             android:exported="false" />
