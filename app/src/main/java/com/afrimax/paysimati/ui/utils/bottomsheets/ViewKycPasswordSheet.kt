@@ -12,8 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.data.utils.safeApiCall
+import com.afrimax.paysimati.common.domain.utils.GenericResult
 import com.afrimax.paysimati.data.ApiClient
-import com.afrimax.paysimati.data.model.SelfKycDetailsResponse
 import com.afrimax.paysimati.databinding.ViewKycPasswordBottomSheetBinding
 import com.afrimax.paysimati.ui.utils.interfaces.ViewSelfKycInterface
 import com.afrimax.paysimati.ui.viewkyc.ViewKycDetailsActivity
@@ -21,11 +22,8 @@ import com.afrimax.paysimati.util.AESCrypt
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class ViewKycPasswordSheet: BottomSheetDialogFragment() {
+class ViewKycPasswordSheet : BottomSheetDialogFragment() {
     private lateinit var b: ViewKycPasswordBottomSheetBinding
 
     private lateinit var sheetCallback: ViewSelfKycInterface
@@ -125,48 +123,37 @@ class ViewKycPasswordSheet: BottomSheetDialogFragment() {
             val idToken = activity.fetchIdToken()
 
             val encryptedPassword = AESCrypt.encrypt(b.viewKycPasswordSheetET.text.toString())
-            val selfKycDetailsCall = ApiClient.apiService.getSelfKycDetails(encryptedPassword, idToken)
+            val viewKycCall = safeApiCall {
+                ApiClient.apiService.getSelfKycDetails(encryptedPassword, idToken)
+            }
 
-            selfKycDetailsCall.enqueue(object : Callback<SelfKycDetailsResponse> {
-                override fun onResponse(
-                    call: Call<SelfKycDetailsResponse>, response: Response<SelfKycDetailsResponse>
-                ) {
-                    hideButtonLoader(
-                        b.viewKycPasswordSheetViewButton,
-                        b.viewKycPasswordSheetViewButtonLoaderLottie,
-                        getString(R.string.view)
-                    )
-                    val body = response.body()
-                    if (body != null && response.isSuccessful) {
-                        sheetCallback.onClickViewButton(body.data)
-                        dismiss()
-                    } else {
-                        b.viewKycPasswordSheetETWarningTV.visibility = View.VISIBLE
-                        b.viewKycPasswordSheetETWarningTV.text =
-                            getString(R.string.invalid_password)
-                        b.viewKycPasswordSheetET.background = ContextCompat.getDrawable(
-                            requireContext(), R.drawable.bg_edit_text_error
-                        )
-                    }
+            when (viewKycCall) {
+                is GenericResult.Success -> {
+                    sheetCallback.onClickViewButton(viewKycCall.data.data)
+                    dismiss()
                 }
 
-                override fun onFailure(call: Call<SelfKycDetailsResponse>, t: Throwable) {
-                    hideButtonLoader(
-                        b.viewKycPasswordSheetViewButton,
-                        b.viewKycPasswordSheetViewButtonLoaderLottie,
-                        getString(R.string.view)
+                is GenericResult.Error -> {
+                    b.viewKycPasswordSheetETWarningTV.visibility = View.VISIBLE
+                    b.viewKycPasswordSheetETWarningTV.text = getString(R.string.invalid_password)
+                    b.viewKycPasswordSheetET.background = ContextCompat.getDrawable(
+                        requireContext(), R.drawable.bg_edit_text_error
                     )
-                    activity.showToast(getString(R.string.default_error_toast))
                 }
+            }
 
-            })
+            hideButtonLoader(
+                b.viewKycPasswordSheetViewButton,
+                b.viewKycPasswordSheetViewButtonLoaderLottie,
+                getString(R.string.view)
+            )
         }
     }
 
     private fun showButtonLoader(
         actionButton: AppCompatButton, loaderLottie: LottieAnimationView
     ) {
-        actionButton.text = ""
+        actionButton.text = getString(R.string.empty_string)
         b.viewKycPasswordSheetET.isEnabled = false
         b.viewKycPasswordSheetCloseButton.isEnabled = false
         b.viewKycPasswordSheetViewButton.isEnabled = false

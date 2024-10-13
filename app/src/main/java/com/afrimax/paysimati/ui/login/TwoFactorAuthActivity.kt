@@ -24,7 +24,7 @@ import com.afrimax.paysimati.databinding.ActivityTwoFactorAuthBinding
 import com.afrimax.paysimati.ui.home.HomeActivity
 import com.afrimax.paysimati.ui.kyc.KycProgressActivity
 import com.afrimax.paysimati.util.Constants
-import com.afrimax.paysimati.util.LoginPinTransformation
+import com.afrimax.paysimati.util.MaskPinTransformation
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
@@ -72,7 +72,7 @@ class TwoFactorAuthActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        b.twoFactorAuthCodeET.transformationMethod = LoginPinTransformation()
+        b.twoFactorAuthCodeET.transformationMethod = MaskPinTransformation()
         loginMode = intent.getStringExtra(Constants.LOGIN_MODE) ?: ""
     }
 

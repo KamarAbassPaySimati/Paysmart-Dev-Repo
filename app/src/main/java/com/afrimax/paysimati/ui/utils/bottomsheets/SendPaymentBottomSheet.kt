@@ -7,34 +7,28 @@ import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.data.utils.safeApiCall
+import com.afrimax.paysimati.common.domain.utils.Errors
+import com.afrimax.paysimati.common.domain.utils.GenericResult
 import com.afrimax.paysimati.data.ApiClient
-import com.afrimax.paysimati.data.model.CashOutApiResponse
 import com.afrimax.paysimati.data.model.CashOutRequestBody
-import com.afrimax.paysimati.data.model.DefaultResponse
-import com.afrimax.paysimati.data.model.PayToAfrimaxErrorResponse
 import com.afrimax.paysimati.data.model.PayToAfrimaxRequestBody
-import com.afrimax.paysimati.data.model.PayToAfrimaxResponse
 import com.afrimax.paysimati.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paysimati.data.model.PayToUnRegisteredPersonRequest
 import com.afrimax.paysimati.data.model.SubscriptionDetailsRequestBody
 import com.afrimax.paysimati.data.model.SubscriptionPaymentRequestBody
-import com.afrimax.paysimati.data.model.SubscriptionPaymentSuccessfulResponse
 import com.afrimax.paysimati.databinding.SendPaymentBottomSheetBinding
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.utils.interfaces.SendPaymentInterface
 import com.afrimax.paysimati.util.AESCrypt
 import com.afrimax.paysimati.util.Constants
-import com.afrimax.paysimati.util.LoginPinTransformation
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.gson.Gson
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogFragment() {
@@ -42,29 +36,37 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
     private lateinit var sheetCallback: SendPaymentInterface
     private lateinit var parentActivity: BaseActivity
     private lateinit var loginMode: String
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         binding = SendPaymentBottomSheetBinding.inflate(inflater, container, false)
+
         setupView()
+        setUpAutoAcceptPinField()
+
         return binding.root
     }
 
     private fun setupView() {
         parentActivity = activity as BaseActivity
         loginMode = parentActivity.retrieveLoginMode() ?: Constants.SELECTION_PIN
-        binding.sendPaymentPin.transformationMethod = LoginPinTransformation()
+
         when (loginMode) {
             Constants.SELECTION_PIN -> {
-                binding.sendPaymentPinContainer.visibility = View.VISIBLE
+                binding.sendPaymentSheetAPF.visibility = VISIBLE
                 binding.sendPaymentPasswordContainer.visibility = View.GONE
+
+                binding.sendPaymentConfirmButton.visibility = View.GONE
             }
 
             Constants.SELECTION_PASSWORD -> {
-                binding.sendPaymentPinContainer.visibility = View.GONE
-                binding.sendPaymentPasswordContainer.visibility = View.VISIBLE
+                binding.sendPaymentSheetAPF.visibility = View.GONE
+                binding.sendPaymentPasswordContainer.visibility = VISIBLE
+
+                binding.sendPaymentConfirmButton.visibility = VISIBLE
             }
         }
 
@@ -93,10 +95,9 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
             dismiss()
         }
 
-        binding.sendPaymentConfirm.setOnClickListener {
-            when (loginMode) {
-                Constants.SELECTION_PIN -> validatePinField()
-                Constants.SELECTION_PASSWORD -> validatePasswordField()
+        binding.sendPaymentConfirmButton.setOnClickListener {
+            lifecycleScope.launch {
+                validatePasswordField()
             }
         }
 
@@ -104,33 +105,18 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
             onTogglePasswordClicked()
         }
 
-        binding.sendPaymentPin.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(
-                pinText: CharSequence?, index: Int, isBackSpace: Int, isNewDigit: Int,
-            ) {
-                //Remove any error warning text while typing
-                if (binding.sendPaymentPin.text.toString().isEmpty()) {
-                    binding.sendPaymentPinETWarning.visibility = View.VISIBLE
-                    binding.sendPaymentPinETWarning.text = getString(R.string.required_field)
-                } else {
-                    binding.sendPaymentPinETWarning.visibility = View.GONE
-                }
+        binding.sendPaymentPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
             }
 
-            override fun afterTextChanged(editable: Editable?) {}
-
-        })
-
-        binding.sendPaymentPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                //
+            }
 
             override fun afterTextChanged(p0: Editable?) {
                 if (binding.sendPaymentPassword.text.isEmpty()) {
-                    binding.sendPaymentPasswordETWarning.visibility = View.VISIBLE
+                    binding.sendPaymentPasswordETWarning.visibility = VISIBLE
                     binding.sendPaymentPasswordETWarning.text = getString(R.string.required_field)
                     binding.sendPaymentPasswordBox.background =
                         ContextCompat.getDrawable(requireContext(), R.drawable.bg_edit_text_error)
@@ -139,10 +125,31 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                     binding.sendPaymentPasswordETWarning.visibility = View.GONE
                     binding.sendPaymentPasswordBox.background =
                         ContextCompat.getDrawable(requireContext(), R.drawable.bg_edit_text_focused)
-                    binding.sendPaymentPasswordToggle.visibility = View.VISIBLE
+                    binding.sendPaymentPasswordToggle.visibility = VISIBLE
                 }
             }
         })
+    }
+
+    private fun setUpAutoAcceptPinField() {
+        binding.sendPaymentSheetAPF.apply {
+            onPinEntered {
+                lifecycleScope.launch {
+                    when (data) {
+                        is SubscriptionDetailsRequestBody -> onConfirmClickedPayPaymaart(text, data)
+                        is PayToAfrimaxRequestBody -> onConfirmClickedPayAfrimax(text, data)
+                        is CashOutRequestBody -> onConfirmClickedCashOut(text, data)
+                        is PayToUnRegisteredPersonRequest -> onConfirmClickedPayUnRegisteredPerson(
+                            text, data
+                        )
+
+                        is PayToRegisteredPersonRequest -> onConfirmClickedPayRegisteredPerson(
+                            text, data
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun onTogglePasswordClicked() {
@@ -159,47 +166,7 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
         binding.sendPaymentPassword.setSelection(binding.sendPaymentPassword.length())
     }
 
-    private fun validatePinField() {
-        var isValid = true
-        binding.sendPaymentPinETWarning.visibility = View.GONE
-
-        if (binding.sendPaymentPin.text.toString().isEmpty()) {
-            isValid = false
-            binding.sendPaymentPinETWarning.visibility = View.VISIBLE
-            binding.sendPaymentPinETWarning.text = getString(R.string.required_field)
-        } else if (binding.sendPaymentPin.text.toString().length != 6) {
-            isValid = false
-            binding.sendPaymentPinETWarning.visibility = View.VISIBLE
-            binding.sendPaymentPinETWarning.text = getString(R.string.invalid_pin)
-        }
-
-        if (isValid) {
-            when (data) {
-                is SubscriptionDetailsRequestBody -> onConfirmClickedPayPaymaart(
-                    binding.sendPaymentPin.text.toString(), data
-                )
-
-                is PayToAfrimaxRequestBody -> onConfirmClickedPayAfrimax(
-                    binding.sendPaymentPin.text.toString(), data
-                )
-
-                is CashOutRequestBody -> onConfirmClickedCashOut(
-                    binding.sendPaymentPin.text.toString(), data
-                )
-
-                is PayToUnRegisteredPersonRequest -> onConfirmClickedPayUnRegisteredPerson(
-                    binding.sendPaymentPin.text.toString(), data
-                )
-
-                is PayToRegisteredPersonRequest -> onConfirmClickedPayRegisteredPerson(
-                    binding.sendPaymentPin.text.toString(),
-                    data
-                )
-            }
-        }
-    }
-
-    private fun validatePasswordField() {
+    private suspend fun validatePasswordField() {
         var isValid = true
         binding.sendPaymentPasswordETWarning.visibility = View.GONE
         binding.sendPaymentPasswordBox.background =
@@ -207,7 +174,7 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
 
         if (binding.sendPaymentPassword.text.isEmpty()) {
             isValid = false
-            binding.sendPaymentPasswordETWarning.visibility = View.VISIBLE
+            binding.sendPaymentPasswordETWarning.visibility = VISIBLE
             binding.sendPaymentPasswordETWarning.text = getString(R.string.required_field)
             binding.sendPaymentPasswordBox.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.bg_edit_text_error)
@@ -232,20 +199,19 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                 )
 
                 is PayToRegisteredPersonRequest -> onConfirmClickedPayRegisteredPerson(
-                    binding.sendPaymentPassword.text.toString(),
-                    data
+                    binding.sendPaymentPassword.text.toString(), data
                 )
             }
         }
     }
 
-    private fun onConfirmClickedPayPaymaart(
+    private suspend fun onConfirmClickedPayPaymaart(
         password: String, data: SubscriptionDetailsRequestBody
     ) {
         val activity = context as BaseActivity
         val credential = AESCrypt.encrypt(password)
         activity.hideKeyboard(view, requireContext())
-        showButtonLoader()
+
         val subscriptionPaymentRequestBody = SubscriptionPaymentRequestBody(
             referenceNumber = data.referenceNumber,
             subType = data.subType,
@@ -253,288 +219,142 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
             autoRenew = data.autoRenew
         )
 
-        lifecycleScope.launch {
-            val idToken = activity.fetchIdToken()
-            val subscriptionHandler = ApiClient.apiService.subscriptionPayment(
+
+        val idToken = activity.fetchIdToken()
+        val subscriptionHandler = safeApiCall {
+            ApiClient.apiService.subscriptionPayment(
                 idToken, subscriptionPaymentRequestBody
             )
+        }
 
-            subscriptionHandler.enqueue(object : Callback<SubscriptionPaymentSuccessfulResponse> {
-                override fun onResponse(
-                    call: Call<SubscriptionPaymentSuccessfulResponse>,
-                    response: Response<SubscriptionPaymentSuccessfulResponse>
-                ) {
-                    if (response.isSuccessful && response.body() != null) {
-                        dismiss()
-                        sheetCallback.onPaymentSuccess(response.body()?.subscriptionPaymentDetails)
-                    } else {
-                        val errorBody = Gson().fromJson(
-                            response.errorBody()?.string(), DefaultResponse::class.java
-                        )
-                        if (errorBody.message == "Invalid Credential") {
-                            when (loginMode) {
-                                Constants.SELECTION_PIN -> {
-                                    binding.sendPaymentPinETWarning.apply {
-                                        visibility = View.VISIBLE
-                                        text = getString(R.string.invalid_pin)
-                                    }
-                                }
+        when (subscriptionHandler) {
+            is GenericResult.Success -> {
+                dismiss()
+                sheetCallback.onPaymentSuccess(subscriptionHandler.data.subscriptionPaymentDetails)
+            }
 
-                                Constants.SELECTION_PASSWORD -> {
-                                    binding.sendPaymentPasswordETWarning.apply {
-                                        visibility = View.VISIBLE
-                                        text = getString(R.string.invalid_password)
-                                    }
-                                }
-                            }
-                        } else {
-                            displayError(errorBody.message)
-                        }
-                    }
-                    hideButtonLoader()
-                }
-
-                override fun onFailure(
-                    call: Call<SubscriptionPaymentSuccessfulResponse>, throwable: Throwable
-                ) {
-                    hideButtonLoader()
-                    activity.showToast(getString(R.string.default_error_toast))
-                }
-            })
+            is GenericResult.Error -> handleError(subscriptionHandler.error)
         }
     }
 
-    private fun onConfirmClickedPayAfrimax(password: String, data: PayToAfrimaxRequestBody) {
+    private suspend fun onConfirmClickedPayAfrimax(
+        password: String, data: PayToAfrimaxRequestBody
+    ) {
         val activity = requireContext() as BaseActivity
         val encryptedPassword = AESCrypt.encrypt(password)
         activity.hideKeyboard(view, requireContext())
         val newRequestBody = data.copy(password = encryptedPassword)
-        showButtonLoader()
-        lifecycleScope.launch {
-            val idToken = activity.fetchIdToken()
-            val payToAfrimaxHandler = ApiClient.apiService.payToAfrimax(
+
+        val idToken = activity.fetchIdToken()
+        val payToAfrimaxHandler = safeApiCall {
+            ApiClient.apiService.payToAfrimax(
                 idToken, newRequestBody
             )
+        }
 
-            payToAfrimaxHandler.enqueue(object : Callback<PayToAfrimaxResponse> {
-                override fun onResponse(
-                    call: Call<PayToAfrimaxResponse>, response: Response<PayToAfrimaxResponse>
-                ) {
-                    if (response.isSuccessful && response.body() != null) {
-                        dismiss()
-                        sheetCallback.onPaymentSuccess(response.body()?.payAfrimaxResponse)
-                    } else {
-                        val errorBody = Gson().fromJson(
-                            response.errorBody()?.string(), PayToAfrimaxErrorResponse::class.java
-                        )
-                        if (errorBody.message == "Invalid password") {
-                            when (loginMode) {
-                                Constants.SELECTION_PIN -> {
-                                    binding.sendPaymentPinETWarning.apply {
-                                        visibility = View.VISIBLE
-                                        text = getString(R.string.invalid_pin)
-                                    }
-                                }
+        when (payToAfrimaxHandler) {
+            is GenericResult.Success -> {
+                dismiss()
+                sheetCallback.onPaymentSuccess(payToAfrimaxHandler.data.payAfrimaxResponse)
+            }
 
-                                Constants.SELECTION_PASSWORD -> {
-                                    binding.sendPaymentPasswordETWarning.apply {
-                                        visibility = View.VISIBLE
-                                        text = getString(R.string.invalid_password)
-                                    }
-                                }
-                            }
-                        } else {
-                            displayError(errorBody.message)
-                        }
-                    }
-                    hideButtonLoader()
-                }
-
-                override fun onFailure(call: Call<PayToAfrimaxResponse>, throwable: Throwable) {
-                    hideButtonLoader()
-                    activity.showToast(getString(R.string.default_error_toast))
-                }
-
-            })
+            is GenericResult.Error -> handleError(payToAfrimaxHandler.error)
         }
     }
 
-    private fun onConfirmClickedCashOut(password: String, data: CashOutRequestBody) {
+    private suspend fun onConfirmClickedCashOut(password: String, data: CashOutRequestBody) {
         val activity = requireContext() as BaseActivity
         val encryptedPassword = AESCrypt.encrypt(password)
         val newRequestBody = data.copy(password = encryptedPassword)
         activity.hideKeyboard(view, requireContext())
-        showButtonLoader()
-        lifecycleScope.launch {
-            val idToken = activity.fetchIdToken()
-            val selfCashOutCall = ApiClient.apiService.cashOut(
+
+        val idToken = activity.fetchIdToken()
+        val selfCashOutCall = safeApiCall {
+            ApiClient.apiService.cashOut(
                 idToken, newRequestBody
             )
+        }
 
-            selfCashOutCall.enqueue(object : Callback<CashOutApiResponse> {
-                override fun onResponse(
-                    call: Call<CashOutApiResponse>,
-                    response: Response<CashOutApiResponse>,
-                ) {
-                    hideButtonLoader()
-                    val body = response.body()
-                    if (body != null && response.isSuccessful) {
-                        sheetCallback.onPaymentSuccess(body.cashOutResponse)
-                        dismiss()
-                    } else {
-                        val errorBody = Gson().fromJson(
-                            response.errorBody()?.string(), DefaultResponse::class.java
-                        )
-                        if (errorBody.message == "Incorrect password") {
-                            when (loginMode) {
-                                Constants.SELECTION_PIN -> {
-                                    binding.sendPaymentPinETWarning.apply {
-                                        visibility = View.VISIBLE
-                                        text = getString(R.string.invalid_pin)
-                                    }
-                                }
+        when (selfCashOutCall) {
+            is GenericResult.Success -> {
+                sheetCallback.onPaymentSuccess(selfCashOutCall.data.cashOutResponse)
+                dismiss()
+            }
 
-                                Constants.SELECTION_PASSWORD -> {
-                                    binding.sendPaymentPasswordETWarning.apply {
-                                        visibility = View.VISIBLE
-                                        text = getString(R.string.invalid_password)
-                                    }
-                                }
-                            }
-                        } else {
-                            displayError(errorBody.message)
-                        }
-
-                    }
-                }
-
-                override fun onFailure(p0: Call<CashOutApiResponse>, p1: Throwable) {
-                    hideButtonLoader()
-                    activity.showToast(getString(R.string.default_error_toast))
-                }
-
-            })
+            is GenericResult.Error -> handleError(selfCashOutCall.error)
         }
     }
 
-    private fun onConfirmClickedPayUnRegisteredPerson(
+    private suspend fun onConfirmClickedPayUnRegisteredPerson(
         password: String, data: PayToUnRegisteredPersonRequest
     ) {
         val activity = requireContext() as BaseActivity
         val encryptedPassword = AESCrypt.encrypt(password)
         val newRequestBody = data.copy(password = encryptedPassword)
         activity.hideKeyboard(view, requireContext())
-        showButtonLoader()
-        lifecycleScope.launch {
-            val idToken = activity.fetchIdToken()
-            val payToUnRegisteredCall = ApiClient.apiService.payToUnRegisteredPerson(
+
+        val idToken = activity.fetchIdToken()
+        val payToUnRegisteredCall = safeApiCall {
+            ApiClient.apiService.payToUnRegisteredPerson(
                 idToken, newRequestBody
             )
+        }
 
-            val body = payToUnRegisteredCall.body()
-
-            if (payToUnRegisteredCall.isSuccessful && body != null) {
-                sheetCallback.onPaymentSuccess(body.data)
+        when (payToUnRegisteredCall) {
+            is GenericResult.Success -> {
+                sheetCallback.onPaymentSuccess(payToUnRegisteredCall.data.data)
                 dismiss()
-            } else {
-                val errorBody =
-                    Gson().fromJson(
-                        payToUnRegisteredCall.errorBody()?.string(),
-                        DefaultResponse::class.java
-                    )
-                if (errorBody.message == "Incorrect password") {
-                    when (loginMode) {
-                        Constants.SELECTION_PIN -> {
-                            binding.sendPaymentPinETWarning.apply {
-                                visibility = View.VISIBLE
-                                text = getString(R.string.invalid_pin)
-                            }
-                        }
-
-                        Constants.SELECTION_PASSWORD -> {
-                            binding.sendPaymentPasswordETWarning.apply {
-                                visibility = View.VISIBLE
-                                text = getString(R.string.invalid_password)
-                            }
-                        }
-                    }
-                } else {
-                    displayError(errorBody.message)
-                }
             }
 
+            is GenericResult.Error -> handleError(payToUnRegisteredCall.error)
         }
     }
 
 
-    private fun onConfirmClickedPayRegisteredPerson(
+    private suspend fun onConfirmClickedPayRegisteredPerson(
         password: String, data: PayToRegisteredPersonRequest
     ) {
         val activity = requireContext() as BaseActivity
         val encryptedPassword = AESCrypt.encrypt(password)
         val newRequestBody = data.copy(credential = encryptedPassword)
         activity.hideKeyboard(view, requireContext())
-        showButtonLoader()
-        lifecycleScope.launch {
-            val idToken = activity.fetchIdToken()
-            val payToUnRegisteredCall = ApiClient.apiService.payToRegisteredPerson(
+
+        val idToken = activity.fetchIdToken()
+        val payToUnRegisteredCall = safeApiCall {
+            ApiClient.apiService.payToRegisteredPerson(
                 idToken, newRequestBody
             )
+        }
 
-            val body = payToUnRegisteredCall.body()
-
-            if (payToUnRegisteredCall.isSuccessful && body != null) {
-                sheetCallback.onPaymentSuccess(body.data)
+        when (payToUnRegisteredCall) {
+            is GenericResult.Success -> {
+                sheetCallback.onPaymentSuccess(payToUnRegisteredCall.data.data)
                 dismiss()
-            } else {
-                val errorBody =
-                    Gson().fromJson(
-                        payToUnRegisteredCall.errorBody()?.string(),
-                        DefaultResponse::class.java
-                    )
-                if (errorBody.message == "Incorrect password") {
-                    when (loginMode) {
-                        Constants.SELECTION_PIN -> {
-                            binding.sendPaymentPinETWarning.apply {
-                                visibility = View.VISIBLE
-                                text = getString(R.string.invalid_pin)
-                            }
-                        }
+            }
 
-                        Constants.SELECTION_PASSWORD -> {
-                            binding.sendPaymentPasswordETWarning.apply {
-                                visibility = View.VISIBLE
-                                text = getString(R.string.invalid_password)
-                            }
-                        }
+            is GenericResult.Error -> handleError(payToUnRegisteredCall.error)
+        }
+    }
+
+    private fun handleError(error: Errors.Network) {
+        when (error) {
+            Errors.Network.UNAUTHORIZED, Errors.Network.BAD_REQUEST -> {
+                when (loginMode) {
+                    Constants.SELECTION_PIN -> {
+                        binding.sendPaymentSheetAPF.showWarning(warningText = getString(R.string.invalid_pin))
                     }
-                } else {
-                    displayError(errorBody.message)
+
+                    Constants.SELECTION_PASSWORD -> {
+                        binding.sendPaymentPasswordETWarning.visibility = VISIBLE
+                        binding.sendPaymentPasswordETWarning.text = getString(R.string.invalid_pin)
+                    }
                 }
             }
 
-        }
-    }
-
-    private fun displayError(message: String) {
-        //A quick fix.
-        dismiss()
-        sheetCallback.onPaymentFailure(message)
-    }
-
-    private fun showButtonLoader() {
-        binding.sendPaymentConfirmLoaderLottie.visibility = View.VISIBLE
-        binding.sendPaymentConfirm.apply {
-            text = getString(R.string.empty_string)
-            isEnabled = false
-        }
-    }
-
-    private fun hideButtonLoader() {
-        binding.sendPaymentConfirmLoaderLottie.visibility = View.GONE
-        binding.sendPaymentConfirm.apply {
-            text = getString(R.string.confirm)
-            isEnabled = true
+            else -> {
+                sheetCallback.onPaymentFailure(getString(R.string.default_error_toast))
+                dismiss()
+            }
         }
     }
 
