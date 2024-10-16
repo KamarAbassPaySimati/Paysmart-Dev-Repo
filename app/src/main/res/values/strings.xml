@@ -733,4 +733,5 @@
     <string name="paysimati_id_and_name">PaySimati ID, name</string>
     <string name="phone_number_and_name">Phone number, name</string>
     <string name="no_contacts_permission">No contacts Permission</string>
+    <string name="paymaart_website_and_email">www.paysimati.com\u00A0\u00A0•\u00A0\u00A0hello@paysimati.com</string>
 </resources>
