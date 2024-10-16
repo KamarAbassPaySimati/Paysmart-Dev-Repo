@@ -83,7 +83,7 @@ class PayAfrimax {
             }
 
             "Login Pin" -> {
-                Espresso.onView(withId(R.id.sendPaymentPinETWarning)).check(
+                Espresso.onView(withId(R.id.sendPaymentSheetAPF)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -139,7 +139,7 @@ class PayAfrimax {
 
     @When("I enter login PIN {string} for payment")
     fun enterLoginPin(pin: String) {
-        Espresso.onView(withId(R.id.sendPaymentPin)).perform(
+        Espresso.onView(withId(R.id.sendPaymentSheetAPF)).perform(
             ViewActions.replaceText(""), ViewActions.typeText(pin), ViewActions.closeSoftKeyboard()
         )
     }
@@ -152,7 +152,7 @@ class PayAfrimax {
 
     @Then("I should be asked for the login pin for payment")
     fun askingForLoginPin() {
-        Espresso.onView(withId(R.id.sendPaymentPin))
+        Espresso.onView(withId(R.id.sendPaymentSheetAPF))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
 
@@ -165,7 +165,7 @@ class PayAfrimax {
 
     @When("I click on the confirm button for login pin")
     fun clickingOnConfirmButtonForLogin() {
-        Espresso.onView(withId(R.id.sendPaymentConfirm))
+        Espresso.onView(withId(R.id.sendPaymentConfirmButton))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }

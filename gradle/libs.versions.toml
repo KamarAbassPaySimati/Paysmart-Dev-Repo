@@ -70,6 +70,7 @@ aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.r
 aws-storage-s3 = { module = "com.amplifyframework:aws-storage-s3", version.ref = "awsAuthCognito" }
 blurry = { module = "jp.wasabeef:blurry", version.ref = "blurry" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 core-kotlin = { module = "com.amplifyframework:core-kotlin", version.ref = "awsAuthCognito" }
 cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumberAndroid" }
 cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberAndroid" }

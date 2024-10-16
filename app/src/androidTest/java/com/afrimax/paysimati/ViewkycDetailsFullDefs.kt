@@ -63,14 +63,12 @@ class ViewkycDetailsFullDefs {
 
     @When("I click on confirm authorisation")
     fun clickingForPinConfirmation() {
-        Espresso.onView(ViewMatchers.withId(R.id.viewKycPinSheetViewButton))
-            .perform(ViewActions.click())
-        Thread.sleep(5000)
+      //
     }
 
     @Then("I should see error message {string} for view kyc")
     fun iShouldSeeErrorMessageFor2FA(errorMessage: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.viewKycPinSheetETWarningTV))
+        Espresso.onView(ViewMatchers.withId(R.id.viewKycPinSheetAPF))
             .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
     }
 
@@ -84,7 +82,7 @@ class ViewkycDetailsFullDefs {
 
     @When("I enter authorisation PIN {string} for view kyc")
     fun enterLoginPin(pin: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.viewKycPinSheetET)).perform(
+        Espresso.onView(ViewMatchers.withId(R.id.viewKycPinSheetAPF)).perform(
             ViewActions.replaceText(""), ViewActions.typeText(pin), ViewActions.closeSoftKeyboard()
         )
     }

@@ -200,6 +200,7 @@ dependencies {
     //Retrofit & GSON
     implementation libs.retrofit
     implementation libs.converter.gson
+    implementation(libs.converter.scalars)
 
     //Amplify
     implementation libs.aws.auth.cognito
