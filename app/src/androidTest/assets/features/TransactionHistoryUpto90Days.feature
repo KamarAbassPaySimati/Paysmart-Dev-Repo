@@ -22,3 +22,14 @@ Feature:Paymaart - Customer Android - Transaction histroy upto 90days
     Then I should see recent four transactions
     When I click on see all link
     Then I should see list of Transactions of last 90 days
+    When I click the back button in transaction history screen
+    Then I should be redirected to home screen
+    When I open menu and navigate to Wallet Statement
+    When I select "Last 90 days" as time period for downloading wallet statement
+    And I click on export Wallet statement
+    Then I should see a pop-up asking type of file to be downloaded
+    When I select "PDF" as file type
+    Then I should read a message stating Exported Successfully for downloading wallet statement
+
+
+
