@@ -7,19 +7,23 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.DP
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.ApiClient
@@ -369,13 +373,42 @@ class ViewSpecificTransactionActivity : BaseActivity() {
 
 
     private fun getBitmapFromView(view: View, height: Int, width: Int): Bitmap {
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
+        val bottomTextColor =
+            ContextCompat.getColor(this@ViewSpecificTransactionActivity, R.color.neutralGrey)
+        val bottomTextFont = ResourcesCompat.getFont(view.context, R.font.inter_regular)
+        val bottomTextString = getString(R.string.paymaart_website_and_email)
+
+        val textView = TextView(view.context).apply {
+            text = bottomTextString
+            textSize = 12f
+            setTextColor(bottomTextColor)
+            gravity = Gravity.CENTER
+            setPadding(16.DP, 0, 16.DP, 16.DP)
+            typeface = bottomTextFont
+        }
+
+        val textViewWidthSpec = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY)
+        val textViewHeightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        textView.measure(textViewWidthSpec, textViewHeightSpec)
+        textView.layout(0, 0, textView.measuredWidth, textView.measuredHeight)
+
+        // Measure the original view
+        val finalBitmap =
+            Bitmap.createBitmap(width, height + textView.measuredHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(finalBitmap)
+
+        // Draw the original view on the canvas
         val bgDrawable: Drawable? = view.background
-        if (bgDrawable != null) bgDrawable.draw(canvas)
-        else canvas.drawColor(Color.WHITE)
+        if (bgDrawable != null) {
+            bgDrawable.draw(canvas)
+        } else {
+            canvas.drawColor(Color.WHITE)
+        }
         view.draw(canvas)
-        return bitmap
+        canvas.translate(0f, height.toFloat())
+        textView.draw(canvas)
+
+        return finalBitmap
     }
 
     private fun getImageToShare(bitmap: Bitmap): Uri? {

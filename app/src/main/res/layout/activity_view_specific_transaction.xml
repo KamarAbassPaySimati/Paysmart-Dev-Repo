@@ -610,7 +610,7 @@
                 android:id="@+id/paymentReceiptActivityButtonContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_above="@+id/paymentReceiptActivityBottomText"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="32dp"
                 android:gravity="center"
@@ -636,6 +636,19 @@
                     android:src="@drawable/ico_share_primary" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/paymentReceiptActivityBottomText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/paymaart_website_and_email"
+                android:textColor="@color/neutralGrey"
+                android:textSize="12sp" />
 
         </RelativeLayout>
 

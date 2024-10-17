@@ -22,7 +22,7 @@
             android:contentDescription="@string/close_button_data"
             android:padding="16dp"
             android:src="@drawable/ic_close"
-            app:tint="@color/black"/>
+            app:tint="@color/black" />
 
     </RelativeLayout>
 
@@ -510,8 +510,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:lineHeight="16dp"
                         android:fontFamily="@font/inter_regular"
+                        android:lineHeight="16dp"
                         android:text="@string/note"
                         android:textColor="@color/neutralGreyPrimaryText"
                         android:textSize="14sp"
@@ -529,7 +529,7 @@
         android:id="@+id/paymentSuccessfulButtonContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/paymentSuccessfulBottomText"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="32dp"
         android:gravity="center"
@@ -539,10 +539,10 @@
             android:id="@+id/paymentSuccessfulFlagPayment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
             android:background="@drawable/bg_payment_status_button"
             android:contentDescription="@string/flag_payment_data"
             android:padding="16dp"
-            android:layout_marginEnd="32dp"
             android:src="@drawable/ico_flag_primary" />
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -555,5 +555,18 @@
             android:src="@drawable/ico_share_primary" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/paymentSuccessfulBottomText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/inter_regular"
+        android:text="@string/paymaart_website_and_email"
+        android:textColor="@color/neutralGrey"
+        android:textSize="12sp" />
 
 </RelativeLayout>
