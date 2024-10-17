@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.databinding.ActivityIntroBinding
 import com.afrimax.paysimati.ui.login.LoginActivity
 import com.afrimax.paysimati.ui.register.RegisterActivity
@@ -25,6 +26,8 @@ class IntroActivity : AppCompatActivity() {
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsController.isAppearanceLightStatusBars = false
         setContentView(binding.root)
+
+        binding.introActivityVersionTV.text = BuildConfig.VERSION_NAME
 
         binding.registerButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))

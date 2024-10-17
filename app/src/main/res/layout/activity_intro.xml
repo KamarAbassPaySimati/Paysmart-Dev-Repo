@@ -71,6 +71,7 @@
         android:background="@color/primaryLight">
 
         <TextView
+            android:id="@+id/introActivityVersionTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingVertical="9dp"
