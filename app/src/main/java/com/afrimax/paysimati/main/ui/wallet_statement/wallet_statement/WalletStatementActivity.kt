@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.afrimax.paysimati.common.presentation.utils.UiText
 import com.afrimax.paysimati.common.presentation.utils.showBottomSheet
 import com.afrimax.paysimati.common.presentation.utils.showSnack
 import com.afrimax.paysimati.common.presentation.utils.showToast
@@ -128,6 +129,7 @@ class WalletStatementActivity : AppCompatActivity() {
 
     private fun setUpExportButton() {
         val sheet = ExportTypeSheet(downloadPdf = {
+            showToast(UiText.Dynamic("Download Started"))
             vm(WalletStatementIntent.ExportPdfData)
         }, downloadCsv = {
             null
