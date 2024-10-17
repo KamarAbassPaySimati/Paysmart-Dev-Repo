@@ -66,15 +66,17 @@ class DownloadManager(private val context: Context) {
 
         if (uri != null) {
             try {
-                val result = context.contentResolver.openOutputStream(uri)?.use { outputStream ->
-                    responseBody.byteStream().use { inputStream ->
-                        copyStream(
-                            inputStream = inputStream,
-                            outputStream = outputStream,
-                            totalBytes = responseBody.contentLength(),
-                            fileUri = uri,
-                            mimeType = mimeType
-                        )
+                val result = withContext(Dispatchers.IO) {
+                    context.contentResolver.openOutputStream(uri)?.use { outputStream ->
+                        responseBody.byteStream().use { inputStream ->
+                            copyStream(
+                                inputStream = inputStream,
+                                outputStream = outputStream,
+                                totalBytes = responseBody.contentLength(),
+                                fileUri = uri,
+                                mimeType = mimeType
+                            )
+                        }
                     }
                 }
 

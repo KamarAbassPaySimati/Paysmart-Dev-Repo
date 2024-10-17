@@ -184,6 +184,8 @@ dependencies {
     implementation(libs.xmlbeans)
     androidTestImplementation libs.stax.api
     androidTestImplementation libs.aalto.xml
+    //Idling registry support for Espresso
+    implementation libs.androidx.espresso.idling.resource
 
     //dependency injection
 
