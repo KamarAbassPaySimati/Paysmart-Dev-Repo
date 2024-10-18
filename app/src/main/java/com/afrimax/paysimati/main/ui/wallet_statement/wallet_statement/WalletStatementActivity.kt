@@ -132,7 +132,8 @@ class WalletStatementActivity : AppCompatActivity() {
             showToast(UiText.Dynamic("Download Started"))
             vm(WalletStatementIntent.ExportPdfData)
         }, downloadCsv = {
-            null
+            showToast(UiText.Dynamic("Download Started"))
+            vm(WalletStatementIntent.ExportCsvData)
         })
 
         b.walletStatementActivityExportButton.apply {

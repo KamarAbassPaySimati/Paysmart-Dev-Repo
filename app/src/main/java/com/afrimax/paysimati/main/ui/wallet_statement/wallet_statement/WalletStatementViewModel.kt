@@ -10,7 +10,9 @@ import com.afrimax.paysimati.common.presentation.utils.asUiText
 import com.afrimax.paysimati.common.presentation.utils.currentState
 import com.afrimax.paysimati.common.presentation.utils.postSideEffect
 import com.afrimax.paysimati.common.presentation.utils.reduceState
+import com.afrimax.paysimati.main.domain.usecase.DownloadCsvFileUseCase
 import com.afrimax.paysimati.main.domain.usecase.DownloadPdfFileUseCase
+import com.afrimax.paysimati.main.domain.usecase.FetchWalletStatementCsvUrlUseCase
 import com.afrimax.paysimati.main.domain.usecase.FetchWalletStatementPdfUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -23,7 +25,9 @@ import javax.inject.Inject
 class WalletStatementViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fetchWalletStatementPdfUrlUseCase: FetchWalletStatementPdfUrlUseCase,
-    private val downloadPdfFileUseCase: DownloadPdfFileUseCase
+    private val fetchWalletStatementCsvUrlUseCase: FetchWalletStatementCsvUrlUseCase,
+    private val downloadPdfFileUseCase: DownloadPdfFileUseCase,
+    private val downloadCsvFileUseCase: DownloadCsvFileUseCase
 ) : ViewModel(), ContainerHost<WalletStatementState, WalletStatementSideEffect> {
 
     private val initialState = savedStateHandle[VIEW_MODEL_STATE] ?: WalletStatementState(
@@ -40,6 +44,7 @@ class WalletStatementViewModel @Inject constructor(
     operator fun invoke(action: WalletStatementIntent): Job? {
         return when (action) {
             is WalletStatementIntent.ExportPdfData -> exportPdfData()
+            is WalletStatementIntent.ExportCsvData -> exportCsvData()
             is WalletStatementIntent.SetSelectedOption -> setSelectedOption(option = action.option)
         }
     }
@@ -50,6 +55,26 @@ class WalletStatementViewModel @Inject constructor(
 
             pdfUrl?.let {
                 when (val downloadCall = downloadPdfFileUseCase(fileUrl = it)) {
+                    is GenericResult.Success -> postSideEffect {
+                        WalletStatementSideEffect.ShowToast(
+                            UiText.Dynamic("File downloaded successfully")
+                        )
+                    }
+
+                    is GenericResult.Error -> postSideEffect {
+                        WalletStatementSideEffect.ShowToast(downloadCall.error.asUiText())
+                    }
+                }
+            }
+        }
+    }
+
+    private fun exportCsvData(): Job {
+        return viewModelScope.launch {
+            val csvUrl = fetchWalletStatementCsvUrl(timePeriodOption = currentState.selectedOption)
+
+            csvUrl?.let {
+                when (val downloadCall = downloadCsvFileUseCase(fileUrl = it)) {
                     is GenericResult.Success -> postSideEffect {
                         WalletStatementSideEffect.ShowToast(
                             UiText.Dynamic("File downloaded successfully")
@@ -75,6 +100,17 @@ class WalletStatementViewModel @Inject constructor(
 
     private suspend fun fetchWalletStatementPdfUrl(timePeriodOption: Int): String? {
         val fetchUrlCall = fetchWalletStatementPdfUrlUseCase(timePeriodSelection = timePeriodOption)
+
+        when (fetchUrlCall) {
+            is GenericResult.Success -> return fetchUrlCall.data
+            is GenericResult.Error -> postSideEffect { WalletStatementSideEffect.ShowToast((fetchUrlCall.error.asUiText())) }
+        }
+
+        return null
+    }
+
+    private suspend fun fetchWalletStatementCsvUrl(timePeriodOption: Int): String? {
+        val fetchUrlCall = fetchWalletStatementCsvUrlUseCase(timePeriodSelection = timePeriodOption)
 
         when (fetchUrlCall) {
             is GenericResult.Success -> return fetchUrlCall.data

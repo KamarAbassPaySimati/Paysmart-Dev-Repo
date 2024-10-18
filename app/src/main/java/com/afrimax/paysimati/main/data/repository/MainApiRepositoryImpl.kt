@@ -36,4 +36,26 @@ class MainApiRepositoryImpl(
         }
 
     }
+
+    override suspend fun fetchWalletStatementCsvUrl(timePeriodOption: Int): GenericResult<String, Errors.Network> {
+        val request = mapToExportTimePeriod(timePeriodOption) ?: return GenericResult.Error(
+            Errors.Network.BAD_REQUEST
+        )
+
+        val apiCall = safeApiCall {
+            mainApiService.fetchWalletStatementCsvUrl(
+                header = tokenProvider.token(), timePeriod = request
+            )
+        }
+
+        return when (apiCall) {
+            is GenericResult.Success -> {
+                if (apiCall.data.s3Url != null) GenericResult.Success(apiCall.data.s3Url)
+                else GenericResult.Error(Errors.Network.NO_RESPONSE)
+            }
+
+            is GenericResult.Error -> GenericResult.Error(apiCall.error)
+        }
+
+    }
 }

@@ -164,6 +164,20 @@
                             android:textSize="16sp"
                             app:buttonTint="@color/bg_toggles_selector" />
 
+                        <RadioButton
+                            android:id="@+id/transactionHistorySheetLast90RB"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:minHeight="0dp"
+                            android:padding="16dp"
+                            android:text="@string/last_90_days"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonTint="@color/bg_toggles_selector" />
+
                     </RadioGroup>
 
                     <LinearLayout
