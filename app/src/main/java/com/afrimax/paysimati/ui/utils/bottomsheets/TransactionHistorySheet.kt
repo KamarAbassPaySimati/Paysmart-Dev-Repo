@@ -36,6 +36,7 @@ class TransactionHistorySheet: BottomSheetDialogFragment(){
             7 -> b.transactionHistorySheetLast7RB.isChecked = true
             30 -> b.transactionHistorySheetLast30RB.isChecked = true
             60 -> b.transactionHistorySheetLast60RB.isChecked = true
+            90 -> b.transactionHistorySheetLast90RB.isChecked = true
         }
 
         //Setup type filter
@@ -97,6 +98,7 @@ class TransactionHistorySheet: BottomSheetDialogFragment(){
             R.id.transactionHistorySheetLast7RB -> selectedTime = 7
             R.id.transactionHistorySheetLast30RB -> selectedTime = 30
             R.id.transactionHistorySheetLast60RB -> selectedTime = 60
+            R.id.transactionHistorySheetLast90RB -> selectedTime = 90
         }
         return selectedTime
     }
