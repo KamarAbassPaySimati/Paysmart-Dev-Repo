@@ -27,7 +27,7 @@
                 android:contentDescription="@string/back_button"
                 android:padding="16dp"
                 android:src="@drawable/ic_arrow_back"
-                app:tint="@color/white"/>
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/transactionHistoryActivityHeaderTV"
@@ -83,8 +83,8 @@
                     android:contentDescription="@string/close_button_data"
                     android:padding="12dp"
                     android:src="@drawable/ic_close"
-                    app:tint="@color/neutralGreyPrimaryText"
                     android:visibility="gone"
+                    app:tint="@color/neutralGreyPrimaryText"
                     tools:visibility="visible" />
 
             </RelativeLayout>
@@ -167,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_regular"
                 android:padding="16dp"
-                android:text="@string/recent_transactions_of_last_60_days"
+                android:text="@string/recent_transactions_of_last_90_days"
                 android:textColor="@color/neutralGrey"
                 android:textSize="14sp"
                 android:visibility="gone"

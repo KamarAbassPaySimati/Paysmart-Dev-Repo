@@ -81,7 +81,7 @@ class MakePaymentsToPaymaart {
 
     @When("I click on the confirm button for login pin for membership selection")
     fun clickingOnConfirmButtonForLoginPin() {
-        Espresso.onView(withId(R.id.sendPaymentConfirm))
+        Espresso.onView(withId(R.id.sendPaymentConfirmButton))
             .perform(ViewActions.click())
         Thread.sleep(3000)
     }
@@ -92,7 +92,7 @@ class MakePaymentsToPaymaart {
     }
     @Then("I should be asked for authorisation pin for membership selection")
     fun askingForAuthorisationPin() {
-        Espresso.onView(withId(R.id.sendPaymentPin))
+        Espresso.onView(withId(R.id.sendPaymentSheetAPF))
             .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
     }
     @Then("I should see error message {string} for field with ID {string} for membership selection")
@@ -100,7 +100,7 @@ class MakePaymentsToPaymaart {
 
         when (fieldID) {
             "Login Pin" -> {
-                Espresso.onView(withId(R.id.sendPaymentPinETWarning)).check(
+                Espresso.onView(withId(R.id.sendPaymentSheetAPF)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -110,7 +110,7 @@ class MakePaymentsToPaymaart {
     }
     @When("I enter login PIN {string} for membership selection")
     fun enterLoginPin(pin: String) {
-        Espresso.onView(withId(R.id.sendPaymentPin))
+        Espresso.onView(withId(R.id.sendPaymentSheetAPF))
             .perform(
                 ViewActions.typeText(pin),
                 ViewActions.closeSoftKeyboard()

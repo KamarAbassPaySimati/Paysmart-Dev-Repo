@@ -260,6 +260,7 @@
     <string name="town_village_ta">Town/Village/TA</string>
     <string name="enter_town_village_traditional_authority">Enter town/village/traditional authority</string>
     <string name="district">District</string>
+    <string name="desc_icon">icon</string>
     <string name="enter_district">Enter district</string>
     <string name="save_and_continue">Save and continue</string>
     <string name="skip">Skip</string>
@@ -686,6 +687,7 @@
     <string name="no_transactions_yet">No Transactions Yet</string>
     <string name="no_transactions_subtext">You have no transactions at the moment.</string>
     <string name="recent_transactions_of_last_60_days">Recent transactions in last 60 days</string>
+    <string name="recent_transactions_of_last_90_days">Recent transactions in last 90 days</string>
     <string name="cash_in">Cash-in</string>
     <string name="pay_in">Pay-in</string>
     <string name="pay_out">Pay-out</string>
@@ -734,4 +736,14 @@
     <string name="phone_number_and_name">Phone number, name</string>
     <string name="no_contacts_permission">No contacts Permission</string>
     <string name="paymaart_website_and_email">www.paysimati.com\u00A0\u00A0•\u00A0\u00A0hello@paysimati.com</string>
+    <string name="wallet_statement">Wallet Statement</string>
+    <string name="select_time_period">Select time period</string>
+    <string name="this_month">This Month</string>
+    <string name="last_month">Last Month</string>
+    <string name="last_90_days">Last 90 Days</string>
+    <string name="csv_file_data">Csv file</string>
+    <string name="pdf_file_data">Pdf file</string>
+    <string name="pdf">PDF</string>
+    <string name="csv">CSV</string>
+    <string name="export_as">Export As</string>
 </resources>
