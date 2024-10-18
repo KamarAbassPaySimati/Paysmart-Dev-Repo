@@ -11,6 +11,6 @@ import javax.inject.Named
 class WalletStatementConfig {
 
     @Provides
-    @Named("walletStatementPdfNamePrefix")
-    fun provideWalletStatementPdfName(): String = "wallet_statement"
+    @Named("walletStatementFileNamePrefix")
+    fun provideWalletStatementFileName(): String = "wallet_statement"
 }

@@ -12,4 +12,9 @@ interface MainApiService {
     suspend fun fetchWalletStatementPdfUrl(
         @Header("Authorization") header: String, @Query("timePeriod") timePeriod: String
     ): Response<FetchWalletStatementResponse>
+
+    @GET("customer-user/transaction-history-csv")
+    suspend fun fetchWalletStatementCsvUrl(
+        @Header("Authorization") header: String, @Query("timePeriod") timePeriod: String
+    ): Response<FetchWalletStatementResponse>
 }
