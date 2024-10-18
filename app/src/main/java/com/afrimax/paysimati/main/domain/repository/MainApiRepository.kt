@@ -6,4 +6,6 @@ import com.afrimax.paysimati.common.domain.utils.GenericResult
 interface MainApiRepository {
 
     suspend fun fetchWalletStatementPdfUrl(timePeriodOption: Int): GenericResult<String, Errors.Network>
+
+    suspend fun fetchWalletStatementCsvUrl(timePeriodOption: Int): GenericResult<String, Errors.Network>
 }
