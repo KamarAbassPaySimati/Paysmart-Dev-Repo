@@ -184,6 +184,8 @@ dependencies {
     implementation(libs.xmlbeans)
     androidTestImplementation libs.stax.api
     androidTestImplementation libs.aalto.xml
+    //Idling registry support for Espresso
+    implementation libs.androidx.espresso.idling.resource
 
     //dependency injection
 
@@ -200,6 +202,7 @@ dependencies {
     //Retrofit & GSON
     implementation libs.retrofit
     implementation libs.converter.gson
+    implementation(libs.converter.scalars)
 
     //Amplify
     implementation libs.aws.auth.cognito

@@ -38,6 +38,7 @@ import com.afrimax.paysimati.data.model.IndividualTransactionHistory
 import com.afrimax.paysimati.data.model.PayPersonTransactions
 import com.afrimax.paysimati.data.model.WalletData
 import com.afrimax.paysimati.databinding.ActivityHomeBinding
+import com.afrimax.paysimati.main.ui.wallet_statement.wallet_statement.WalletStatementActivity
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.cashout.CashOutSearchActivity
 import com.afrimax.paysimati.ui.delete.DeleteAccountActivity
@@ -352,6 +353,12 @@ class HomeActivity : BaseActivity(), HomeInterface {
             dest = HELP_CENTER
             b.homeActivity.closeDrawer(GravityCompat.END)
         }
+
+        b.homeActivityNavView.homeDrawerWalletStatementTV.setOnClickListener {
+            dest = WALLET_STATEMENT
+            b.homeActivity.closeDrawer(GravityCompat.END)
+        }
+
         b.homeActivityNavView.homeDrawerFaqTV.setOnClickListener {
             dest = FAQS
             b.homeActivity.closeDrawer(GravityCompat.END)
@@ -436,6 +443,10 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
                     HELP_CENTER -> {
                         startActivity(Intent(this@HomeActivity, HelpCenterActivity::class.java))
+                    }
+
+                    WALLET_STATEMENT -> {
+                        startActivity(Intent(this@HomeActivity, WalletStatementActivity::class.java))
                     }
 
                     FAQS -> {
@@ -817,6 +828,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         const val DRAWER_ABOUT_US = 15
         const val HELP_CENTER = 16
         const val FAQS = 17
+        const val WALLET_STATEMENT = 18
     }
 
     override fun onClickViewBalance(viewWalletScope: String, data: WalletData?) {

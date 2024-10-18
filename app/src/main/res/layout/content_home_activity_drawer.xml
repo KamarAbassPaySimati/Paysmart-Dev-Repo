@@ -100,6 +100,20 @@
 
 
         <TextView
+            android:id="@+id/homeDrawerWalletStatementTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center_vertical|start"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/wallet_statement"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:drawableStartCompat="@drawable/ic_wallet_statement" />
+
+        <TextView
             android:id="@+id/homeDrawerHelpCenterTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
