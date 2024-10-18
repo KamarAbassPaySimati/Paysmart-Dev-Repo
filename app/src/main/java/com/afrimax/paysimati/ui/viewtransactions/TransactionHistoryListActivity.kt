@@ -126,7 +126,7 @@ class TransactionHistoryListActivity : BaseActivity(), TransactionHistoryInterfa
                     if (time != null)
                         putInt(Constants.TRANSACTION_FILTER_TIME, time!!)
                     else
-                        putInt(Constants.TRANSACTION_FILTER_TIME, 60)
+                        putInt(Constants.TRANSACTION_FILTER_TIME, 90)
                     putString(Constants.TRANSACTION_FILTER_TYPE, type)
                 }
             }.show(supportFragmentManager, TransactionHistorySheet.TAG)
@@ -254,7 +254,7 @@ class TransactionHistoryListActivity : BaseActivity(), TransactionHistoryInterfa
         search = searchString
         pageValue = body.nextPage
         //Set title if not searching
-        if (time == null || time == 60) b.transactionHistoryActivityRecentTransactionsTV.visibility =
+        if (time == null || time == 90) b.transactionHistoryActivityRecentTransactionsTV.visibility =
             View.VISIBLE
         else b.transactionHistoryActivityRecentTransactionsTV.visibility = View.GONE
 
