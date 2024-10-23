@@ -21,9 +21,7 @@ class ViewWalletBalance {
 
     @When("I click on view balance button")
     fun clickViewButtonForWalletBalance() {
-        Espresso.onView(ViewMatchers.withId(R.id.viewWalletPinSheetViewButton))
-            .perform(ViewActions.click())
-        Thread.sleep(5000)
+    //
     }
 
     @Then("I should be asked for the login pin for viewing wallet balance")
@@ -34,13 +32,13 @@ class ViewWalletBalance {
 
     @Then("I should see error message {string} for viewing wallet balance")
     fun seeErrorMessage(errorMessage: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.viewWalletPinSheetETWarningTV))
+        Espresso.onView(ViewMatchers.withId(R.id.viewWalletPinSheetAPF))
             .check(ViewAssertions.matches(ViewMatchers.withText(errorMessage)))
     }
 
     @When("I enter authorisation PIN {string} for viewing wallet balance")
     fun enterLoginPin(pin: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.viewWalletPinSheetET)).perform(
+        Espresso.onView(ViewMatchers.withId(R.id.viewWalletPinSheetAPF)).perform(
             ViewActions.replaceText(""), ViewActions.typeText(pin), ViewActions.closeSoftKeyboard()
         )
     }

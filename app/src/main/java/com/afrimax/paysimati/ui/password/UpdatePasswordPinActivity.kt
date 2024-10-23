@@ -10,8 +10,6 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -25,13 +23,12 @@ import com.afrimax.paysimati.data.model.DefaultResponse
 import com.afrimax.paysimati.data.model.UpdatePinOrPasswordRequest
 import com.afrimax.paysimati.databinding.ActivityUpdatePasswordPinBinding
 import com.afrimax.paysimati.ui.BaseActivity
-import com.afrimax.paysimati.ui.intro.IntroActivity
 import com.afrimax.paysimati.ui.login.LoginActivity
 import com.afrimax.paysimati.ui.utils.bottomsheets.PasswordGuideBottomSheet
 import com.afrimax.paysimati.ui.utils.bottomsheets.PinGuideBottomSheet
 import com.afrimax.paysimati.util.AESCrypt
 import com.afrimax.paysimati.util.Constants
-import com.afrimax.paysimati.util.LoginPinTransformation
+import com.afrimax.paysimati.util.MaskPinTransformation
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.core.Amplify
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -64,8 +61,8 @@ class UpdatePasswordPinActivity : BaseActivity() {
     }
 
     private fun initViews() {
-        b.updatePasswordPinActivityNewPinET.transformationMethod = LoginPinTransformation()
-        b.updatePasswordPinActivityConfirmPinET.transformationMethod = LoginPinTransformation()
+        b.updatePasswordPinActivityNewPinET.transformationMethod = MaskPinTransformation()
+        b.updatePasswordPinActivityConfirmPinET.transformationMethod = MaskPinTransformation()
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

@@ -2,29 +2,22 @@ package com.afrimax.paysimati.ui.utils.bottomsheets
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.data.utils.safeApiCall
+import com.afrimax.paysimati.common.domain.utils.Errors
+import com.afrimax.paysimati.common.domain.utils.GenericResult
 import com.afrimax.paysimati.data.ApiClient
-import com.afrimax.paysimati.data.model.ViewWalletResponse
 import com.afrimax.paysimati.databinding.ViewWalletBalancePinBottomSheetBinding
 import com.afrimax.paysimati.ui.home.HomeActivity
 import com.afrimax.paysimati.ui.utils.interfaces.HomeInterface
 import com.afrimax.paysimati.util.AESCrypt
 import com.afrimax.paysimati.util.Constants
-import com.afrimax.paysimati.util.LoginPinTransformation
-import com.afrimax.paysimati.util.showLogE
-import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ViewWalletPinSheet : BottomSheetDialogFragment() {
 
@@ -45,11 +38,13 @@ class ViewWalletPinSheet : BottomSheetDialogFragment() {
         initViews()
         setUpListeners()
 
+        setUpAutoAcceptPinField()
+
         return b.root
     }
 
     private fun initViews() {
-        b.viewWalletPinSheetET.transformationMethod = LoginPinTransformation()
+        //
     }
 
     private fun setUpListeners() {
@@ -57,122 +52,46 @@ class ViewWalletPinSheet : BottomSheetDialogFragment() {
         b.viewWalletPinSheetCloseButton.setOnClickListener {
             dismiss()
         }
-
-        b.viewWalletPinSheetViewButton.setOnClickListener {
-            validateFieldForView()
-        }
-
-        configureEditTextPinChangeListener()
-
     }
 
-    private fun validateFieldForView() {
-        var isValid = true
-        b.viewWalletPinSheetETWarningTV.visibility = View.GONE
-
-        if (b.viewWalletPinSheetET.text.toString().isEmpty()) {
-            isValid = false
-            b.viewWalletPinSheetETWarningTV.visibility = View.VISIBLE
-            b.viewWalletPinSheetETWarningTV.text = getString(R.string.required_field)
-        } else if (b.viewWalletPinSheetET.text.toString().length != 6) {
-            isValid = false
-            b.viewWalletPinSheetETWarningTV.visibility = View.VISIBLE
-            b.viewWalletPinSheetETWarningTV.text = getString(R.string.invalid_pin)
-        }
-
-        if (isValid) getWalletDetailsApi()
-
-    }
-
-    private fun configureEditTextPinChangeListener() {
-        b.viewWalletPinSheetET.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(
-                pinText: CharSequence?, index: Int, isBackSpace: Int, isNewDigit: Int
-            ) {
-                //Remove any error warning text while typing
-                if (b.viewWalletPinSheetET.text.toString().isEmpty()) {
-                    b.viewWalletPinSheetETWarningTV.visibility = View.VISIBLE
-                    b.viewWalletPinSheetETWarningTV.text = getString(R.string.required_field)
-                } else {
-                    b.viewWalletPinSheetETWarningTV.visibility = View.GONE
+    private fun setUpAutoAcceptPinField() {
+        b.viewWalletPinSheetAPF.apply {
+            onPinEntered {
+                lifecycleScope.launch {
+                    getWalletDetailsApi()
                 }
             }
-
-            override fun afterTextChanged(editable: Editable?) {
-                //
-            }
-
-        })
+        }
     }
 
-    private fun getWalletDetailsApi() {
-        showButtonLoader(
-            b.viewWalletPinSheetViewButton, b.viewWalletPinSheetViewButtonLoaderLottie
-        )
-        lifecycleScope.launch {
-            val activity = requireActivity() as HomeActivity
-            val idToken = activity.fetchIdToken()
-            val encryptedPin = AESCrypt.encrypt(b.viewWalletPinSheetET.text.toString())
-            "REsponse".showLogE(encryptedPin)
-            val selfKycDetailsCall = ApiClient.apiService.viewWallet(idToken, encryptedPin)
 
-            selfKycDetailsCall.enqueue(object : Callback<ViewWalletResponse> {
-                override fun onResponse(
-                    call: Call<ViewWalletResponse>, response: Response<ViewWalletResponse>
-                ) {
-                    hideButtonLoader(
-                        b.viewWalletPinSheetViewButton,
-                        b.viewWalletPinSheetViewButtonLoaderLottie,
-                        getString(R.string.view)
-                    )
-                    val body = response.body()
-                    if (body != null && response.isSuccessful) {
-                        sheetCallback.onClickViewBalance(viewWalletScope, body.data)
-                        dismiss()
-                    } else {
-                        b.viewWalletPinSheetETWarningTV.visibility = View.VISIBLE
-                        b.viewWalletPinSheetETWarningTV.text = getString(R.string.invalid_pin)
+    private suspend fun getWalletDetailsApi() {
+
+
+        val activity = requireActivity() as HomeActivity
+        val idToken = activity.fetchIdToken()
+        val encryptedPin = AESCrypt.encrypt(b.viewWalletPinSheetAPF.text)
+
+        val viewWalletCall = safeApiCall {
+            ApiClient.apiService.viewWallet(idToken, encryptedPin)
+        }
+
+        when (viewWalletCall) {
+            is GenericResult.Success -> {
+                sheetCallback.onClickViewBalance(viewWalletScope, viewWalletCall.data.data)
+                dismiss()
+            }
+
+            is GenericResult.Error -> {
+                when (viewWalletCall.error) {
+                    Errors.Network.UNAUTHORIZED, Errors.Network.BAD_REQUEST -> {
+                        b.viewWalletPinSheetAPF.showWarning(getString(R.string.invalid_pin))
                     }
-                }
 
-                override fun onFailure(call: Call<ViewWalletResponse>, t: Throwable) {
-                    hideButtonLoader(
-                        b.viewWalletPinSheetViewButton,
-                        b.viewWalletPinSheetViewButtonLoaderLottie,
-                        getString(R.string.view)
-                    )
-                    "Response".showLogE(t.message ?: "")
-                    activity.showToast(getString(R.string.default_error_toast))
+                    else -> b.viewWalletPinSheetAPF.showWarning(getString(R.string.default_error_toast))
                 }
-
-            })
+            }
         }
-    }
-
-    private fun showButtonLoader(
-        actionButton: AppCompatButton, loaderLottie: LottieAnimationView
-    ) {
-        actionButton.text = ""
-        b.viewWalletPinSheetET.isEnabled = false
-        b.viewWalletPinSheetCloseButton.isEnabled = false
-        b.viewWalletPinSheetViewButton.isEnabled = false
-        loaderLottie.visibility = View.VISIBLE
-
-    }
-
-    private fun hideButtonLoader(
-        actionButton: AppCompatButton, loaderLottie: LottieAnimationView, buttonText: String
-    ) {
-        actionButton.text = buttonText
-        b.viewWalletPinSheetET.isEnabled = true
-        b.viewWalletPinSheetCloseButton.isEnabled = true
-        b.viewWalletPinSheetViewButton.isEnabled = true
-        loaderLottie.visibility = View.GONE
-
     }
 
     override fun onAttach(context: Context) {

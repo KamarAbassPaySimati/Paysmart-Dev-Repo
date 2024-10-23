@@ -114,7 +114,7 @@ class CashOutRequest {
             }
 
             "PIN" -> {
-                Espresso.onView(withId(R.id.sendPaymentPinETWarning)).check(
+                Espresso.onView(withId(R.id.sendPaymentSheetAPF)).check(
                     ViewAssertions.matches(
                         ViewMatchers.withText(errorMessage)
                     )
@@ -153,14 +153,14 @@ class CashOutRequest {
 
     @Then("I enter authorisation PIN {string} for requesting cash-out")
     fun enterAuthorisationPIN(pin: String) {
-        Espresso.onView(withId(R.id.sendPaymentPin)).perform(
+        Espresso.onView(withId(R.id.sendPaymentSheetAPF)).perform(
             ViewActions.replaceText(""), ViewActions.typeText(pin), ViewActions.closeSoftKeyboard()
         )
     }
 
     @When("I click on confirm button for requesting cash-out")
     fun clickConfirmCashOutButton() {
-        Espresso.onView(withId(R.id.sendPaymentConfirm))
+        Espresso.onView(withId(R.id.sendPaymentConfirmButton))
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }

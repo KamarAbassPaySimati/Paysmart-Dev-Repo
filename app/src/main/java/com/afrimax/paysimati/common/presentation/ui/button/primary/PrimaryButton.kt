@@ -65,6 +65,16 @@ class PrimaryButton @JvmOverloads constructor(
         }
     }
 
+    // ====================================================================
+    //                        PUBLIC PROPERTIES & METHODS
+    // ====================================================================
+
+    var text: String
+        get() = b.primaryButton.text.toString()
+        set(value) {
+            b.primaryButton.text = value
+        }
+
     fun setOnClickListener(listener: () -> Job?) {
         b.primaryButton.setOnClickListener {
             if (cxt is LifecycleOwner) {

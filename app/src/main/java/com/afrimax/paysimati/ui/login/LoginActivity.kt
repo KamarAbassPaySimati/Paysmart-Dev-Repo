@@ -31,7 +31,7 @@ import com.afrimax.paysimati.ui.register.RegisterActivity
 import com.afrimax.paysimati.ui.utils.bottomsheets.LoginLoginByDialog
 import com.afrimax.paysimati.ui.utils.interfaces.LoginByDialogInterface
 import com.afrimax.paysimati.util.Constants
-import com.afrimax.paysimati.util.LoginPinTransformation
+import com.afrimax.paysimati.util.MaskPinTransformation
 import com.afrimax.paysimati.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.auth.cognito.options.AWSCognitoAuthSignInOptions
@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity(), LoginByDialogInterface {
     }
 
     private fun initViews() {
-        b.loginActivityPinET.transformationMethod = LoginPinTransformation()
+        b.loginActivityPinET.transformationMethod = MaskPinTransformation()
     }
 
     private fun setSpinnerDropdownHeight(
