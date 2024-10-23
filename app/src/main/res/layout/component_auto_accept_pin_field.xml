@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/autoAcceptPinField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/autoAcceptPinFieldTitleTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/title" />
+
+        <com.poovam.pinedittextfield.SquarePinField
+            android:id="@+id/autoAcceptPinFieldET"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-7dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="-7dp"
+            android:layout_marginBottom="-7dp"
+            android:background="@color/transparent"
+            android:inputType="number"
+            android:textColor="@color/neutralGreyPrimaryText"
+            android:textSize="24sp"
+            app:cornerRadius="6dp"
+            app:distanceInBetween="16dp"
+            app:fieldBgColor="@color/neutralGreyTextFieldBackground"
+            app:fieldColor="@color/transparent"
+            app:fillerColor="@color/primaryColor"
+            app:highlightColor="@color/primaryColor"
+            app:isCustomBackground="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/autoAcceptPinFieldTitleTV"
+            app:lineThickness="0.5dp"
+            app:noOfFields="6" />
+
+        <TextView
+            android:id="@+id/autoAcceptPinFieldWarningTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/invalid_code"
+            android:textColor="@color/accentNegative"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/autoAcceptPinFieldET"
+            tools:visibility="visible" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/autoAcceptPinFieldLoaderLottie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/autoAcceptPinFieldET"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/static_button_loader" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</merge>

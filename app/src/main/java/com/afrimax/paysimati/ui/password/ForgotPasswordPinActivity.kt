@@ -17,12 +17,8 @@ import android.view.animation.AccelerateInterpolator
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -39,7 +35,7 @@ import com.afrimax.paysimati.ui.utils.bottomsheets.PasswordGuideBottomSheet
 import com.afrimax.paysimati.ui.utils.bottomsheets.PinGuideBottomSheet
 import com.afrimax.paysimati.util.AESCrypt
 import com.afrimax.paysimati.util.Constants
-import com.afrimax.paysimati.util.LoginPinTransformation
+import com.afrimax.paysimati.util.MaskPinTransformation
 import com.afrimax.paysimati.util.RecaptchaManager
 import com.afrimax.paysimati.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
@@ -89,8 +85,8 @@ private val recaptchaClient: RecaptchaClient
     private fun initViews() {
         showEmailView()
 
-        b.forgotPasswordPinActivityNewPinET.transformationMethod = LoginPinTransformation()
-        b.forgotPasswordPinActivityConfirmPinET.transformationMethod = LoginPinTransformation()
+        b.forgotPasswordPinActivityNewPinET.transformationMethod = MaskPinTransformation()
+        b.forgotPasswordPinActivityConfirmPinET.transformationMethod = MaskPinTransformation()
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

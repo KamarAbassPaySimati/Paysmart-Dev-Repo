@@ -157,9 +157,9 @@ interface ApiService {
     fun getMembershipDetails(@Header("Authorization") header: String): Call<MembershipPlansResponse>
 
     @GET("$CUSTOMER_USER/view-self-kyc-customer")
-    fun getSelfKycDetails(
+    suspend fun getSelfKycDetails(
         @Query(value = "password") password: String, @Header("Authorization") header: String
-    ): Call<SelfKycDetailsResponse>
+    ): Response<SelfKycDetailsResponse>
 
     @POST("$KYC_UPDATE/send-otp-mobile-customer")
     fun sendOtpForEditSelfKyc(
@@ -208,9 +208,9 @@ interface ApiService {
     ): Call<DefaultResponse>
 
     @GET("$CUSTOMER_USER/view-wallet")
-    fun viewWallet(
+    suspend fun viewWallet(
         @Header("Authorization") header: String, @Query("password") password: String
-    ): Call<ViewWalletResponse>
+    ): Response<ViewWalletResponse>
 
     @POST("$PAYMAART/$CUSTOMER/subscription-details")
     fun getSubscriptionDetails(
@@ -218,9 +218,9 @@ interface ApiService {
     ): Call<SubscriptionDetailsResponse>
 
     @POST("$PAYMAART/$CUSTOMER/subscription-payment")
-    fun subscriptionPayment(
+    suspend fun subscriptionPayment(
         @Header("Authorization") header: String, @Body body: SubscriptionPaymentRequestBody
-    ): Call<SubscriptionPaymentSuccessfulResponse>
+    ): Response<SubscriptionPaymentSuccessfulResponse>
 
     @PATCH("$PAYMAART/$CUSTOMER/update-auto-renew")
     fun updateAutoRenewal(
@@ -238,9 +238,9 @@ interface ApiService {
     ): Call<GetAfrimaxPlansResponse>
 
     @POST("$AFRIMAX/cmr/payment")
-    fun payToAfrimax(
+    suspend fun payToAfrimax(
         @Header("Authorization") header: String, @Body body: PayToAfrimaxRequestBody
-    ): Call<PayToAfrimaxResponse>
+    ): Response<PayToAfrimaxResponse>
 
     @POST("flag-transaction/flag-transaction-customer")
     fun flagTransaction(
@@ -265,9 +265,9 @@ interface ApiService {
     ): Call<SearchUsersDataResponse>
 
     @POST("$CASHIN_CASHOUT/request-cashout-customer")
-    fun cashOut(
+    suspend fun cashOut(
         @Header("Authorization") header: String, @Body body: CashOutRequestBody
-    ): Call<CashOutApiResponse>
+    ): Response<CashOutApiResponse>
 
     @GET("$CASHIN_CASHOUT/calc-fee")
     fun getTransactionDetails(
@@ -315,8 +315,7 @@ interface ApiService {
 
     @POST("$CUSTOMER_USER/search-by-phone")
     suspend fun searchUsersByPhoneCredentials(
-        @Header("Authorization") header: String,
-        @Body body: PayPersonRequestBody
+        @Header("Authorization") header: String, @Body body: PayPersonRequestBody
     ): Response<PayPersonResponse>
 
     @GET("$CUSTOMER_USER/view-transaction")
@@ -328,8 +327,7 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/recent-transaction")
     fun getPersonRecentTransactionList(
-        @Header("Authorization") header: String,
-        @Query("page") page: Int = 1
+        @Header("Authorization") header: String, @Query("page") page: Int = 1
     ): Call<PayPersonResponse>
 
     @POST("bank-transactions/customer/payment-details")

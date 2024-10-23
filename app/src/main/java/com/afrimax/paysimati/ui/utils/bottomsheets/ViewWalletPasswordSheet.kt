@@ -12,8 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.data.utils.safeApiCall
+import com.afrimax.paysimati.common.domain.utils.GenericResult
 import com.afrimax.paysimati.data.ApiClient
-import com.afrimax.paysimati.data.model.ViewWalletResponse
 import com.afrimax.paysimati.databinding.ViewWalletBalancePasswordBottomSheetBinding
 import com.afrimax.paysimati.ui.home.HomeActivity
 import com.afrimax.paysimati.ui.utils.interfaces.HomeInterface
@@ -22,9 +23,6 @@ import com.afrimax.paysimati.util.Constants
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class ViewWalletPasswordSheet : BottomSheetDialogFragment() {
 
@@ -54,7 +52,9 @@ class ViewWalletPasswordSheet : BottomSheetDialogFragment() {
         }
 
         b.viewWalletPasswordSheetViewButton.setOnClickListener {
-            validateFieldForView()
+            lifecycleScope.launch {
+                validateFieldForView()
+            }
         }
 
         configureEditTextFocusListener()
@@ -62,7 +62,7 @@ class ViewWalletPasswordSheet : BottomSheetDialogFragment() {
 
     }
 
-    private fun validateFieldForView() {
+    private suspend fun validateFieldForView() {
         var isValid = true
         b.viewWalletPasswordSheetETWarningTV.visibility = View.GONE
         b.viewWalletPasswordSheetET.background =
@@ -124,52 +124,39 @@ class ViewWalletPasswordSheet : BottomSheetDialogFragment() {
         })
     }
 
-    private fun getWalletDetailsApi() {
+    private suspend fun getWalletDetailsApi() {
         showButtonLoader(
             b.viewWalletPasswordSheetViewButton, b.viewWalletPasswordSheetViewButtonLoaderLottie
         )
-        lifecycleScope.launch {
-            val activity = requireActivity() as HomeActivity
-            val idToken = activity.fetchIdToken()
-            activity.hideKeyboard(view, requireContext())
-            val encryptedPassword = AESCrypt.encrypt(b.viewWalletPasswordSheetET.text.toString())
-            val selfKycDetailsCall = ApiClient.apiService.viewWallet(idToken, encryptedPassword)
 
-            selfKycDetailsCall.enqueue(object : Callback<ViewWalletResponse> {
-                override fun onResponse(
-                    call: Call<ViewWalletResponse>, response: Response<ViewWalletResponse>
-                ) {
-                    hideButtonLoader(
-                        b.viewWalletPasswordSheetViewButton,
-                        b.viewWalletPasswordSheetViewButtonLoaderLottie,
-                        getString(R.string.view)
-                    )
-                    val body = response.body()
-                    if (body != null && response.isSuccessful) {
-
-                        sheetCallback.onClickViewBalance(viewWalletScope, body.data)
-                        dismiss()
-                    } else {
-                        b.viewWalletPasswordSheetETWarningTV.visibility = View.VISIBLE
-                        b.viewWalletPasswordSheetETWarningTV.text =
-                            getString(R.string.invalid_password)
-                        b.viewWalletPasswordSheetET.background = ContextCompat.getDrawable(
-                            requireContext(), R.drawable.bg_edit_text_error
-                        )
-                    }
-                }
-
-                override fun onFailure(call: Call<ViewWalletResponse>, t: Throwable) {
-                    hideButtonLoader(
-                        b.viewWalletPasswordSheetViewButton,
-                        b.viewWalletPasswordSheetViewButtonLoaderLottie,
-                        getString(R.string.view)
-                    )
-                    activity.showToast(getString(R.string.default_error_toast))
-                }
-
-            })
+        val activity = requireActivity() as HomeActivity
+        val idToken = activity.fetchIdToken()
+        activity.hideKeyboard(view, requireContext())
+        val encryptedPassword = AESCrypt.encrypt(b.viewWalletPasswordSheetET.text.toString())
+        val viewWalletCall = safeApiCall {
+            ApiClient.apiService.viewWallet(idToken, encryptedPassword)
         }
+
+        when (viewWalletCall) {
+            is GenericResult.Success -> {
+                sheetCallback.onClickViewBalance(viewWalletScope, viewWalletCall.data.data)
+                dismiss()
+            }
+
+            is GenericResult.Error -> {
+                b.viewWalletPasswordSheetETWarningTV.visibility = View.VISIBLE
+                b.viewWalletPasswordSheetETWarningTV.text = getString(R.string.invalid_password)
+                b.viewWalletPasswordSheetET.background = ContextCompat.getDrawable(
+                    requireContext(), R.drawable.bg_edit_text_error
+                )
+            }
+        }
+
+        hideButtonLoader(
+            b.viewWalletPasswordSheetViewButton,
+            b.viewWalletPasswordSheetViewButtonLoaderLottie,
+            getString(R.string.view)
+        )
     }
 
     private fun showButtonLoader(
