@@ -59,4 +59,25 @@
         <attr name="buttonText" />
     </declare-styleable>
 
+    <!--    Bar-->
+    <declare-styleable name="Bar">
+        <attr name="leftIcon" format="reference" />
+        <attr name="rightFirstIcon" format="reference" />
+        <attr name="rightSecondIcon" format="reference" />
+        <attr name="maxProgress" format="integer" />
+        <attr name="progress" format="integer" />
+        <attr name="progressText" format="string" />
+        <attr name="bgTint" format="color" />
+        <attr name="contentTint" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="BasicTopBar">
+        <attr name="titleText" />
+        <attr name="leftIcon" />
+        <attr name="rightFirstIcon" />
+        <attr name="rightSecondIcon" />
+        <attr name="contentTint" />
+        <attr name="bgTint" />
+    </declare-styleable>
+
 </resources>

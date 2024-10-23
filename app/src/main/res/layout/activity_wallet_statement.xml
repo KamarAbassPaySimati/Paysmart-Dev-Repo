@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/walletStatementActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".main.ui.wallet_statement.wallet_statement.WalletStatementActivity">
+
+    <com.afrimax.paysimati.common.presentation.ui.bar.basic_top.BasicTopBar
+        android:id="@+id/walletStatementActivityBTB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentTint="@color/neutralGreyPrimaryText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleText="@string/wallet_statement" />
+
+    <ScrollView
+        android:id="@+id/walletStatementActivitySV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/walletStatementActivityExportButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/walletStatementActivityBTB">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/select_time_period"
+                android:textColor="@color/neutralGreyPrimaryText"
+                android:textSize="14sp" />
+
+            <RadioGroup
+                android:id="@+id/walletStatementActivityRG"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/walletStatementActivityOption1RB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/inter_regular"
+                    android:minHeight="0dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/today"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="16sp"
+                    app:buttonTint="@color/bg_toggles_selector" />
+
+                <RadioButton
+                    android:id="@+id/walletStatementActivityOption2RB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:minHeight="0dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/yesterday"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="16sp"
+                    app:buttonTint="@color/bg_toggles_selector" />
+
+                <RadioButton
+                    android:id="@+id/walletStatementActivityOption3RB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:minHeight="0dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/last_7_days"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="16sp"
+                    app:buttonTint="@color/bg_toggles_selector" />
+
+                <RadioButton
+                    android:id="@+id/walletStatementActivityOption4RB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:minHeight="0dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/this_month"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="16sp"
+                    app:buttonTint="@color/bg_toggles_selector" />
+
+                <RadioButton
+                    android:id="@+id/walletStatementActivityOption5RB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:minHeight="0dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/last_month"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="16sp"
+                    app:buttonTint="@color/bg_toggles_selector" />
+
+                <RadioButton
+                    android:id="@+id/walletStatementActivityOption6RB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:minHeight="0dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/last_60_days"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="16sp"
+                    app:buttonTint="@color/bg_toggles_selector" />
+
+                <RadioButton
+                    android:id="@+id/walletStatementActivityOption7RB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
+                    android:minHeight="0dp"
+                    android:paddingVertical="16dp"
+                    android:text="@string/last_90_days"
+                    android:textColor="@color/neutralGreyPrimaryText"
+                    android:textSize="16sp"
+                    app:buttonTint="@color/bg_toggles_selector" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <com.afrimax.paysimati.common.presentation.ui.button.primary.PrimaryButton
+        android:id="@+id/walletStatementActivityExportButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:buttonText="Export Wallet Statement"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

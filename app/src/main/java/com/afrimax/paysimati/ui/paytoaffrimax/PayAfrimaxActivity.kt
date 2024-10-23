@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.NameFormatter
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.AfrimaxPlan
 import com.afrimax.paysimati.data.model.GetAfrimaxPlansResponse
@@ -78,7 +79,7 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
     }
 
     private fun setUpLayout() {
-        b.payAfrimaxActivityShortNameTV.text = getInitials(afrimaxName)
+        b.payAfrimaxActivityShortNameTV.text = NameFormatter.shortName(afrimaxName)
         b.payAfrimaxActivityNameTV.text = afrimaxName
         b.payAfrimaxActivityAfrimaxIdTV.text = afrimaxId
     }
