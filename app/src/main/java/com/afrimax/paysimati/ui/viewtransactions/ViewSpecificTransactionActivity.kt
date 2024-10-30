@@ -177,7 +177,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityBalanceContainer.visibility = VISIBLE
                 b.paymentReceiptActivityBalanceTV.text = getString(
                     R.string.amount_formatted,
-                    getFormattedAmount(transactionDetail.receiverClosingBalance)
+                    getFormattedAmount(transactionDetail.senderClosingBalance)
                 )
             }
 
@@ -303,6 +303,13 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                     )
                 )
                 b.paymentReceiptActivityFlagPaymentIV.visibility = View.GONE
+                b.paymentReceiptActivityBalanceContainer.visibility = VISIBLE
+                b.paymentReceiptActivityBalanceTV.text =
+                    getString(
+                        R.string.amount_formatted,
+                        getFormattedAmount(commonView?.senderBalance)
+                    )
+
             }
 
             CASH_OUT_FAILED -> {
@@ -459,7 +466,8 @@ data class CommonViewData(
     val vatIncluded: String,
     val txnId: String,
     val dateTime: Double,
-    val balance: String,
+    val senderBalance: String,
+    val receiverBalance: String,
     val transactionType: String,
 )
 
@@ -474,7 +482,8 @@ fun TransactionDetail.toCommonView() = CommonViewData(
     vatIncluded = this.vat ?: "-",
     txnId = this.transactionId,
     dateTime = this.createdAt ?: 0.0,
-    balance = this.receiverClosingBalance ?: "-",
+    senderBalance = this.senderClosingBalance ?: "-",
+    receiverBalance = this.receiverClosingBalance ?: "-",
     transactionType = this.transactionType
 )
 

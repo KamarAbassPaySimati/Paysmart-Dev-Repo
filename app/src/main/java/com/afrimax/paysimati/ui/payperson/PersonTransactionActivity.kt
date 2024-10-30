@@ -118,10 +118,11 @@ class PersonTransactionActivity : BaseActivity() {
                )
            }*/
 
-        val paymaartIdOrPhone =
-            if (paymaartID.startsWith("CMR")) PaymaartIdFormatter.formatId(paymaartID) else PhoneNumberFormatter.formatWholeNumber(
-                phoneNumber
-            )
+        val paymaartIdOrPhone = when {
+            paymaartID.startsWith("CMR") -> PaymaartIdFormatter.formatId(paymaartID)
+            paymaartID.startsWith("+") -> PhoneNumberFormatter.formatWholeNumber(paymaartID)
+            else -> PhoneNumberFormatter.formatWholeNumber(phoneNumber)
+        }
         binding.paymentListReceiverPaymaartId.text = paymaartIdOrPhone
 
         if (profilePicture.isNotEmpty()) {
