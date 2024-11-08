@@ -239,6 +239,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         payPersonTransactionsAdapter.setOnClickListener(object :
             HomeScreenPayPersonAdapter.OnClickListener {
             override fun onClick(transaction: PayPersonTransactions) {
+                println("mylog, ${transaction.paymaartId}")
                 val intent = Intent(this@HomeActivity, PersonTransactionActivity::class.java)
                 intent.putExtra(Constants.PAYMAART_ID, transaction.paymaartId)
                 intent.putExtra(Constants.PHONE_NUMBER, transaction.phoneNumber)
