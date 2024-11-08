@@ -49,7 +49,6 @@ class ListPersonTransactionActivity : BaseActivity() {
     private var isPaginating: Boolean = false
     private var paginationEnd: Boolean = false
     private var page: Int = 1
-    private var totalListItems: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListPersonTransactionBinding.inflate(layoutInflater)
@@ -95,14 +94,12 @@ class ListPersonTransactionActivity : BaseActivity() {
             RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE && !isPaginating) {
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE && !isPaginating && !paginationEnd) {
                     isPaginating = true
-                    if (!paginationEnd) {
-                        if (searchText.isNotEmpty()) {
-                            paymaartUserPagination()
-                        } else {
-                            getRecentPersonTransactionsPagination()
-                        }
+                    if (searchText.isNotEmpty()) {
+                        paymaartUserPagination()
+                    } else {
+                        getRecentPersonTransactionsPagination()
                     }
                 }
             }
@@ -144,6 +141,7 @@ class ListPersonTransactionActivity : BaseActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(editable: Editable?) {
+                page = 1
                 typeJob?.cancel()
                 typeJob = coroutineScope.launch {
                     delay(500)
@@ -373,13 +371,14 @@ class ListPersonTransactionActivity : BaseActivity() {
                     hideLoader()
                     val data = response.body()
                     if (data != null) {
-                        totalListItems += data.payPersonList.size
-                        paginationEnd = totalListItems >= data.totalCount
+                        mContactsList.clear()
+                        mContactsList.addAll(data.payPersonList)
+
+                        paginationEnd = mContactsList.size >= data.totalCount
                         if (!paginationEnd) {
                             page++
                         }
-                        mContactsList.clear()
-                        mContactsList.addAll(data.payPersonList)
+
                         if (mContactsList.isEmpty()) {
                             binding.listPersonTransactionRV.adapter?.notifyDataSetChanged()
                             showEmptyScreen(false)
@@ -408,7 +407,7 @@ class ListPersonTransactionActivity : BaseActivity() {
             showLoader()
             val idToken = fetchIdToken()
             val recentTransactionHandler =
-                ApiClient.apiService.getPersonRecentTransactionList(idToken, page)
+                ApiClient.apiService.getPersonRecentTransactionList(idToken)
 
             recentTransactionHandler.enqueue(object : Callback<PayPersonResponse> {
                 override fun onResponse(
@@ -422,14 +421,16 @@ class ListPersonTransactionActivity : BaseActivity() {
                         if (payPersonList.isNullOrEmpty()) {
                             showEmptyScreen(true)
                         } else {
-                            totalListItems += data?.payPersonList?.size!!
-                            paginationEnd = totalListItems >= data.totalCount
-                            if (!paginationEnd) {
-                                page++
+                            data?.let {
+                                mContactsList.clear()
+                                mContactsList.addAll(data.payPersonList)
+
+                                paginationEnd = mContactsList.size >= data.totalCount
+                                if (!paginationEnd) {
+                                    page++
+                                }
+                                hideLoader()
                             }
-                            mContactsList.clear()
-                            mContactsList.addAll(data.payPersonList)
-                            hideLoader()
                         }
                     }
                 }
@@ -460,14 +461,21 @@ class ListPersonTransactionActivity : BaseActivity() {
                         if (data?.payPersonList.isNullOrEmpty()) {
                             showEmptyScreen(true)
                         } else {
-                            totalListItems += data?.payPersonList?.size!!
-                            paginationEnd = totalListItems >= data.totalCount
-                            if (!paginationEnd) {
-                                page++
+                            data?.let {
+                                val previousListSize = mContactsList.size
+                                mContactsList.addAll(data.payPersonList)
+
+                                paginationEnd = mContactsList.size >= data.totalCount
+                                if (!paginationEnd) {
+                                    page++
+                                }
+
+                                binding.listPersonTransactionRV.adapter?.notifyItemRangeInserted(
+                                    previousListSize, mContactsList.size
+                                )
                             }
-                            mContactsList.clear()
-                            mContactsList.addAll(data.payPersonList)
                         }
+                        isPaginating = false
                     }
                     hideLoader()
                 }
@@ -487,7 +495,7 @@ class ListPersonTransactionActivity : BaseActivity() {
             try {
                 val response =
                     if (searchByPaymaartCredentials) ApiClient.apiService.searchUsersByPaymaartCredentials(
-                        header = idToken, search = searchText
+                        header = idToken, search = searchText, page = page
                     )
                     else ApiClient.apiService.searchUsersByPhoneCredentials(
                         header = idToken, body = PayPersonRequestBody(phoneNumberList)
@@ -496,12 +504,14 @@ class ListPersonTransactionActivity : BaseActivity() {
                     val data = response.body()
                     if (data != null) {
                         val previousListSize = mContactsList.size
-                        totalListItems += data.payPersonList.size
-                        paginationEnd = totalListItems >= data.totalCount
+
+                        mContactsList.addAll(data.payPersonList)
+
+                        paginationEnd = mContactsList.size >= data.totalCount
                         if (!paginationEnd) {
                             page++
                         }
-                        mContactsList.addAll(data.payPersonList)
+
                         binding.listPersonTransactionRV.adapter?.notifyItemRangeInserted(
                             previousListSize, mContactsList.size
                         )
