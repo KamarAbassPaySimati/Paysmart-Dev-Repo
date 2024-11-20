@@ -88,7 +88,12 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
         b.payPersonActivityPaymaartIdTV.apply {
             if (userData.paymaartId.isNotBlank()) {
                 visibility = VISIBLE
-                text = PaymaartIdFormatter.formatCustomerId(userData.paymaartId)
+                val content = if (userData.paymaartId.startsWith("CMR")) {
+                    PaymaartIdFormatter.formatCustomerId(userData.paymaartId)
+                } else {
+                    PhoneNumberFormatter.formatWholeNumber(userData.paymaartId)
+                }
+                text = content
             } else {
                 visibility = GONE
             }
@@ -97,10 +102,16 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
         b.payPersonActivityPhoneNumberTV.apply {
             if (userData.phoneNumber.isNotBlank()) {
                 visibility = VISIBLE
-                text = if (userData.countryCode.isNotBlank()) PhoneNumberFormatter.format(
-                    userData.countryCode, userData.phoneNumber
-                )
-                else PhoneNumberFormatter.formatWholeNumber(userData.phoneNumber)
+                val content = if (userData.countryCode.isNotBlank()) {
+                    "${userData.countryCode} ${
+                        PhoneNumberFormatter.format(
+                            userData.countryCode, userData.phoneNumber
+                        )
+                    }"
+                } else {
+                    PhoneNumberFormatter.formatWholeNumber(userData.phoneNumber)
+                }
+                text = content
             } else {
                 visibility = GONE
             }

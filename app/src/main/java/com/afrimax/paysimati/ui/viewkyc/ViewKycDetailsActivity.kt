@@ -15,6 +15,7 @@ import androidx.transition.TransitionManager
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
+import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.DefaultResponse
 import com.afrimax.paysimati.data.model.ViewUserData
@@ -24,12 +25,10 @@ import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.kyc.KycCustomerPersonalDetailsActivity
 import com.afrimax.paysimati.ui.kyc.KycFullScreenPreviewActivity
 import com.afrimax.paysimati.ui.kyc.KycProgressActivity
-import com.afrimax.paysimati.ui.utils.bottomsheets.EditSimplifiedKycSheet
 import com.afrimax.paysimati.ui.utils.bottomsheets.ViewKycPasswordSheet
 import com.afrimax.paysimati.ui.utils.bottomsheets.ViewKycPinSheet
 import com.afrimax.paysimati.ui.utils.interfaces.ViewSelfKycInterface
 import com.afrimax.paysimati.util.Constants
-import com.afrimax.paysimati.util.showLogE
 import com.bumptech.glide.Glide
 import jp.wasabeef.blurry.Blurry
 import kotlinx.coroutines.launch
@@ -90,13 +89,10 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         //populate views
         val nameList = accountName.uppercase().split(" ")
         val shortName = "${nameList[0][0]}${nameList[1][0]}${nameList[2][0]}"
-        if (profilePicture.isNotEmpty()){
+        if (profilePicture.isNotEmpty()) {
             val profilePicUrl = BuildConfig.CDN_BASE_URL + profilePicture
             b.viewSelfKycActivityProfileIV.visibility = View.VISIBLE
-            Glide
-                .with(this)
-                .load(profilePicUrl)
-                .into(b.viewSelfKycActivityProfileIV)
+            Glide.with(this).load(profilePicUrl).into(b.viewSelfKycActivityProfileIV)
             b.viewSelfKycActivityShortNameTV.visibility = View.GONE
 
         }
@@ -335,7 +331,10 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
                 ) {
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
-                        val i = Intent(this@ViewKycDetailsActivity, KycCustomerPersonalDetailsActivity::class.java)
+                        val i = Intent(
+                            this@ViewKycDetailsActivity,
+                            KycCustomerPersonalDetailsActivity::class.java
+                        )
                         i.putExtra(Constants.KYC_SCOPE, Constants.KYC_MALAWI_FULL)
                         i.putExtra(Constants.VIEW_SCOPE, Constants.VIEW_SCOPE_UPDATE)
                         i.putExtra(Constants.PROFILE_PICTURE, profilePicture)
@@ -368,7 +367,7 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         )
     }
 
-    private fun hideLoader(){
+    private fun hideLoader() {
         b.viewSelfKycActivityUpgradeButtonLottieLoader.visibility = View.GONE
         b.viewSelfKycActivityUpgradeButton.apply {
             text = getString(R.string.upgrade_to_full_kyc)
@@ -589,31 +588,20 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus && kycStatus != getString(R.string.not_started) && !isBlurred) {
-            Blurry
-                .with(this)
-                .radius(12)
-                .sampling(3)
+            Blurry.with(this).radius(12).sampling(3)
                 .capture(b.viewSelfKycActivityKycDetailsContainer)
                 .into(b.viewSelfKycActivityBlur1IV)
             isBlurred = true
         }
 
         if (hasFocus && kycStatus != Constants.COMPLETED && !isContainerBlurred) {
-            Blurry
-                .with(this)
-                .radius(12)
-                .sampling(3)
-                .capture(b.viewSelfKycActivityBottomBar)
+            Blurry.with(this).radius(12).sampling(3).capture(b.viewSelfKycActivityBottomBar)
                 .into(b.viewSelfKycActivityBlur2IV)
             isContainerBlurred = true
         }
 
-        if (hasFocus && kycStatus == Constants.COMPLETED && kycType == getString(R.string.malawi_simplified_kyc_registration) && !isUpgradeContainerBlurred){
-            Blurry
-                .with(this)
-                .radius(2)
-                .sampling(5)
-                .capture(b.viewSelfKycActivityBottomBar)
+        if (hasFocus && kycStatus == Constants.COMPLETED && kycType == getString(R.string.malawi_simplified_kyc_registration) && !isUpgradeContainerBlurred) {
+            Blurry.with(this).radius(2).sampling(5).capture(b.viewSelfKycActivityBottomBar)
                 .into(b.viewSelfKycActivityBlur2IV)
             isUpgradeContainerBlurred = false
         }
@@ -874,13 +862,13 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
             //All these implementation have been changed.
             //`intl_address` will contain the international address of the non malawian customer.
             /**
-                val intlAddressComponents = ArrayList<String>()
-                if (!data.intl_po_box_no.isNullOrEmpty()) intlAddressComponents.add(data.intl_po_box_no)
-                if (!data.intl_house_number.isNullOrEmpty()) intlAddressComponents.add(data.intl_house_number)
-                if (!data.intl_street_name.isNullOrEmpty()) intlAddressComponents.add(data.intl_street_name)
-                if (!data.intl_town_village_ta.isNullOrEmpty()) intlAddressComponents.add(data.intl_town_village_ta)
-                if (!data.intl_district.isNullOrEmpty()) intlAddressComponents.add(data.intl_district)
-                val intlAddress = intlAddressComponents.joinToString(separator = ", ").ifEmpty { "-" }
+            val intlAddressComponents = ArrayList<String>()
+            if (!data.intl_po_box_no.isNullOrEmpty()) intlAddressComponents.add(data.intl_po_box_no)
+            if (!data.intl_house_number.isNullOrEmpty()) intlAddressComponents.add(data.intl_house_number)
+            if (!data.intl_street_name.isNullOrEmpty()) intlAddressComponents.add(data.intl_street_name)
+            if (!data.intl_town_village_ta.isNullOrEmpty()) intlAddressComponents.add(data.intl_town_village_ta)
+            if (!data.intl_district.isNullOrEmpty()) intlAddressComponents.add(data.intl_district)
+            val intlAddress = intlAddressComponents.joinToString(separator = ", ").ifEmpty { "-" }
              */
             val intlAddress = data.intl_address ?: ""
             b.viewSelfKycActivityYourAddressHiddenContainer.viewKycYourAddressInternationalAddressTV.text =
@@ -889,14 +877,15 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
     }
 
     private fun populateContactDetails(data: ViewUserData) {
-        val formattedNumber = StringBuilder(data.phone_number!!)
-        formattedNumber.insert(2, ' ')
-        formattedNumber.insert(6, ' ')
-        val phone = "${data.country_code} $formattedNumber"
+        val phoneNum = "${data.country_code} ${
+            PhoneNumberFormatter.format(
+                data.country_code, data.phone_number
+            )
+        }"
         b.viewSelfKycActivityContactDetailsHiddenContainer.viewKycContactDetailsEmailTV.text =
             data.email
         b.viewSelfKycActivityContactDetailsHiddenContainer.viewKycContactDetailsPhoneNumberTV.text =
-            phone
+            phoneNum
     }
 
     override fun onClickViewButton(viewUserData: ViewUserData) {
