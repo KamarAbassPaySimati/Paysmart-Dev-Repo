@@ -6,7 +6,6 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
@@ -73,12 +72,12 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
     private fun setUpLayout() {
         if (userData.profilePicture.isNullOrEmpty()) {
             b.payPersonActivityShortNameTV.apply {
-                visibility = View.VISIBLE
+                visibility = VISIBLE
                 text = getInitials(userData.name)
             }
         } else {
             b.payPersonActivityProfileIV.also {
-                it.visibility = View.VISIBLE
+                it.visibility = VISIBLE
                 Glide.with(this).load(BuildConfig.CDN_BASE_URL + userData.profilePicture)
                     .centerCrop().into(it)
             }
@@ -184,7 +183,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
                 }
 
                 //Hide any error warning
-                b.payPersonActivityPaymentErrorBox.visibility = View.GONE
+                b.payPersonActivityPaymentErrorBox.visibility = GONE
             }
         })
     }
@@ -218,27 +217,27 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
         when {
             amount.isEmpty() -> {
                 isValid = false
-                b.payPersonActivityPaymentErrorBox.visibility = View.VISIBLE
+                b.payPersonActivityPaymentErrorBox.visibility = VISIBLE
                 b.payPersonActivityPaymentErrorTV.text = getString(R.string.please_enter_amount)
             }
 
             isRegistered && amount.toDouble() < 100.0 -> {
                 isValid = false
-                b.payPersonActivityPaymentErrorBox.visibility = View.VISIBLE
+                b.payPersonActivityPaymentErrorBox.visibility = VISIBLE
                 b.payPersonActivityPaymentErrorTV.text =
                     getString(R.string.minimum_amount_is_100_mwk)
             }
 
             !isRegistered && amount.toDouble() < 500.0 -> {
                 isValid = false
-                b.payPersonActivityPaymentErrorBox.visibility = View.VISIBLE
+                b.payPersonActivityPaymentErrorBox.visibility = VISIBLE
                 b.payPersonActivityPaymentErrorTV.text =
                     getString(R.string.minimum_amount_is_500_mwk)
             }
 
             mainDigits.length > 7 || decimalDigits.length > 2 -> {
                 isValid = false
-                b.payPersonActivityPaymentErrorBox.visibility = View.VISIBLE
+                b.payPersonActivityPaymentErrorBox.visibility = VISIBLE
                 b.payPersonActivityPaymentErrorTV.text = getString(R.string.invalid_amount)
             }
 
@@ -357,7 +356,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
         )
-        loaderLottie.visibility = View.VISIBLE
+        loaderLottie.visibility = VISIBLE
     }
 
     private fun hideButtonLoader(
@@ -365,7 +364,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
     ) {
         actionButton.text = buttonText
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-        loaderLottie.visibility = View.GONE
+        loaderLottie.visibility = GONE
     }
 
     override fun onPaymentSuccess(successData: Any?) {
@@ -380,7 +379,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
 
 
     override fun onPaymentFailure(message: String) {
-        b.payPersonActivityPaymentErrorBox.visibility = View.VISIBLE
+        b.payPersonActivityPaymentErrorBox.visibility = VISIBLE
         b.payPersonActivityPaymentErrorTV.text = message
     }
 
