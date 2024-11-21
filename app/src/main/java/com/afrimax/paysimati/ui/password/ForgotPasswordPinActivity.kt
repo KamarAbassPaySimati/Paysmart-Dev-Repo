@@ -60,9 +60,12 @@ class ForgotPasswordPinActivity : BaseActivity() {
     private lateinit var countDownTimer: CountDownTimer
     private var paymaartId = ""
     private var encryptedOtp = ""
-    private var securityQuestionId = ""
     private var email = ""
     private var resendCount = 0
+
+    private var questionsList = ArrayList<VerifyForgotOtpResponse.Question>()
+    private var attempts = 1
+    private var currentShownQuestion: VerifyForgotOtpResponse.Question? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,8 +82,9 @@ class ForgotPasswordPinActivity : BaseActivity() {
         initViews()
         setUpListeners()
     }
-private val recaptchaClient: RecaptchaClient
-    get() = RecaptchaManager.getClient()!!
+
+    private val recaptchaClient: RecaptchaClient
+        get() = RecaptchaManager.getClient()!!
 
     private fun initViews() {
         showEmailView()
@@ -150,11 +154,19 @@ private val recaptchaClient: RecaptchaClient
         }
 
         b.forgotPasswordPinActivityPasswordResetButton.setOnClickListener {
-            onClickReset()
+            if (attempts < 3) {
+                onClickReset()
+            } else {
+                showPasswordQuestionWarning(getString(R.string.acc_is_locked_contact_admin))
+            }
         }
 
         b.forgotPasswordPinActivityPinResetButton.setOnClickListener {
-            onClickReset()
+            if (attempts < 3) {
+                onClickReset()
+            } else {
+                showPinQuestionWarning(getString(R.string.acc_is_locked_contact_admin))
+            }
         }
 
         setupEditTextFocusListeners()
@@ -197,41 +209,36 @@ private val recaptchaClient: RecaptchaClient
         b.forgotPasswordPinActivityOtpResendTV.isEnabled = false
         countDownTimer.start()
         lifecycleScope.launch {
-            recaptchaClient
-                .execute(RecaptchaAction.custom(Constants.RESEND_OTP))
-                .onSuccess {
-                    resendOtpApi()
-                }.onFailure {exception ->
-                    "Response".showLogE(exception.message ?: "")
-                    showToast(getString(R.string.default_error_toast))
-                }
+            recaptchaClient.execute(RecaptchaAction.custom(Constants.RESEND_OTP)).onSuccess {
+                resendOtpApi()
+            }.onFailure { exception ->
+                "Response".showLogE(exception.message ?: "")
+                showToast(getString(R.string.default_error_toast))
+            }
         }
     }
 
     private fun onClickReset() {
         hideKeyboard(this)
         lifecycleScope.launch {
-            recaptchaClient
-                .execute(RecaptchaAction.custom(Constants.RESET))
-                .onSuccess {
-                    when (forgotCredentialType) {
-                        Constants.FORGOT_CREDENTIAL_PIN -> {
-                            if (validatePin()) {
-
-                                updatePinApi()
-                            }
-                        }
-
-                        Constants.FORGOT_CREDENTIAL_PASSWORD -> {
-                            if (validatePassword()) {
-                                updatePasswordApi()
-                            }
+            recaptchaClient.execute(RecaptchaAction.custom(Constants.RESET)).onSuccess {
+                when (forgotCredentialType) {
+                    Constants.FORGOT_CREDENTIAL_PIN -> {
+                        if (validatePin()) {
+                            updatePinApi()
                         }
                     }
-                }.onFailure { exception ->
-                    "Response".showLogE(exception.message ?: "")
-                    showToast(getString(R.string.default_error_toast))
+
+                    Constants.FORGOT_CREDENTIAL_PASSWORD -> {
+                        if (validatePassword()) {
+                            updatePasswordApi()
+                        }
+                    }
                 }
+            }.onFailure { exception ->
+                "Response".showLogE(exception.message ?: "")
+                showToast(getString(R.string.default_error_toast))
+            }
         }
     }
 
@@ -239,14 +246,12 @@ private val recaptchaClient: RecaptchaClient
         if (validateOtp()) {
             hideKeyboard(this)
             lifecycleScope.launch {
-                recaptchaClient
-                    .execute(RecaptchaAction.custom(Constants.VERIFY_OTP))
-                    .onSuccess {
-                        verifyForgotOtpApi()
-                    }.onFailure { exception ->
-                        "Response".showLogE(exception.message ?: "")
-                        showToast(getString(R.string.default_error_toast))
-                    }
+                recaptchaClient.execute(RecaptchaAction.custom(Constants.VERIFY_OTP)).onSuccess {
+                    verifyForgotOtpApi()
+                }.onFailure { exception ->
+                    "Response".showLogE(exception.message ?: "")
+                    showToast(getString(R.string.default_error_toast))
+                }
             }
         }
     }
@@ -257,16 +262,17 @@ private val recaptchaClient: RecaptchaClient
             )
         ) {
             hideKeyboard(this)
-            showButtonLoader(b.forgotPasswordPinActivityProceedButton, b.forgotPasswordPinActivityProceedButtonLoaderLottie)
+            showButtonLoader(
+                b.forgotPasswordPinActivityProceedButton,
+                b.forgotPasswordPinActivityProceedButtonLoaderLottie
+            )
             lifecycleScope.launch {
-                recaptchaClient
-                    .execute(RecaptchaAction.custom(Constants.SEND_OTP))
-                    .onSuccess { _ ->
-                        sendOtpApi()
-                    }.onFailure { exception ->
-                        "Response".showLogE(exception.message ?: "")
-                        showToast(getString(R.string.default_error_toast))
-                    }
+                recaptchaClient.execute(RecaptchaAction.custom(Constants.SEND_OTP)).onSuccess { _ ->
+                    sendOtpApi()
+                }.onFailure { exception ->
+                    "Response".showLogE(exception.message ?: "")
+                    showToast(getString(R.string.default_error_toast))
+                }
             }
         }
     }
@@ -700,15 +706,17 @@ private val recaptchaClient: RecaptchaClient
         countDownTimer.start()
     }
 
-    private fun showPasswordView(question: String) {
+    private fun showPasswordView(question: String?, refreshPasswordField: Boolean = true) {
         b.forgotPasswordPinActivitySetPasswordView.visibility = View.VISIBLE
         b.forgotPasswordPinActivityOtpView.visibility = View.GONE
         b.forgotPasswordPinActivityEmailView.visibility = View.GONE
         b.forgotPasswordPinActivitySetPinView.visibility = View.GONE
 
         //Reset fields
-        b.forgotPasswordPinActivityNewPasswordET.text.clear()
-        b.forgotPasswordPinActivityConfirmPasswordET.text.clear()
+        if (refreshPasswordField) {
+            b.forgotPasswordPinActivityNewPasswordET.text.clear()
+            b.forgotPasswordPinActivityConfirmPasswordET.text.clear()
+        }
         b.forgotPasswordPinActivityPasswordSecurityQuestionET.text.clear()
 
         b.forgotPasswordPinActivityNewPasswordBox.background =
@@ -728,15 +736,17 @@ private val recaptchaClient: RecaptchaClient
         countDownTimer.cancel()
     }
 
-    private fun showPinView(question: String) {
+    private fun showPinView(question: String?, refreshPinField: Boolean = true) {
         b.forgotPasswordPinActivitySetPinView.visibility = View.VISIBLE
         b.forgotPasswordPinActivitySetPasswordView.visibility = View.GONE
         b.forgotPasswordPinActivityOtpView.visibility = View.GONE
         b.forgotPasswordPinActivityEmailView.visibility = View.GONE
 
         //Reset fields
-        b.forgotPasswordPinActivityNewPinET.text?.clear()
-        b.forgotPasswordPinActivityConfirmPinET.text?.clear()
+        if (refreshPinField) {
+            b.forgotPasswordPinActivityNewPinET.text?.clear()
+            b.forgotPasswordPinActivityConfirmPinET.text?.clear()
+        }
         b.forgotPasswordPinActivityPinSecurityQuestionET.text.clear()
 
         b.forgotPasswordPinActivityPinSecurityQuestionET.background =
@@ -758,8 +768,10 @@ private val recaptchaClient: RecaptchaClient
         bottomSheetDialog.setContentView(dialogView)
         bottomSheetDialog.setCancelable(false)
         val titleTextView = dialogView.findViewById<TextView>(R.id.sheetPinPasswordChangeTitleTV)
-        val subTitleTextView = dialogView.findViewById<TextView>(R.id.sheetPinPasswordChangeSubTextTV)
-        val loginButton = dialogView.findViewById<AppCompatButton>(R.id.sheetPinPasswordChangeButton)
+        val subTitleTextView =
+            dialogView.findViewById<TextView>(R.id.sheetPinPasswordChangeSubTextTV)
+        val loginButton =
+            dialogView.findViewById<AppCompatButton>(R.id.sheetPinPasswordChangeButton)
         loginButton.setOnClickListener {
             bottomSheetDialog.dismiss()
             startActivity(Intent(this@ForgotPasswordPinActivity, LoginActivity::class.java))
@@ -773,7 +785,8 @@ private val recaptchaClient: RecaptchaClient
 
             Constants.FORGOT_CREDENTIAL_PASSWORD -> {
                 titleTextView.text = getString(R.string.password_changed)
-                subTitleTextView.text = getString(R.string.your_password_has_been_successfully_changed)
+                subTitleTextView.text =
+                    getString(R.string.your_password_has_been_successfully_changed)
             }
         }
         bottomSheetDialog.show()
@@ -994,16 +1007,23 @@ private val recaptchaClient: RecaptchaClient
             ) {
                 val body = response.body()
                 if (body != null && response.isSuccessful) {
-                    securityQuestionId = body.id
+
+                    questionsList = body.question
+                    currentShownQuestion = questionsList.getOrNull(0)
+                    currentShownQuestion?.let { questionsList.remove(it) }
+
                     hideButtonLoader(
                         b.forgotPasswordPinActivityOtpVerifyButton,
                         b.forgotPasswordPinActivityOtpVerifyButtonLoaderLottie,
                         getString(R.string.verify)
                     )
                     when (forgotCredentialType) {
-                        Constants.FORGOT_CREDENTIAL_PIN -> showPinView(body.question)
-                        Constants.FORGOT_CREDENTIAL_PASSWORD -> showPasswordView(body.question)
+                        Constants.FORGOT_CREDENTIAL_PIN -> showPinView(currentShownQuestion?.question)
+                        Constants.FORGOT_CREDENTIAL_PASSWORD -> showPasswordView(
+                            currentShownQuestion?.question
+                        )
                     }
+                    attempts = 1
                 } else {
                     val errorResponse: VerifyForgotOtpResponse = Gson().fromJson(
                         response.errorBody()!!.string(),
@@ -1087,7 +1107,7 @@ private val recaptchaClient: RecaptchaClient
                 confirm_password = AESCrypt.encrypt(b.forgotPasswordPinActivityConfirmPinET.text.toString()),
                 email_address = email,
                 type = PIN,
-                question_id = securityQuestionId,
+                question_id = currentShownQuestion?.questionId ?: "",
                 answer = b.forgotPasswordPinActivityPinSecurityQuestionET.text.toString()
                     .lowercase()
             )
@@ -1106,11 +1126,21 @@ private val recaptchaClient: RecaptchaClient
                     )
                     showPasswordPinUpdatedView()
                 } else {
-                    val errorResponse: DefaultResponse = Gson().fromJson(
-                        response.errorBody()!!.string(),
-                        object : TypeToken<DefaultResponse>() {}.type
-                    )
-                    showPinQuestionWarning(errorResponse.message)
+                    attempts++
+                    if (attempts >= 3) {
+                        showPinQuestionWarning(getString(R.string.acc_is_locked_contact_admin))
+                    } else {
+                        currentShownQuestion = questionsList.getOrNull(0)
+                        currentShownQuestion?.let { questionsList.remove(it) }
+
+                        showPinView(currentShownQuestion?.question, false)
+
+                        val errorResponse: DefaultResponse = Gson().fromJson(
+                            response.errorBody()!!.string(),
+                            object : TypeToken<DefaultResponse>() {}.type
+                        )
+                        showPinQuestionWarning(errorResponse.message)
+                    }
                     hideButtonLoader(
                         b.forgotPasswordPinActivityPinResetButton,
                         b.forgotPasswordPinActivityPinResetButtonLoaderLottie,
@@ -1137,7 +1167,7 @@ private val recaptchaClient: RecaptchaClient
                 confirm_password = AESCrypt.encrypt(b.forgotPasswordPinActivityConfirmPasswordET.text.toString()),
                 email_address = email,
                 type = PASSWORD,
-                question_id = securityQuestionId,
+                question_id = currentShownQuestion?.questionId ?: "",
                 answer = b.forgotPasswordPinActivityPasswordSecurityQuestionET.text.toString()
                     .lowercase()
             )
@@ -1156,11 +1186,21 @@ private val recaptchaClient: RecaptchaClient
                     )
                     showPasswordPinUpdatedView()
                 } else {
-                    val errorResponse: DefaultResponse = Gson().fromJson(
-                        response.errorBody()!!.string(),
-                        object : TypeToken<DefaultResponse>() {}.type
-                    )
-                    showPasswordQuestionWarning(errorResponse.message)
+                    attempts++
+                    if (attempts >= 3) {
+                        showPasswordQuestionWarning(getString(R.string.acc_is_locked_contact_admin))
+                    } else {
+                        currentShownQuestion = questionsList.getOrNull(0)
+                        currentShownQuestion?.let { questionsList.remove(it) }
+
+                        showPasswordView(currentShownQuestion?.question, false)
+
+                        val errorResponse: DefaultResponse = Gson().fromJson(
+                            response.errorBody()!!.string(),
+                            object : TypeToken<DefaultResponse>() {}.type
+                        )
+                        showPasswordQuestionWarning(errorResponse.message)
+                    }
                     hideButtonLoader(
                         b.forgotPasswordPinActivityPasswordResetButton,
                         b.forgotPasswordPinActivityPasswordResetButtonLoaderLottie,

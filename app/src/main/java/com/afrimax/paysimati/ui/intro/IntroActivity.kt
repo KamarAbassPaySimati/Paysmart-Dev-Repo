@@ -27,7 +27,8 @@ class IntroActivity : AppCompatActivity() {
         windowInsetsController.isAppearanceLightStatusBars = false
         setContentView(binding.root)
 
-        binding.introActivityVersionTV.text = BuildConfig.VERSION_NAME
+        val version  ="Version ${BuildConfig.VERSION_NAME}"
+        binding.introActivityVersionTV.text = version
 
         binding.registerButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
