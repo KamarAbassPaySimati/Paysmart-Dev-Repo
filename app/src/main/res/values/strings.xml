@@ -746,4 +746,5 @@
     <string name="pdf">PDF</string>
     <string name="csv">CSV</string>
     <string name="export_as">Export As</string>
+    <string name="acc_is_locked_contact_admin">Account is locked. Please contact the Paymaart Admin to unlock.</string>
 </resources>
