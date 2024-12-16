@@ -64,7 +64,7 @@ class ForgotPasswordPinActivity : BaseActivity() {
     private var resendCount = 0
 
     private var questionsList = ArrayList<VerifyForgotOtpResponse.Question>()
-    private var attempts = 1
+    private var attempts = 0
     private var currentShownQuestion: VerifyForgotOtpResponse.Question? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -1023,7 +1023,7 @@ class ForgotPasswordPinActivity : BaseActivity() {
                             currentShownQuestion?.question
                         )
                     }
-                    attempts = 1
+                    attempts = 0
                 } else {
                     val errorResponse: VerifyForgotOtpResponse = Gson().fromJson(
                         response.errorBody()!!.string(),
@@ -1127,12 +1127,9 @@ class ForgotPasswordPinActivity : BaseActivity() {
                     showPasswordPinUpdatedView()
                 } else {
                     attempts++
-                    if (attempts >= 3) {
-                        showPinQuestionWarning(getString(R.string.acc_is_locked_contact_admin))
-                    } else {
+                    if (attempts < 3) {
                         currentShownQuestion = questionsList.getOrNull(0)
                         currentShownQuestion?.let { questionsList.remove(it) }
-
                         showPinView(currentShownQuestion?.question, false)
 
                         val errorResponse: DefaultResponse = Gson().fromJson(
@@ -1140,6 +1137,8 @@ class ForgotPasswordPinActivity : BaseActivity() {
                             object : TypeToken<DefaultResponse>() {}.type
                         )
                         showPinQuestionWarning(errorResponse.message)
+                    } else {
+                        showPinQuestionWarning(getString(R.string.acc_is_locked_contact_admin))
                     }
                     hideButtonLoader(
                         b.forgotPasswordPinActivityPinResetButton,
@@ -1187,12 +1186,9 @@ class ForgotPasswordPinActivity : BaseActivity() {
                     showPasswordPinUpdatedView()
                 } else {
                     attempts++
-                    if (attempts >= 3) {
-                        showPasswordQuestionWarning(getString(R.string.acc_is_locked_contact_admin))
-                    } else {
+                    if (attempts < 3) {
                         currentShownQuestion = questionsList.getOrNull(0)
                         currentShownQuestion?.let { questionsList.remove(it) }
-
                         showPasswordView(currentShownQuestion?.question, false)
 
                         val errorResponse: DefaultResponse = Gson().fromJson(
@@ -1200,6 +1196,8 @@ class ForgotPasswordPinActivity : BaseActivity() {
                             object : TypeToken<DefaultResponse>() {}.type
                         )
                         showPasswordQuestionWarning(errorResponse.message)
+                    } else {
+                        showPasswordQuestionWarning(getString(R.string.acc_is_locked_contact_admin))
                     }
                     hideButtonLoader(
                         b.forgotPasswordPinActivityPasswordResetButton,
