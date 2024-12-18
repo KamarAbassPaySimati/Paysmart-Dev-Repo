@@ -59,8 +59,6 @@ import com.afrimax.paysimati.util.RecaptchaManager
 import com.afrimax.paysimati.util.countries
 import com.afrimax.paysimati.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
-import com.amplifyframework.kotlin.core.Amplify
-import com.amplifyframework.storage.StorageException
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.recaptcha.RecaptchaAction
@@ -69,8 +67,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -79,7 +75,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.util.UUID
 
 @AndroidEntryPoint
 class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
@@ -1273,28 +1268,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         val matrix = Matrix()
         matrix.postRotate(degrees)
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-    }
-
-
-    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
-    private suspend fun amplifyUpload(uri: Uri): String {
-        val stream = contentResolver.openInputStream(uri)
-
-        if (stream != null) {
-            val objectKey = "customer_profile/${UUID.randomUUID()}/${
-                getFileNameFromUri(
-                    this, uri
-                )
-            }"
-            val upload = Amplify.Storage.uploadInputStream(objectKey, stream)
-            try {
-                val result = upload.result()
-                return result.key
-            } catch (error: StorageException) {
-                //
-            }
-        }
-        return ""
     }
 
     @SuppressLint("Range")
