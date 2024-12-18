@@ -22,6 +22,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.core.fileTypeFromUri
+import com.afrimax.paysimati.common.data.utils.CONTENT_TYPE_PDF
+import com.afrimax.paysimati.common.domain.enums.FileType
 import com.afrimax.paysimati.databinding.ActivityKycCaptureUploadBinding
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.util.Constants
@@ -29,8 +32,10 @@ import com.afrimax.paysimati.util.showLogE
 import com.airbnb.lottie.LottieAnimationView
 import com.amplifyframework.kotlin.core.Amplify
 import com.amplifyframework.storage.StorageException
+import com.amplifyframework.storage.options.StorageUploadInputStreamOptions
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -224,16 +229,14 @@ class KycCaptureUploadActivity : BaseActivity() {
             if (frontDocUrl.endsWith(".pdf")) {
                 frontUploadType = UploadType.FILE
                 loadPdf(getString(R.string.front), frontDocUrl, true)
-            } else
-                loadImage(getString(R.string.front), frontDocUrl, true)
+            } else loadImage(getString(R.string.front), frontDocUrl, true)
 
             if (backDocUrl != null) {
                 callbackIntent.putExtra(Constants.KYC_DOCUMENT_BACK_URL, backDocUrl)
-                if (backDocUrl.endsWith(".pdf")){
+                if (backDocUrl.endsWith(".pdf")) {
                     backUploadType = UploadType.FILE
                     loadPdf(getString(R.string.back), backDocUrl, true)
-                }
-                else loadImage(getString(R.string.back), backDocUrl, true)
+                } else loadImage(getString(R.string.back), backDocUrl, true)
             }
         }
 
@@ -488,19 +491,15 @@ class KycCaptureUploadActivity : BaseActivity() {
         b.kycCaptureUploadActivityFrontReUploadButton.setOnClickListener {
             removeFrontImage()
             currentCaptureSide = getString(R.string.front)
-            if (frontUploadType == UploadType.PHOTO)
-                checkPermissionsAndProceed()
-            else
-                launchFilePicker()
+            if (frontUploadType == UploadType.PHOTO) checkPermissionsAndProceed()
+            else launchFilePicker()
         }
 
         b.kycCaptureUploadActivityBackReUploadButton.setOnClickListener {
             removeBackImage()
             currentCaptureSide = getString(R.string.back)
-            if (backUploadType == UploadType.PHOTO)
-                checkPermissionsAndProceed()
-            else
-                launchFilePicker()
+            if (backUploadType == UploadType.PHOTO) checkPermissionsAndProceed()
+            else launchFilePicker()
         }
 
         b.kycCaptureUploadActivityFrontUploadButton.setOnClickListener {
@@ -671,7 +670,7 @@ class KycCaptureUploadActivity : BaseActivity() {
     }
 
 
-    @OptIn(FlowPreview::class)
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     private suspend fun amplifyUpload(uri: Uri): String {
         val paymaartId = retrievePaymaartId()
         val stream = contentResolver.openInputStream(uri)
@@ -683,7 +682,20 @@ class KycCaptureUploadActivity : BaseActivity() {
                 )
             }"
 
-            val upload = Amplify.Storage.uploadInputStream(objectKey, stream)
+            val fileType = this.fileTypeFromUri(uri)
+
+            val contentType: String? = when (fileType) {
+                FileType.IMAGE, null -> null
+                FileType.PDF -> CONTENT_TYPE_PDF
+            }
+
+            val options = StorageUploadInputStreamOptions.builder().apply {
+                contentType?.let { contentType(it) }
+            }.build()
+
+            val upload = Amplify.Storage.uploadInputStream(
+                key = objectKey, local = stream, options = options
+            )
             try {
                 val result = upload.result()
                 "Result".showLogE(result.key)
@@ -835,7 +847,6 @@ class KycCaptureUploadActivity : BaseActivity() {
     }
 }
 
-enum class UploadType{
-    PHOTO,
-    FILE
+enum class UploadType {
+    PHOTO, FILE
 }
