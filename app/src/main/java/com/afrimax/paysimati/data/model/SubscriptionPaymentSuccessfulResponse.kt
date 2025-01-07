@@ -6,37 +6,23 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class SubscriptionPaymentSuccessfulResponse(
-    @SerializedName("data")
-    val subscriptionPaymentDetails: SubscriptionPaymentDetails,
-    @SerializedName("success_status")
-    val successStatus: Boolean
+    @SerializedName("data") val subscriptionPaymentDetails: SubscriptionPaymentDetails,
+    @SerializedName("success_status") val successStatus: Boolean
 )
 
 data class SubscriptionPaymentDetails(
-    @SerializedName("created_at")
-    val createdAt: Long,
-    @SerializedName("end_date")
-    val endDate: Long,
-    @SerializedName("membership")
-    val membership: String?,
-    @SerializedName("receiver_id")
-    val receiverId: String?,
-    @SerializedName("receiver_name")
-    val receiverName: String?,
-    @SerializedName("sender_id")
-    val senderId: String?,
-    @SerializedName("sender_name")
-    val senderName: String?,
-    @SerializedName("start_date")
-    val startDate: Long,
-    @SerializedName("transaction_amount")
-    val transactionAmount: Double,
-    @SerializedName("transaction_fee")
-    val transactionFee: Double,
-    @SerializedName("transaction_id")
-    val transactionId: String?,
-    @SerializedName("vat")
-    val vat: Double
+    @SerializedName("created_at") val createdAt: Long,
+    @SerializedName("end_date") val endDate: Long,
+    @SerializedName("membership") val membership: String?,
+    @SerializedName("receiver_id") val receiverId: String?,
+    @SerializedName("receiver_name") val receiverName: String?,
+    @SerializedName("sender_id") val senderId: String?,
+    @SerializedName("sender_name") val senderName: String?,
+    @SerializedName("start_date") val startDate: Long,
+    @SerializedName("transaction_amount") val transactionAmount: Double,
+    @SerializedName("transaction_fee") val transactionFee: Double,
+    @SerializedName("transaction_id") val transactionId: String?,
+    @SerializedName("vat") val vat: Double
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readLong(),

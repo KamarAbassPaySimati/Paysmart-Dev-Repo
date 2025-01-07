@@ -6,23 +6,16 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 
 data class SubscriptionDetailsResponse(
-    @SerializedName("data")
-    val subscriptionDetails: SubscriptionDetails,
-    @SerializedName("success_status")
-    val successStatus: Boolean
+    @SerializedName("data") val subscriptionDetails: SubscriptionDetails,
+    @SerializedName("success_status") val successStatus: Boolean
 )
 
 data class SubscriptionDetails(
-    @SerializedName("total_amount")
-    val totalAmount: Double,
-    @SerializedName("transaction_fee")
-    val transactionFee: Double,
-    @SerializedName("vat")
-    val vat: Double,
-    @SerializedName("membership_start")
-    val membershipStart: Long,
-    @SerializedName("membership_expiry")
-    val membershipExpiry: Long
+    @SerializedName("total_amount") val totalAmount: Double,
+    @SerializedName("transaction_fee") val transactionFee: Double,
+    @SerializedName("vat") val vat: Double,
+    @SerializedName("membership_start") val membershipStart: Long,
+    @SerializedName("membership_expiry") val membershipExpiry: Long
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readDouble(),
@@ -56,10 +49,7 @@ data class SubscriptionDetails(
 }
 
 data class SubscriptionDetailsRequestBody(
-    @SerializedName("ref_no")
-    val referenceNumber: String?,
-    @SerializedName("sub_type")
-    val subType: String?,
-    @SerializedName("auto_renew")
-    val autoRenew: Boolean
+    @SerializedName("ref_no") val referenceNumber: String?,
+    @SerializedName("sub_type") val subType: String?,
+    @SerializedName("auto_renew") val autoRenew: Boolean
 )
