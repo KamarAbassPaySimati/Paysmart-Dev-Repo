@@ -60,9 +60,35 @@ class ChoosePlanAdapter(
             val price = "${String.format(Locale.US, "%,.2f", plan.price.toDouble())} MWK"
             h.cardChoosePlanPriceTV.text = price
 
-            h.cardChoosePlanNameTV.text = plan.serviceName[0]
-            h.cardChoosePlanDataTV.text = plan.serviceName[1]
-            h.cardChoosePlanValidityTV.text = plan.serviceName[2]
+            val planName = plan.serviceName.getOrNull(0)
+            if (planName != null) {
+                h.cardChoosePlanNameTV.apply {
+                    visibility = View.VISIBLE
+                    text = planName
+                }
+            } else {
+                h.cardChoosePlanNameTV.visibility = View.GONE
+            }
+
+            val data = plan.serviceName.getOrNull(1)
+            if (data != null) {
+                h.cardChoosePlanDataTV.apply {
+                    visibility = View.VISIBLE
+                    text = data
+                }
+            } else {
+                h.cardChoosePlanDataTV.visibility = View.GONE
+            }
+
+            val validity = plan.serviceName.getOrNull(2)
+            if (validity != null) {
+                h.cardChoosePlanValidityTV.apply {
+                    visibility = View.VISIBLE
+                    text = validity
+                }
+            } else {
+                h.cardChoosePlanValidityTV.visibility = View.GONE
+            }
 
             //If selected then change background
             h.cardChoosePlan.background = if (plan.isSelected == true) ContextCompat.getDrawable(
