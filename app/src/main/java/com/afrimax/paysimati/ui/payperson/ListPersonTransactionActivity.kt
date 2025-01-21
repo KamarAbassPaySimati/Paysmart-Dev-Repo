@@ -84,6 +84,9 @@ class ListPersonTransactionActivity : BaseActivity() {
                 startActivity(intent)
             }
         })
+
+
+
         binding.listPersonTransactionRV.apply {
             layoutManager = LinearLayoutManager(
                 this@ListPersonTransactionActivity, LinearLayoutManager.VERTICAL, false
