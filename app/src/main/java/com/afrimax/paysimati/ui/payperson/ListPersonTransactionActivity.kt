@@ -474,7 +474,7 @@ class ListPersonTransactionActivity : BaseActivity() {
                                 }
 
                                 binding.listPersonTransactionRV.adapter?.notifyItemRangeInserted(
-                                    previousListSize, mContactsList.size
+                                        previousListSize, mContactsList.size
                                 )
                             }
                         }

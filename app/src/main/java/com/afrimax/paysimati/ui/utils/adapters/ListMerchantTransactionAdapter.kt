@@ -6,15 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
-import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
-import com.afrimax.paysimati.data.model.PayPerson
+import com.afrimax.paysimati.data.model.MerchantList
 import com.afrimax.paysimati.databinding.PayMerchantAdapterBinding
-import com.afrimax.paysimati.databinding.PayPersonAdapterViewBinding
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
 
 class ListMerchantTransactionAdapter(
-    private val merchantTransactions: List<PayPerson>
+    private val merchantTransactions: List<MerchantList>
 ) : RecyclerView.Adapter<ListMerchantTransactionAdapter.ViewHolder>() {
 
     private var onClickListener: OnClickListener? = null
@@ -30,7 +28,7 @@ class ListMerchantTransactionAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val contact = merchantTransactions[position]
+        val merchantdetails = merchantTransactions[position]
         with(holder) {
             binding.payMerchantName.visibility = View.GONE
             binding.payMerchantLocation.visibility = View.GONE
@@ -38,37 +36,39 @@ class ListMerchantTransactionAdapter(
             binding.payMerchantShortNameTV.visibility = View.GONE
             binding.payMerchantIV.visibility = View.GONE
 
+            binding.payMerchantLocation.apply {
+                visibility = View.VISIBLE
+                text = merchantdetails.streetName
+            }
             binding.payMerchantName.apply {
                 visibility = View.VISIBLE
-                text = merchantTransactions[position].fullName
+                text = merchantdetails.MerchantName
             }
-            if (!contact.phoneNumber.isNullOrEmpty() && !contact.paymaartId.isNullOrEmpty()) {
-                //registered customer
-                binding.payMerchantLocation.visibility = View.VISIBLE
-                binding.payMerchantLocation.text =
-                    contact.let { PhoneNumberFormatter.formatWholeNumber(it.countryCode + it.phoneNumber) }
-
-                binding.payMerchantId.visibility = View.VISIBLE
-                binding.payMerchantId.text = PaymaartIdFormatter.formatId(contact.paymaartId)
+            binding.payMerchantId.apply {
+                visibility = View.VISIBLE
+                text = PaymaartIdFormatter.formatId(merchantdetails.paymaartId)
             }
-
-
-            if (merchantTransactions[position].profilePicture.isNullOrEmpty()) {
-                binding.payMerchantShortNameTV.apply {
-                    visibility = View.VISIBLE
-                    text = getInitials(merchantTransactions[position].fullName)
-                }
+            binding.payMerchantShortNameTV.apply {
+                visibility = View.VISIBLE
+                text = getInitials(merchantdetails.MerchantName)
+            }
+            if (merchantdetails.profile_pic.isNullOrEmpty()) {
+                binding.payMerchantIV.visibility = View.GONE
             } else {
+                val imageUrl = BuildConfig.CDN_BASE_URL + merchantdetails.profile_pic
                 binding.payMerchantIV.also {
                     it.visibility = View.VISIBLE
-                    Glide.with(it)
-                        .load(BuildConfig.CDN_BASE_URL + merchantTransactions[position].profilePicture)
-                        .centerCrop().into(it)
+                    Glide
+                        .with(holder.itemView.context)
+                        .load(imageUrl)
+                        .centerCrop()
+                        .into(it)
                 }
             }
+
             binding.root.setOnClickListener {
                 if (onClickListener != null) {
-                    onClickListener!!.onClick(merchantTransactions[position])
+                    onClickListener!!.onClick(merchantdetails)
                 }
             }
         }
@@ -81,15 +81,6 @@ class ListMerchantTransactionAdapter(
     }
 
     interface OnClickListener {
-        fun onClick(transaction: PayPerson)
-    }
-
-    private fun formattedPhoneNumber(phoneNumber: String?): String {
-        if (phoneNumber == null) return ""
-        return try {
-            "${phoneNumber.substring(0, 2)} ${phoneNumber.substring(2, 6)} ${phoneNumber.substring(6)}"
-        } catch (e: StringIndexOutOfBoundsException) {
-            phoneNumber
-        }
+        fun onClick(transaction: MerchantList)
     }
 }

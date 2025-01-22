@@ -79,7 +79,6 @@ private const val CUSTOMER_USER = "customer-user"
 private const val BDD = "bdd"
 private const val KYC_UPDATE = "kyc-update"
 private const val PAYMAART = "paymaart"
-private const val MERCHANT = "merchant"
 private const val CUSTOMER = "customer"
 private const val AFRIMAX = "afrimax"
 private const val CASHIN_CASHOUT = "cashin-cashout"
@@ -336,8 +335,7 @@ interface ApiService {
     @GET("$CUSTOMER_USER/recent-transactions")
     fun getMerchantTransactionList(
         @Header("Authorization") header: String,@Query("page") page:Int=1
-    )
-    //: Call<PayMerchantResponse>
+    ):Call<PayMerchantResponse>
 
 
 
