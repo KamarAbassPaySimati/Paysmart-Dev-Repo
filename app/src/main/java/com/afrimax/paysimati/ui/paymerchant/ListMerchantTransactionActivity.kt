@@ -186,7 +186,8 @@ class ListMerchantTransactionActivity : BaseActivity() {
                 }
 
                 override fun onFailure(p0: Call<PayMerchantResponse>, p1: Throwable) {
-                    TODO("Not yet implemented")
+                    hideLoader()
+                    showToast(getString(R.string.default_error_toast))
                 }
 
 
