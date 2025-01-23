@@ -1,4 +1,4 @@
-Feature: Paymaart- Customer Android- List Merchant Transacion
+Feature: Paymaart- Customer Android- List Merchant Transaction
 
   As a customer, I want to be able to view list of merchants transaction
 
