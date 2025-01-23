@@ -84,6 +84,9 @@ class ListPersonTransactionActivity : BaseActivity() {
                 startActivity(intent)
             }
         })
+
+
+
         binding.listPersonTransactionRV.apply {
             layoutManager = LinearLayoutManager(
                 this@ListPersonTransactionActivity, LinearLayoutManager.VERTICAL, false
@@ -471,7 +474,7 @@ class ListPersonTransactionActivity : BaseActivity() {
                                 }
 
                                 binding.listPersonTransactionRV.adapter?.notifyItemRangeInserted(
-                                    previousListSize, mContactsList.size
+                                        previousListSize, mContactsList.size
                                 )
                             }
                         }
