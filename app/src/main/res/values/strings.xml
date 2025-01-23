@@ -752,4 +752,7 @@
     <string name="Walmart">W</string>
     <string name="walmart">Walmart</string>
     <string name="Location">Location\n</string>
+    <string name="scan_any_qr_code">Scan any QR code</string>
+    <string name="cancelbutton">cancelbutton</string>
+    <string name="frame_for_scanner">frame for scanner</string>
 </resources>
