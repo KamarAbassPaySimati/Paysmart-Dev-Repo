@@ -44,6 +44,7 @@ import com.afrimax.paysimati.ui.cashout.CashOutSearchActivity
 import com.afrimax.paysimati.ui.delete.DeleteAccountActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlansActivity
 import com.afrimax.paysimati.ui.password.UpdatePasswordPinActivity
+import com.afrimax.paysimati.ui.paymerchant.ListMerchantTransactionActivity
 import com.afrimax.paysimati.ui.payperson.ListPersonTransactionActivity
 import com.afrimax.paysimati.ui.payperson.PersonTransactionActivity
 import com.afrimax.paysimati.ui.paytoaffrimax.ValidateAfrimaxIdActivity
@@ -115,12 +116,13 @@ class HomeActivity : BaseActivity(), HomeInterface {
         askNotificationPermission()
         checkForUpdate()
     }
-
+//doubt
     private fun initViews() {
         appUpdateManager = AppUpdateManagerFactory.create(this)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+           //1
                 if (b.homeActivity.isDrawerVisible(GravityCompat.END)) b.homeActivity.closeDrawer(
                     GravityCompat.END
                 )
@@ -161,7 +163,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityPayMerchantButton.setOnClickListener {
             if (checkKycStatus()) {
-                //
+                startActivity(Intent(this,ListMerchantTransactionActivity::class.java))
             }
         }
 
@@ -180,7 +182,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityScanQrButton.setOnClickListener {
             if (checkKycStatus()) {
-                //
+
             }
         }
 
