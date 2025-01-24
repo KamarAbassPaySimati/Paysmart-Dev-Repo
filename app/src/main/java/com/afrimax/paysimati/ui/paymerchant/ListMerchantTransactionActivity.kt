@@ -1,6 +1,7 @@
 package com.afrimax.paysimati.ui.paymerchant
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -66,6 +67,10 @@ class ListMerchantTransactionActivity : BaseActivity() {
 
 
     private fun setupView() {
+        binding.listMerchantLocation.setOnClickListener{
+            startActivity(Intent(this@ListMerchantTransactionActivity, ListMerchantByLocationActivity::class.java))
+        }
+
         val payMerchantListAdapter = ListMerchantTransactionAdapter(mMerchantList)
         binding.listMerchantTransactionRV.apply {
             layoutManager = LinearLayoutManager(
@@ -97,6 +102,8 @@ class ListMerchantTransactionActivity : BaseActivity() {
         binding.listMerchantTransactionBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+
 
     }
     private fun setupListeners() {
@@ -150,6 +157,7 @@ class ListMerchantTransactionActivity : BaseActivity() {
             }
         })
     }
+
     private fun searchForMerchantTransactions() {
         coroutineScope.launch {
             showLoader()
