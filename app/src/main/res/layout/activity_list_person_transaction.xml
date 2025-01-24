@@ -76,7 +76,6 @@
                 android:layout_toEndOf="@+id/listPersonTransactionContactsIV"
                 android:autofillHints=""
                 android:background="@color/transparent"
-                android:drawableEnd="@drawable/ico_search_neutral_grey"
                 android:ellipsize="end"
                 android:fontFamily="@font/inter_regular"
                 android:hint="@string/paysimati_id_and_name"
@@ -86,6 +85,18 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/neutralGrey"
                 android:textSize="14sp" />
+            <ImageView
+                android:id="@+id/searchicon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/search"
+                android:padding="12dp"
+                android:src="@drawable/ico_search_neutral_grey"
+                app:tint="@color/neutralGrey"
+                android:visibility="visible"
+                tools:visibility="visible" />
 
             <ImageView
                 android:id="@+id/listPersonTransactionSearchClearIV"

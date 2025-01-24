@@ -72,11 +72,10 @@
                 android:id="@+id/listMerchantTransactionSearchET"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/listPersonTransactionSearchClearIV"
+                android:layout_toStartOf="@+id/listMerchantTransactionSearchClearIV"
                 android:layout_toEndOf="@+id/listMerchantLocation"
                 android:autofillHints=""
                 android:background="@color/transparent"
-                android:drawableEnd="@drawable/ico_search_neutral_grey"
                 android:ellipsize="end"
                 android:fontFamily="@font/inter_regular"
                 android:hint="@string/search_by_paymaart_id_name_and_phone_number"
@@ -85,9 +84,22 @@
                 android:padding="12dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/neutralGrey"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
             <ImageView
-                android:id="@+id/listPersonTransactionSearchClearIV"
+                android:id="@+id/searchicon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/search"
+                android:padding="12dp"
+                android:src="@drawable/ico_search_neutral_grey"
+                app:tint="@color/neutralGrey"
+                android:visibility="visible"
+                tools:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/listMerchantTransactionSearchClearIV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -97,7 +109,7 @@
                 android:src="@drawable/ic_close"
                 app:tint="@color/neutralGreyPrimaryText"
                 android:visibility="gone"
-                tools:visibility="visible" />
+                tools:visibility="visible"  />
 
         </RelativeLayout>
 

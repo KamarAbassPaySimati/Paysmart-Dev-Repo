@@ -337,7 +337,12 @@ interface ApiService {
         @Header("Authorization") header: String,@Query("page") page:Int=1
     ):Call<PayMerchantResponse>
 
-
+    @GET("$CUSTOMER_USER/recent-transactions")
+    fun searchMerchantById(
+        @Header("Authorization") header: String,
+        @Query("search") search: String,
+        @Query("page") page: Int = 1
+    ):Call<PayMerchantResponse>
 
     @POST("bank-transactions/customer/payment-details")
     suspend fun getTaxForPayToRegisteredPerson(
