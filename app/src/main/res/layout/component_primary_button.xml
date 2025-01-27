@@ -6,20 +6,30 @@
     <FrameLayout
         android:id="@+id/primaryButtonContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/primaryButton"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@drawable/bg_common_button"
+            android:background="@drawable/primary_rounded_button_background_disabled"
+            android:gravity="center"
+            android:text="" />
+
+        <TextView
+            android:id="@+id/primaryButtonTextTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawablePadding="8dp"
             android:fontFamily="@font/inter_medium"
+            android:gravity="center"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="18sp"
-            tools:text="@string/submit" />
+            app:drawableTint="@color/white"
+            tools:text="Submit" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/primaryButtonLoader"
