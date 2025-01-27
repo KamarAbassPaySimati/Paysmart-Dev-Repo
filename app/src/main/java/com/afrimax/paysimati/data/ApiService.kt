@@ -23,6 +23,7 @@ import com.afrimax.paysimati.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paysimati.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paysimati.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paysimati.data.model.MembershipPlansResponse
+import com.afrimax.paysimati.data.model.PayMerchantResponse
 import com.afrimax.paysimati.data.model.PayPersonRequestBody
 import com.afrimax.paysimati.data.model.PayPersonResponse
 import com.afrimax.paysimati.data.model.PayToAfrimaxRequestBody
@@ -40,6 +41,7 @@ import com.afrimax.paysimati.data.model.SaveInfoSimplifiedToFullRequest
 import com.afrimax.paysimati.data.model.SaveNewAddressDetailsSelfKycRequest
 import com.afrimax.paysimati.data.model.SaveNewIdentityDetailsSelfKycRequest
 import com.afrimax.paysimati.data.model.SaveNewInfoDetailsSelfKycRequest
+import com.afrimax.paysimati.data.model.SearchMerchantByLocation
 import com.afrimax.paysimati.data.model.SearchUsersDataResponse
 import com.afrimax.paysimati.data.model.SecurityQuestionsResponse
 import com.afrimax.paysimati.data.model.SelfKycDetailsResponse
@@ -329,6 +331,28 @@ interface ApiService {
     fun getPersonRecentTransactionList(
         @Header("Authorization") header: String, @Query("page") page: Int = 1
     ): Call<PayPersonResponse>
+
+
+    @GET("$CUSTOMER_USER/recent-transactions")
+    fun getMerchantTransactionList(
+        @Header("Authorization") header: String,@Query("page") page:Int=1
+    ):Call<PayMerchantResponse>
+
+    @GET("$CUSTOMER_USER/recent-transactions")
+    fun searchMerchantById(
+        @Header("Authorization") header: String,
+        @Query("search") search: String,
+        @Query("page") page: Int = 1
+    ):Call<PayMerchantResponse>
+
+    @GET("$CUSTOMER_USER/find-merchants")
+    fun searchMerchantByLocation(
+        @Header("Authorization") header: String,
+        @Query("location") search: String,
+        @Query("trading_type")tradingType:String?=null,
+        @Query("page") page: Int = 1
+    ):Call<SearchMerchantByLocation>
+
 
     @POST("bank-transactions/customer/payment-details")
     suspend fun getTaxForPayToRegisteredPerson(

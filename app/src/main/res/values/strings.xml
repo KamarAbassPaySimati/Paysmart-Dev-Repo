@@ -747,4 +747,20 @@
     <string name="csv">CSV</string>
     <string name="export_as">Export As</string>
     <string name="acc_is_locked_contact_admin">Account is locked. Please contact the Paymaart Admin to unlock.</string>
+    <string name="pay_merchant">Pay Merchant</string>
+    <string name="search_by_paymaart_id_name_and_phone_number">PaySimati ID, till no., trading name or type </string>
+    <string name="search_by_paymaart_id_trading_name">PaySimati ID, trading name  </string>
+    <string name="search_by_location">Search by location</string>
+    <string name="Walmart">W</string>
+    <string name="walmart">Walmart</string>
+    <string name="Location"> Location\n</string>
+    <string name="scan_any_qr_code">Scan any QR code</string>
+    <string name="cancelbutton">cancelbutton</string>
+    <string name="frame_for_scanner">frame for scanner</string>
+    <string name="filter_by_trading_name">filter by trading name</string>
+    <string name="till_no">Till No : </string>
+    <string name="trading_types">Trading Types: </string>
+    <string name="trading_type">Trading Type</string>
+    <string name="supermarket">Supermarket</string>
+    <string name="_trading_number">123456</string>
 </resources>
