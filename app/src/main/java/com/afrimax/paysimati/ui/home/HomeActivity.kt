@@ -49,6 +49,7 @@ import com.afrimax.paysimati.ui.payperson.ListPersonTransactionActivity
 import com.afrimax.paysimati.ui.payperson.PersonTransactionActivity
 import com.afrimax.paysimati.ui.paytoaffrimax.ValidateAfrimaxIdActivity
 import com.afrimax.paysimati.ui.refundrequest.RefundRequestActivity
+import com.afrimax.paysimati.ui.scanQr.CustomCaptureActivity
 import com.afrimax.paysimati.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paysimati.ui.utils.adapters.HomeScreenPayPersonAdapter
 import com.afrimax.paysimati.ui.utils.bottomsheets.CompleteKycSheet
@@ -70,6 +71,9 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -166,6 +170,27 @@ class HomeActivity : BaseActivity(), HomeInterface {
                 startActivity(Intent(this,ListMerchantTransactionActivity::class.java))
             }
         }
+        val scanner = registerForActivityResult<ScanOptions, ScanIntentResult>(
+            ScanContract()
+        ) { result ->
+            if (result.contents != null) {
+
+                Toast.makeText(this,"${result.contents}",Toast.LENGTH_SHORT).show()
+            } else {
+
+                Toast.makeText(this, "canclled", Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        b.homeActivityScanQrButton.setOnClickListener{
+            if(checkKycStatus()){
+                scanner.launch(
+                    ScanOptions().setPrompt("").setDesiredBarcodeFormats(ScanOptions.QR_CODE)
+                        .setCaptureActivity(CustomCaptureActivity::class.java)
+                )
+            }
+        }
 
         b.homeActivityPayPaymaartButton.setOnClickListener {
             if (checkKycStatus()) {
@@ -180,11 +205,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
             }
         }
 
-        b.homeActivityScanQrButton.setOnClickListener {
-            if (checkKycStatus()) {
 
-            }
-        }
 
         b.homeActivityCashOutButton.setOnClickListener {
             if (checkKycStatus()) {

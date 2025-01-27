@@ -733,6 +733,7 @@
     <string name="note_formatted">Note: %1$s</string>
     <string name="paid">Paid</string>
     <string name="paysimati_id_and_name">PaySimati ID, name</string>
+
     <string name="phone_number_and_name">Phone number, name</string>
     <string name="no_contacts_permission">No contacts Permission</string>
     <string name="paymaart_website_and_email">www.paysimati.com\u00A0\u00A0•\u00A0\u00A0hello@paysimati.com</string>
@@ -749,7 +750,11 @@
     <string name="acc_is_locked_contact_admin">Account is locked. Please contact the Paymaart Admin to unlock.</string>
     <string name="pay_merchant">Pay Merchant</string>
     <string name="search_by_paymaart_id_name_and_phone_number">PaySimati ID, till no., trading name or type </string>
+    <string name="search_by_paymaart_id_trading_name">PaySimati ID, trading name  </string>
     <string name="Walmart">W</string>
     <string name="walmart">Walmart</string>
     <string name="Location">Location\n</string>
+    <string name="scan_any_qr_code">Scan any QR code</string>
+    <string name="cancelbutton">cancelbutton</string>
+    <string name="frame_for_scanner">frame for scanner</string>
 </resources>
