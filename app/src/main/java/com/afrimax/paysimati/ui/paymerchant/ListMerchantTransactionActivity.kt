@@ -65,7 +65,6 @@ class ListMerchantTransactionActivity : BaseActivity() {
         listMerchantTransaction()
     }
 
-
     private fun setupView() {
         binding.listMerchantLocation.setOnClickListener{
             startActivity(Intent(this@ListMerchantTransactionActivity, ListMerchantByLocationActivity::class.java))
