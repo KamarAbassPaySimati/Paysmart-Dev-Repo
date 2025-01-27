@@ -10,14 +10,15 @@ Feature: Paymaart- Customer Android- List Merchant Transaction
     When I choose to login with paymart ID
     And I enter paymart ID "85957573"
     And I enter login PIN "520736"
-    And I click on login button
+    When I click on login button
     Then I see the TOTP screen
     When I enter the generated OTP
+    And I click back button on Membership plans page
     Then I am redirected to the homepage
 
   Scenario: Viewing recently transacted merchants from last 90 days
     Given I am redirected to the homepage
-    When I click on the "Merchant" option
+    When I click on the Merchant option
     Then I should see a list of merchants I have transacted with in the last 90 days
 
 
