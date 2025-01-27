@@ -23,6 +23,7 @@ import com.afrimax.paysimati.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paysimati.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paysimati.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paysimati.data.model.MembershipPlansResponse
+import com.afrimax.paysimati.data.model.PayMerchantResponse
 import com.afrimax.paysimati.data.model.PayPersonRequestBody
 import com.afrimax.paysimati.data.model.PayPersonResponse
 import com.afrimax.paysimati.data.model.PayToAfrimaxRequestBody
@@ -329,6 +330,19 @@ interface ApiService {
     fun getPersonRecentTransactionList(
         @Header("Authorization") header: String, @Query("page") page: Int = 1
     ): Call<PayPersonResponse>
+
+
+    @GET("$CUSTOMER_USER/recent-transactions")
+    fun getMerchantTransactionList(
+        @Header("Authorization") header: String,@Query("page") page:Int=1
+    ):Call<PayMerchantResponse>
+
+    @GET("$CUSTOMER_USER/recent-transactions")
+    fun searchMerchantById(
+        @Header("Authorization") header: String,
+        @Query("search") search: String,
+        @Query("page") page: Int = 1
+    ):Call<PayMerchantResponse>
 
     @POST("bank-transactions/customer/payment-details")
     suspend fun getTaxForPayToRegisteredPerson(
