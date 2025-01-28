@@ -12,7 +12,7 @@ Feature: Paymaart- Customer Android- Search Merchant
   Background: Logging into admin approved customer account
     Given The login screen is displayed
     When I choose to login with paymart ID
-    And I enter paymart ID "85957573"
+    When I enter paymart ID "85957573"
     And I enter login PIN "520736"
     When I click on login button
     Then I see the TOTP screen
@@ -25,16 +25,16 @@ Feature: Paymaart- Customer Android- Search Merchant
     When I click on the Merchant option
     Then I should see a list of merchants I have transacted with in the last 90 days
 
-  Scenario: Searching Merchant by trading name / merchant name
+  Scenario: Searching Merchant by trading name
     When I click on the Search tab
-    And I enter trading name / Merchant name as "Suhaas"
-    Then I should see the Merchant name along with Merchant ID
+    And I enter trading name as "Suhaas"
+    Then I should see the Trading name along with Paymaart ID
 
   Scenario: Clearing the result on Search tab
     When I click on clear button on search tab
     Then the search tab should be empty
 
-  Scenario: Searching merchant by Paymaart ID / Merchant ID
+  Scenario: Searching merchant by Paymaart ID
     When I click on the Search tab
-    And I enter Paymaart ID / Merchant ID as "5669142"
-    Then I should see the Merchant name along with Merchant ID
+    And I enter paymart ID "5669142"
+    Then I should see the Trading name along with Paymaart ID
