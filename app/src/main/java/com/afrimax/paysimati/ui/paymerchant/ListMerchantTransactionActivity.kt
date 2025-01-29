@@ -233,7 +233,6 @@ class ListMerchantTransactionActivity : BaseActivity() {
                         if (response.code() == 204) {
                             showEmptyScreen(true)
                         } else {
-
                             val data = response.body()
                             val paymerchantList = response.body()?.payMerchantList
                             if (paymerchantList.isNullOrEmpty()) {

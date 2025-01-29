@@ -685,6 +685,8 @@
     <string name="no_refund_request_yet_subtext">You have no refund request at the moment.</string>
     <string name="transaction_history">Transaction History</string>
     <string name="no_transactions_yet">No Transactions Yet</string>
+    <string name="search_for_merchant">Search for Merchants</string>
+    <string name="search_for_merchant_subtext">Find merchants by their trading type and  location</string>
     <string name="no_transactions_subtext">You have no transactions at the moment.</string>
     <string name="recent_transactions_of_last_60_days">Recent transactions in last 60 days</string>
     <string name="recent_transactions_of_last_90_days">Recent transactions in last 90 days</string>

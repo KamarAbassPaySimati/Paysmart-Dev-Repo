@@ -106,7 +106,7 @@
 
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/listMerchantTransactionContentBox"
+        android:id="@+id/listMerchantByLocationContentBox"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -120,7 +120,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/listMerchantTransactionNoDataFoundContainer"
+        android:id="@+id/listMerchantByLocationNoDataFoundContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -133,24 +133,17 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/listMerchantTransactionNoDataFoundIV"
+            android:id="@+id/listMerchantByLocationNoDataFoundIV"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:contentDescription="@string/search"
             android:scaleType="fitCenter"
             android:src="@drawable/ico_search_for_users" />
 
-        <ImageView
-            android:id="@+id/listMerchantByLocationNoDataFoundIV"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:contentDescription="@string/search"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ico_search_for_merchant" />
 
 
         <TextView
-            android:id="@+id/listMerchantTransactionNoDataFoundTitleTV"
+            android:id="@+id/listMerchantByLocationNoDataFoundTitleTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -163,7 +156,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/listMerchantTransactionNoDataFoundSubtextTV"
+            android:id="@+id/listMerchantByLocationNoDataFoundSubtextTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -178,7 +171,7 @@
     </LinearLayout>
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/listMerchantTransactionLoaderLottie"
+        android:id="@+id/listMerchantByLocationLoaderLottie"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"

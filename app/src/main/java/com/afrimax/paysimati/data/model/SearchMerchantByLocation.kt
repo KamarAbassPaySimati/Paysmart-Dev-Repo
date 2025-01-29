@@ -4,11 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 data class SearchMerchantByLocation(
     @SerializedName("data")
-    val `MerchantListLocation`: List<MerchantListLocation>,
+    val MerchantListLocation: List<MerchantListLocation>,
     @SerializedName("message")
     val message: String?=null,
     @SerializedName("success_status")
-    val succesStatus: Boolean
+    val succesStatus: Boolean,
+    @SerializedName("total_count")
+    val totalCount: Int
 )
 
 

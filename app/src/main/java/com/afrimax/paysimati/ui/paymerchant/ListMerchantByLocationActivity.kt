@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -38,7 +37,8 @@ class ListMerchantByLocationActivity : BaseActivity(), MerchantFilterCallback {
     private val mMerchantList = mutableListOf<MerchantListLocation>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private var searchText: String = ""
-    private var tradeType:String=""
+    private var tradeType:String="All"
+    private var tradeTypetext:String=""
     private var typeJob: Job? = null
     private var searchByPaymaartCredentials: Boolean = true
     private var isPaginating: Boolean = false
@@ -55,38 +55,14 @@ class ListMerchantByLocationActivity : BaseActivity(), MerchantFilterCallback {
             insets
         }
 
-
         val wic = WindowInsetsControllerCompat(window, window.decorView)
         wic.isAppearanceLightStatusBars = true
         wic.isAppearanceLightNavigationBars = true
         setupView()
+        showEmptyScreen(true)
         setupListeners()
     }
-    override fun onTradingTypeSelected(type: String) {
-        tradeType=type
-        Toast.makeText(this, type, Toast.LENGTH_SHORT).show()
-        searchForMerchantByLocation()
-    }
-
-    override fun clearTradingTypeFilters() {
-        tradeType = ""
-
-        // Clear the search text (if needed)
-        searchText = ""
-
-        // Reset the list of merchants to show all or a default list
-        mMerchantList.clear() // Clear the current merchant list
-
-        // Optionally, notify the adapter that the data has changed
-        binding.listMerchantByLocationRV.adapter?.notifyDataSetChanged()
-
-        // Optionally, update the UI to reflect the cleared filters (e.g., show all merchants)
-        showToast("Filters cleared!") // Optional: Show a toast message
-    }
-
-
     private fun setupView() {
-
         val payMerchantListAdapter = ListMerchantByLocationAdapter(mMerchantList)
         binding.listMerchantByLocationRV.apply {
             layoutManager = LinearLayoutManager(
@@ -95,7 +71,6 @@ class ListMerchantByLocationActivity : BaseActivity(), MerchantFilterCallback {
             adapter = payMerchantListAdapter
             itemDecoration(0.DP) { outRect, position, margin ->
                 if (position == 0) outRect.top = margin
-
             }
         }
         binding.listMerchantByLocationRV.addOnScrollListener(object :
@@ -105,18 +80,22 @@ class ListMerchantByLocationActivity : BaseActivity(), MerchantFilterCallback {
                 if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE && !isPaginating && !paginationEnd) {
                     isPaginating = true
                     if (searchText.isNotEmpty()) {
-                        //paymaartMerchantPagination()
+                     paymaartMerchantLocationPagination()
                     } else {
-                        //getRecentMerchantTransactionsPagination()
+
                     }
                 }
             }
         })
         binding.listMerchantFilterBySearch.setOnClickListener {
             val merchantFilterSheet = MerchantFilterTradingTypesSheet()
+            val bundle = Bundle().apply {
+                putString("tradeType", tradeType)
+            }
+            merchantFilterSheet.arguments = bundle
             merchantFilterSheet.show(supportFragmentManager, MerchantFilterTradingTypesSheet.TAG)
-        }
 
+        }
         binding.listMerchantByLocationSearchET.hint=getString(R.string.search_by_location)
 
         binding.listMerchantByLocationcancelIV.setOnClickListener {
@@ -127,9 +106,7 @@ class ListMerchantByLocationActivity : BaseActivity(), MerchantFilterCallback {
     private fun setupListeners() {
         binding.listMerchantByLocationSearchET.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // No action needed before the text changes
             }
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(s.isNullOrEmpty()){
                     binding.searchicon.visibility= View.VISIBLE
@@ -139,7 +116,6 @@ class ListMerchantByLocationActivity : BaseActivity(), MerchantFilterCallback {
                     binding.searchicon.visibility= View.GONE
                     binding.listMerchantByLocationSearchClearIV.visibility= View.VISIBLE
                 }
-                // Handle real-time changes if required
             }
 
             @SuppressLint("NotifyDataSetChanged")
@@ -159,36 +135,32 @@ class ListMerchantByLocationActivity : BaseActivity(), MerchantFilterCallback {
                             }
                             else{
                                 mMerchantList.clear()
-                                // binding.listMerchantTransactionRV.adapter?.notifyDataSetChanged()
-                                if(searchText.isNotEmpty()){
-                                    //    showEmptyScreen(true)
+                               binding.listMerchantByLocationRV.adapter?.notifyDataSetChanged()
+                                if(searchText.isNotEmpty() && searchText.length>4){
+                                       showEmptyScreen(false)
                                 }
                                 else{
-                                    //  showEmptyScreen(false)
+                                     showEmptyScreen(true)
                                 }
                             }
                         }
                     }
                 }
-
-
             }
-
         })
     }
-
     private fun searchForMerchantByLocation() {
         coroutineScope.launch {
-          //  showLoader()
+          showLoader()
             val idtoken = fetchIdToken()
             try{
-                val searchMerchant = ApiClient.apiService.searchMerchantByLocation(idtoken,searchText,tradeType)
+                val searchMerchant = ApiClient.apiService.searchMerchantByLocation(idtoken,searchText,tradeTypetext)
                 searchMerchant.enqueue(object : Callback<SearchMerchantByLocation> {
                     override fun onResponse(
                         call: Call<SearchMerchantByLocation>,
                         response: Response<SearchMerchantByLocation>
                     ) {
-                      //  hideLoader()
+                      hideLoader()
                         if(response.isSuccessful){
                             if(response.code()==204){
                                 showEmptyScreen(false)
@@ -198,86 +170,139 @@ class ListMerchantByLocationActivity : BaseActivity(), MerchantFilterCallback {
                                 if(data!=null){
                                     mMerchantList.clear()
                                     mMerchantList.addAll(data.MerchantListLocation)
-//                                    paginationEnd = mMerchantList.size >= data.totalCount
-//                                    if (!paginationEnd) {
-//                                        page++
-//                                    }
+                                    paginationEnd = mMerchantList.size >= data.totalCount
+                                    if (!paginationEnd) {
+                                        page++
+                                    }
                                     if (mMerchantList.isEmpty()) {
                                         binding.listMerchantByLocationRV.adapter?.notifyDataSetChanged()
-                                        // showEmptyScreen(false)
+                                        showEmptyScreen(false)
                                     } else {
                                         binding.listMerchantByLocationRV.adapter?.notifyDataSetChanged()
                                     }
 
                                 }
-
                             }
-                            // Toast.makeText(this@ListMerchantTransactionActivity, data?.message, Toast.LENGTH_LONG).show()
                         }else{
-                            //  hideLoader()
-                            //   showEmptyScreen(false)
+                             hideLoader()
+                              showEmptyScreen(false)
                         }
                     }
-
                     override fun onFailure(call: Call<SearchMerchantByLocation>, t: Throwable) {
                         hideLoader()
                         showEmptyScreen(false)
                     }
                 })
             }
-
             catch (e:Exception){
-//hideLoader()
+                hideLoader()
                 if(searchText.isEmpty()){
-                    //     showEmptyScreen(true)
+                    showEmptyScreen(true)
                 }else{
-                    //  showEmptyScreen(false)
+                    showEmptyScreen(false)
                 }
                 showToast(getString(R.string.default_error_toast))
             }
         }
     }
+    private fun paymaartMerchantLocationPagination() {
+        coroutineScope.launch {
+            showLoader()
+            val idtoken = fetchIdToken()
+            val searchMerchanthandler = ApiClient.apiService.searchMerchantByLocation(idtoken,searchText,tradeTypetext)
+
+            searchMerchanthandler.enqueue(object : Callback<SearchMerchantByLocation> {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onResponse(
+                    call: Call<SearchMerchantByLocation>,
+                    response: Response<SearchMerchantByLocation>
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val data = response.body()
+                        if (data?.MerchantListLocation.isNullOrEmpty()) {
+                            showEmptyScreen(true)
+
+                        } else {
+                            data?.let {
+                                val previousListSize = mMerchantList.size
+                                mMerchantList.addAll(data.MerchantListLocation)
+                                paginationEnd = mMerchantList.size >= data.totalCount
+                                if (!paginationEnd) {
+                                    page++
+                                }
+                                binding.listMerchantByLocationRV.adapter?.notifyDataSetChanged()
+                                if (!paginationEnd) {
+                                    page++
+                                }
+                                binding.listMerchantByLocationRV.adapter?.notifyItemRangeInserted(
+                                    previousListSize, mMerchantList.size
+                                )
+                            }
+                        }
+                        isPaginating = false
+                    }
+                    hideLoader()
+                }
+
+                override fun onFailure(p0: Call<SearchMerchantByLocation>, p1: Throwable) {
+                    hideLoader()
+                    showToast(getString(R.string.default_error_toast))
+                }
 
 
+            })
+
+
+        }
+    }
+    override fun onTradingTypeSelected(type: String) {
+        tradeTypetext=type
+        tradeType=type
+        if(tradeTypetext == "All"){
+            tradeTypetext=""
+        }
+        searchForMerchantByLocation()
+    }
+    override fun clearTradingTypeFilters(type: String) {
+        tradeTypetext=""
+        tradeType = type
+        searchForMerchantByLocation()
+    }
     private fun showLoader() {
-        binding.listMerchantTransactionLoaderLottie.visibility = View.VISIBLE
-        binding.listMerchantTransactionNoDataFoundContainer.visibility = View.GONE
-        binding.listMerchantTransactionContentBox.visibility = View.GONE
+        binding.listMerchantByLocationLoaderLottie.visibility = View.VISIBLE
+        binding.listMerchantByLocationNoDataFoundContainer.visibility = View.GONE
+        binding.listMerchantByLocationContentBox.visibility = View.GONE
     }
     private fun hideLoader() {
-        binding.listMerchantTransactionLoaderLottie.visibility = View.GONE
-        binding.listMerchantTransactionNoDataFoundContainer.visibility = View.GONE
-        binding.listMerchantTransactionContentBox.visibility = View.VISIBLE
-        if (searchText.isNotEmpty()) binding.listMerchantByLocationRV.visibility =
-            View.GONE
+        binding.listMerchantByLocationLoaderLottie.visibility = View.GONE
+        binding.listMerchantByLocationNoDataFoundContainer.visibility = View.GONE
+        binding.listMerchantByLocationContentBox.visibility = View.VISIBLE
     }
     private fun showEmptyScreen(condition: Boolean) {
-        // true - no past transactions
+        // true - search for merchant
         //false - no data found when searched,
-        binding.listMerchantTransactionLoaderLottie.visibility = View.GONE
-        binding.listMerchantTransactionContentBox.visibility = View.GONE
-        binding.listMerchantTransactionNoDataFoundContainer.visibility = View.VISIBLE
-        binding.listMerchantTransactionNoDataFoundIV.setImageResource(if (condition) R.drawable.ico_search_for_users else R.drawable.ico_no_data_found)
-        binding.listMerchantTransactionNoDataFoundTitleTV.text =
-            getString(if (condition) R.string.no_transactions_yet else R.string.no_data_found)
-        binding.listMerchantTransactionNoDataFoundSubtextTV.text =
-            getString(if (condition) R.string.no_transactions_subtext else R.string.no_data_found_subtext)
+        binding.listMerchantByLocationLoaderLottie.visibility = View.GONE
+        binding.listMerchantByLocationContentBox.visibility = View.GONE
+        binding.listMerchantByLocationNoDataFoundContainer.visibility = View.VISIBLE
+        binding.listMerchantByLocationNoDataFoundIV.setImageResource(if (condition) R.drawable.ico_search_for_merchant else R.drawable.ico_no_data_found)
+        binding.listMerchantByLocationNoDataFoundTitleTV.text =
+            getString(if (condition) R.string.search_for_merchant else R.string.no_data_found)
+        binding.listMerchantByLocationNoDataFoundSubtextTV.text =
+            getString(if (condition) R.string.search_for_merchant_subtext else R.string.no_data_found_subtext)
+
         try {
-            binding.listMerchantTransactionLoaderLottie.visibility = View.GONE
-            binding.listMerchantTransactionContentBox.visibility = View.GONE
-            binding.listMerchantTransactionNoDataFoundContainer.visibility = View.VISIBLE
-            binding.listMerchantTransactionNoDataFoundIV.setImageResource(if (condition) R.drawable.ico_search_for_users else R.drawable.ico_no_data_found)
-            binding.listMerchantTransactionNoDataFoundTitleTV.text =
-                getString(if (condition) R.string.no_transactions_yet else R.string.no_data_found)
-            binding.listMerchantTransactionNoDataFoundSubtextTV.text =
-                getString(if (condition) R.string.no_transactions_subtext else R.string.no_data_found_subtext)
+            binding.listMerchantByLocationLoaderLottie.visibility = View.GONE
+            binding.listMerchantByLocationContentBox.visibility = View.GONE
+            binding.listMerchantByLocationNoDataFoundContainer.visibility = View.VISIBLE
+            binding.listMerchantByLocationNoDataFoundIV.setImageResource(if (condition) R.drawable.ico_search_for_merchant else R.drawable.ico_no_data_found)
+            binding.listMerchantByLocationNoDataFoundTitleTV.text =
+                getString(if (condition) R.string.search_for_merchant else R.string.no_data_found)
+            binding.listMerchantByLocationNoDataFoundSubtextTV.text =
+                getString(if (condition) R.string.search_for_merchant_subtext else R.string.no_data_found_subtext)
         } catch (e: Exception) {
             "Response".showLogE(e.message ?: "")
         }
     }
-
-
-
 
 }
 

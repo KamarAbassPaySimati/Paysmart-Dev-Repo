@@ -7,19 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.databinding.MerchantTypesFilterBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import javax.inject.Named
 
 class MerchantFilterTradingTypesSheet : BottomSheetDialogFragment() {
     private lateinit var binding: MerchantTypesFilterBottomSheetBinding
     private lateinit var sheetCallback: MerchantFilterCallback
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private var tradeType: String = "All"
     private val tradingTypes: ArrayList<TradingType> by lazy { provideTradingTypes() }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -31,37 +30,35 @@ class MerchantFilterTradingTypesSheet : BottomSheetDialogFragment() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         return bottomSheet
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = MerchantTypesFilterBottomSheetBinding.inflate(inflater, container, false)
+        arguments?.let {
+            tradeType = it.getString("tradeType", "All")
+        }
         setupLayout()
         setupListeners()
         return binding.root
     }
-
-
     private fun setupLayout() {
         populateTradingTypes()
     }
-
     private fun setupListeners() {
         binding.merchantFilterApplyButton.setOnClickListener {
-            val selectedType = getSelectedTradingType()
-            // Show toast with the selected trading type
+            var selectedType = getSelectedTradingType()
             sheetCallback.onTradingTypeSelected(selectedType)
             dismiss()
         }
 
         binding.merchantFilterClearAllButton.setOnClickListener {
-            tradingTypes.clear()
-            sheetCallback.clearTradingTypeFilters()
+            val clearAll = "All"
+            sheetCallback.clearTradingTypeFilters(clearAll)
             dismiss()
         }
     }
-
     private fun populateTradingTypes() {
+  binding.tradingTypes.removeAllViews()
         tradingTypes.forEachIndexed { index, type ->
             val radioButton = RadioButton(requireContext()).apply {
                 id = index
@@ -92,20 +89,20 @@ class MerchantFilterTradingTypesSheet : BottomSheetDialogFragment() {
                     setMargins(16, 0, 0, 0) // 16dp start margin
                 }
                 layoutParams = params
+
             }
-            // if(type.name == "All") radioButton.performClick()
+            if (type.name == tradeType) {
+                radioButton.isChecked = true
+            }
+
             binding.tradingTypes.addView(radioButton)
         }
-        binding.tradingTypes.check(0)
     }
-
-
     private fun getSelectedTradingType(): String {
         val selectedId = binding.tradingTypes.checkedRadioButtonId
         val selectedButton = binding.tradingTypes.findViewById<RadioButton>(selectedId)
         return selectedButton?.text?.toString() ?: ""
     }
-
     private fun provideTradingTypes(): ArrayList<TradingType> {
         return ArrayList<TradingType>().apply {
             add(TradingType(name = "All"))
@@ -269,22 +266,18 @@ class MerchantFilterTradingTypesSheet : BottomSheetDialogFragment() {
             add(TradingType(name = "Salons & Barber Shops"))
         }
     }
-
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         sheetCallback = context as MerchantFilterCallback
     }
-
     companion object {
         const val TAG = "MerchantFilterTradingTypesSheet"
     }
 }
 
-
 data class TradingType(val name: String)
 
 interface MerchantFilterCallback {
     fun onTradingTypeSelected(type: String)
-    fun clearTradingTypeFilters()
+    fun clearTradingTypeFilters(type: String)
 }
