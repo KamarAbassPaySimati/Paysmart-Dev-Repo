@@ -30,6 +30,6 @@ Feature: Paymaart- Customer Android- Search Merchant by location
     When I click on Location icon
     And I click on Search tab
     And I enter the location as "Balugubingi"
-    Then I should see the Merchants from that location
+    Then I should see the Merchants from that specific location
 
 
