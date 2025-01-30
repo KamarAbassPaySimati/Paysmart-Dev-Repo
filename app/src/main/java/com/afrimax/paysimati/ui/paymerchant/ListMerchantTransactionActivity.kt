@@ -13,16 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.presentation.utils.DP
+import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
 import com.afrimax.paysimati.common.presentation.utils.itemDecoration
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.MerchantList
 import com.afrimax.paysimati.data.model.PayMerchantResponse
+import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.databinding.ActivityListMerchantTransactionBinding
 import com.afrimax.paysimati.ui.BaseActivity
+import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity
 import com.afrimax.paysimati.ui.utils.adapters.ListMerchantTransactionAdapter
-import com.afrimax.paysimati.util.Constants
 import com.afrimax.paysimati.util.showLogE
-import com.github.javafaker.shaded.snakeyaml.scanner.Constant
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -76,12 +77,12 @@ class ListMerchantTransactionActivity : BaseActivity() {
         payMerchantListAdapter.setOnClickListener(object:ListMerchantTransactionAdapter.OnClickListener{
             override fun onClick(transaction: MerchantList) {
                 val intent = Intent(this@ListMerchantTransactionActivity, ChatMerchantActivity::class.java)
-                intent.putExtra(Constants.MERCHANT_NAME,transaction.MerchantName)
-                intent.putExtra(Constants.PAYMAART_ID,transaction.paymaartId)
-                intent.putExtra(Constants.PROFILE_PICTURE,transaction.profile_pic)
-                intent.putExtra(Constants.TILL_NUMBER,transaction.tillNumber)
-                intent.putExtra(Constants.STREET_NAME,transaction.streetName)
-                intent.putExtra(Constants.USER_ID,transaction.userId)
+                intent.putExtra(VIEW_MODEL_STATE, ChatState(
+                    receiverName = transaction.MerchantName!!,
+                    receiverId = transaction.paymaartId!!,
+                    receiverProfilePicture = transaction.profile_pic
+                )
+                )
                 startActivity(intent)
 
             }

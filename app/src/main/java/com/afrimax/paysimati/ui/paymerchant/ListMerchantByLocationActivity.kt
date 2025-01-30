@@ -1,6 +1,7 @@
 package com.afrimax.paysimati.ui.paymerchant
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,12 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.presentation.utils.DP
+import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
 import com.afrimax.paysimati.common.presentation.utils.itemDecoration
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.MerchantListLocation
 import com.afrimax.paysimati.data.model.SearchMerchantByLocation
+import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.databinding.ActivityListMerchantByLocationBinding
 import com.afrimax.paysimati.ui.BaseActivity
+import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity
 import com.afrimax.paysimati.ui.utils.adapters.ListMerchantByLocationAdapter
 import com.afrimax.paysimati.ui.utils.bottomsheets.MerchantFilterCallback
 import com.afrimax.paysimati.ui.utils.bottomsheets.MerchantFilterTradingTypesSheet
@@ -64,6 +68,23 @@ class ListMerchantByLocationActivity : BaseActivity(), MerchantFilterCallback {
     }
     private fun setupView() {
         val payMerchantListAdapter = ListMerchantByLocationAdapter(mMerchantList)
+
+
+        payMerchantListAdapter.setOnClickListener(object: ListMerchantByLocationAdapter.OnClickListener{
+            override fun onClick(transaction: MerchantListLocation) {
+                val intent = Intent(this@ListMerchantByLocationActivity, ChatMerchantActivity::class.java)
+                intent.putExtra(
+                    VIEW_MODEL_STATE, ChatState(
+                    receiverName = transaction.merchantName!!,
+                    receiverId = transaction.paymaartId!!,
+                    receiverProfilePicture = transaction.profilePic
+                )
+                )
+                startActivity(intent)
+
+            }
+
+        })
         binding.listMerchantByLocationRV.apply {
             layoutManager = LinearLayoutManager(
                 this@ListMerchantByLocationActivity, LinearLayoutManager.VERTICAL, false

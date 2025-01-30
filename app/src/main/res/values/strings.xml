@@ -421,10 +421,10 @@
     <string name="employed_option3">Professionals/Technical</string>
     <string name="employed_option4">Professionals/Technical/Manager</string>
     <string name="employed_option5">Board Level/Non-Executive</string>
-    <string name="pay">Pay</string>
     <string name="afrimax">Afrimax</string>
     <string name="merchant">Merchant</string>
     <string name="paysimati">PaySimati</string>
+    <string name="pay">Pay</string>
     <string name="person">Person</string>
     <string name="mwk">MWK</string>
     <string name="_0_00">0.00</string>
@@ -765,4 +765,5 @@
     <string name="trading_type">Trading Type</string>
     <string name="supermarket">Supermarket</string>
     <string name="_trading_number">123456</string>
+    <string name="enter_message">Enter Message</string>
 </resources>
