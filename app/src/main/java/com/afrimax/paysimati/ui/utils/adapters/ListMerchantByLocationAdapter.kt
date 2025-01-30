@@ -7,13 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.data.model.MerchantList
+import com.afrimax.paysimati.data.model.MerchantListLocation
 import com.afrimax.paysimati.databinding.PayMerchantAdapterBinding
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
 
-class ListMerchantTransactionAdapter(
-    private val merchantTransactions: List<MerchantList>
-) : RecyclerView.Adapter<ListMerchantTransactionAdapter.ViewHolder>() {
+class ListMerchantByLocationAdapter(
+    private val merchantTransactions: List<MerchantListLocation>
+) : RecyclerView.Adapter<ListMerchantByLocationAdapter.ViewHolder>() {
 
     private var onClickListener: OnClickListener? = null
 
@@ -35,16 +36,23 @@ class ListMerchantTransactionAdapter(
             binding.payMerchantId.visibility = View.GONE
             binding.payMerchantShortNameTV.visibility = View.GONE
             binding.payMerchantIV.visibility = View.GONE
-            binding.payMerchantTradingtypes.visibility = View.GONE
-            binding.payMerchantTradingType.visibility =View.GONE
+            binding.payMerchantLocation.visibility = View.GONE
+            binding.payMerchantTradingtypes.visibility=View.GONE
+
+
 
             binding.payMerchantLocation.apply {
                 visibility = View.VISIBLE
-                text = merchantdetails.streetName
+                text = merchantdetails.address
             }
+
             binding.payMerchantName.apply {
                 visibility = View.VISIBLE
-                text = merchantdetails.MerchantName
+                text = merchantdetails.merchantName
+            }
+            binding.payMerchantTradingtypes.apply {
+                visibility = View.VISIBLE
+                text = merchantdetails.tradingType.joinToString(",")
             }
             binding.payMerchantId.apply {
                 visibility = View.VISIBLE
@@ -52,12 +60,12 @@ class ListMerchantTransactionAdapter(
             }
             binding.payMerchantShortNameTV.apply {
                 visibility = View.VISIBLE
-                text = getInitials(merchantdetails.MerchantName)
+                text = getInitials(merchantdetails.merchantName)
             }
-            if (merchantdetails.profile_pic.isNullOrEmpty()) {
+            if (merchantdetails.profilePic.isNullOrEmpty()) {
                 binding.payMerchantIV.visibility = View.GONE
             } else {
-                val imageUrl = BuildConfig.CDN_BASE_URL + merchantdetails.profile_pic
+                val imageUrl = BuildConfig.CDN_BASE_URL + merchantdetails.profilePic
                 binding.payMerchantIV.also {
                     it.visibility = View.VISIBLE
                     Glide
@@ -83,6 +91,6 @@ class ListMerchantTransactionAdapter(
     }
 
     interface OnClickListener {
-        fun onClick(transaction: MerchantList)
+        fun onClick(transaction: MerchantListLocation)
     }
 }

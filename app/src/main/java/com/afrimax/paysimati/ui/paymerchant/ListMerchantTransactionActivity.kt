@@ -1,6 +1,7 @@
 package com.afrimax.paysimati.ui.paymerchant
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,12 +13,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.presentation.utils.DP
+import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
 import com.afrimax.paysimati.common.presentation.utils.itemDecoration
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.MerchantList
 import com.afrimax.paysimati.data.model.PayMerchantResponse
+import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.databinding.ActivityListMerchantTransactionBinding
 import com.afrimax.paysimati.ui.BaseActivity
+import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity
 import com.afrimax.paysimati.ui.utils.adapters.ListMerchantTransactionAdapter
 import com.afrimax.paysimati.util.showLogE
 import kotlinx.coroutines.CoroutineScope
@@ -64,9 +68,26 @@ class ListMerchantTransactionActivity : BaseActivity() {
         listMerchantTransaction()
     }
 
-
     private fun setupView() {
+        binding.listMerchantLocation.setOnClickListener{
+            startActivity(Intent(this@ListMerchantTransactionActivity, ListMerchantByLocationActivity::class.java))
+        }
         val payMerchantListAdapter = ListMerchantTransactionAdapter(mMerchantList)
+
+        payMerchantListAdapter.setOnClickListener(object:ListMerchantTransactionAdapter.OnClickListener{
+            override fun onClick(transaction: MerchantList) {
+                val intent = Intent(this@ListMerchantTransactionActivity, ChatMerchantActivity::class.java)
+                intent.putExtra(VIEW_MODEL_STATE, ChatState(
+                    receiverName = transaction.MerchantName!!,
+                    receiverId = transaction.paymaartId!!,
+                    receiverProfilePicture = transaction.profile_pic
+                )
+                )
+                startActivity(intent)
+
+            }
+
+        })
         binding.listMerchantTransactionRV.apply {
             layoutManager = LinearLayoutManager(
                 this@ListMerchantTransactionActivity, LinearLayoutManager.VERTICAL, false
@@ -84,7 +105,7 @@ class ListMerchantTransactionActivity : BaseActivity() {
                 if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE && !isPaginating && !paginationEnd) {
                     isPaginating = true
                     if (searchText.isNotEmpty()) {
-                         paymaartMerchantPagination()
+                        paymaartMerchantPagination()
                     } else {
                         getRecentMerchantTransactionsPagination()
                     }
@@ -97,6 +118,8 @@ class ListMerchantTransactionActivity : BaseActivity() {
         binding.listMerchantTransactionBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+
 
     }
     private fun setupListeners() {
@@ -150,6 +173,7 @@ class ListMerchantTransactionActivity : BaseActivity() {
             }
         })
     }
+
     private fun searchForMerchantTransactions() {
         coroutineScope.launch {
             showLoader()
@@ -185,7 +209,7 @@ class ListMerchantTransactionActivity : BaseActivity() {
                                 }
 
                             }
-                            // Toast.makeText(this@ListMerchantTransactionActivity, data?.message, Toast.LENGTH_LONG).show()
+
                         }else{
                             hideLoader()
                             showEmptyScreen(false)
@@ -226,7 +250,6 @@ class ListMerchantTransactionActivity : BaseActivity() {
                         if (response.code() == 204) {
                             showEmptyScreen(true)
                         } else {
-
                             val data = response.body()
                             val paymerchantList = response.body()?.payMerchantList
                             if (paymerchantList.isNullOrEmpty()) {
