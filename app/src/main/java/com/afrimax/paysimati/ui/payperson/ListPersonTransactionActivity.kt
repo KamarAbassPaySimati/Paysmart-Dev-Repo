@@ -84,9 +84,6 @@ class ListPersonTransactionActivity : BaseActivity() {
                 startActivity(intent)
             }
         })
-
-
-
         binding.listPersonTransactionRV.apply {
             layoutManager = LinearLayoutManager(
                 this@ListPersonTransactionActivity, LinearLayoutManager.VERTICAL, false
@@ -141,15 +138,7 @@ class ListPersonTransactionActivity : BaseActivity() {
         binding.listPersonTransactionSearchET.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if(s.isNullOrEmpty()){
-                    binding.searchicon.visibility=View.VISIBLE
-                    binding.listPersonTransactionSearchClearIV.visibility=View.GONE
-                }else{
-                    binding.searchicon.visibility=View.GONE
-                    binding.listPersonTransactionSearchClearIV.visibility=View.VISIBLE
-                }
-            }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(editable: Editable?) {
                 page = 1
@@ -157,13 +146,9 @@ class ListPersonTransactionActivity : BaseActivity() {
                 typeJob = coroutineScope.launch {
                     delay(500)
                     editable?.let { text ->
-                        binding.listPersonTransactionSearchClearIV.setOnClickListener {
-                            text.clear()
-                        }
                         phoneNumberList.clear()
                         searchText = text.toString()
                         if (searchByPaymaartCredentials) {
-
                             if (searchText.isNotEmpty() && searchText.length > 4) {
                                 searchForPaymaartUser()
                             } else {
@@ -486,7 +471,7 @@ class ListPersonTransactionActivity : BaseActivity() {
                                 }
 
                                 binding.listPersonTransactionRV.adapter?.notifyItemRangeInserted(
-                                        previousListSize, mContactsList.size
+                                    previousListSize, mContactsList.size
                                 )
                             }
                         }
