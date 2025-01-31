@@ -12,10 +12,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,14 +37,17 @@ import androidx.paging.compose.LazyPagingItems
 import com.afrimax.paysimati.R
 import androidx.compose.runtime.State
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.common.core.InterFontFamily
 import com.afrimax.paysimati.common.core.PaySimatiTypography
-import com.afrimax.paysimati.common.core.highlightedLight
-import com.afrimax.paysimati.common.core.neutralGrey
+import com.afrimax.paysimati.common.core.clearTimeToMalawiTimeZone
+import com.afrimax.paysimati.common.core.*
+import com.afrimax.paysimati.common.core.parseMalawianDate
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.data.model.chat.ChatMessage
 import com.afrimax.paysimati.data.model.chat.ChatState
+import com.afrimax.paysimati.data.model.chat.PaymentStatusType
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
@@ -61,7 +66,20 @@ class ChatMerchantActivity : BaseActivity() {
         }
         setContent {
             val state = vm.state.collectAsState()
-            ChatMerchantScreen(state = state)
+            LaunchedEffect(Unit) {
+                vm.sideEffect.collect {
+                    when (it) {
+                        is ChatSideEffect.ShowToast -> {
+                            showToast(it.message.toString())
+                        }
+
+                        is ChatSideEffect.ShowSnack -> {
+                            //
+                        }
+                    }
+                }
+            }
+            ChatMerchantScreen(state = state, modifier = Modifier.fillMaxSize())
         }
     }
 
@@ -91,7 +109,7 @@ class ChatMerchantActivity : BaseActivity() {
                         vm(ChatIntent.SetMessageText(text))
 
                     },
-                    onClickSend ={
+                    onClickSend = {
                         vm(ChatIntent.SendMessage)
                     }
 
@@ -104,25 +122,26 @@ class ChatMerchantActivity : BaseActivity() {
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                //    val previousChats = vm.pagedData.collectAsLazyPagingItems()
-                    //   previousChats.apply {
-                    when {
-//                        loadState.refresh is LoadState.Loading -> {
-//                            PrimaryLoader(
-//                                modifier = Modifier
-//                                    .size(100.dp)
-//                                    .align(Alignment.Center),
-//                                context = context
-//                            )
-//                        }
-//
-//                        else -> {
-//                            ChatsLazyList(
-//                                modifier = Modifier.matchParentSize(),
-//                                previousChats = previousChats,
-//                                realTimeMessages = state.value.realTimeMessages
-//                            )
-//                        }
+                    val previousChats = vm.pagedData.collectAsLazyPagingItems()
+                    previousChats.apply {
+                        when {
+                            loadState.refresh is LoadState.Loading -> {
+                                PrimaryLoader(
+                                    modifier = Modifier
+                                        .size(100.dp)
+                                        .align(Alignment.Center),
+                                    context = context
+                                )
+                            }
+
+                            else -> {
+                                ChatsLazyList(
+                                    modifier = Modifier.matchParentSize(),
+                                    previousChats = previousChats,
+                                    realTimeMessages = state.value.realTimeMessages
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -257,23 +276,23 @@ class ChatMerchantActivity : BaseActivity() {
                         .weight(1f)
                         .padding(vertical = 4.dp)
                         .align(Alignment.CenterVertically),
-                decorationBox = { innerTextField ->
-                    Box {
-                        if (messageText.isEmpty()) {
-                            Text(
-                                text = getString(R.string.enter_message),
-                                style = PaySimatiTypography().subtitle2,
-                                color = neutralGrey
-                            )
+                    decorationBox = { innerTextField ->
+                        Box {
+                            if (messageText.isEmpty()) {
+                                Text(
+                                    text = getString(R.string.enter_message),
+                                    style = PaySimatiTypography().subtitle2,
+                                    color = neutralGrey
+                                )
+                            }
+                            innerTextField()
                         }
-                        innerTextField()
                     }
-                }
                 )
                 IconButton(
                     modifier = Modifier
                         .align(Alignment.Bottom)
-                        .padding(4.dp), onClick =  onClickSend
+                        .padding(4.dp), onClick = onClickSend
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_send),
@@ -295,7 +314,7 @@ class ChatMerchantActivity : BaseActivity() {
             ) {
                 Text(
                     text = stringResource(R.string.pay),
-                     fontFamily = InterFontFamily(),
+                    fontFamily = InterFontFamily(),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 14.sp,
                     color = Color.White
@@ -305,7 +324,6 @@ class ChatMerchantActivity : BaseActivity() {
         }
         // Implement BottomBar content
     }
-
 
 
     @Composable
@@ -327,10 +345,10 @@ class ChatMerchantActivity : BaseActivity() {
             }
 
             //Realtime messages
-            //      realtimeChats(realTimeMessages = realTimeMessages, previousChats = previousChats)
+            realtimeChats(realTimeMessages = realTimeMessages, previousChats = previousChats)
 
             //Previous messages
-            //    previousChats(previousChats = previousChats)
+            previousChats(previousChats = previousChats)
 
             if (previousChats.loadState.append is LoadState.Loading) {
                 item {
@@ -355,8 +373,363 @@ class ChatMerchantActivity : BaseActivity() {
 
         }
     }
+    /**
+     * Displays real-time chat messages in a LazyList.
+     *
+     * This function iterates through a list of real-time chat messages ([realTimeMessages]) and displays them
+     * using appropriate composable functions based on the message type (text or payment).
+     * It also handles displaying date chips to separate messages by day.
+     *
+     * @param realTimeMessages A list of real-time chat messages to display.
+     * @param previousChats A LazyPagingItems object containing previous chat messages. This is used to
+     * determine if a date chip should be displayed before the first real-time message.
+     */
+    private fun LazyListScope.realtimeChats(
+        realTimeMessages: ArrayList<ChatMessage>, previousChats: LazyPagingItems<ChatMessage>
+    ) {
+        items(count = realTimeMessages.size) { index ->
+
+            val chat = realTimeMessages.getOrNull(index)
+            val previousChat = if (index == realTimeMessages.size - 1) {
+                if (previousChats.itemCount > 0) previousChats[0] else null
+            } else {
+                realTimeMessages.getOrNull(index + 1)
+            }
+
+            chat?.let {
+                when (chat) {
+                    is ChatMessage.TextMessage -> {
+                        TextMessage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 4.dp),
+                            message = chat.message,
+                            isAuthor = chat.isAuthor
+                        )
+                    }
+
+                    is ChatMessage.PaymentMessage -> {
+                        PaymentMessage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 4.dp),
+                            amount = chat.amount,
+                            txnId = chat.transactionId,
+                            paymentStatus = chat.paymentStatusType,
+                            date = chat.chatCreatedTime.parseMalawianDate("dd MMM yyyy, HH:mm"),
+                            note = chat.note,
+                            isSender = chat.isAuthor
+                        )
+                    }
+                }
+            }
+
+            //Load above the chat message
+            val isFirstChatInTheDay =
+                chat != null && previousChat != null && chat.createdTime.clearTimeToMalawiTimeZone() != previousChat.createdTime.clearTimeToMalawiTimeZone()
+
+            if (isFirstChatInTheDay || previousChat == null) {
+                DateChip(
+                    date = chat!!.createdTime.parseMalawianDate(DATE_CHIP_FORMAT),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+            }
+        }
+
+    }
+    private fun LazyListScope.previousChats(previousChats: LazyPagingItems<ChatMessage>) {
+        items(
+            count = previousChats.itemCount
+        ) { index ->
+            val chat = previousChats[index]
+            val previousChat = if (index > 0) previousChats[index - 1] else null
+
+            val isLastChatInTheDay =
+                chat != null && previousChat != null && chat.createdTime.clearTimeToMalawiTimeZone() != previousChat.createdTime.clearTimeToMalawiTimeZone()
+
+            //Load after chat message
+            if (isLastChatInTheDay) {
+                DateChip(
+                    date = previousChat!!.createdTime.parseMalawianDate(DATE_CHIP_FORMAT),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+            }
+
+            chat?.let {
+                when (chat) {
+                    is ChatMessage.TextMessage -> {
+                        TextMessage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 4.dp),
+                            message = chat.message,
+                            isAuthor = chat.isAuthor
+                        )
+                    }
+
+                    is ChatMessage.PaymentMessage -> {
+                        PaymentMessage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 4.dp),
+                            amount = chat.amount,
+                            txnId = chat.transactionId,
+                            paymentStatus = chat.paymentStatusType,
+                            date = chat.chatCreatedTime.parseMalawianDate("dd MMM yyyy, HH:mm"),
+                            note = chat.note,
+                            isSender = chat.isAuthor
+                        )
+                    }
+                }
+            }
+
+            //All the messages are loaded if following is true
+            val isFullyLoaded =
+                chat != null && previousChats.loadState.append == LoadState.NotLoading(
+                    endOfPaginationReached = true
+                ) && index == previousChats.itemCount - 1
+
+            //Load before chat message
+            if (isFullyLoaded) {
+                DateChip(
+                    date = chat!!.createdTime.parseMalawianDate(DATE_CHIP_FORMAT),
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun TextMessage(modifier: Modifier = Modifier, message: String, isAuthor: Boolean) {
+
+        BoxWithConstraints(
+            modifier = modifier,
+            contentAlignment = if (isAuthor) Alignment.CenterEnd else Alignment.CenterStart
+        ) {
+            val maxWidth = maxWidth * 0.75f // 70% of the screen width
+            Box(
+                modifier = Modifier
+                    .widthIn(max = maxWidth)
+                    .background(neutralGreyDisabled, shape = RoundedCornerShape(8.dp))
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+            ) {
+                androidx.compose.material.Text(
+                    text = message,
+                    fontFamily = InterFontFamily(),
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 14.sp,
+                    color = Color.Black
+                )
+            }
+        }
+
+    }
+
+
+
+    @Composable
+    fun PaymentMessage(
+        modifier: Modifier = Modifier,
+        amount: Double,
+        txnId: String,
+        paymentStatus: PaymentStatusType,
+        date: String,
+        note: String? = null,
+        isSender: Boolean
+    ) {
+        BoxWithConstraints(
+            modifier = modifier,
+            contentAlignment = if (isSender) Alignment.CenterEnd else Alignment.CenterStart
+        ) {
+            val maxWidth = maxWidth * 0.7f // 70% of the screen width
+            Column(
+                modifier = Modifier
+                    .width(maxWidth)
+                    .clip(RoundedCornerShape(8.dp))
+                    .border(
+                        width = 1.dp, color = highlightedLight, shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(16.dp)
+            ) {
+
+                //Amount
+                Row(verticalAlignment = Alignment.Bottom) {
+                    Text(
+                        text = amount.parseCurrency(),
+                        fontFamily = InterFontFamily(),
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 24.sp,
+                        color = primaryColor
+                    )
+
+                    Spacer(modifier = Modifier.width(6.dp))
+
+                    androidx.compose.material.Text(
+                        text = stringResource(R.string.mwk),
+                        fontFamily = InterFontFamily(),
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp,
+                        color = primaryColor,
+                        modifier = Modifier.padding(bottom = 2.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                //Txn Id
+                androidx.compose.material.Text(
+                    text = stringResource(R.string.txn_id_colon, txnId),
+                    fontFamily = InterFontFamily(),
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 14.sp,
+                    color = neutralGreyPrimaryText
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                //Payment status & Date
+                Row(modifier = Modifier.fillMaxWidth()) {
+
+                    //Payment status
+                    when (paymentStatus) {
+                        PaymentStatusType.PENDING -> {
+                            PaymentPendingChip(modifier = Modifier.weight(1f))
+                        }
+
+                        PaymentStatusType.RECEIVED -> {
+                            PaymentReceivedChip(modifier = Modifier.weight(1f))
+                        }
+
+                        PaymentStatusType.DECLINED -> {
+                            PaymentDeclinedChip(modifier = Modifier.weight(1f))
+                        }
+                    }
+
+                    //Date
+                    androidx.compose.material.Text(
+                        text = date,
+                        fontFamily = InterFontFamily(),
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                        color = neutralGreyPrimaryText
+                    )
+
+                }
+
+                //Note
+                if(!note.isNullOrBlank()) {
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    //Divider
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .background(highlightedLight)
+                    )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    androidx.compose.material.Text(
+                        text = stringResource(R.string.note_colon, note),
+                        fontFamily = InterFontFamily(),
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                    )
+                }
+            }
+        }
+    }
+    @Composable
+    fun PaymentReceivedChip(modifier: Modifier = Modifier) {
+        Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painter = painterResource(R.drawable.ic_payment_success),
+                contentDescription = null,
+            )
+
+            Spacer(modifier = Modifier.width(6.dp))
+
+            androidx.compose.material.Text(
+                text = stringResource(R.string.received),
+                fontFamily = InterFontFamily(),
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                color = neutralGreyPrimaryText
+            )
+
+        }
+    }
+
+    @Composable
+    fun PaymentPendingChip(modifier: Modifier = Modifier) {
+        Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painter = painterResource(R.drawable.ic_payment_failure),
+                contentDescription = null,
+            )
+
+            Spacer(modifier = Modifier.width(6.dp))
+
+            androidx.compose.material.Text(
+                text = stringResource(R.string.pending),
+                fontFamily = InterFontFamily(),
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                color = neutralGreyPrimaryText
+            )
+
+        }
+    }
+
+    @Composable
+    fun PaymentDeclinedChip(modifier: Modifier = Modifier) {
+        Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painter = painterResource(R.drawable.ic_close),
+                contentDescription = null,
+            )
+
+            Spacer(modifier = Modifier.width(6.dp))
+
+            androidx.compose.material.Text(
+                text = stringResource(R.string.declined),
+                fontFamily = InterFontFamily(),
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                color = neutralGreyPrimaryText
+            )
+
+        }
+    }
+    @Composable
+    fun DateChip(modifier: Modifier = Modifier, date: String) {
+        Box(
+            modifier = modifier
+                .clip(RoundedCornerShape(24.dp))
+                .background(neutralGreyTextFieldBackground)
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            androidx.compose.material.Text(
+                text = date,
+                fontFamily = InterFontFamily(),
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                color = neutralGreyPrimaryText
+            )
+        }
+    }
+
+
+
+    companion object {
+        const val DATE_CHIP_FORMAT = "dd MMM, yyyy"
+    }
+
 
 }
+
+
 
 
 //@Preview(showBackground = true)

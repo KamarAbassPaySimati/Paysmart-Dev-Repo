@@ -20,7 +20,12 @@ import java.net.HttpURLConnection.HTTP_OK
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+import kotlin.math.abs
 
 fun Context.fileTypeFromUri(uri: Uri): FileType? {
     val mime = MimeTypeMap.getSingleton()
@@ -61,3 +66,28 @@ fun Any?.parseDate(): Date? {
         else -> return null
     }
 }
+fun Date.parseMalawianDate(format: String): String {
+    val cal = Calendar.getInstance().apply { time = this@parseMalawianDate }
+    // Define the desired date format
+    val formattedDate = SimpleDateFormat(format, Locale.getDefault()).apply {
+        timeZone = TimeZone.getTimeZone("Africa/Blantyre")
+    }.format(cal.time)
+    return formattedDate
+}
+
+fun Date.clearTimeToMalawiTimeZone(): Date {
+    val calendar = Calendar.getInstance(TimeZone.getTimeZone("Africa/Blantyre")).apply {
+        time = this@clearTimeToMalawiTimeZone
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }
+    return calendar.time
+}
+
+
+fun Double.parseCurrency(): String {
+    return String.format(Locale.US, "%,.2f", abs(this))
+}
+
