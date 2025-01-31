@@ -46,7 +46,9 @@ import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChatMerchantActivity : BaseActivity() {
     private val vm: ChatViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +64,6 @@ class ChatMerchantActivity : BaseActivity() {
             ChatMerchantScreen(state = state)
         }
     }
-
 
     @Composable
     fun ChatMerchantScreen(state: State<ChatState>, modifier: Modifier = Modifier) {
@@ -86,6 +87,14 @@ class ChatMerchantActivity : BaseActivity() {
                         .imePadding(),
                     context = context,
                     messageText = state.value.messageText,
+                    onMessageType = { text ->
+                        vm(ChatIntent.SetMessageText(text))
+
+                    },
+                    onClickSend ={
+                        vm(ChatIntent.SendMessage)
+                    }
+
                 )
             }) { padding ->
             Column(
@@ -95,7 +104,7 @@ class ChatMerchantActivity : BaseActivity() {
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    //  val previousChats = vm.pagedData.collectAsLazyPagingItems()
+                //    val previousChats = vm.pagedData.collectAsLazyPagingItems()
                     //   previousChats.apply {
                     when {
 //                        loadState.refresh is LoadState.Loading -> {
@@ -222,8 +231,8 @@ class ChatMerchantActivity : BaseActivity() {
     @Composable
     fun BottomBar(
         messageText: String,
-     //   onMessageType: (text: String) -> Unit,
-      //  onClickSend: () -> Unit,
+        onMessageType: (text: String) -> Unit,
+        onClickSend: () -> Unit,
         modifier: Modifier = Modifier,
         context: Context
     ) {
@@ -241,7 +250,7 @@ class ChatMerchantActivity : BaseActivity() {
             ) {
                 BasicTextField(
                     value = messageText,
-                    onValueChange = { text -> }, // onMessageType(text) },
+                    onValueChange = { text -> onMessageType(text) },
                     maxLines = 6,
                     modifier = Modifier
                         .wrapContentHeight()
@@ -251,7 +260,7 @@ class ChatMerchantActivity : BaseActivity() {
                 decorationBox = { innerTextField ->
                     Box {
                         if (messageText.isEmpty()) {
-                            androidx.compose.material.Text(
+                            Text(
                                 text = getString(R.string.enter_message),
                                 style = PaySimatiTypography().subtitle2,
                                 color = neutralGrey
@@ -264,7 +273,7 @@ class ChatMerchantActivity : BaseActivity() {
                 IconButton(
                     modifier = Modifier
                         .align(Alignment.Bottom)
-                        .padding(4.dp), onClick = {}  //onClickSend
+                        .padding(4.dp), onClick =  onClickSend
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_send),

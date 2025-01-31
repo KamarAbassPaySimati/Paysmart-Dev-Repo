@@ -3,18 +3,22 @@ package com.afrimax.paysimati.ui.chatMerchant.domain.usecase
 import com.afrimax.paysimati.common.data.repository.SharedPrefsRepository
 import com.afrimax.paysimati.common.domain.utils.Errors
 import com.afrimax.paysimati.common.domain.utils.GenericResult
-import com.afrimax.paysimati.ui.chatMerchant.domain.repo.ChatSocketRepository
+import com.afrimax.paysimati.data.model.chat.PreviousChatsResult
+import com.afrimax.paysimati.ui.chatMerchant.domain.repo.PaymentApiRepository
 import javax.inject.Inject
 
-class sendChatMessageUseCase @Inject constructor(
-    private val provideChatSocketRepository: ChatSocketRepository,
+class GetPreviousChatsUseCase @Inject constructor(
+    private val paymentApiRepository: PaymentApiRepository,
     private val sharedPrefsRepository: SharedPrefsRepository
 ) {
-    operator fun invoke(message: String, receiverId: String): GenericResult<Unit, Errors> {
+    suspend operator fun invoke(
+        receiverId: String, page: Int
+    ): GenericResult<PreviousChatsResult, Errors> {
+
         val userPaysimatiId = sharedPrefsRepository.userPaySimatiId
         return if (userPaysimatiId != null) {
-            provideChatSocketRepository.sendTextMessage(
-                message = message, receiverId = receiverId, senderId = userPaysimatiId
+            paymentApiRepository.getPreviousChats(
+                receiverId = receiverId, senderId = userPaysimatiId, page = page
             )
         } else {
             GenericResult.Error(Errors.Prefs.NO_SUCH_DATA)

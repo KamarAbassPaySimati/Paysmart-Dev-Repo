@@ -8,6 +8,7 @@ import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 import java.net.HttpURLConnection.HTTP_CONFLICT
 import java.net.HttpURLConnection.HTTP_CREATED
 import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
+import java.net.HttpURLConnection.HTTP_NO_CONTENT
 import java.net.HttpURLConnection.HTTP_OK
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import java.net.SocketTimeoutException
@@ -29,7 +30,7 @@ inline fun <T> safeApiCall(
         val body = response.body()
 
         return when (response.code()) {
-            HTTP_OK, HTTP_CREATED -> if (body != null) GenericResult.Success(body) else GenericResult.Error(
+            HTTP_OK, HTTP_CREATED , HTTP_NO_CONTENT -> if (body != null) GenericResult.Success(body) else GenericResult.Error(
                 Errors.Network.NO_RESPONSE
             )
 

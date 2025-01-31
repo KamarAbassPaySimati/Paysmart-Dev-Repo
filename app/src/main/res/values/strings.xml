@@ -766,4 +766,6 @@
     <string name="supermarket">Supermarket</string>
     <string name="_trading_number">123456</string>
     <string name="enter_message">Enter Message</string>
+    <string name="error_unable_to_connect">Unable to connect</string>
+    <string name="error_mapping_failed">Error Mapping Failed</string>
 </resources>

@@ -8,7 +8,7 @@ import com.afrimax.paysimati.ui.chatMerchant.domain.repo.ChatSocketRepository
 import javax.inject.Inject
 
 class EstablishSocketConnectionUseCase @Inject constructor(
-    private val chatSocketRepository: ChatSocketRepository,
+    private val provideChatSocketRepository: ChatSocketRepository,
     private val sharedPrefsRepository: SharedPrefsRepository
 ) {
     suspend operator fun invoke(
@@ -16,7 +16,7 @@ class EstablishSocketConnectionUseCase @Inject constructor(
     ): GenericResult<Unit, Errors> {
         val userPaysimatiId = sharedPrefsRepository.userPaySimatiId
         return if (userPaysimatiId != null) {
-            chatSocketRepository.establishConnection(
+            provideChatSocketRepository.establishConnection(
                 senderId = userPaysimatiId,
                 receiverId = receiverId,
                 onMessageReceived = onMessageReceived
