@@ -71,7 +71,7 @@ class SearchMerchantByLocation {
 
     @Then("I should read a message stating {string}")
     fun noDataFound(message: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.sheetPinPasswordChangeTitleTV))
-            .check(ViewAssertions.matches(ViewMatchers.withText(message)))
+        Espresso.onView(withId(R.id.sheetPinPasswordChangeTitleTV))
+            .check(ViewAssertions.matches(withText(message)))
     }
 }
