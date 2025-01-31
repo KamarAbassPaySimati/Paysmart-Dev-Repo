@@ -51,11 +51,9 @@ firebaseVersion = "3.0.2"
 googleGmsGoogleServicesVersion = "4.4.2"
 hiltAndroid = "2.51"
 orbitViewmodel = "4.3.1"
-qrscanner="4.3.0"
 
 [libraries]
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
-qr-scanner={ group ="com.journeyapps",name="zxing-android-embedded",version.ref="qrscanner"}
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
 orbit-core = { module = "org.orbit-mvi:orbit-core", version.ref = "orbitViewmodel" }
 orbit-viewmodel = { module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbitViewmodel" }

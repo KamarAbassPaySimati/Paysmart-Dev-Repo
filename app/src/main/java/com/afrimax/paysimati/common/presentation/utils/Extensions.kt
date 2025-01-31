@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.content.res.TypedArray
-import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
@@ -21,7 +20,6 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity.INPUT_METHOD_SERVICE
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.domain.utils.Errors.Network
 import com.afrimax.paysimati.common.domain.utils.Errors.Prefs
@@ -221,21 +219,4 @@ inline fun <reified T> TypedArray.getAttr(
         Drawable::class -> getDrawable(index) as T ?: defaultValue
         else -> throw IllegalArgumentException("Unsupported attribute type")
     }
-}
-
-
-/**This extension simplifies the implementation of custom RecyclerView item decorations,
- * eliminating boilerplate code for a cleaner and more efficient setup*/
-inline fun RecyclerView.itemDecoration(
-    margin: Int, crossinline configureOffsets: (outRect: Rect, position: Int, margin: Int) -> Unit
-) {
-    val decoration = object : RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(
-            outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
-        ) {
-            val position = parent.getChildAdapterPosition(view)
-            configureOffsets(outRect, position, margin)
-        }
-    }
-    addItemDecoration(decoration)
 }

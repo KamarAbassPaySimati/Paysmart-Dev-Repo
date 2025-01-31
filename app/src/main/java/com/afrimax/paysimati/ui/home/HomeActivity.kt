@@ -44,12 +44,10 @@ import com.afrimax.paysimati.ui.cashout.CashOutSearchActivity
 import com.afrimax.paysimati.ui.delete.DeleteAccountActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlansActivity
 import com.afrimax.paysimati.ui.password.UpdatePasswordPinActivity
-import com.afrimax.paysimati.ui.paymerchant.ListMerchantTransactionActivity
 import com.afrimax.paysimati.ui.payperson.ListPersonTransactionActivity
 import com.afrimax.paysimati.ui.payperson.PersonTransactionActivity
 import com.afrimax.paysimati.ui.paytoaffrimax.ValidateAfrimaxIdActivity
 import com.afrimax.paysimati.ui.refundrequest.RefundRequestActivity
-import com.afrimax.paysimati.ui.scanQr.CustomCaptureActivity
 import com.afrimax.paysimati.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paysimati.ui.utils.adapters.HomeScreenPayPersonAdapter
 import com.afrimax.paysimati.ui.utils.bottomsheets.CompleteKycSheet
@@ -71,9 +69,6 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
-import com.journeyapps.barcodescanner.ScanContract
-import com.journeyapps.barcodescanner.ScanIntentResult
-import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -120,13 +115,12 @@ class HomeActivity : BaseActivity(), HomeInterface {
         askNotificationPermission()
         checkForUpdate()
     }
-//doubt
+
     private fun initViews() {
         appUpdateManager = AppUpdateManagerFactory.create(this)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-           //1
                 if (b.homeActivity.isDrawerVisible(GravityCompat.END)) b.homeActivity.closeDrawer(
                     GravityCompat.END
                 )
@@ -167,28 +161,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
 
         b.homeActivityPayMerchantButton.setOnClickListener {
             if (checkKycStatus()) {
-                startActivity(Intent(this,ListMerchantTransactionActivity::class.java))
-            }
-        }
-        val scanner = registerForActivityResult<ScanOptions, ScanIntentResult>(
-            ScanContract()
-        ) { result ->
-            if (result.contents != null) {
-
-                Toast.makeText(this,"${result.contents}",Toast.LENGTH_SHORT).show()
-            } else {
-
-                Toast.makeText(this, "canclled", Toast.LENGTH_SHORT).show()
-            }
-
-        }
-
-        b.homeActivityScanQrButton.setOnClickListener{
-            if(checkKycStatus()){
-                scanner.launch(
-                    ScanOptions().setPrompt("").setDesiredBarcodeFormats(ScanOptions.QR_CODE)
-                        .setCaptureActivity(CustomCaptureActivity::class.java)
-                )
+                //
             }
         }
 
@@ -205,7 +178,11 @@ class HomeActivity : BaseActivity(), HomeInterface {
             }
         }
 
-
+        b.homeActivityScanQrButton.setOnClickListener {
+            if (checkKycStatus()) {
+                //
+            }
+        }
 
         b.homeActivityCashOutButton.setOnClickListener {
             if (checkKycStatus()) {
