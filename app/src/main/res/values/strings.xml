@@ -425,6 +425,10 @@
     <string name="merchant">Merchant</string>
     <string name="paysimati">PaySimati</string>
     <string name="pay">Pay</string>
+    <string name="txn_id_colon">Txn ID: %1$s</string>
+    <string name="note_colon">Note: %1$s</string>
+    <string name="received">Received</string>
+    <string name="declined">Declined</string>
     <string name="person">Person</string>
     <string name="mwk">MWK</string>
     <string name="_0_00">0.00</string>
@@ -766,4 +770,6 @@
     <string name="supermarket">Supermarket</string>
     <string name="_trading_number">123456</string>
     <string name="enter_message">Enter Message</string>
+    <string name="error_unable_to_connect">Unable to connect</string>
+    <string name="error_mapping_failed">Error Mapping Failed</string>
 </resources>

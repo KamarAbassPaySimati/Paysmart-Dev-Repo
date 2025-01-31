@@ -3,6 +3,7 @@ package com.afrimax.paysimati
 import android.app.Application
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import com.afrimax.paysimati.common.data.repository.SharedPrefsRepository
 import com.afrimax.paysimati.util.AmplifyConfigCreator
 import com.afrimax.paysimati.util.AuthCalls
 import com.afrimax.paysimati.util.PrefsManager
@@ -62,6 +63,9 @@ class PaymaartApplication: Application() {
         }
 
     }
+//    val sharedPrefsRepository: SharedPrefsRepository by lazy {
+//        SharedPrefsRepositoryImpl(this)
+//    }
 
     private suspend fun fetchFcmToken(): String {
         return suspendCoroutine { continuation ->

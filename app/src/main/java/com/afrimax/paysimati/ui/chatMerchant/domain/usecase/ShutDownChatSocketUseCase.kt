@@ -4,9 +4,9 @@ import com.afrimax.paysimati.ui.chatMerchant.domain.repo.ChatSocketRepository
 import javax.inject.Inject
 
 class ShutDownChatSocketUseCase @Inject constructor(
-    private val chatSocketRepository: ChatSocketRepository,
+    private val provideChatSocketRepository: ChatSocketRepository,
 ) {
     operator fun invoke() {
-        chatSocketRepository.disconnect()
+        provideChatSocketRepository.disconnect()
     }
 }
