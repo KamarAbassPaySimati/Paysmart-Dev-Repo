@@ -90,4 +90,12 @@ fun Date.clearTimeToMalawiTimeZone(): Date {
 fun Double.parseCurrency(): String {
     return String.format(Locale.US, "%,.2f", abs(this))
 }
+fun String?.parseAmount(): Double {
+    if (this == null) return 0.0
+    return try {
+        this.toDouble()
+    } catch (e: NumberFormatException) {
+        0.0
+    }
+}
 

@@ -46,6 +46,7 @@ inline fun <T> safeApiCall(
     } catch (e: SocketTimeoutException) {
         return GenericResult.Error(Errors.Network.REQUEST_TIMEOUT)
     } catch (e: Exception) {
+        e.printStackTrace()
         return GenericResult.Error(Errors.Network.UNKNOWN)
     }
 }

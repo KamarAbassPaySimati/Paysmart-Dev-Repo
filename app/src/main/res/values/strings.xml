@@ -429,6 +429,7 @@
     <string name="note_colon">Note: %1$s</string>
     <string name="received">Received</string>
     <string name="declined">Declined</string>
+    <string name="decline">Decline</string>
     <string name="person">Person</string>
     <string name="mwk">MWK</string>
     <string name="_0_00">0.00</string>

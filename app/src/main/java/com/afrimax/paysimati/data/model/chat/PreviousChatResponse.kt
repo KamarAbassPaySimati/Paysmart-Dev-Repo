@@ -1,4 +1,4 @@
-package com.afrimax.paysimati.data.model
+package com.afrimax.paysimati.data.model.chat
 
 import com.google.gson.annotations.SerializedName
 
@@ -21,6 +21,6 @@ data class PreviousChatResponse(
         @SerializedName("record_id") val recordId: String? = null,
         @SerializedName("sender_id") val senderId: String? = null,
         @SerializedName("transaction_amount") val transactionAmount: String? = null,
-        @SerializedName("transaction_id") val transactionId: String? = null,
+        @SerializedName("transaction_id") val transactionId: String? = null
     )
 }
