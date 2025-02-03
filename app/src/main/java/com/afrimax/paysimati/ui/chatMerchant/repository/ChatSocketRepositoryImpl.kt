@@ -68,7 +68,7 @@ class ChatSocketRepositoryImpl() : ChatSocketRepository {
         if (webSocket == null) {
             val httpUrlBuilder =
                 //need to chnage for customer
-                HttpUrl.Builder().scheme(PROTOCOL_HTTPS).host(BuildConfig.CHAT_WEBSOCKET)
+                HttpUrl.Builder().scheme(PROTOCOL_HTTPS).host(BuildConfig.MERCHANT_CHAT_WEBSOCKET)
                     .addPathSegment("")
 
             httpUrlBuilder.addQueryParameter(SENDER_ID, senderId)
