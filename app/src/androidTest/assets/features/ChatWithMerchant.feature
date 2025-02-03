@@ -42,3 +42,4 @@ Feature: Paymaart- Customer Android- Chat with Merchant
     And I type "Hello"
     And I click on Send icon
     Then I should see the sent message in the screen
+    
