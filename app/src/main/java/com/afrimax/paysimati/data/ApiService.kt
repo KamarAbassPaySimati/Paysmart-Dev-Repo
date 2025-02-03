@@ -33,7 +33,7 @@ import com.afrimax.paysimati.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paysimati.data.model.PayToUnRegisteredPersonRequest
 import com.afrimax.paysimati.data.model.PayToUnRegisteredPersonResponse
 import com.afrimax.paysimati.data.model.PersonTransactions
-import com.afrimax.paysimati.data.model.PreviousChatResponse
+import com.afrimax.paysimati.data.model.chat.PreviousChatResponse
 import com.afrimax.paysimati.data.model.RefundRequestResponse
 import com.afrimax.paysimati.data.model.ResendCredentialsRequest
 import com.afrimax.paysimati.data.model.SaveBasicDetailsSelfKycRequest
@@ -84,7 +84,7 @@ private const val PAYMAART = "paymaart"
 private const val CUSTOMER = "customer"
 private const val AFRIMAX = "afrimax"
 private const val CASHIN_CASHOUT = "cashin-cashout"
-private const val CHAT="chats"
+
 
 interface ApiService {
 
@@ -241,11 +241,13 @@ interface ApiService {
         @Header("Authorization") header: String, @Query("page") page: Int
     ): Call<GetAfrimaxPlansResponse>
 
-    @GET("$CHAT/customer-messages")
-    fun getPreviousChat(
+    @GET("chats/customer-messages")
+    suspend fun getPreviousChat(
         @Header("Authorization") header: String,
-        @Query("receiver_id") receiverId: String,@Query("page") page: Int
-    ):Response<PreviousChatResponse>
+        @Query("receiver_id") receiverId: String,
+        @Query("page") page: Int
+    ): Response<PreviousChatResponse>
+
 
     @POST("$AFRIMAX/cmr/payment")
     suspend fun payToAfrimax(
@@ -343,23 +345,23 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/recent-transactions")
     fun getMerchantTransactionList(
-        @Header("Authorization") header: String,@Query("page") page:Int=1
-    ):Call<PayMerchantResponse>
+        @Header("Authorization") header: String, @Query("page") page: Int = 1
+    ): Call<PayMerchantResponse>
 
     @GET("$CUSTOMER_USER/recent-transactions")
     fun searchMerchantById(
         @Header("Authorization") header: String,
         @Query("search") search: String,
         @Query("page") page: Int = 1
-    ):Call<PayMerchantResponse>
+    ): Call<PayMerchantResponse>
 
     @GET("$CUSTOMER_USER/find-merchants")
     fun searchMerchantByLocation(
         @Header("Authorization") header: String,
         @Query("location") search: String,
-        @Query("trading_type")tradingType:String?=null,
+        @Query("trading_type") tradingType: String? = null,
         @Query("page") page: Int = 1
-    ):Call<SearchMerchantByLocation>
+    ): Call<SearchMerchantByLocation>
 
 
     @POST("bank-transactions/customer/payment-details")

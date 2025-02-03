@@ -1,7 +1,6 @@
 package com.afrimax.paysimati.ui.chatMerchant.ui
 
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,6 +28,7 @@ import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 
+
 @HiltViewModel
 class ChatViewModel @Inject constructor  (
     private val savedStateHandle: SavedStateHandle,
@@ -36,13 +36,16 @@ class ChatViewModel @Inject constructor  (
     private val establishSocketConnectionUseCase: EstablishSocketConnectionUseCase,
     private val shutDownSocketUseCase: ShutDownChatSocketUseCase,
     private val getPreviousChatsUseCase: GetPreviousChatsUseCase
-)
-    :ViewModel() {
+) :ViewModel() {
+
+
+
     private val _sideEffect = MutableSharedFlow<ChatSideEffect>() // Use SharedFlow for side effects
     val sideEffect: SharedFlow<ChatSideEffect> = _sideEffect
 
     private val initialstate = savedStateHandle[VIEW_MODEL_STATE] ?: ChatState(
         receiverName = "", receiverId = "", receiverProfilePicture = "")
+    //override val container = container<ChatState, ChatSideEffect>(initialState, savedStateHandle)
 
     val state = savedStateHandle.getStateFlow("state", initialstate)
 
@@ -52,15 +55,17 @@ class ChatViewModel @Inject constructor  (
             is ChatIntent.SendMessage -> sendMessage()
             is ChatIntent.ShutDownSocket -> shutDownSocket()
             is ChatIntent.SetMessageText -> setMessage(action.text)
+
         }
     }
+
 
     private fun establishConnection(): Job {
         return viewModelScope.launch {
             establishSocketConnectionUseCase(
                 receiverId =state.value.receiverId
             ) { newMessage ->
-                val currentMessages = ArrayList(state.value.realTimeMessages)
+                val currentMessages = ArrayList(state.value.realTimeMessages) //ArrayList(currentState.realTimeMessages)
                 //Add message
                 currentMessages.add(0, newMessage)
 
@@ -71,37 +76,57 @@ class ChatViewModel @Inject constructor  (
     }
 
 
+
     private fun sendMessage(): Job? {
         return viewModelScope.launch {
-            val currentmessage = state.value.messageText
-            if(currentmessage.isNotBlank()){
-                savedStateHandle["state"] = state.value.copy(messageText = "")
-            }
-            val sendMessageCall = sendChatMessageUseCase(
-                message = state.value.messageText, receiverId = state.value.receiverId
-            )
+            val currentMessage = state.value.messageText
+            Log.d("ChatViewModel", "Attempting to send message: $currentMessage")
 
-            when(sendMessageCall){
-                is GenericResult.Success -> {
-                    val currentmessage = ArrayList(state.value.realTimeMessages)
-                    currentmessage.add(
-                        0,ChatMessage.TextMessage(
+            if (currentMessage.isNotBlank()) {
+                val sendMessageCall = sendChatMessageUseCase(
+                    message = currentMessage, // use currentMessage directly
+                    receiverId = state.value.receiverId
+                )
+
+                when (sendMessageCall) {
+                    is GenericResult.Success -> {
+                        Log.d("ChatViewModel", "Message sent successfully: $currentMessage")
+
+                        val currentMessages = ArrayList(state.value.realTimeMessages)
+//                        currentMessages.add(
+//                            0, ChatMessage.TextMessage(
+//                                chatId = UUID.randomUUID().toString(),
+//                                receiverId = state.value.receiverId,
+//                                message = currentMessage,
+//                                chatCreatedTime = Date(),
+//                                isAuthor = true
+//                            )
+//                        )
+                        val newChatMessage = ChatMessage.TextMessage(
                             chatId = UUID.randomUUID().toString(),
                             receiverId = state.value.receiverId,
-                            message = state.value.messageText,
+                            message = currentMessage,
                             chatCreatedTime = Date(),
                             isAuthor = true
-
                         )
-                    )
-                    savedStateHandle["state"] = state.value.copy(realTimeMessages = currentmessage)
-                }
-                is GenericResult.Error -> {
-                    ChatSideEffect.ShowToast(sendMessageCall.error.asUiText())                }
-            }
+                        currentMessages.add(0, newChatMessage)
+                        savedStateHandle["state"] = state.value.copy(realTimeMessages = currentMessages)
+                       Log.d("ChatViewModel", "Message added to chat history: $newChatMessage")
+                        // Now clear the message text after sending successfully
+                        savedStateHandle["state"] = state.value.copy(messageText = "")
+                    }
 
+                    is GenericResult.Error -> {
+                        Log.e("ChatViewModel", "Failed to send message: ${sendMessageCall.error}")
+                        viewModelScope.launch {
+                            _sideEffect.emit(ChatSideEffect.ShowToast(sendMessageCall.error.asUiText()))
+                        }
+                    }
+                }
+            }
         }
     }
+
     private fun shutDownSocket(): Job? {
         shutDownSocketUseCase()
         return null
@@ -126,13 +151,15 @@ class ChatViewModel @Inject constructor  (
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ChatMessage> {
             // The current page to load; default to 1 if not specified
             val currentPage = params.key ?: 1
+            Log.d("ChatViewModel", "Loading previous chats for page: $currentPage")
             val previousChatsCall = getPreviousChatsUseCase(
                 receiverId = receiverId, page = currentPage
             )
+            Log.d("ChatViewModel", "Loading previous chats reciverid: $receiverId")
 
             return when (previousChatsCall) {
                 is GenericResult.Success -> {
-
+                    Log.d("ChatViewModel", "Successfully loaded previous chats.")
                     val nextPage = if (currentPage * 20 < previousChatsCall.data.totalRecords) {
                         currentPage + 1
                     } else {
@@ -147,6 +174,7 @@ class ChatViewModel @Inject constructor  (
                 }
 
                 is GenericResult.Error -> {
+                    println("mylog, previousChatsCall.error: ${previousChatsCall.error}")
                     onError(previousChatsCall.error)
                     LoadResult.Error(Exception(previousChatsCall.error.toString()))
                 }
@@ -163,8 +191,9 @@ class ChatViewModel @Inject constructor  (
     }
 
     private val pageSource = PreviousChatsSource(
-        getPreviousChatsUseCase = getPreviousChatsUseCase,
+        // receiverId = currentState.receiverId,
         receiverId = state.value.receiverId,
+        getPreviousChatsUseCase = getPreviousChatsUseCase,
         onError = { error ->
             // Directly show the toast without using side effect
             ChatSideEffect.ShowToast(error.asUiText())

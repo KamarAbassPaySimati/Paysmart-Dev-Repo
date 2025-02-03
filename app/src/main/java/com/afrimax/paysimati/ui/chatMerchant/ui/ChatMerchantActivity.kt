@@ -1,60 +1,94 @@
 package com.afrimax.paysimati.ui.chatMerchant.ui
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.afrimax.paysimati.R
-import androidx.compose.runtime.State
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.afrimax.paysimati.BuildConfig
+import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.core.InterFontFamily
 import com.afrimax.paysimati.common.core.PaySimatiTypography
 import com.afrimax.paysimati.common.core.clearTimeToMalawiTimeZone
-import com.afrimax.paysimati.common.core.*
+import com.afrimax.paysimati.common.core.highlightedLight
+import com.afrimax.paysimati.common.core.neutralGrey
+import com.afrimax.paysimati.common.core.neutralGreyDisabled
+import com.afrimax.paysimati.common.core.neutralGreyPrimaryText
+import com.afrimax.paysimati.common.core.neutralGreyTextFieldBackground
+import com.afrimax.paysimati.common.core.parseCurrency
 import com.afrimax.paysimati.common.core.parseMalawianDate
+import com.afrimax.paysimati.common.core.primaryColor
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
+import com.afrimax.paysimati.common.presentation.utils.showToast
 import com.afrimax.paysimati.data.model.chat.ChatMessage
 import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.data.model.chat.PaymentStatusType
-import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChatMerchantActivity : BaseActivity() {
+class ChatMerchantActivity : AppCompatActivity() {
     private val vm: ChatViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,9 +104,8 @@ class ChatMerchantActivity : BaseActivity() {
                 vm.sideEffect.collect {
                     when (it) {
                         is ChatSideEffect.ShowToast -> {
-                            showToast(it.message.toString())
+                            showToast(it.message)
                         }
-
                         is ChatSideEffect.ShowSnack -> {
                             //
                         }
@@ -86,43 +119,40 @@ class ChatMerchantActivity : BaseActivity() {
     @Composable
     fun ChatMerchantScreen(state: State<ChatState>, modifier: Modifier = Modifier) {
 
-        val context = LocalContext.current
+       // val context = LocalContext.current
         Scaffold(modifier = modifier, topBar = {
-
+            vm(ChatIntent.EstablishConnection)
             TopBar(
                 receiverName = state.value.receiverName,
                 receiverId = state.value.receiverId,
                 receiverProfilePicture = state.value.receiverProfilePicture,
-                modifier = Modifier.fillMaxWidth(), context = context
+                modifier = Modifier.fillMaxWidth()
             )
         },
             bottomBar = {
                 BottomBar(
-                    modifier = Modifier
+                    modifier = Modifier.background(Color.White)
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 6.dp)
                         .navigationBarsPadding()
                         .imePadding(),
-                    context = context,
                     messageText = state.value.messageText,
                     onMessageType = { text ->
                         vm(ChatIntent.SetMessageText(text))
-
                     },
                     onClickSend = {
                         vm(ChatIntent.SendMessage)
-                    }
-
-                )
+                    })
             }) { padding ->
             Column(
-                modifier = Modifier.padding(padding)
+                modifier = Modifier.padding(padding).background(Color.White)
             ) {
                 // Content goes here
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     val previousChats = vm.pagedData.collectAsLazyPagingItems()
+                    Log.d("ChatViewModel", "previousChats: ${previousChats.itemCount}")
                     previousChats.apply {
                         when {
                             loadState.refresh is LoadState.Loading -> {
@@ -130,10 +160,9 @@ class ChatMerchantActivity : BaseActivity() {
                                     modifier = Modifier
                                         .size(100.dp)
                                         .align(Alignment.Center),
-                                    context = context
+                                    context = this@ChatMerchantActivity
                                 )
                             }
-
                             else -> {
                                 ChatsLazyList(
                                     modifier = Modifier.matchParentSize(),
@@ -153,9 +182,9 @@ class ChatMerchantActivity : BaseActivity() {
         receiverName: String,
         receiverId: String,
         receiverProfilePicture: String? = null,
-        modifier: Modifier = Modifier, context: Context
+        modifier: Modifier = Modifier
     ) {
-        val primaryColor = Color(ContextCompat.getColor(context, R.color.primaryColor))
+        val primaryColor = Color(ContextCompat.getColor(this@ChatMerchantActivity, R.color.primaryColor))
         Column(modifier = modifier.background(primaryColor)) {
             //Topbar
             Row(
@@ -197,7 +226,6 @@ class ChatMerchantActivity : BaseActivity() {
                         )
                         //get profile pic
                         receiverProfilePicture?.let {
-
                             AndroidView(modifier = Modifier
                                 .matchParentSize()
                                 .clip(RoundedCornerShape(8.dp)), factory = { context ->
@@ -225,6 +253,7 @@ class ChatMerchantActivity : BaseActivity() {
                         Text(
                             //reciver name
                             text = receiverName,
+                            fontFamily = InterFontFamily(),
                             fontWeight = FontWeight.Medium,
                             fontSize = 14.sp,
                             color = Color.White
@@ -236,6 +265,7 @@ class ChatMerchantActivity : BaseActivity() {
                         PaymaartIdFormatter.formatId(receiverId!!)?.let {
                             Text(
                                 text = it,
+                                fontFamily = InterFontFamily(),
                                 fontWeight = FontWeight.Normal,
                                 fontSize = 12.sp,
                                 color = Color.White
@@ -253,9 +283,9 @@ class ChatMerchantActivity : BaseActivity() {
         onMessageType: (text: String) -> Unit,
         onClickSend: () -> Unit,
         modifier: Modifier = Modifier,
-        context: Context
+
     ) {
-        val primaryColor = Color(ContextCompat.getColor(context, R.color.primaryColor))
+
         Row(modifier = modifier, verticalAlignment = Alignment.Bottom) {
             Row(
                 modifier = Modifier
@@ -296,7 +326,8 @@ class ChatMerchantActivity : BaseActivity() {
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_send),
-                        contentDescription = null
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(neutralGreyPrimaryText)
                     )
                 }
 
@@ -332,9 +363,11 @@ class ChatMerchantActivity : BaseActivity() {
         previousChats: LazyPagingItems<ChatMessage>,
         realTimeMessages: ArrayList<ChatMessage>
     ) {
+        Log.d("ChatsLazyList", "previousChats: ${previousChats.itemCount}")
+        Log.d("ChatsLazyList", "loadState: ${previousChats.loadState}")
 
         LazyColumn(
-            modifier = modifier,
+            modifier = modifier.background(Color.White),
             reverseLayout = true,
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -358,8 +391,8 @@ class ChatMerchantActivity : BaseActivity() {
                             .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        androidx.compose.material.CircularProgressIndicator(
-                            ///  color = primaryColor,
+                     CircularProgressIndicator(
+                            color = primaryColor,
                             strokeWidth = 4.dp,
                             modifier = Modifier.size(20.dp)
                         )
@@ -418,7 +451,8 @@ class ChatMerchantActivity : BaseActivity() {
                             paymentStatus = chat.paymentStatusType,
                             date = chat.chatCreatedTime.parseMalawianDate("dd MMM yyyy, HH:mm"),
                             note = chat.note,
-                            isSender = chat.isAuthor
+                            isSender = chat.isAuthor,
+                            tillnumber = chat.receiverId
                         )
                     }
                 }
@@ -477,7 +511,8 @@ class ChatMerchantActivity : BaseActivity() {
                             paymentStatus = chat.paymentStatusType,
                             date = chat.chatCreatedTime.parseMalawianDate("dd MMM yyyy, HH:mm"),
                             note = chat.note,
-                            isSender = chat.isAuthor
+                            isSender = chat.isAuthor,
+                            tillnumber = chat.receiverId
                         )
                     }
                 }
@@ -510,10 +545,10 @@ class ChatMerchantActivity : BaseActivity() {
             Box(
                 modifier = Modifier
                     .widthIn(max = maxWidth)
-                    .background(neutralGreyDisabled, shape = RoundedCornerShape(8.dp))
+                    .background(if (isAuthor) neutralGreyDisabled else Color.White, shape = RoundedCornerShape(8.dp))
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             ) {
-                androidx.compose.material.Text(
+                Text(
                     text = message,
                     fontFamily = InterFontFamily(),
                     fontWeight = FontWeight.Normal,
@@ -535,7 +570,8 @@ class ChatMerchantActivity : BaseActivity() {
         paymentStatus: PaymentStatusType,
         date: String,
         note: String? = null,
-        isSender: Boolean
+        isSender: Boolean,
+        tillnumber:String
     ) {
         BoxWithConstraints(
             modifier = modifier,
@@ -564,7 +600,7 @@ class ChatMerchantActivity : BaseActivity() {
 
                     Spacer(modifier = Modifier.width(6.dp))
 
-                    androidx.compose.material.Text(
+                    Text(
                         text = stringResource(R.string.mwk),
                         fontFamily = InterFontFamily(),
                         fontWeight = FontWeight.Medium,
@@ -577,7 +613,7 @@ class ChatMerchantActivity : BaseActivity() {
                 Spacer(modifier = Modifier.height(6.dp))
 
                 //Txn Id
-                androidx.compose.material.Text(
+                Text(
                     text = stringResource(R.string.txn_id_colon, txnId),
                     fontFamily = InterFontFamily(),
                     fontWeight = FontWeight.Normal,
@@ -587,23 +623,7 @@ class ChatMerchantActivity : BaseActivity() {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                //Payment status & Date
-                Row(modifier = Modifier.fillMaxWidth()) {
-
-                    //Payment status
-                    when (paymentStatus) {
-                        PaymentStatusType.PENDING -> {
-                            PaymentPendingChip(modifier = Modifier.weight(1f))
-                        }
-
-                        PaymentStatusType.RECEIVED -> {
-                            PaymentReceivedChip(modifier = Modifier.weight(1f))
-                        }
-
-                        PaymentStatusType.DECLINED -> {
-                            PaymentDeclinedChip(modifier = Modifier.weight(1f))
-                        }
-                    }
+                //Payment status & Dat
 
                     //Date
                     androidx.compose.material.Text(
@@ -613,13 +633,20 @@ class ChatMerchantActivity : BaseActivity() {
                         fontSize = 12.sp,
                         color = neutralGreyPrimaryText
                     )
+                Spacer(modifier = Modifier.height(10.dp))
 
-                }
+
 
                 //Note
                 if(!note.isNullOrBlank()) {
+                    Text(
+                        text = stringResource(R.string.note_colon, note),
+                        fontFamily = InterFontFamily(),
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                        color = neutralGreyPrimaryText
+                    )
                     Spacer(modifier = Modifier.height(10.dp))
-
                     //Divider
                     Box(
                         modifier = Modifier
@@ -628,14 +655,40 @@ class ChatMerchantActivity : BaseActivity() {
                             .background(highlightedLight)
                     )
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                }
+                Row(modifier = Modifier.fillMaxWidth().padding(top=8.dp), horizontalArrangement = Arrangement.End){
+                    OutlinedButton(
+                        onClick = {},//onDeclineClick,
+                        border = BorderStroke(1.dp, primaryColor), // Use your highlightedLight color
+                        shape = RoundedCornerShape(8.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.decline),
+                            color = primaryColor, // Or a suitable color
+                            fontFamily = InterFontFamily(),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp
+                        )
+                    }
 
-                    androidx.compose.material.Text(
-                        text = stringResource(R.string.note_colon, note),
-                        fontFamily = InterFontFamily(),
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 12.sp,
-                    )
+                    Spacer(modifier = Modifier.width(8.dp)) // Add spacing between buttons
+
+                    Button(
+                        onClick = {} ,//onPayClick,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = primaryColor // Use your primary color
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+
+                    ) {
+                        Text(
+                            text = stringResource(R.string.pay),
+                            color = Color.White,
+                            fontFamily = InterFontFamily(),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 14.sp
+                        )
+                    }
                 }
             }
         }
@@ -671,7 +724,7 @@ class ChatMerchantActivity : BaseActivity() {
 
             Spacer(modifier = Modifier.width(6.dp))
 
-            androidx.compose.material.Text(
+           Text(
                 text = stringResource(R.string.pending),
                 fontFamily = InterFontFamily(),
                 fontWeight = FontWeight.Normal,
@@ -692,7 +745,7 @@ class ChatMerchantActivity : BaseActivity() {
 
             Spacer(modifier = Modifier.width(6.dp))
 
-            androidx.compose.material.Text(
+           Text(
                 text = stringResource(R.string.declined),
                 fontFamily = InterFontFamily(),
                 fontWeight = FontWeight.Normal,
@@ -720,6 +773,16 @@ class ChatMerchantActivity : BaseActivity() {
         }
     }
 
+
+    override fun onResume() {
+        vm(ChatIntent.EstablishConnection)
+        super.onResume()
+    }
+
+    override fun onPause() {
+        vm(ChatIntent.ShutDownSocket)
+        super.onPause()
+    }
 
 
     companion object {
