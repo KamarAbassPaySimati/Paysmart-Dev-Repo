@@ -363,8 +363,7 @@ class ChatMerchantActivity : AppCompatActivity() {
         previousChats: LazyPagingItems<ChatMessage>,
         realTimeMessages: ArrayList<ChatMessage>
     ) {
-        Log.d("ChatsLazyList", "previousChats: ${previousChats.itemCount}")
-        Log.d("ChatsLazyList", "loadState: ${previousChats.loadState}")
+
 
         LazyColumn(
             modifier = modifier.background(Color.White),
