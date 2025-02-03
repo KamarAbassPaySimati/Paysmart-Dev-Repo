@@ -96,7 +96,7 @@ android {
             buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
             buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
             buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
-            buildConfigField("String", "MERCHANT_CHAT_WEBSOCKE", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
+            buildConfigField("String", "MERCHANT_CHAT_WEBSOCKET", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
         }
 
         qa{
