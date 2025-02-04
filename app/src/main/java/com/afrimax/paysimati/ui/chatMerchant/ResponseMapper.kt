@@ -1,5 +1,6 @@
 package com.afrimax.paysimati.ui.chatMerchant
 
+import android.util.Log
 import com.afrimax.paysimati.common.core.parseAmount
 import com.afrimax.paysimati.common.core.parseDate
 import com.afrimax.paysimati.common.presentation.utils.CHAT_TYPE_TEXT_MESSAGE
@@ -66,6 +67,7 @@ private fun mapTextMessage(
             message = chat.content,
             chatCreatedTime = date,
             isAuthor = chat.senderId == senderId
+
         )
     } else null
 }
@@ -74,7 +76,8 @@ private fun mapTextMessage(
 private fun mapPaymentRequestMessage(
     chat: PreviousChatResponse.ChatMessage, senderId: String, date: Date?
 ): ChatMessage.PaymentMessage? {
-    return if (chat.receiverId != null && chat.senderId != null && date != null && chat.transactionId != null) {
+    Log.d("ChatMapping", "Payment Request Message - Till Number: ${chat.tillnumber}") // Log tillnumber
+    return if ( chat.receiverId != null && chat.senderId != null && date != null && chat.transactionId != null) {
         ChatMessage.PaymentMessage(
             chatId = UUID.randomUUID().toString(),
             receiverId = chat.receiverId,
@@ -83,7 +86,9 @@ private fun mapPaymentRequestMessage(
             paymentStatusType = PaymentStatusType.DECLINED,
             chatCreatedTime = date,
             note = chat.content,
-            isAuthor = chat.senderId == senderId
+            isAuthor = chat.senderId == senderId,
+            tillnumber = chat.tillnumber
+
         )
     } else null
 }
@@ -91,7 +96,7 @@ private fun mapPaymentRequestMessage(
 private fun mapPaymentCompletedMessage(
     chat: PreviousChatResponse.ChatMessage, senderId: String, date: Date?
 ): ChatMessage.PaymentMessage? {
-    return if (chat.receiverId != null && chat.senderId != null && date != null && chat.transactionId != null) {
+    return if (chat.tillnumber!=null &&chat.receiverId != null && chat.senderId != null && date != null && chat.transactionId != null) {
         ChatMessage.PaymentMessage(
             chatId = UUID.randomUUID().toString(),
             receiverId = chat.receiverId,
@@ -100,7 +105,8 @@ private fun mapPaymentCompletedMessage(
             paymentStatusType = PaymentStatusType.RECEIVED,
             chatCreatedTime = date,
             note = chat.content,
-            isAuthor = chat.senderId == senderId
+            isAuthor = chat.senderId == senderId,
+            tillnumber = chat.tillnumber
         )
     } else null
 }

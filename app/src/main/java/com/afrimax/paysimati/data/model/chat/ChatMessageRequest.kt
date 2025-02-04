@@ -11,4 +11,5 @@ data class ChatMessageRequest(
     @SerializedName("type") val type: String,
     @SerializedName("note") val note: String? = null,
     @SerializedName("amount") val amount: Double? = null,
+
 )

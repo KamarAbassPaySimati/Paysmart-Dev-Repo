@@ -82,7 +82,9 @@ class ListMerchantTransactionActivity : BaseActivity() {
                     VIEW_MODEL_STATE, ChatState(
                     receiverName = transaction.MerchantName!!,
                     receiverId = transaction.paymaartId!!,
-                    receiverProfilePicture = transaction.profile_pic
+                    receiverProfilePicture = transaction.profile_pic,
+                    receiverAddress = transaction.streetName!!,
+                    tillnumber = transaction.tillNumber!!
                 )
                 )
                 startActivity(intent)

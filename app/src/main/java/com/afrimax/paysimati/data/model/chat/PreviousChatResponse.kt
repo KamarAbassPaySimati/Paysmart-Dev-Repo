@@ -19,6 +19,7 @@ data class PreviousChatResponse(
         @SerializedName("created_at") val createdAt: String? = null,
         @SerializedName("receiver_id") val receiverId: String? = null,
         @SerializedName("record_id") val recordId: String? = null,
+        @SerializedName("till_number")val tillnumber:String,
         @SerializedName("sender_id") val senderId: String? = null,
         @SerializedName("transaction_amount") val transactionAmount: String? = null,
         @SerializedName("transaction_id") val transactionId: String? = null

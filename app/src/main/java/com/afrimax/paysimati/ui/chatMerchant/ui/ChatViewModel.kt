@@ -44,7 +44,7 @@ class ChatViewModel @Inject constructor  (
     val sideEffect: SharedFlow<ChatSideEffect> = _sideEffect
 
     private val initialstate = savedStateHandle[VIEW_MODEL_STATE] ?: ChatState(
-        receiverName = "", receiverId = "", receiverProfilePicture = "")
+        receiverName = "", receiverId = "", receiverProfilePicture = "", receiverAddress = "", tillnumber = "")
     //override val container = container<ChatState, ChatSideEffect>(initialState, savedStateHandle)
 
     val state = savedStateHandle.getStateFlow("state", initialstate)
@@ -80,7 +80,6 @@ class ChatViewModel @Inject constructor  (
     private fun sendMessage(): Job? {
         return viewModelScope.launch {
             val currentMessage = state.value.messageText
-            Log.d("ChatViewModel", "Attempting to send message: $currentMessage")
 
             if (currentMessage.isNotBlank()) {
                 val sendMessageCall = sendChatMessageUseCase(
@@ -90,18 +89,8 @@ class ChatViewModel @Inject constructor  (
 
                 when (sendMessageCall) {
                     is GenericResult.Success -> {
-                        Log.d("ChatViewModel", "Message sent successfully: $currentMessage")
 
                         val currentMessages = ArrayList(state.value.realTimeMessages)
-//                        currentMessages.add(
-//                            0, ChatMessage.TextMessage(
-//                                chatId = UUID.randomUUID().toString(),
-//                                receiverId = state.value.receiverId,
-//                                message = currentMessage,
-//                                chatCreatedTime = Date(),
-//                                isAuthor = true
-//                            )
-//                        )
                         val newChatMessage = ChatMessage.TextMessage(
                             chatId = UUID.randomUUID().toString(),
                             receiverId = state.value.receiverId,
@@ -111,13 +100,11 @@ class ChatViewModel @Inject constructor  (
                         )
                         currentMessages.add(0, newChatMessage)
                         savedStateHandle["state"] = state.value.copy(realTimeMessages = currentMessages)
-                       Log.d("ChatViewModel", "Message added to chat history: $newChatMessage")
                         // Now clear the message text after sending successfully
                         savedStateHandle["state"] = state.value.copy(messageText = "")
                     }
 
                     is GenericResult.Error -> {
-                        Log.e("ChatViewModel", "Failed to send message: ${sendMessageCall.error}")
                         viewModelScope.launch {
                             _sideEffect.emit(ChatSideEffect.ShowToast(sendMessageCall.error.asUiText()))
                         }
@@ -151,15 +138,12 @@ class ChatViewModel @Inject constructor  (
         override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ChatMessage> {
             // The current page to load; default to 1 if not specified
             val currentPage = params.key ?: 1
-            Log.d("ChatViewModel", "Loading previous chats for page: $currentPage")
             val previousChatsCall = getPreviousChatsUseCase(
                 receiverId = receiverId, page = currentPage
             )
-            Log.d("ChatViewModel", "Loading previous chats reciverid: $receiverId")
 
             return when (previousChatsCall) {
                 is GenericResult.Success -> {
-                    Log.d("ChatViewModel", "Successfully loaded previous chats.")
                     val nextPage = if (currentPage * 20 < previousChatsCall.data.totalRecords) {
                         currentPage + 1
                     } else {
@@ -174,7 +158,6 @@ class ChatViewModel @Inject constructor  (
                 }
 
                 is GenericResult.Error -> {
-                    println("mylog, previousChatsCall.error: ${previousChatsCall.error}")
                     onError(previousChatsCall.error)
                     LoadResult.Error(Exception(previousChatsCall.error.toString()))
                 }
