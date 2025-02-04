@@ -28,7 +28,8 @@ sealed class ChatMessage(
         val paymentStatusType: PaymentStatusType,
         val chatCreatedTime: Date,
         val note: String? = null,
-        val isAuthor: Boolean
+        val isAuthor: Boolean,
+        val tillnumber: String
     ) : ChatMessage(createdTime = chatCreatedTime)
 
 }

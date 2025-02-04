@@ -77,8 +77,11 @@ class ListMerchantByLocationActivity : BaseActivity(), MerchantFilterCallback {
                     VIEW_MODEL_STATE, ChatState(
                     receiverName = transaction.merchantName!!,
                     receiverId = transaction.paymaartId!!,
-                    receiverProfilePicture = transaction.profilePic
-                )
+                    receiverProfilePicture = transaction.profilePic,
+                    receiverAddress = transaction.streetName!!,
+                    tillnumber = transaction.tillNumber!!
+
+                    )
                 )
                 startActivity(intent)
 

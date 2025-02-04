@@ -1,5 +1,6 @@
 package com.afrimax.paysimati.ui.chatMerchant.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
@@ -83,6 +84,13 @@ import com.afrimax.paysimati.common.presentation.utils.showToast
 import com.afrimax.paysimati.data.model.chat.ChatMessage
 import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.data.model.chat.PaymentStatusType
+import com.afrimax.paysimati.ui.paymerchant.PayMerchantActivity
+import com.afrimax.paysimati.util.Constants
+import com.afrimax.paysimati.util.Constants.MERCHANT_NAME
+import com.afrimax.paysimati.util.Constants.PAYMAART_ID
+import com.afrimax.paysimati.util.Constants.PROFILE_PICTURE
+import com.afrimax.paysimati.util.Constants.STREET_NAME
+import com.afrimax.paysimati.util.Constants.TILL_NUMBER
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -142,7 +150,12 @@ class ChatMerchantActivity : AppCompatActivity() {
                     },
                     onClickSend = {
                         vm(ChatIntent.SendMessage)
-                    })
+                    },
+                    reciverId = state.value.receiverId,
+                    reciverName = state.value.receiverName,
+                    reciverLoc = state.value.receiverAddress,
+                    receiverProfilePicture = state.value.receiverProfilePicture,
+                    tillnumber = state.value.tillnumber)
             }) { padding ->
             Column(
                 modifier = Modifier.padding(padding).background(Color.White)
@@ -152,7 +165,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     val previousChats = vm.pagedData.collectAsLazyPagingItems()
-                    Log.d("ChatViewModel", "previousChats: ${previousChats.itemCount}")
+
                     previousChats.apply {
                         when {
                             loadState.refresh is LoadState.Loading -> {
@@ -283,6 +296,11 @@ class ChatMerchantActivity : AppCompatActivity() {
         onMessageType: (text: String) -> Unit,
         onClickSend: () -> Unit,
         modifier: Modifier = Modifier,
+        reciverId:String,
+        reciverName:String,
+        reciverLoc:String,
+        receiverProfilePicture: String? = null,
+        tillnumber:String
 
     ) {
 
@@ -340,7 +358,13 @@ class ChatMerchantActivity : AppCompatActivity() {
                     .wrapContentWidth()
                     .height(56.dp),
                 onClick = {
-                    //logic part
+                   val i =Intent(this@ChatMerchantActivity,PayMerchantActivity::class.java)
+                    i.putExtra(PAYMAART_ID,reciverId)
+                    i.putExtra(MERCHANT_NAME,reciverName)
+                    i.putExtra(STREET_NAME,reciverLoc)
+                    i.putExtra(PROFILE_PICTURE,receiverProfilePicture)
+                    i.putExtra(TILL_NUMBER,tillnumber)
+                    startActivity(i)
                 }
             ) {
                 Text(
@@ -363,8 +387,7 @@ class ChatMerchantActivity : AppCompatActivity() {
         previousChats: LazyPagingItems<ChatMessage>,
         realTimeMessages: ArrayList<ChatMessage>
     ) {
-        Log.d("ChatsLazyList", "previousChats: ${previousChats.itemCount}")
-        Log.d("ChatsLazyList", "loadState: ${previousChats.loadState}")
+
 
         LazyColumn(
             modifier = modifier.background(Color.White),
@@ -452,7 +475,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                             date = chat.chatCreatedTime.parseMalawianDate("dd MMM yyyy, HH:mm"),
                             note = chat.note,
                             isSender = chat.isAuthor,
-                            tillnumber = chat.receiverId
+                            tillnumber = chat.tillnumber
                         )
                     }
                 }
@@ -512,7 +535,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                             date = chat.chatCreatedTime.parseMalawianDate("dd MMM yyyy, HH:mm"),
                             note = chat.note,
                             isSender = chat.isAuthor,
-                            tillnumber = chat.receiverId
+                            tillnumber = chat.tillnumber
                         )
                     }
                 }
@@ -615,6 +638,17 @@ class ChatMerchantActivity : AppCompatActivity() {
                 //Txn Id
                 Text(
                     text = stringResource(R.string.txn_id_colon, txnId),
+                    fontFamily = InterFontFamily(),
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 14.sp,
+                    color = neutralGreyPrimaryText
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+
+                Text(
+                    text = stringResource(R.string.tillnumber, tillnumber),
                     fontFamily = InterFontFamily(),
                     fontWeight = FontWeight.Normal,
                     fontSize = 14.sp,

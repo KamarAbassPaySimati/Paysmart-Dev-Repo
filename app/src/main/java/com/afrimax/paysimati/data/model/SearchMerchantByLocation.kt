@@ -22,7 +22,7 @@ data class MerchantListLocation(
     @SerializedName("profile_pic")
     val profilePic: String? = null,
     @SerializedName("street_name")
-    val address:  String?=null,
+    val streetName:  String?=null,
     @SerializedName("till_number")
     val tillNumber:  String?=null,
     @SerializedName("trading_type")

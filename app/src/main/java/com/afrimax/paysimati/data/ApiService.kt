@@ -13,6 +13,7 @@ import com.afrimax.paysimati.data.model.GetAfrimaxPlansResponse
 import com.afrimax.paysimati.data.model.GetInstitutesResponse
 import com.afrimax.paysimati.data.model.GetSharedSecretRequest
 import com.afrimax.paysimati.data.model.GetSharedSecretResponse
+import com.afrimax.paysimati.data.model.GetTaxForPayToMerchantResponse
 import com.afrimax.paysimati.data.model.GetTaxForPayToRegisteredPersonResponse
 import com.afrimax.paysimati.data.model.GetTaxForPayToUnRegisteredPersonResponse
 import com.afrimax.paysimati.data.model.GetTransactionDetailsResponse
@@ -23,6 +24,7 @@ import com.afrimax.paysimati.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paysimati.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paysimati.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paysimati.data.model.MembershipPlansResponse
+import com.afrimax.paysimati.data.model.PayMerchantRequest
 import com.afrimax.paysimati.data.model.PayMerchantResponse
 import com.afrimax.paysimati.data.model.PayPersonRequestBody
 import com.afrimax.paysimati.data.model.PayPersonResponse
@@ -368,6 +370,12 @@ interface ApiService {
     suspend fun getTaxForPayToRegisteredPerson(
         @Header("Authorization") header: String, @Body body: PayToRegisteredPersonRequest
     ): Response<GetTaxForPayToRegisteredPersonResponse>
+
+
+    @POST("chats/pay-merchant")
+    suspend fun  getTaxForMechant(
+        @Header("Authorization") header: String, @Body body: PayMerchantRequest
+    ): Response<GetTaxForPayToMerchantResponse>
 
     @POST("bank-transactions/customer/pay-customer")
     suspend fun payToRegisteredPerson(

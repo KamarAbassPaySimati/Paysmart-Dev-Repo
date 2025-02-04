@@ -43,7 +43,7 @@ class ListMerchantByLocationAdapter(
 
             binding.payMerchantLocation.apply {
                 visibility = View.VISIBLE
-                text = merchantdetails.address
+                text = merchantdetails.streetName
             }
 
             binding.payMerchantName.apply {
