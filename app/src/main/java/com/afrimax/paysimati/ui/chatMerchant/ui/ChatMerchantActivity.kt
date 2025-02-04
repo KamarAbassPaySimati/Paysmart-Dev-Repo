@@ -199,7 +199,7 @@ class ChatMerchantActivity : AppCompatActivity() {
     ) {
         val primaryColor = Color(ContextCompat.getColor(this@ChatMerchantActivity, R.color.primaryColor))
         Column(modifier = modifier.background(primaryColor)) {
-            //Topbar
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
