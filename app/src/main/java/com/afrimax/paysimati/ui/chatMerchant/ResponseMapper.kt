@@ -106,7 +106,7 @@ private fun mapPaymentCompletedMessage(
             chatCreatedTime = date,
             note = chat.content,
             isAuthor = chat.senderId == senderId,
-            tillnumber = chat.tillnumber
+            tillnumber = chat.tillnumber,
         )
     } else null
 }

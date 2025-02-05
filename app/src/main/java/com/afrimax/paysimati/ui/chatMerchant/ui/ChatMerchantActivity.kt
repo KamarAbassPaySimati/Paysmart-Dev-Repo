@@ -88,6 +88,7 @@ import com.afrimax.paysimati.ui.paymerchant.PayMerchantActivity
 import com.afrimax.paysimati.util.Constants
 import com.afrimax.paysimati.util.Constants.MERCHANT_NAME
 import com.afrimax.paysimati.util.Constants.PAYMAART_ID
+import com.afrimax.paysimati.util.Constants.PAYMENT_AMOUNT
 import com.afrimax.paysimati.util.Constants.PROFILE_PICTURE
 import com.afrimax.paysimati.util.Constants.STREET_NAME
 import com.afrimax.paysimati.util.Constants.TILL_NUMBER
@@ -180,7 +181,11 @@ class ChatMerchantActivity : AppCompatActivity() {
                                 ChatsLazyList(
                                     modifier = Modifier.matchParentSize(),
                                     previousChats = previousChats,
-                                    realTimeMessages = state.value.realTimeMessages
+                                    realTimeMessages = state.value.realTimeMessages,
+                                    reciverLoc = state.value.receiverAddress,
+                                    receiverId= state.value.receiverId,
+                                    reciverName = state.value.receiverName,
+                                    receiverProfilePicture = state.value.receiverProfilePicture,
                                 )
                             }
                         }
@@ -385,7 +390,11 @@ class ChatMerchantActivity : AppCompatActivity() {
     fun ChatsLazyList(
         modifier: Modifier = Modifier,
         previousChats: LazyPagingItems<ChatMessage>,
-        realTimeMessages: ArrayList<ChatMessage>
+        realTimeMessages: ArrayList<ChatMessage>,
+        reciverLoc: String,
+        receiverProfilePicture: String?,
+        receiverId: String,
+        reciverName: String
     ) {
 
 
@@ -401,10 +410,10 @@ class ChatMerchantActivity : AppCompatActivity() {
             }
 
             //Realtime messages
-            realtimeChats(realTimeMessages = realTimeMessages, previousChats = previousChats)
+            realtimeChats(realTimeMessages = realTimeMessages, previousChats = previousChats, reciverLoc = reciverLoc,reciverName=reciverName,receiverProfilePicture=receiverProfilePicture,receiverId=receiverId)
 
             //Previous messages
-            previousChats(previousChats = previousChats)
+            previousChats(previousChats = previousChats,reciverLoc=reciverLoc,reciverName=reciverName,receiverProfilePicture=receiverProfilePicture,receiverId=receiverId)
 
             if (previousChats.loadState.append is LoadState.Loading) {
                 item {
@@ -441,7 +450,7 @@ class ChatMerchantActivity : AppCompatActivity() {
      * determine if a date chip should be displayed before the first real-time message.
      */
     private fun LazyListScope.realtimeChats(
-        realTimeMessages: ArrayList<ChatMessage>, previousChats: LazyPagingItems<ChatMessage>
+        realTimeMessages: ArrayList<ChatMessage>, previousChats: LazyPagingItems<ChatMessage>,reciverLoc: String,receiverId: String,reciverName: String,receiverProfilePicture: String?
     ) {
         items(count = realTimeMessages.size) { index ->
 
@@ -475,7 +484,11 @@ class ChatMerchantActivity : AppCompatActivity() {
                             date = chat.chatCreatedTime.parseMalawianDate("dd MMM yyyy, HH:mm"),
                             note = chat.note,
                             isSender = chat.isAuthor,
-                            tillnumber = chat.tillnumber
+                            tillnumber = chat.tillnumber,
+                            reciverLoc = reciverLoc,
+                            receiverId = receiverId,
+                            reciverName = reciverName,
+                            receiverProfilePicture = receiverProfilePicture
                         )
                     }
                 }
@@ -494,7 +507,7 @@ class ChatMerchantActivity : AppCompatActivity() {
         }
 
     }
-    private fun LazyListScope.previousChats(previousChats: LazyPagingItems<ChatMessage>) {
+    private fun LazyListScope.previousChats(previousChats: LazyPagingItems<ChatMessage>,reciverLoc: String,receiverId: String,reciverName: String,receiverProfilePicture: String?) {
         items(
             count = previousChats.itemCount
         ) { index ->
@@ -535,7 +548,12 @@ class ChatMerchantActivity : AppCompatActivity() {
                             date = chat.chatCreatedTime.parseMalawianDate("dd MMM yyyy, HH:mm"),
                             note = chat.note,
                             isSender = chat.isAuthor,
-                            tillnumber = chat.tillnumber
+                            tillnumber = chat.tillnumber,
+                            reciverLoc = reciverLoc,
+                            receiverId = receiverId,
+                            reciverName = reciverName,
+                            receiverProfilePicture = receiverProfilePicture
+
                         )
                     }
                 }
@@ -594,7 +612,12 @@ class ChatMerchantActivity : AppCompatActivity() {
         date: String,
         note: String? = null,
         isSender: Boolean,
-        tillnumber:String
+        tillnumber:String,
+        reciverLoc: String,
+        reciverName:String,
+        receiverProfilePicture:String?,
+        receiverId:String
+
     ) {
         BoxWithConstraints(
             modifier = modifier,
@@ -708,7 +731,15 @@ class ChatMerchantActivity : AppCompatActivity() {
                     Spacer(modifier = Modifier.width(8.dp)) // Add spacing between buttons
 
                     Button(
-                        onClick = {} ,//onPayClick,
+                        onClick = {
+                            val i =Intent(this@ChatMerchantActivity,PayMerchantActivity::class.java)
+                            i.putExtra(PAYMAART_ID,receiverId)
+                            i.putExtra(MERCHANT_NAME,reciverName)
+                            i.putExtra(STREET_NAME,reciverLoc)
+                            i.putExtra(PROFILE_PICTURE,receiverProfilePicture)
+                            i.putExtra(TILL_NUMBER,tillnumber)
+                            i.putExtra(PAYMENT_AMOUNT,amount)
+                            startActivity(i)} ,//onPayClick,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = primaryColor // Use your primary color
                         ),

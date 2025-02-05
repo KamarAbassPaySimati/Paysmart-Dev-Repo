@@ -40,6 +40,7 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
     private var streetname: String = ""
     private var profilepic: String = ""
     private var tillno: String = ""
+    private var amount:Double = 0.0
 
 
     private lateinit var binding: ActivityPayMerchantBinding
@@ -49,6 +50,8 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
         streetname = intent.getStringExtra(Constants.STREET_NAME) ?: ""
         profilepic = intent.getStringExtra(Constants.PROFILE_PICTURE) ?: ""
         tillno = intent.getStringExtra(Constants.TILL_NUMBER) ?: ""
+        amount = intent.getDoubleExtra(Constants.PAYMENT_AMOUNT,0.0)
+
         super.onCreate(savedInstanceState)
       //  enableEdgeToEdge()
         binding = ActivityPayMerchantBinding.inflate(layoutInflater)
@@ -99,7 +102,15 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
         }
         binding.payMerchantActivitytillno.text = tillno
 
-
+        if (amount > 0.0) {
+            binding.payMerchantActivityAmountET.apply {
+                setText(amount.toString())
+                isEnabled = false
+                isFocusable = false
+                isFocusableInTouchMode = false
+                setTextColor(resources.getColor(R.color.neutralGrey)) // Optional: Make it look disabled
+            }
+        }
     }
 
     private fun setUpListeners() {
