@@ -382,6 +382,10 @@ interface ApiService {
         @Header("Authorization") header: String, @Body body: PayToRegisteredPersonRequest
     ): Response<PayToRegisteredPersonApiResponse>
 
+    @POST("chats/pay-request")
+    suspend fun payMerchantRequest(
+        @Header("Authorization") header: String, @Body body: PayMerchantRequest
+    )
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
