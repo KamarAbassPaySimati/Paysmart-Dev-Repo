@@ -66,9 +66,7 @@ inline fun <T> safeApiCall2(
         val errorBody = response.errorBody()?.string()
 
         return when (response.code()) {
-            HTTP_OK, HTTP_CREATED, HTTP_NO_CONTENT -> if (body != null) Result.Success(body) else Result.Error(
-                Network.NoResponse("")
-            )
+            HTTP_OK, HTTP_CREATED, HTTP_NO_CONTENT -> if (body != null) Result.Success(body) else Result.Error(Network.NoResponse(""))
 
             HTTP_INTERNAL_ERROR -> Result.Error(Network.InternalError(errorBody.parseErrorMessage()))
 
