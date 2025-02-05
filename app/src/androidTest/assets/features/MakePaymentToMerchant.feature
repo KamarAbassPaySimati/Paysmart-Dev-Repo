@@ -41,29 +41,45 @@ Feature: Paymaart- Customer Android- Make Payments to Merchant
 
   Scenario: Searching merchant by Paymaart ID
     When I click on the Search tab
+    And I enter paymart ID "012345"
+    Then I should read a message stating "No Data Found"
+    When I click on clear button on search tab
     And I enter paymart ID "4263169"
     Then I should see the Trading name along with Paymaart ID
     When I select the Merchant "Suhaas Kumar TEST"
     Then I should see the merchant's name, ID and recent transaction history
 
-  Scenario: I try making payment to Merchant
+  Scenario: Making a payment to Merchant
     When I click on Pay button
     Then I should be directed to send payment screen
-    When I enter amount as "3000000" for pay to Merchant
-    And I click on Send Payment
+    When I click on Send Payment
+    Then I should read a message stating Please enter amount
+    When I enter amount as "20" for pay to Merchant
+    When I click on Send Payment
+    Then I should read a message stating "Minimum amount is 100.00 MWK" in Send Payment Screen
+    When I enter amount as "3796000" for pay to Merchant
+    When I click on Send Payment
     And I click on Proceed
-    And I enter Invalid PIN
+    And I enter Invalid PIN "102030"
     Then I should read a message stating "Invalid PIN" in PIN field
-    When I enter Valid PIN
+    When I enter Valid PIN "970541"
     Then I should read a message stating "Insufficient Funds." in Send Payment Screen
     When I enter amount as "300" for pay to Merchant
-    And I enter grocery in Add note tab
-    And I click on Send Payment
+    Then I enter grocery in Add note tab
+    When I click on Send Payment
     And I click on Proceed
-    And I enter Invalid PIN
+    And I enter Invalid PIN "102030"
     Then I should read a message stating "Invalid PIN" in PIN field
-    When I enter Valid PIN
+    When I enter Valid PIN "970541"
     Then I should see the Payment Successful message along with details
+
+  Scenario: Sharing the Transaction confirmation details
+    Given I see Payment Successful message along with details
+    When I click on Share icon
+    Then I should see a popup window with different shareable options
+
+
+
 
 
 
