@@ -2,7 +2,6 @@ package com.afrimax.paysimati.ui.chatMerchant.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.compose.setContent
@@ -80,12 +79,12 @@ import com.afrimax.paysimati.common.core.parseCurrency
 import com.afrimax.paysimati.common.core.parseMalawianDate
 import com.afrimax.paysimati.common.core.primaryColor
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
+import com.afrimax.paysimati.common.presentation.utils.parseTillNumber
 import com.afrimax.paysimati.common.presentation.utils.showToast
 import com.afrimax.paysimati.data.model.chat.ChatMessage
 import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.data.model.chat.PaymentStatusType
 import com.afrimax.paysimati.ui.paymerchant.PayMerchantActivity
-import com.afrimax.paysimati.util.Constants
 import com.afrimax.paysimati.util.Constants.MERCHANT_NAME
 import com.afrimax.paysimati.util.Constants.PAYMAART_ID
 import com.afrimax.paysimati.util.Constants.PAYMENT_AMOUNT
@@ -115,6 +114,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                         is ChatSideEffect.ShowToast -> {
                             showToast(it.message)
                         }
+
                         is ChatSideEffect.ShowSnack -> {
                             //
                         }
@@ -128,7 +128,7 @@ class ChatMerchantActivity : AppCompatActivity() {
     @Composable
     fun ChatMerchantScreen(state: State<ChatState>, modifier: Modifier = Modifier) {
 
-       // val context = LocalContext.current
+        // val context = LocalContext.current
         Scaffold(modifier = modifier, topBar = {
             vm(ChatIntent.EstablishConnection)
             TopBar(
@@ -137,29 +137,32 @@ class ChatMerchantActivity : AppCompatActivity() {
                 receiverProfilePicture = state.value.receiverProfilePicture,
                 modifier = Modifier.fillMaxWidth()
             )
-        },
-            bottomBar = {
-                BottomBar(
-                    modifier = Modifier.background(Color.White)
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 6.dp)
-                        .navigationBarsPadding()
-                        .imePadding(),
-                    messageText = state.value.messageText,
-                    onMessageType = { text ->
-                        vm(ChatIntent.SetMessageText(text))
-                    },
-                    onClickSend = {
-                        vm(ChatIntent.SendMessage)
-                    },
-                    reciverId = state.value.receiverId,
-                    reciverName = state.value.receiverName,
-                    reciverLoc = state.value.receiverAddress,
-                    receiverProfilePicture = state.value.receiverProfilePicture,
-                    tillnumber = state.value.tillnumber)
-            }) { padding ->
+        }, bottomBar = {
+            BottomBar(
+                modifier = Modifier
+                    .background(Color.White)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 6.dp)
+                    .navigationBarsPadding()
+                    .imePadding(),
+                messageText = state.value.messageText,
+                onMessageType = { text ->
+                    vm(ChatIntent.SetMessageText(text))
+                },
+                onClickSend = {
+                    vm(ChatIntent.SendMessage)
+                },
+                reciverId = state.value.receiverId,
+                reciverName = state.value.receiverName,
+                reciverLoc = state.value.receiverAddress,
+                receiverProfilePicture = state.value.receiverProfilePicture,
+                tillnumber = state.value.tillnumber
+            )
+        }) { padding ->
             Column(
-                modifier = Modifier.padding(padding).background(Color.White)
+                modifier = Modifier
+                    .padding(padding)
+                    .background(Color.White)
             ) {
                 // Content goes here
                 Box(
@@ -177,6 +180,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                                     context = this@ChatMerchantActivity
                                 )
                             }
+
                             else -> {
                                 ChatsLazyList(
                                     modifier = Modifier.matchParentSize(),
@@ -202,7 +206,8 @@ class ChatMerchantActivity : AppCompatActivity() {
         receiverProfilePicture: String? = null,
         modifier: Modifier = Modifier
     ) {
-        val primaryColor = Color(ContextCompat.getColor(this@ChatMerchantActivity, R.color.primaryColor))
+        val primaryColor =
+            Color(ContextCompat.getColor(this@ChatMerchantActivity, R.color.primaryColor))
         Column(modifier = modifier.background(primaryColor)) {
 
             Row(
@@ -301,11 +306,11 @@ class ChatMerchantActivity : AppCompatActivity() {
         onMessageType: (text: String) -> Unit,
         onClickSend: () -> Unit,
         modifier: Modifier = Modifier,
-        reciverId:String,
-        reciverName:String,
-        reciverLoc:String,
+        reciverId: String,
+        reciverName: String,
+        reciverLoc: String,
         receiverProfilePicture: String? = null,
-        tillnumber:String
+        tillnumber: String
 
     ) {
 
@@ -320,8 +325,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                     .weight(1f)
                     .heightIn(min = 56.dp)
             ) {
-                BasicTextField(
-                    value = messageText,
+                BasicTextField(value = messageText,
                     onValueChange = { text -> onMessageType(text) },
                     maxLines = 6,
                     modifier = Modifier
@@ -340,8 +344,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                             }
                             innerTextField()
                         }
-                    }
-                )
+                    })
                 IconButton(
                     modifier = Modifier
                         .align(Alignment.Bottom)
@@ -363,15 +366,14 @@ class ChatMerchantActivity : AppCompatActivity() {
                     .wrapContentWidth()
                     .height(56.dp),
                 onClick = {
-                   val i =Intent(this@ChatMerchantActivity,PayMerchantActivity::class.java)
-                    i.putExtra(PAYMAART_ID,reciverId)
-                    i.putExtra(MERCHANT_NAME,reciverName)
-                    i.putExtra(STREET_NAME,reciverLoc)
-                    i.putExtra(PROFILE_PICTURE,receiverProfilePicture)
-                    i.putExtra(TILL_NUMBER,tillnumber)
+                    val i = Intent(this@ChatMerchantActivity, PayMerchantActivity::class.java)
+                    i.putExtra(PAYMAART_ID, reciverId)
+                    i.putExtra(MERCHANT_NAME, reciverName)
+                    i.putExtra(STREET_NAME, reciverLoc)
+                    i.putExtra(PROFILE_PICTURE, receiverProfilePicture)
+                    i.putExtra(TILL_NUMBER, tillnumber)
                     startActivity(i)
-                }
-            ) {
+                }) {
                 Text(
                     text = stringResource(R.string.pay),
                     fontFamily = InterFontFamily(),
@@ -423,7 +425,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                             .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                     CircularProgressIndicator(
+                        CircularProgressIndicator(
                             color = primaryColor,
                             strokeWidth = 4.dp,
                             modifier = Modifier.size(20.dp)
@@ -438,6 +440,7 @@ class ChatMerchantActivity : AppCompatActivity() {
 
         }
     }
+
     /**
      * Displays real-time chat messages in a LazyList.
      *
@@ -484,7 +487,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                             date = chat.chatCreatedTime.parseMalawianDate("dd MMM yyyy, HH:mm"),
                             note = chat.note,
                             isSender = chat.isAuthor,
-                            tillnumber = chat.tillnumber,
+                            tillnumber = chat.tillnumber.parseTillNumber(),
                             reciverLoc = reciverLoc,
                             receiverId = receiverId,
                             reciverName = reciverName,
@@ -548,7 +551,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                             date = chat.chatCreatedTime.parseMalawianDate("dd MMM yyyy, HH:mm"),
                             note = chat.note,
                             isSender = chat.isAuthor,
-                            tillnumber = chat.tillnumber,
+                            tillnumber = chat.tillnumber.parseTillNumber(),
                             reciverLoc = reciverLoc,
                             receiverId = receiverId,
                             reciverName = reciverName,
@@ -586,7 +589,10 @@ class ChatMerchantActivity : AppCompatActivity() {
             Box(
                 modifier = Modifier
                     .widthIn(max = maxWidth)
-                    .background(if (isAuthor) neutralGreyDisabled else Color.White, shape = RoundedCornerShape(8.dp))
+                    .background(
+                        if (isAuthor) neutralGreyDisabled else Color.White,
+                        shape = RoundedCornerShape(8.dp)
+                    )
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             ) {
                 Text(
@@ -682,20 +688,19 @@ class ChatMerchantActivity : AppCompatActivity() {
 
                 //Payment status & Dat
 
-                    //Date
-                    androidx.compose.material.Text(
-                        text = date,
-                        fontFamily = InterFontFamily(),
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 12.sp,
-                        color = neutralGreyPrimaryText
-                    )
+                //Date
+                androidx.compose.material.Text(
+                    text = date,
+                    fontFamily = InterFontFamily(),
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 12.sp,
+                    color = neutralGreyPrimaryText
+                )
                 Spacer(modifier = Modifier.height(10.dp))
 
 
-
                 //Note
-                if(!note.isNullOrBlank()) {
+                if (!note.isNullOrBlank()) {
                     Text(
                         text = stringResource(R.string.note_colon, note),
                         fontFamily = InterFontFamily(),
@@ -713,10 +718,17 @@ class ChatMerchantActivity : AppCompatActivity() {
                     )
 
                 }
-                Row(modifier = Modifier.fillMaxWidth().padding(top=8.dp), horizontalArrangement = Arrangement.End){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
                     OutlinedButton(
                         onClick = {},//onDeclineClick,
-                        border = BorderStroke(1.dp, primaryColor), // Use your highlightedLight color
+                        border = BorderStroke(
+                            1.dp, primaryColor
+                        ), // Use your highlightedLight color
                         shape = RoundedCornerShape(8.dp)
                     ) {
                         Text(
@@ -789,7 +801,7 @@ class ChatMerchantActivity : AppCompatActivity() {
 
             Spacer(modifier = Modifier.width(6.dp))
 
-           Text(
+            Text(
                 text = stringResource(R.string.pending),
                 fontFamily = InterFontFamily(),
                 fontWeight = FontWeight.Normal,
@@ -810,7 +822,7 @@ class ChatMerchantActivity : AppCompatActivity() {
 
             Spacer(modifier = Modifier.width(6.dp))
 
-           Text(
+            Text(
                 text = stringResource(R.string.declined),
                 fontFamily = InterFontFamily(),
                 fontWeight = FontWeight.Normal,
@@ -820,6 +832,7 @@ class ChatMerchantActivity : AppCompatActivity() {
 
         }
     }
+
     @Composable
     fun DateChip(modifier: Modifier = Modifier, date: String) {
         Box(
@@ -856,8 +869,6 @@ class ChatMerchantActivity : AppCompatActivity() {
 
 
 }
-
-
 
 
 //@Preview(showBackground = true)

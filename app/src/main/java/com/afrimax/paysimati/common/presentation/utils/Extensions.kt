@@ -245,3 +245,11 @@ inline fun RecyclerView.itemDecoration(
     }
     addItemDecoration(decoration)
 }
+
+fun String.parseTillNumber(): String {
+    return if (this.length == 7) {
+        "${this.substring(0, 3)} ${this.substring(3, 7)}"
+    } else {
+        this
+    }
+}
