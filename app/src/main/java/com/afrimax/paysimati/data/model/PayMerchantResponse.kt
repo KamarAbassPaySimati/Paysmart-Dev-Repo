@@ -30,3 +30,5 @@ data class MerchantList(
     @SerializedName("created_at")
     val createdAt: String?=null
 )
+
+

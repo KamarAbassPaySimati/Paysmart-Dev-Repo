@@ -17,6 +17,7 @@ import com.afrimax.paysimati.common.domain.utils.Errors
 import com.afrimax.paysimati.common.domain.utils.GenericResult
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.CashOutRequestBody
+import com.afrimax.paysimati.data.model.PayMerchantRequest
 import com.afrimax.paysimati.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paysimati.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paysimati.data.model.PayToUnRegisteredPersonRequest
@@ -71,7 +72,7 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
         }
 
         binding.sendPaymentSubText.text = when (data) {
-            is SubscriptionDetailsRequestBody, is PayToUnRegisteredPersonRequest, is PayToRegisteredPersonRequest -> getString(
+            is SubscriptionDetailsRequestBody, is PayToUnRegisteredPersonRequest, is PayToRegisteredPersonRequest , is PayMerchantRequest-> getString(
                 R.string.send_payment_subtext
             )
 
@@ -142,15 +143,17 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                         is PayToUnRegisteredPersonRequest -> onConfirmClickedPayUnRegisteredPerson(
                             text, data
                         )
-
                         is PayToRegisteredPersonRequest -> onConfirmClickedPayRegisteredPerson(
                             text, data
                         )
+                        is PayMerchantRequest->onConfirmClickedPayMerchant(text,data)
                     }
                 }
             }
         }
     }
+
+
 
     private fun onTogglePasswordClicked() {
         val passwordTransformation = binding.sendPaymentPassword.transformationMethod
@@ -197,10 +200,13 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                 is PayToUnRegisteredPersonRequest -> onConfirmClickedPayUnRegisteredPerson(
                     binding.sendPaymentPassword.text.toString(), data
                 )
-
+//
                 is PayToRegisteredPersonRequest -> onConfirmClickedPayRegisteredPerson(
                     binding.sendPaymentPassword.text.toString(), data
                 )
+                is PayMerchantRequest->
+                    onConfirmClickedPayMerchant(
+                        binding.sendPaymentPassword.text.toString(),data)
             }
         }
     }
@@ -233,7 +239,8 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                 sheetCallback.onPaymentSuccess(subscriptionHandler.data.subscriptionPaymentDetails)
             }
 
-            is GenericResult.Error -> handleError(subscriptionHandler.error)
+            is GenericResult.Error ->
+                handleError(subscriptionHandler.error)
         }
     }
 
@@ -336,9 +343,39 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
         }
     }
 
+    private suspend fun onConfirmClickedPayMerchant(
+        password: String, data: PayMerchantRequest
+    ) {
+        val activity = requireContext() as BaseActivity
+        val encryptedpassword = AESCrypt.encrypt(password)
+        val newRequestBody = data.copy(password = encryptedpassword)
+        activity.hideKeyboard(view, requireContext())
+        val idtoken =activity.fetchIdToken()
+
+        val payToMerchant = safeApiCall {
+            ApiClient.apiService.getTaxForMechant(
+                idtoken, newRequestBody
+            )
+        }
+
+        when (payToMerchant) {
+            is GenericResult.Success -> {
+                sheetCallback.onPaymentSuccess(payToMerchant.data.paymerchant)
+                dismiss()
+            }
+
+            is GenericResult.Error -> handleError(payToMerchant.error)
+        }
+
+    }
+
+
+
+
+
     private fun handleError(error: Errors.Network) {
         when (error) {
-            Errors.Network.UNAUTHORIZED, Errors.Network.BAD_REQUEST -> {
+            Errors.Network.UNAUTHORIZED -> {
                 when (loginMode) {
                     Constants.SELECTION_PIN -> {
                         binding.sendPaymentSheetAPF.showWarning(warningText = getString(R.string.invalid_pin))
@@ -347,6 +384,18 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                     Constants.SELECTION_PASSWORD -> {
                         binding.sendPaymentPasswordETWarning.visibility = VISIBLE
                         binding.sendPaymentPasswordETWarning.text = getString(R.string.invalid_pin)
+                    }
+                }
+            }
+            Errors.Network.BAD_REQUEST ->{
+                when (loginMode) {
+                    Constants.SELECTION_PIN -> {
+                        binding.sendPaymentSheetAPF.showWarning(warningText = getString(R.string.insufficient_funds))
+                    }
+
+                    Constants.SELECTION_PASSWORD -> {
+                        binding.sendPaymentPasswordETWarning.visibility = VISIBLE
+                        binding.sendPaymentPasswordETWarning.text = getString(R.string.insufficient_funds)
                     }
                 }
             }

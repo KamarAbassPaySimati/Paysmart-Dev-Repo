@@ -116,6 +116,7 @@ object Constants {
     const val VIEW_SCOPE_UPDATE = "view_scope_update" // used for upgrading simplified to full kyc
     const val PUBLIC_PROFILE = "public_profile"
     const val PROFILE_PICTURE = "profile_picture"
+    const val PROFILE_PICTURES = "profile_picture"
     const val PHONE_NUMBER = "phone_number"
     const val COUNTRY_CODE = "country_code"
     const val KYC_SEND_EMAIL = "kyc_send_email"
@@ -146,6 +147,10 @@ object Constants {
     const val AFRIMAX_ID = "afrimax_id"
     const val AFRIMAX_NAME = "afrimax_name"
     const val CUSTOMER_NAME = "customer_name"
+    const val MERCHANT_NAME = "merchant_name"
+    const val STREET_NAME ="street_name"
+    const val TILL_NUMBER = "till_number"
+    const val USER_ID = "user_iD"
     const val PAYMENT_AMOUNT = "payment_amount"
     const val CUSTOMER_ID = "payment_id"
     const val PAYMENT_TXN_FEE = "payment_txn_fee"
@@ -172,4 +177,9 @@ object Constants {
     const val USER_DATA_PREFS = "user_data_prefs"
     const val PREF_KEY_PAYMAART_ID = "pref_key_paymaart_id"
     const val PREF_KEY_LOGIN_MODE = "pref_key_login_mode"
+
+
+
+
+
 }

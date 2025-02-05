@@ -13,6 +13,7 @@ import com.afrimax.paysimati.data.model.GetAfrimaxPlansResponse
 import com.afrimax.paysimati.data.model.GetInstitutesResponse
 import com.afrimax.paysimati.data.model.GetSharedSecretRequest
 import com.afrimax.paysimati.data.model.GetSharedSecretResponse
+import com.afrimax.paysimati.data.model.GetTaxForPayToMerchantResponse
 import com.afrimax.paysimati.data.model.GetTaxForPayToRegisteredPersonResponse
 import com.afrimax.paysimati.data.model.GetTaxForPayToUnRegisteredPersonResponse
 import com.afrimax.paysimati.data.model.GetTransactionDetailsResponse
@@ -23,6 +24,7 @@ import com.afrimax.paysimati.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paysimati.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paysimati.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paysimati.data.model.MembershipPlansResponse
+import com.afrimax.paysimati.data.model.PayMerchantRequest
 import com.afrimax.paysimati.data.model.PayMerchantResponse
 import com.afrimax.paysimati.data.model.PayPersonRequestBody
 import com.afrimax.paysimati.data.model.PayPersonResponse
@@ -33,6 +35,7 @@ import com.afrimax.paysimati.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paysimati.data.model.PayToUnRegisteredPersonRequest
 import com.afrimax.paysimati.data.model.PayToUnRegisteredPersonResponse
 import com.afrimax.paysimati.data.model.PersonTransactions
+import com.afrimax.paysimati.data.model.chat.PreviousChatResponse
 import com.afrimax.paysimati.data.model.RefundRequestResponse
 import com.afrimax.paysimati.data.model.ResendCredentialsRequest
 import com.afrimax.paysimati.data.model.SaveBasicDetailsSelfKycRequest
@@ -83,6 +86,7 @@ private const val PAYMAART = "paymaart"
 private const val CUSTOMER = "customer"
 private const val AFRIMAX = "afrimax"
 private const val CASHIN_CASHOUT = "cashin-cashout"
+
 
 interface ApiService {
 
@@ -239,6 +243,14 @@ interface ApiService {
         @Header("Authorization") header: String, @Query("page") page: Int
     ): Call<GetAfrimaxPlansResponse>
 
+    @GET("chats/customer-messages")
+    suspend fun getPreviousChat(
+        @Header("Authorization") header: String,
+        @Query("receiver_id") receiverId: String,
+        @Query("page") page: Int
+    ): Response<PreviousChatResponse>
+
+
     @POST("$AFRIMAX/cmr/payment")
     suspend fun payToAfrimax(
         @Header("Authorization") header: String, @Body body: PayToAfrimaxRequestBody
@@ -335,29 +347,35 @@ interface ApiService {
 
     @GET("$CUSTOMER_USER/recent-transactions")
     fun getMerchantTransactionList(
-        @Header("Authorization") header: String,@Query("page") page:Int=1
-    ):Call<PayMerchantResponse>
+        @Header("Authorization") header: String, @Query("page") page: Int = 1
+    ): Call<PayMerchantResponse>
 
     @GET("$CUSTOMER_USER/recent-transactions")
     fun searchMerchantById(
         @Header("Authorization") header: String,
         @Query("search") search: String,
         @Query("page") page: Int = 1
-    ):Call<PayMerchantResponse>
+    ): Call<PayMerchantResponse>
 
     @GET("$CUSTOMER_USER/find-merchants")
     fun searchMerchantByLocation(
         @Header("Authorization") header: String,
         @Query("location") search: String,
-        @Query("trading_type")tradingType:String?=null,
+        @Query("trading_type") tradingType: String? = null,
         @Query("page") page: Int = 1
-    ):Call<SearchMerchantByLocation>
+    ): Call<SearchMerchantByLocation>
 
 
     @POST("bank-transactions/customer/payment-details")
     suspend fun getTaxForPayToRegisteredPerson(
         @Header("Authorization") header: String, @Body body: PayToRegisteredPersonRequest
     ): Response<GetTaxForPayToRegisteredPersonResponse>
+
+
+    @POST("chats/pay-merchant")
+    suspend fun  getTaxForMechant(
+        @Header("Authorization") header: String, @Body body: PayMerchantRequest
+    ): Response<GetTaxForPayToMerchantResponse>
 
     @POST("bank-transactions/customer/pay-customer")
     suspend fun payToRegisteredPerson(
