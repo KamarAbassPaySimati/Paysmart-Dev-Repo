@@ -375,7 +375,7 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
 
     private fun handleError(error: Errors.Network) {
         when (error) {
-            Errors.Network.UNAUTHORIZED, Errors.Network.BAD_REQUEST -> {
+            Errors.Network.UNAUTHORIZED -> {
                 when (loginMode) {
                     Constants.SELECTION_PIN -> {
                         binding.sendPaymentSheetAPF.showWarning(warningText = getString(R.string.invalid_pin))
@@ -384,6 +384,18 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                     Constants.SELECTION_PASSWORD -> {
                         binding.sendPaymentPasswordETWarning.visibility = VISIBLE
                         binding.sendPaymentPasswordETWarning.text = getString(R.string.invalid_pin)
+                    }
+                }
+            }
+            Errors.Network.BAD_REQUEST ->{
+                when (loginMode) {
+                    Constants.SELECTION_PIN -> {
+                        binding.sendPaymentSheetAPF.showWarning(warningText = getString(R.string.insufficient_funds))
+                    }
+
+                    Constants.SELECTION_PASSWORD -> {
+                        binding.sendPaymentPasswordETWarning.visibility = VISIBLE
+                        binding.sendPaymentPasswordETWarning.text = getString(R.string.insufficient_funds)
                     }
                 }
             }
