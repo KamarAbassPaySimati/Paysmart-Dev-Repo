@@ -41,10 +41,10 @@ Feature: Paymaart- Customer Android- Make Payments to Merchant
 
   Scenario: Searching merchant by Paymaart ID
     When I click on the Search tab
-    And I enter paymart ID "012345"
-    Then I should read a message stating "No Data Found"
+    And I enter paymart ID as "012345"
+    Then I should read a message stating "No Data Found" in Search Merchant page
     When I click on clear button on search tab
-    And I enter paymart ID "4263169"
+    And I enter paymart ID as "4263169"
     Then I should see the Trading name along with Paymaart ID
     When I select the Merchant "Suhaas Kumar TEST"
     Then I should see the merchant's name, ID and recent transaction history
