@@ -5,7 +5,6 @@ sealed interface Errors : GenericError {
     /**Errors that can occur while performing network calls*/
     enum class Network : Errors {
         NO_RESPONSE, NO_INTERNET, INTERNAL_ERROR, REQUEST_TIMEOUT, PAYLOAD_TOO_LARGE,MAPPING_FAILED, UNKNOWN, UNABLE_TO_UPLOAD, ACCOUNT_LOCKED, FILE_NOT_FOUND, UNPROCESSABLE_ENTITY,CONFLICT_FOUND, UNAUTHORIZED, BAD_REQUEST, UNABLE_TO_CONNECT
-
     }
 
     /**Errors that can occur while performing operations on SharedPreferences*/
