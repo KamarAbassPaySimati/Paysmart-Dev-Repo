@@ -9,7 +9,6 @@ import android.view.Gravity
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.ViewCompat
@@ -19,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
+import com.afrimax.paysimati.common.presentation.utils.parseTillNumber
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.PayMerchantModel
 import com.afrimax.paysimati.data.model.PayMerchantRequest
@@ -50,7 +50,7 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
         profilepic = intent.getStringExtra(Constants.PROFILE_PICTURE) ?: ""
         tillno = intent.getStringExtra(Constants.TILL_NUMBER) ?: ""
         super.onCreate(savedInstanceState)
-      //  enableEdgeToEdge()
+        //  enableEdgeToEdge()
         binding = ActivityPayMerchantBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.PayMerchantActivity)) { v, insets ->
@@ -77,8 +77,7 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
         } else {
             binding.payMerchantActivityProfileIV.also {
                 it.visibility = VISIBLE
-                Glide.with(this).load(BuildConfig.CDN_BASE_URL + profilepic)
-                    .centerCrop().into(it)
+                Glide.with(this).load(BuildConfig.CDN_BASE_URL + profilepic).centerCrop().into(it)
             }
         }
 
@@ -97,7 +96,7 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
                 visibility = GONE
             }
         }
-        binding.payMerchantActivitytillno.text = tillno
+        binding.payMerchantActivitytillno.text = tillno.parseTillNumber()
 
 
     }
