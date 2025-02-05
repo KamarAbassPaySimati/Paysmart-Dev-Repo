@@ -36,7 +36,7 @@ Feature: Paymaart- Customer Android- Make payments to Merchants request
     Then I should be able to see the payment request made by the merchant in chat screen
 
   Scenario: Making a payment for a requested amount that exceeds the wallet balance
-    When I click on Pay button for 1st Requested Amount "350000" in chat screen
+    When I click on Pay button for 1st Requested Amount "10000" in chat screen
     Then I should be directed to Send Payment page
     When I click on Send Payment button
     And I click on Proceed
@@ -47,7 +47,7 @@ Feature: Paymaart- Customer Android- Make payments to Merchants request
     Then I click on Back button
 
   Scenario: Making a payment for a requested amount less than the wallet balance
-    When I click on Pay button for 2nd Requested Amount "20" in chat screen
+    When I click on Pay button for 2nd Requested Amount "2.80" in chat screen
     Then I should be directed to Send Payment page
     When I click on Send Payment button
     And I click on Proceed
@@ -59,7 +59,7 @@ Feature: Paymaart- Customer Android- Make payments to Merchants request
 
   Scenario: Declining the Payment request
     Given I am on the Chat Screen
-    When I click on Decline button for 3rd Requested Amount "560260" in chat screen
+    When I click on Decline button for 3rd Requested Amount "56026" in chat screen
     Then I should see a message indicating declined for that Payment request
 
 
