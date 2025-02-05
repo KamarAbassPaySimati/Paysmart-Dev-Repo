@@ -172,6 +172,7 @@ object Constants {
     const val FAQS_TYPE = "faqs_type"
     const val FAQs_URL = "https://www.paymaart.net/mobile-faqs"
     const val PAYMAART_ID = "paymaart_id"
+    const val STATUS_CODE = "status_code"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"

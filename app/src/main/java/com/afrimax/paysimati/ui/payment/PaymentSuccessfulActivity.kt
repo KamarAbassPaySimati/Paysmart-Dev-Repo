@@ -29,6 +29,7 @@ import com.afrimax.paysimati.common.presentation.utils.DP
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.model.CashOutResponse
+import com.afrimax.paysimati.data.model.MerchantPayResponse
 import com.afrimax.paysimati.data.model.PayAfrimaxResponse
 import com.afrimax.paysimati.data.model.PayMerchantPaymentResponse
 import com.afrimax.paysimati.data.model.PayMerchantResponse
@@ -218,6 +219,29 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 }
             }
 
+            is MerchantPayResponse ->{
+                val model = CommonViewModel(
+                    fromName = data.customerName,
+                    fromId = data.customerId,
+                    toName = data.merchantName,
+                    toId = data.merchantId,
+                    transactionAmount = data.amount,
+                    transactionFees = data.transactionfee?.toDouble(),
+                    vat = data.vat,
+                    transactionId = data.transactionID,
+                    dateTime = data.createdAt
+                )
+                setCommonView(model)
+                binding.paymentSuccessfulToPhoneNumberContainer.visibility = View.GONE
+                binding.paymentSuccessfulToPaymaartIdContainer.visibility = View.VISIBLE
+                transactionId = data.transactionID ?: ""
+                if (!data.note.isNullOrEmpty()) {
+                    binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                    binding.paymentSuccessfulMembershipValue.text = data.note
+                }
+            }
+
+
 
 
         }
@@ -252,6 +276,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 this@PaymentSuccessfulActivity.finishAffinity()
+
             }
         })
     }

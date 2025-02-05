@@ -76,7 +76,6 @@ private fun mapTextMessage(
 private fun mapPaymentRequestMessage(
     chat: PreviousChatResponse.ChatMessage, senderId: String, date: Date?
 ): ChatMessage.PaymentMessage? {
-    Log.d("ChatMapping", "Payment Request Message - Till Number: ${chat.tillnumber}") // Log tillnumber
     return if ( chat.receiverId != null && chat.senderId != null && date != null && chat.transactionId != null) {
         ChatMessage.PaymentMessage(
             chatId = UUID.randomUUID().toString(),

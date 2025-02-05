@@ -23,7 +23,8 @@
         <activity
             android:name=".ui.paymerchant.PayMerchantActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:taskAffinity=".payment"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".ui.chatMerchant.ui.ChatMerchantActivity"
             android:exported="false"

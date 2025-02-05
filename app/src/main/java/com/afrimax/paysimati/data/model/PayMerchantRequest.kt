@@ -14,4 +14,5 @@ data class PayMerchantRequest(
     @SerializedName("till_number")val tillnumber:String?=null,
 
 
+
 )

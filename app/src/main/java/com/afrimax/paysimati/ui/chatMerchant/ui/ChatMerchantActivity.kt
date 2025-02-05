@@ -89,8 +89,10 @@ import com.afrimax.paysimati.util.Constants.MERCHANT_NAME
 import com.afrimax.paysimati.util.Constants.PAYMAART_ID
 import com.afrimax.paysimati.util.Constants.PAYMENT_AMOUNT
 import com.afrimax.paysimati.util.Constants.PROFILE_PICTURE
+import com.afrimax.paysimati.util.Constants.STATUS_CODE
 import com.afrimax.paysimati.util.Constants.STREET_NAME
 import com.afrimax.paysimati.util.Constants.TILL_NUMBER
+import com.afrimax.paysimati.util.Constants.TRANSACTION_ID
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
@@ -137,28 +139,28 @@ class ChatMerchantActivity : AppCompatActivity() {
                 receiverProfilePicture = state.value.receiverProfilePicture,
                 modifier = Modifier.fillMaxWidth()
             )
-        }, bottomBar = {
-            BottomBar(
-                modifier = Modifier
-                    .background(Color.White)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 6.dp)
-                    .navigationBarsPadding()
-                    .imePadding(),
-                messageText = state.value.messageText,
-                onMessageType = { text ->
-                    vm(ChatIntent.SetMessageText(text))
-                },
-                onClickSend = {
-                    vm(ChatIntent.SendMessage)
-                },
-                reciverId = state.value.receiverId,
-                reciverName = state.value.receiverName,
-                reciverLoc = state.value.receiverAddress,
-                receiverProfilePicture = state.value.receiverProfilePicture,
-                tillnumber = state.value.tillnumber
-            )
-        }) { padding ->
+        },
+            bottomBar = {
+                BottomBar(
+                    modifier = Modifier.background(Color.White)
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 6.dp)
+                        .navigationBarsPadding()
+                        .imePadding(),
+                    messageText = state.value.messageText,
+                    onMessageType = { text ->
+                        vm(ChatIntent.SetMessageText(text))
+                    },
+                    onClickSend = {
+                        vm(ChatIntent.SendMessage)
+                    },
+                    reciverId = state.value.receiverId,
+                    reciverName = state.value.receiverName,
+                    reciverLoc = state.value.receiverAddress,
+                    receiverProfilePicture = state.value.receiverProfilePicture,
+                    tillnumber = state.value.tillnumber,
+                    statusCode =0)
+            }) { padding ->
             Column(
                 modifier = Modifier
                     .padding(padding)
@@ -190,6 +192,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                                     receiverId= state.value.receiverId,
                                     reciverName = state.value.receiverName,
                                     receiverProfilePicture = state.value.receiverProfilePicture,
+                                    statusCode = 1
                                 )
                             }
                         }
@@ -206,8 +209,7 @@ class ChatMerchantActivity : AppCompatActivity() {
         receiverProfilePicture: String? = null,
         modifier: Modifier = Modifier
     ) {
-        val primaryColor =
-            Color(ContextCompat.getColor(this@ChatMerchantActivity, R.color.primaryColor))
+        val primaryColor = Color(ContextCompat.getColor(this@ChatMerchantActivity, R.color.primaryColor))
         Column(modifier = modifier.background(primaryColor)) {
 
             Row(
@@ -306,11 +308,12 @@ class ChatMerchantActivity : AppCompatActivity() {
         onMessageType: (text: String) -> Unit,
         onClickSend: () -> Unit,
         modifier: Modifier = Modifier,
-        reciverId: String,
-        reciverName: String,
-        reciverLoc: String,
+        reciverId:String,
+        reciverName:String,
+        reciverLoc:String,
         receiverProfilePicture: String? = null,
-        tillnumber: String
+        tillnumber:String,
+        statusCode:Int
 
     ) {
 
@@ -325,7 +328,8 @@ class ChatMerchantActivity : AppCompatActivity() {
                     .weight(1f)
                     .heightIn(min = 56.dp)
             ) {
-                BasicTextField(value = messageText,
+                BasicTextField(
+                    value = messageText,
                     onValueChange = { text -> onMessageType(text) },
                     maxLines = 6,
                     modifier = Modifier
@@ -344,7 +348,8 @@ class ChatMerchantActivity : AppCompatActivity() {
                             }
                             innerTextField()
                         }
-                    })
+                    }
+                )
                 IconButton(
                     modifier = Modifier
                         .align(Alignment.Bottom)
@@ -366,14 +371,16 @@ class ChatMerchantActivity : AppCompatActivity() {
                     .wrapContentWidth()
                     .height(56.dp),
                 onClick = {
-                    val i = Intent(this@ChatMerchantActivity, PayMerchantActivity::class.java)
-                    i.putExtra(PAYMAART_ID, reciverId)
-                    i.putExtra(MERCHANT_NAME, reciverName)
-                    i.putExtra(STREET_NAME, reciverLoc)
-                    i.putExtra(PROFILE_PICTURE, receiverProfilePicture)
-                    i.putExtra(TILL_NUMBER, tillnumber)
+                   val i =Intent(this@ChatMerchantActivity,PayMerchantActivity::class.java)
+                    i.putExtra(PAYMAART_ID,reciverId)
+                    i.putExtra(MERCHANT_NAME,reciverName)
+                    i.putExtra(STREET_NAME,reciverLoc)
+                    i.putExtra(PROFILE_PICTURE,receiverProfilePicture)
+                    i.putExtra(TILL_NUMBER,tillnumber)
+                    i.putExtra(STATUS_CODE,statusCode)
                     startActivity(i)
-                }) {
+                }
+            ) {
                 Text(
                     text = stringResource(R.string.pay),
                     fontFamily = InterFontFamily(),
@@ -384,7 +391,7 @@ class ChatMerchantActivity : AppCompatActivity() {
             }
 
         }
-        // Implement BottomBar content
+
     }
 
 
@@ -396,9 +403,9 @@ class ChatMerchantActivity : AppCompatActivity() {
         reciverLoc: String,
         receiverProfilePicture: String?,
         receiverId: String,
-        reciverName: String
+        reciverName: String,
+        statusCode:Int
     ) {
-
 
         LazyColumn(
             modifier = modifier.background(Color.White),
@@ -412,10 +419,21 @@ class ChatMerchantActivity : AppCompatActivity() {
             }
 
             //Realtime messages
-            realtimeChats(realTimeMessages = realTimeMessages, previousChats = previousChats, reciverLoc = reciverLoc,reciverName=reciverName,receiverProfilePicture=receiverProfilePicture,receiverId=receiverId)
+            realtimeChats(realTimeMessages = realTimeMessages,
+                previousChats = previousChats,
+                reciverLoc = reciverLoc,
+                reciverName=reciverName,
+                receiverProfilePicture=receiverProfilePicture,
+                receiverId=receiverId,
+                statusCode=statusCode)
 
             //Previous messages
-            previousChats(previousChats = previousChats,reciverLoc=reciverLoc,reciverName=reciverName,receiverProfilePicture=receiverProfilePicture,receiverId=receiverId)
+            previousChats(previousChats = previousChats,
+                reciverLoc=reciverLoc,
+                reciverName=reciverName,
+                receiverProfilePicture=receiverProfilePicture,
+                receiverId=receiverId,
+                statusCode=statusCode)
 
             if (previousChats.loadState.append is LoadState.Loading) {
                 item {
@@ -453,7 +471,12 @@ class ChatMerchantActivity : AppCompatActivity() {
      * determine if a date chip should be displayed before the first real-time message.
      */
     private fun LazyListScope.realtimeChats(
-        realTimeMessages: ArrayList<ChatMessage>, previousChats: LazyPagingItems<ChatMessage>,reciverLoc: String,receiverId: String,reciverName: String,receiverProfilePicture: String?
+        realTimeMessages: ArrayList<ChatMessage>, previousChats: LazyPagingItems<ChatMessage>
+        ,reciverLoc: String,
+        receiverId: String,
+        reciverName: String,
+        receiverProfilePicture: String?,
+        statusCode: Int
     ) {
         items(count = realTimeMessages.size) { index ->
 
@@ -491,13 +514,13 @@ class ChatMerchantActivity : AppCompatActivity() {
                             reciverLoc = reciverLoc,
                             receiverId = receiverId,
                             reciverName = reciverName,
-                            receiverProfilePicture = receiverProfilePicture
+                            receiverProfilePicture = receiverProfilePicture,
+                            statusCode = statusCode
                         )
                     }
                 }
             }
 
-            //Load above the chat message
             val isFirstChatInTheDay =
                 chat != null && previousChat != null && chat.createdTime.clearTimeToMalawiTimeZone() != previousChat.createdTime.clearTimeToMalawiTimeZone()
 
@@ -510,7 +533,11 @@ class ChatMerchantActivity : AppCompatActivity() {
         }
 
     }
-    private fun LazyListScope.previousChats(previousChats: LazyPagingItems<ChatMessage>,reciverLoc: String,receiverId: String,reciverName: String,receiverProfilePicture: String?) {
+    private fun LazyListScope.previousChats(previousChats: LazyPagingItems<ChatMessage>,
+                                            reciverLoc: String,
+                                            receiverId: String,
+                                            reciverName: String,
+                                            receiverProfilePicture: String?,statusCode: Int) {
         items(
             count = previousChats.itemCount
         ) { index ->
@@ -555,7 +582,9 @@ class ChatMerchantActivity : AppCompatActivity() {
                             reciverLoc = reciverLoc,
                             receiverId = receiverId,
                             reciverName = reciverName,
-                            receiverProfilePicture = receiverProfilePicture
+                            receiverProfilePicture = receiverProfilePicture,
+                            statusCode = statusCode,
+
 
                         )
                     }
@@ -622,7 +651,8 @@ class ChatMerchantActivity : AppCompatActivity() {
         reciverLoc: String,
         reciverName:String,
         receiverProfilePicture:String?,
-        receiverId:String
+        receiverId:String,
+        statusCode: Int
 
     ) {
         BoxWithConstraints(
@@ -676,6 +706,8 @@ class ChatMerchantActivity : AppCompatActivity() {
                 Spacer(modifier = Modifier.height(10.dp))
 
 
+
+
                 Text(
                     text = stringResource(R.string.tillnumber, tillnumber),
                     fontFamily = InterFontFamily(),
@@ -688,19 +720,31 @@ class ChatMerchantActivity : AppCompatActivity() {
 
                 //Payment status & Dat
 
-                //Date
-                androidx.compose.material.Text(
-                    text = date,
-                    fontFamily = InterFontFamily(),
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    color = neutralGreyPrimaryText
-                )
-                Spacer(modifier = Modifier.height(10.dp))
+                Row(modifier = Modifier.fillMaxWidth()) {
+
+                    when (paymentStatus) {
+
+                        PaymentStatusType.RECEIVED -> {
+                            PaymentReceivedChip(modifier = Modifier.weight(1f))
+                        }
+
+                        PaymentStatusType.DECLINED -> {
+                            PaymentDeclinedChip(modifier = Modifier.weight(1f))
+                        }
+                    }
+
+                    androidx.compose.material.Text(
+                        text = date,
+                        fontFamily = InterFontFamily(),
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                        color = neutralGreyPrimaryText
+                    )
+                }
 
 
                 //Note
-                if (!note.isNullOrBlank()) {
+                if(!note.isNullOrBlank()) {
                     Text(
                         text = stringResource(R.string.note_colon, note),
                         fontFamily = InterFontFamily(),
@@ -751,6 +795,8 @@ class ChatMerchantActivity : AppCompatActivity() {
                             i.putExtra(PROFILE_PICTURE,receiverProfilePicture)
                             i.putExtra(TILL_NUMBER,tillnumber)
                             i.putExtra(PAYMENT_AMOUNT,amount)
+                            i.putExtra(STATUS_CODE,statusCode)
+                            i.putExtra(TRANSACTION_ID,txnId)
                             startActivity(i)} ,//onPayClick,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = primaryColor // Use your primary color
@@ -781,7 +827,7 @@ class ChatMerchantActivity : AppCompatActivity() {
             Spacer(modifier = Modifier.width(6.dp))
 
             androidx.compose.material.Text(
-                text = stringResource(R.string.received),
+                text = stringResource(R.string.paid),
                 fontFamily = InterFontFamily(),
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
@@ -822,7 +868,7 @@ class ChatMerchantActivity : AppCompatActivity() {
 
             Spacer(modifier = Modifier.width(6.dp))
 
-            Text(
+           Text(
                 text = stringResource(R.string.declined),
                 fontFamily = InterFontFamily(),
                 fontWeight = FontWeight.Normal,
@@ -832,7 +878,6 @@ class ChatMerchantActivity : AppCompatActivity() {
 
         }
     }
-
     @Composable
     fun DateChip(modifier: Modifier = Modifier, date: String) {
         Box(
@@ -869,6 +914,8 @@ class ChatMerchantActivity : AppCompatActivity() {
 
 
 }
+
+
 
 
 //@Preview(showBackground = true)
