@@ -89,7 +89,7 @@ class MakePaymentToMerchant {
 
     @And("I enter Invalid PIN {string}")
     fun enterInvalidPin(pin: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.sendPaymentPassword)).perform(
+        Espresso.onView(withId(R.id.sendPaymentPassword)).perform(
             ViewActions.replaceText(""), ViewActions.typeText(pin), ViewActions.closeSoftKeyboard())
 
     }
@@ -104,7 +104,7 @@ class MakePaymentToMerchant {
 
     @When("I enter Valid PIN {string}")
     fun enterValidPin(pin: String) {
-        Espresso.onView(ViewMatchers.withId(R.id.sendPaymentPassword)).perform(
+        Espresso.onView(withId(R.id.sendPaymentPassword)).perform(
             ViewActions.replaceText(""), ViewActions.typeText(pin), ViewActions.closeSoftKeyboard())
 
     }
