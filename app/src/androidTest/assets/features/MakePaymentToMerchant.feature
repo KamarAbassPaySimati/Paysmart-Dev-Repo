@@ -15,7 +15,7 @@ Feature: Paymaart- Customer Android- Make Payments to Merchant
   Background: Logging into admin approved customer account
     Given The login screen is displayed
     When I choose to login with paymart ID
-    When I enter paymart ID "14018857"
+    When I enter paymart ID "25465668"
     And I enter login PIN "970541"
     When I click on login button
     Then I see the TOTP screen
@@ -65,7 +65,7 @@ Feature: Paymaart- Customer Android- Make Payments to Merchant
     When I enter Valid PIN "970541"
     Then I should read a message stating "Insufficient Funds." in Send Payment Screen
     When I enter amount as "300" for pay to Merchant
-    Then I enter grocery in Add note tab
+    Then I enter "grocery" in Add note tab
     When I click on Send Payment
     And I click on Proceed
     And I enter Invalid PIN "102030"
