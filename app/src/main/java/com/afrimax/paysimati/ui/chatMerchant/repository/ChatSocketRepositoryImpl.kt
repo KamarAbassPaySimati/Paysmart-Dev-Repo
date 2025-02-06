@@ -5,6 +5,7 @@ import com.afrimax.paysimati.common.core.log
 import com.afrimax.paysimati.common.domain.utils.Errors
 import com.afrimax.paysimati.common.domain.utils.GenericResult
 import com.afrimax.paysimati.common.presentation.utils.ACTION_SEND_MESSAGE
+import com.afrimax.paysimati.common.presentation.utils.CHAT_TYPE_PAYMENT_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.CHAT_TYPE_TEXT_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.PROTOCOL_HTTPS
 import com.afrimax.paysimati.common.presentation.utils.PROTOCOL_WSS
@@ -13,6 +14,7 @@ import com.afrimax.paysimati.common.presentation.utils.SENDER_ID
 import com.afrimax.paysimati.data.model.chat.ChatMessage
 import com.afrimax.paysimati.data.model.chat.ChatMessageRequest
 import com.afrimax.paysimati.data.model.chat.ChatMessageResponse
+import com.afrimax.paysimati.data.model.chat.PaymentStatusType
 import com.afrimax.paysimati.ui.chatMerchant.domain.repo.ChatSocketRepository
 import com.afrimax.paysimati.ui.chatMerchant.mapToChatMessage
 import com.google.gson.Gson
@@ -50,6 +52,7 @@ class ChatSocketRepositoryImpl() : ChatSocketRepository {
             GenericResult.Error(Errors.Network.UNABLE_TO_CONNECT)
         }
     }
+
 
     override fun disconnect() {
         // Clean up the OkHttp client to prevent leaks

@@ -19,6 +19,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.core.log
 import com.afrimax.paysimati.ui.home.HomeActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlansActivity
 import com.afrimax.paysimati.ui.splash.SplashScreenActivity
@@ -39,6 +40,7 @@ class MessagingService(
     override fun handleIntent(data: Intent?) {
 
         if (data != null) {
+            data.log()
             val isSilent = data.getStringExtra(IS_SILENT).toBoolean()
             if (isSilent) handleSilentPush(data)
             else showNotification(data)
@@ -101,7 +103,8 @@ class MessagingService(
         createNotificationChannel()
         var transactionId: String? = null
         val action =  data.getStringExtra(ACTION).toString()
-        if (action == NotificationNavigation.TRANSACTIONS.screenName) transactionId = data.getStringExtra(TXN_ID).toString()
+        if (action == NotificationNavigation.TRANSACTIONS.screenName) transactionId =
+            data.getStringExtra(TXN_ID).toString()
         val targetActivity: Class<out AppCompatActivity> = when (action) {
             NotificationNavigation.MEMBERSHIP_PLANS.screenName -> MembershipPlansActivity::class.java
             NotificationNavigation.TRANSACTIONS.screenName -> ViewSpecificTransactionActivity::class.java
