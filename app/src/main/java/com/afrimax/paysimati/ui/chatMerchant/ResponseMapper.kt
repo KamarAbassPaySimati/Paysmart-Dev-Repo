@@ -3,6 +3,7 @@ package com.afrimax.paysimati.ui.chatMerchant
 import android.util.Log
 import com.afrimax.paysimati.common.core.parseAmount
 import com.afrimax.paysimati.common.core.parseDate
+import com.afrimax.paysimati.common.presentation.utils.CHAT_TYPE_PAYMENT_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.CHAT_TYPE_TEXT_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.PAYMENT_COMPLETED_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.PAYMENT_REQUEST_MESSAGE
@@ -76,11 +77,10 @@ private fun mapTextMessage(
 private fun mapPaymentRequestMessage(
     chat: PreviousChatResponse.ChatMessage, senderId: String, date: Date?
 ): ChatMessage.PaymentMessage? {
-    Log.d("ChatMapping", "Payment Request Message - Till Number: ${chat.tillnumber}") // Log tillnumber
     return if ( chat.receiverId != null && chat.senderId != null && date != null && chat.transactionId != null) {
         ChatMessage.PaymentMessage(
             chatId = UUID.randomUUID().toString(),
-            receiverId = chat.receiverId,
+            receiverId = chat.senderId,
             amount = chat.transactionAmount.parseAmount(),
             transactionId = chat.transactionId,
             paymentStatusType = PaymentStatusType.DECLINED,
@@ -106,7 +106,7 @@ private fun mapPaymentCompletedMessage(
             chatCreatedTime = date,
             note = chat.content,
             isAuthor = chat.senderId == senderId,
-            tillnumber = chat.tillnumber
+            tillnumber = chat.tillnumber,
         )
     } else null
 }

@@ -8,7 +8,7 @@ data class ChatState(
     val receiverName: String,
     val receiverId: String,
     val receiverProfilePicture: String? = null,
-      val receiverAddress:String,
+    val receiverAddress:String,
     val tillnumber:String,
     val messageText: String = "",
     val realTimeMessages: ArrayList<ChatMessage> = ArrayList()

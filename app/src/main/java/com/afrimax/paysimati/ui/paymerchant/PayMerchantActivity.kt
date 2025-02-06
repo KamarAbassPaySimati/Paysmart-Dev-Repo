@@ -20,8 +20,10 @@ import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.parseTillNumber
 import com.afrimax.paysimati.data.ApiClient
+import com.afrimax.paysimati.data.model.MerchantRequestPay
 import com.afrimax.paysimati.data.model.PayMerchantModel
 import com.afrimax.paysimati.data.model.PayMerchantRequest
+import com.afrimax.paysimati.data.model.PayMerchantRequestModel
 import com.afrimax.paysimati.databinding.ActivityPayMerchantBinding
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlanModel
@@ -40,6 +42,9 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
     private var streetname: String = ""
     private var profilepic: String = ""
     private var tillno: String = ""
+    private var amount:Double = 0.0
+    private var statuscode :Int = 0
+    private var transactionID : String = ""
 
 
     private lateinit var binding: ActivityPayMerchantBinding
@@ -49,6 +54,10 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
         streetname = intent.getStringExtra(Constants.STREET_NAME) ?: ""
         profilepic = intent.getStringExtra(Constants.PROFILE_PICTURE) ?: ""
         tillno = intent.getStringExtra(Constants.TILL_NUMBER) ?: ""
+        amount = intent.getDoubleExtra(Constants.PAYMENT_AMOUNT,0.0)
+        statuscode = intent.getIntExtra(Constants.STATUS_CODE,0)
+        transactionID = intent.getStringExtra(Constants.TRANSACTION_ID) ?: ""
+
         super.onCreate(savedInstanceState)
         //  enableEdgeToEdge()
         binding = ActivityPayMerchantBinding.inflate(layoutInflater)
@@ -98,7 +107,15 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
         }
         binding.payMerchantActivitytillno.text = tillno.parseTillNumber()
 
-
+        if (amount > 0.0) {
+            binding.payMerchantActivityAmountET.apply {
+                setText(amount.toString())
+                isEnabled = false
+                isFocusable = false
+                isFocusableInTouchMode = false
+                setTextColor(resources.getColor(R.color.neutralGrey)) // Optional: Make it look disabled
+            }
+        }
     }
 
     private fun setUpListeners() {
@@ -187,6 +204,8 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
         })
     }
 
+
+
     private fun validateAmount() {
         var isvalid = true
         val amount = binding.payMerchantActivityAmountET.text.toString()
@@ -217,11 +236,19 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
 
         }
         if (isvalid) {
-            hideKeyboard(this@PayMerchantActivity)
-            getTaxAndVatForMerchantTransaction(amount = amount.toDouble())
+            if(statuscode==0){
+                hideKeyboard(this@PayMerchantActivity)
+                getTaxAndVatForMerchantTransaction(amount = amount.toDouble())
 
+            }
+            else{
+                hideKeyboard(this@PayMerchantActivity)
+                getTaxAndVatforMerchantRequestTransaction(amount = amount.toDouble())
+            }
         }
     }
+
+
 
     private fun getTaxAndVatForMerchantTransaction(amount: Double) {
         showbuttonloader(
@@ -260,9 +287,61 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
                         senderId = this@PayMerchantActivity.retrievePaymaartId(),
                         entryBy = this@PayMerchantActivity.retrievePaymaartId(),
                         tillnumber = tillno
-
                     )
+
                 ).show(supportFragmentManager, TotalReceiptSheet.TAG)
+
+            } else {
+                showToast(getString(R.string.default_error_toast))
+            }
+
+
+        }
+
+
+    }
+
+
+    private fun getTaxAndVatforMerchantRequestTransaction(amount: Double) {
+        showbuttonloader(
+            binding.payMerchantActivitySendPaymentButton,
+            binding.payMerchantActivitySendPaymentButtonLoaderLottie
+        )
+
+        lifecycleScope.launch {
+            val idtoken = fetchIdToken()
+            val response = ApiClient.apiService.payMerchantRequest(
+                idtoken, MerchantRequestPay(
+                    senderId = this@PayMerchantActivity.retrievePaymaartId(),
+                    requestId =transactionID,
+                    entryBy = this@PayMerchantActivity.retrievePaymaartId(),
+                    flag = true,
+                    tillnumber = tillno,
+                    receiverId = paymaartID,
+                )
+
+            )
+
+            val body = response.body()
+            if (response.isSuccessful && body != null) {
+                hideButtonLoader(
+                    binding.payMerchantActivitySendPaymentButton,
+                    binding.payMerchantActivitySendPaymentButtonLoaderLottie,
+                    getString(R.string.send_payment)
+                )
+                TotalReceiptSheet(
+                    PayMerchantRequestModel(
+                        amount = body.paymerchant.amount.toString(),
+                        vat = body.paymerchant.vat.toString(),
+                        txnFee = body.paymerchant.transactionfee.toString(),
+                        recieiverid = paymaartID,
+                        note = binding.payMerchantActivityAddNoteET.text.toString(),
+                        senderId = this@PayMerchantActivity.retrievePaymaartId(),
+                        entryBy = this@PayMerchantActivity.retrievePaymaartId(),
+                        tillnumber = tillno,
+                        requestid = transactionID
+                    )
+           ).show(supportFragmentManager, TotalReceiptSheet.TAG)
 
             } else {
                 showToast(getString(R.string.default_error_toast))

@@ -16,6 +16,7 @@ import com.afrimax.paysimati.common.data.utils.safeApiCall2
 import com.afrimax.paysimati.common.domain.utils.Result
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.CashOutRequestBody
+import com.afrimax.paysimati.data.model.MerchantRequestPay
 import com.afrimax.paysimati.data.model.PayMerchantRequest
 import com.afrimax.paysimati.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paysimati.data.model.PayToRegisteredPersonRequest
@@ -148,11 +149,14 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                         )
 
                         is PayMerchantRequest -> onConfirmClickedPayMerchant(text, data)
+
+                        is MerchantRequestPay -> onConfirmClickedPayMerchantRequest(text, data)
                     }
                 }
             }
         }
     }
+
 
     private fun onTogglePasswordClicked() {
         val passwordTransformation = binding.sendPaymentPassword.transformationMethod
@@ -169,7 +173,6 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
     }
 
     private suspend fun validatePasswordField() {
-
         var isValid = true
         binding.sendPaymentPasswordETWarning.visibility = View.GONE
         binding.sendPaymentPasswordBox.background =
@@ -205,9 +208,15 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
                     binding.sendPaymentPassword.text.toString(), data
                 )
 
-                is PayMerchantRequest -> onConfirmClickedPayMerchant(
-                    binding.sendPaymentPassword.text.toString(), data
-                )
+                is PayMerchantRequest ->
+                    onConfirmClickedPayMerchant(
+                        binding.sendPaymentPassword.text.toString(), data
+                    )
+
+                is MerchantRequestPay ->
+                    onConfirmClickedPayMerchantRequest(
+                        binding.sendPaymentPassword.text.toString(), data
+                    )
             }
         }
     }
@@ -354,6 +363,34 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
 
         val payToMerchant = safeApiCall2 {
             ApiClient.apiService.getTaxForMechant(
+                idtoken, newRequestBody
+            )
+        }
+
+        when (payToMerchant) {
+            is Result.Success -> {
+                sheetCallback.onPaymentSuccess(payToMerchant.data.paymerchant)
+                dismiss()
+            }
+
+            is Result.Error -> handleError(payToMerchant.error.errorMessage)
+        }
+
+    }
+
+    private suspend fun onConfirmClickedPayMerchantRequest(
+        password: String,
+        data: MerchantRequestPay
+    ) {
+
+        val activity = requireContext() as BaseActivity
+        val encryptedpassword = AESCrypt.encrypt(password)
+        val newRequestBody = data.copy(password = encryptedpassword)
+        activity.hideKeyboard(view, requireContext())
+        val idtoken = activity.fetchIdToken()
+
+        val payToMerchant = safeApiCall2 {
+            ApiClient.apiService.payMerchantRequest(
                 idtoken, newRequestBody
             )
         }

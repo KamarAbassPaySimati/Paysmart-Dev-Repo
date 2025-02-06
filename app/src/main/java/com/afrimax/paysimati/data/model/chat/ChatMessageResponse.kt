@@ -13,4 +13,5 @@ data class ChatMessageResponse(
 @SerializedName("transaction_amount") val transactionAmount: Double? = null,
 @SerializedName("created_at") val createdAt: Double? = null,
 @SerializedName("request_id") val requestId: String? = null,
+@SerializedName("till_number") val tillnumber: String? = null
 )

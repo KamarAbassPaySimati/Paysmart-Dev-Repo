@@ -29,7 +29,8 @@ sealed class ChatMessage(
         val chatCreatedTime: Date,
         val note: String? = null,
         val isAuthor: Boolean,
-        val tillnumber: String
+        val tillnumber: String,
+        val streetName: String? = null
     ) : ChatMessage(createdTime = chatCreatedTime)
 
 }

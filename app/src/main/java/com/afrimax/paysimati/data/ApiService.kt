@@ -24,6 +24,8 @@ import com.afrimax.paysimati.data.model.KycSaveCustomerPreferenceRequest
 import com.afrimax.paysimati.data.model.KycSaveIdentityDetailRequest
 import com.afrimax.paysimati.data.model.KycSavePersonalDetailRequest
 import com.afrimax.paysimati.data.model.MembershipPlansResponse
+import com.afrimax.paysimati.data.model.MerchantRequestPay
+import com.afrimax.paysimati.data.model.MerchantRequestResponse
 import com.afrimax.paysimati.data.model.PayMerchantRequest
 import com.afrimax.paysimati.data.model.PayMerchantResponse
 import com.afrimax.paysimati.data.model.PayPersonRequestBody
@@ -381,6 +383,11 @@ interface ApiService {
     suspend fun payToRegisteredPerson(
         @Header("Authorization") header: String, @Body body: PayToRegisteredPersonRequest
     ): Response<PayToRegisteredPersonApiResponse>
+
+    @POST("chats/pay-request")
+    suspend fun payMerchantRequest(
+        @Header("Authorization") header: String, @Body body: MerchantRequestPay
+    ):Response<MerchantRequestResponse>
 
 
     //For BDD purpose
