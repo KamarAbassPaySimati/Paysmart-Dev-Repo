@@ -71,6 +71,7 @@ import com.afrimax.paysimati.data.model.VerifyOtpForEditSelfKycResponse
 import com.afrimax.paysimati.data.model.VerifyOtpRequestBody
 import com.afrimax.paysimati.data.model.VerifyOtpResponse
 import com.afrimax.paysimati.data.model.ViewWalletResponse
+import com.afrimax.paysimati.data.model.MerchantProfileResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -280,6 +281,7 @@ interface ApiService {
         @Query("search") search: String?
     ): Call<SearchUsersDataResponse>
 
+
     @POST("$CASHIN_CASHOUT/request-cashout-customer")
     suspend fun cashOut(
         @Header("Authorization") header: String, @Body body: CashOutRequestBody
@@ -351,6 +353,12 @@ interface ApiService {
     fun getMerchantTransactionList(
         @Header("Authorization") header: String, @Query("page") page: Int = 1
     ): Call<PayMerchantResponse>
+
+    @GET("$CUSTOMER_USER/merchant-detail")
+    fun getMerchantProfile(
+        @Header("Authorization") header: String,
+        @Query("merchant_id") merchant_id:String
+    ):Call<MerchantProfileResponse>
 
     @GET("$CUSTOMER_USER/recent-transactions")
     fun searchMerchantById(

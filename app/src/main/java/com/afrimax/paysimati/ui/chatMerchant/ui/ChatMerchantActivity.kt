@@ -12,6 +12,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -84,6 +85,7 @@ import com.afrimax.paysimati.common.presentation.utils.showToast
 import com.afrimax.paysimati.data.model.chat.ChatMessage
 import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.data.model.chat.PaymentStatusType
+import com.afrimax.paysimati.ui.paymerchant.MerchantProfile
 import com.afrimax.paysimati.ui.paymerchant.PayMerchantActivity
 import com.afrimax.paysimati.util.Constants.MERCHANT_NAME
 import com.afrimax.paysimati.util.Constants.PAYMAART_ID
@@ -137,7 +139,12 @@ class ChatMerchantActivity : AppCompatActivity() {
                 receiverName = state.value.receiverName,
                 receiverId = state.value.receiverId,
                 receiverProfilePicture = state.value.receiverProfilePicture,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().clickable {
+                    val intent = Intent(this@ChatMerchantActivity,MerchantProfile::class.java)
+                    intent.putExtra(PAYMAART_ID,state.value.receiverId)
+                    intent.putExtra(MERCHANT_NAME,state.value.receiverName)
+                    startActivity(intent)
+                }
             )
         },
             bottomBar = {
@@ -731,6 +738,10 @@ class ChatMerchantActivity : AppCompatActivity() {
 
                         PaymentStatusType.DECLINED -> {
                             PaymentDeclinedChip(modifier = Modifier.weight(1f))
+                        }
+
+                        PaymentStatusType.PENDING -> {
+
                         }
                     }
 

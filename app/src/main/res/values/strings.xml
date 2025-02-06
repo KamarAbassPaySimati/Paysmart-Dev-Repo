@@ -761,7 +761,7 @@
     <string name="search_by_location">Search by location</string>
     <string name="Walmart">W</string>
     <string name="walmart">Walmart</string>
-    <string name="Location"> Location\n</string>
+    <string name="Location"> Location</string>
     <string name="scan_any_qr_code">Scan any QR code</string>
     <string name="cancelbutton">cancelbutton</string>
     <string name="frame_for_scanner">frame for scanner</string>
@@ -769,6 +769,7 @@
     <string name="till_no">Till No : </string>
     <string name="trading_types">Trading Types: </string>
     <string name="trading_type">Trading Type</string>
+    <string name="trading_name">Trading Name</string>
     <string name="supermarket">Supermarket</string>
     <string name="_trading_number">123456</string>
     <string name="enter_message">Enter Message</string>
@@ -817,4 +818,7 @@
     </string>
     <string name="verification_otp_sent_successfully">Verification OTP sent successfully.</string>
     <string name="profile">Profile\n</string>
+    <string name="business_name">Bussiness Images</string>
+    <string name="Report_Merchant">Report Merchant</string>
+    <string name="MerchantProfile">Profile</string>
 </resources>
