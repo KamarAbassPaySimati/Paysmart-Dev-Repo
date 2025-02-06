@@ -15,6 +15,7 @@ import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
 import com.afrimax.paysimati.common.presentation.utils.asUiText
 import com.afrimax.paysimati.data.model.chat.ChatMessage
 import com.afrimax.paysimati.data.model.chat.ChatState
+import com.afrimax.paysimati.data.model.chat.PaymentStatusType
 import com.afrimax.paysimati.ui.chatMerchant.domain.usecase.EstablishSocketConnectionUseCase
 import com.afrimax.paysimati.ui.chatMerchant.domain.usecase.GetPreviousChatsUseCase
 import com.afrimax.paysimati.ui.chatMerchant.domain.usecase.ShutDownChatSocketUseCase

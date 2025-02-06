@@ -816,4 +816,5 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="verification_otp_sent_successfully">Verification OTP sent successfully.</string>
+    <string name="profile">Profile\n</string>
 </resources>

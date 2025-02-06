@@ -371,7 +371,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                     .wrapContentWidth()
                     .height(56.dp),
                 onClick = {
-                   val i =Intent(this@ChatMerchantActivity,PayMerchantActivity::class.java)
+                    val i =Intent(this@ChatMerchantActivity,PayMerchantActivity::class.java)
                     i.putExtra(PAYMAART_ID,reciverId)
                     i.putExtra(MERCHANT_NAME,reciverName)
                     i.putExtra(STREET_NAME,reciverLoc)
@@ -586,7 +586,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                             statusCode = statusCode,
 
 
-                        )
+                            )
                     }
                 }
             }
@@ -718,10 +718,11 @@ class ChatMerchantActivity : AppCompatActivity() {
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                //Payment status & Dat
+
 
                 Row(modifier = Modifier.fillMaxWidth()) {
 
+                    //Payment status
                     when (paymentStatus) {
 
                         PaymentStatusType.RECEIVED -> {
@@ -733,6 +734,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                         }
                     }
 
+                    //Date
                     androidx.compose.material.Text(
                         text = date,
                         fontFamily = InterFontFamily(),
@@ -740,7 +742,9 @@ class ChatMerchantActivity : AppCompatActivity() {
                         fontSize = 12.sp,
                         color = neutralGreyPrimaryText
                     )
+
                 }
+
 
 
                 //Note
@@ -762,60 +766,69 @@ class ChatMerchantActivity : AppCompatActivity() {
                     )
 
                 }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    OutlinedButton(
-                        onClick = {},//onDeclineClick,
-                        border = BorderStroke(
-                            1.dp, primaryColor
-                        ), // Use your highlightedLight color
-                        shape = RoundedCornerShape(8.dp)
+
+                if(paymentStatus!=PaymentStatusType.RECEIVED) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
+                        horizontalArrangement = Arrangement.End
                     ) {
-                        Text(
-                            text = stringResource(R.string.decline),
-                            color = primaryColor, // Or a suitable color
-                            fontFamily = InterFontFamily(),
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp
-                        )
-                    }
+                        OutlinedButton(
+                            onClick = {},//onDeclineClick,
+                            border = BorderStroke(
+                                1.dp, primaryColor
+                            ), // Use your highlightedLight color
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Text(
+                                text = stringResource(R.string.decline),
+                                color = primaryColor, // Or a suitable color
+                                fontFamily = InterFontFamily(),
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp
+                            )
+                        }
 
-                    Spacer(modifier = Modifier.width(8.dp)) // Add spacing between buttons
+                        Spacer(modifier = Modifier.width(8.dp)) // Add spacing between buttons
 
-                    Button(
-                        onClick = {
-                            val i =Intent(this@ChatMerchantActivity,PayMerchantActivity::class.java)
-                            i.putExtra(PAYMAART_ID,receiverId)
-                            i.putExtra(MERCHANT_NAME,reciverName)
-                            i.putExtra(STREET_NAME,reciverLoc)
-                            i.putExtra(PROFILE_PICTURE,receiverProfilePicture)
-                            i.putExtra(TILL_NUMBER,tillnumber)
-                            i.putExtra(PAYMENT_AMOUNT,amount)
-                            i.putExtra(STATUS_CODE,statusCode)
-                            i.putExtra(TRANSACTION_ID,txnId)
-                            startActivity(i)} ,//onPayClick,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = primaryColor // Use your primary color
-                        ),
-                        shape = RoundedCornerShape(8.dp)
+                        Button(
+                            onClick = {
+                                val i = Intent(
+                                    this@ChatMerchantActivity,
+                                    PayMerchantActivity::class.java
+                                )
+                                i.putExtra(PAYMAART_ID, receiverId)
+                                i.putExtra(MERCHANT_NAME, reciverName)
+                                i.putExtra(STREET_NAME, reciverLoc)
+                                i.putExtra(PROFILE_PICTURE, receiverProfilePicture)
+                                i.putExtra(TILL_NUMBER, tillnumber)
+                                i.putExtra(PAYMENT_AMOUNT, amount)
+                                i.putExtra(STATUS_CODE, statusCode)
+                                i.putExtra(TRANSACTION_ID, txnId)
+                                startActivity(i)
+                            },//onPayClick,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = primaryColor // Use your primary color
+                            ),
+                            shape = RoundedCornerShape(8.dp)
 
-                    ) {
-                        Text(
-                            text = stringResource(R.string.pay),
-                            color = Color.White,
-                            fontFamily = InterFontFamily(),
-                            fontWeight = FontWeight.Medium,
-                            fontSize = 14.sp
-                        )
+                        ) {
+                            Text(
+                                text = stringResource(R.string.pay),
+                                color = Color.White,
+                                fontFamily = InterFontFamily(),
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 14.sp
+                            )
+                        }
                     }
                 }
             }
         }
     }
+
+
     @Composable
     fun PaymentReceivedChip(modifier: Modifier = Modifier) {
         Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
@@ -868,7 +881,7 @@ class ChatMerchantActivity : AppCompatActivity() {
 
             Spacer(modifier = Modifier.width(6.dp))
 
-           Text(
+            Text(
                 text = stringResource(R.string.declined),
                 fontFamily = InterFontFamily(),
                 fontWeight = FontWeight.Normal,
@@ -917,9 +930,3 @@ class ChatMerchantActivity : AppCompatActivity() {
 
 
 
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewChatMerchantScreen() {
-//    ChatMerchantScreen()
-//}
