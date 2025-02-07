@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewMerchantProfile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.viewkyc.ViewKycDetailsActivity">
+
+
+    <ImageView
+        android:id="@+id/viewMerchantActivityBgIV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/view_kyc_background_data"
+        android:scaleType="centerCrop"
+        android:src="@drawable/rectangle" />
+
+    <RelativeLayout
+        android:id="@+id/viewMerchantActivityTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/viewMerchantActivityBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back_button"
+            android:padding="16dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/white" />
+
+
+        <TextView
+            android:id="@+id/viewMerchantActivityHeaderTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/viewMerchantActivityBackButton"
+            android:fontFamily="@font/inter_medium"
+            android:includeFontPadding="false"
+            android:text="@string/MerchantProfile"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/viewMerchantActivityBaseCV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/viewMerchantActivityBottomBar"
+        android:layout_below="@+id/viewMerchantActivityTopBar"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="0dp">
+
+        <ScrollView
+            android:id="@+id/viewMerchantActivitySV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/viewMerchant2ActivityBgIV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/view_kyc_background_data"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/rectangle" />
+
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/viewMerchantActivityProfileContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="72dp">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/payMerchantIV"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:src="@drawable/ic_arrow_back"
+                            android:visibility="gone"
+                            app:shapeAppearanceOverlay="@style/profileImagePreviewSmall"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                           />
+
+                        <TextView
+                            android:id="@+id/viewMerchantActivityShortNameTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:fontFamily="@font/inter_bold"
+                            android:gravity="center"
+                            android:padding="16dp"
+                            android:text="@string/mwk"
+                            android:textColor="@color/primaryColor"
+                            android:textSize="24sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:background="@drawable/primary_outlined_button_background"
+                            android:visibility="visible"/>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/viewMerchantActivityNameTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/viewMerchantActivityProfileContainer"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:text="@string/account_name"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/viewMerchantActivityPaymaartIdContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/viewMerchantActivityNameTV"
+                        android:layout_centerHorizontal="true"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/viewMerchantActivityPaymaartIdTV"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textAllCaps="true"
+                            android:text="@string/paysimati_id"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/viewMerchantActivityDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_view_kyc_card"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/till_no"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="14sp"
+                        tools:ignore="RtlSymmetry" />
+
+                    <TextView
+                        android:id="@+id/viewMerchantTilno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/dash"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/viewAllTillNumbers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="16dp"
+                        android:text="View All"
+                        android:textColor="@color/primaryColor"
+                        android:textSize="14sp"
+                        android:visibility="gone"
+                        android:clickable="true"
+                        android:focusable="true"/>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/phone_number"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/viewMerchantPhoneNumberTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/dash"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/Location"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/viewMerchantLocationTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/dash"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/trading_name"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/viewMerchantTradingnameTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/dash"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/trading_types"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/viewMerchantTradingTypesTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/dash"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/business_name"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="14sp" />
+
+
+
+<!--                    <com.google.android.material.imageview.ShapeableImageView-->
+<!--                        android:id="@+id/viewMerchantBusinessTypesTV"-->
+<!--                        android:layout_width="100dp"-->
+<!--                        android:layout_height="100dp"-->
+<!--                        android:src="@drawable/ic_arrow_back"-->
+<!--                        android:visibility="gone"-->
+<!--                        app:shapeAppearanceOverlay="@style/profileImagePreviewSmall"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintDimensionRatio="1:1"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        />-->
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/viewMerchantBusinessTypesRV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentStart="true"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </androidx.cardview.widget.CardView>
+
+    <FrameLayout
+        android:id="@+id/viewMerchantActivityBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/viewSelfKycActivityCompleteKycButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/primary_rounded_button_background"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/complete_kyc_registration"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/viewSelfKycActivityEditButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/primary_outlined_button_background"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/inter_medium"
+                android:gravity="center"
+                android:text="@string/Report_Merchant"
+                android:textAllCaps="false"
+                android:textColor="@color/primaryColor"
+                android:textSize="18sp"
+               />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/loaderOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="gone"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/listMerchantTransactionLoaderLottie"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_loader"
+            android:visibility="gone"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+
+
+</RelativeLayout>
