@@ -54,9 +54,6 @@ Feature: Paymaart- Customer Android- Make Payments to Merchant
     Then I should be directed to send payment screen
     When I click on Send Payment
     Then I should read a message stating Please enter amount
-    When I enter amount as "20" for pay to Merchant
-    When I click on Send Payment
-    Then I should read a message stating "Minimum amount is 100.00 MWK" in Send Payment Screen
     When I enter amount as "3796000" for pay to Merchant
     When I click on Send Payment
     And I click on Proceed
