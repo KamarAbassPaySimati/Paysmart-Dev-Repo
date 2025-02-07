@@ -2,11 +2,13 @@ package com.afrimax.paysimati.common.presentation.ui.button.primary
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.domain.utils.then
@@ -25,6 +27,7 @@ class PrimaryButton @JvmOverloads constructor(
 
     //XML attributes with default values
     private var buttonText: String = cxt.getString(R.string.button)
+    private var buttonIcon: Drawable? = null
 
     init {
         // Obtain the styled attributes defined in XML for the component
@@ -33,6 +36,7 @@ class PrimaryButton @JvmOverloads constructor(
         // Retrieve XML attributes from the TypedArray and assign default values if not found
         tArray.run {
             buttonText = getAttr(R.styleable.PrimaryButton_buttonText, buttonText)
+            buttonIcon = getAttr(R.styleable.PrimaryButton_buttonIcon, buttonIcon)
         }
 
         // The post block ensures that the following code is executed only at runtime (not during layout preview)
@@ -52,7 +56,10 @@ class PrimaryButton @JvmOverloads constructor(
     }
 
     private fun showDisplayData() {
-        b.primaryButton.text = buttonText
+        b.primaryButtonTextTV.text = buttonText
+        buttonIcon?.let {
+            b.primaryButtonTextTV.setCompoundDrawablesWithIntrinsicBounds(it, null, null, null)
+        }
     }
 
     // ====================================================================
@@ -60,8 +67,9 @@ class PrimaryButton @JvmOverloads constructor(
     // ====================================================================
 
     private fun setUpButton() {
-        b.primaryButton.apply {
-            text = buttonText
+        if (b.primaryButtonTextTV.text.isBlank()) text = buttonText
+        buttonIcon?.let {
+            b.primaryButtonTextTV.setCompoundDrawablesWithIntrinsicBounds(it, null, null, null)
         }
     }
 
@@ -70,18 +78,26 @@ class PrimaryButton @JvmOverloads constructor(
     // ====================================================================
 
     var text: String
-        get() = b.primaryButton.text.toString()
+        get() = b.primaryButtonTextTV.text.toString()
         set(value) {
-            b.primaryButton.text = value
+            b.primaryButtonTextTV.text = value
+            buttonText = value
+        }
+
+    var isButtonEnabled: Boolean
+        get() = b.primaryButton.isEnabled
+        set(value) {
+            b.primaryButton.isEnabled = value
         }
 
     fun setOnClickListener(listener: () -> Job?) {
         b.primaryButton.setOnClickListener {
-            if (cxt is LifecycleOwner) {
-                cxt.lifecycleScope.launch {
+            val lifecycleOwner = if (cxt is LifecycleOwner) cxt else findViewTreeLifecycleOwner()
+            lifecycleOwner?.let {
+                lifecycleOwner.lifecycleScope.launch {
                     // Show the loader
                     b.primaryButtonLoader.visibility = VISIBLE
-                    b.primaryButton.text = cxt.getString(R.string.empty_string)
+                    b.primaryButtonTextTV.text = cxt.getString(R.string.empty_string)
 
                     if (cxt is Activity) {
                         cxt.window.setFlags(
@@ -97,7 +113,7 @@ class PrimaryButton @JvmOverloads constructor(
 
                     // Hide the loader after execution
                     b.primaryButtonLoader.visibility = GONE
-                    b.primaryButton.text = buttonText
+                    b.primaryButtonTextTV.text = buttonText
 
                 }
             }

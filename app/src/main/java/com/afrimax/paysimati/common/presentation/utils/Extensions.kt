@@ -50,12 +50,16 @@ fun GenericError.asUiText(): UiText {
         Network.CONFLICT_FOUND -> UiText.Resource(R.string.conflict_found)
         Network.UNAUTHORIZED -> UiText.Resource(R.string.error_un_authorized)
         Network.BAD_REQUEST -> UiText.Resource(R.string.error_bad_request)
+        Network.UNABLE_TO_CONNECT -> UiText.Resource(R.string.error_unable_to_connect)
+        Network.MAPPING_FAILED-> UiText.Resource(R.string.error_mapping_failed)
+
 
         //Errors that can occur while performing operations on SharedPreferences
         Prefs.NO_SUCH_DATA -> UiText.Resource(R.string.error_not_data_found)
         Prefs.UNKNOWN -> UiText.Resource(R.string.error_unknown)
 
         //Errors that can occur while accessing local storage files
+
         Storage.UNABLE_TO_ACCESS_FILE -> UiText.Resource(R.string.unable_to_access_file)
         Storage.FILE_NOT_FOUND -> UiText.Resource(R.string.file_not_found)
         Storage.PERMISSION_DENIED -> UiText.Resource(R.string.permission_denied)
@@ -73,7 +77,9 @@ fun GenericError.asUiText(): UiText {
         Validation.INVALID -> UiText.Resource(R.string.error_invalid)
         Validation.UNSUPPORTED_FILE -> UiText.Resource(R.string.error_unsupported_file)
         Validation.NOT_VERIFIED -> UiText.Resource(R.string.error_not_verified)
-
+        Network.ACCOUNT_LOCKED -> TODO()
+        Network.UNPROCESSABLE_ENTITY -> TODO()
+        Prefs.NO_SUCH_DATA -> TODO()
     }
 }
 
@@ -238,4 +244,12 @@ inline fun RecyclerView.itemDecoration(
         }
     }
     addItemDecoration(decoration)
+}
+
+fun String.parseTillNumber(): String {
+    return if (this.length == 7) {
+        "${this.substring(0, 3)} ${this.substring(3, 7)}"
+    } else {
+        this
+    }
 }
