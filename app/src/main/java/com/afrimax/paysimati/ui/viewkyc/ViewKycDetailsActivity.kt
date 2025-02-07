@@ -393,6 +393,7 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
         startActivity(i)
     }
 
+
     private fun onClickIdDocBack() {
         val i = Intent(this, KycFullScreenPreviewActivity::class.java)
         i.putExtra(Constants.KYC_MEDIA_IS_UPLOADED, true)

@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
@@ -68,6 +69,10 @@ class KycFullScreenPreviewActivity : BaseActivity() {
         if (fileName.isNotEmpty()) b.kycFullScreenPreviewActivityFileNameTV.text = fileName
     }
 
+
+
+
+
     private fun loadPdf() {
         val isUploaded = intent.getBooleanExtra(Constants.KYC_MEDIA_IS_UPLOADED, false)
         if (isUploaded) {
@@ -101,17 +106,44 @@ class KycFullScreenPreviewActivity : BaseActivity() {
 
         }
     }
-
-    private fun loadImage() {
+    private fun loadImages() {
         val isUploaded = intent.getBooleanExtra(Constants.KYC_MEDIA_IS_UPLOADED, false)
         if (isUploaded) {
             val imageUrl: String = intent.getStringExtra(Constants.KYC_CAPTURED_IMAGE_URI) ?: ""
+            Log.d("KycFullScreenPreview", "Image URL received: $imageUrl") // Debug log
             Glide.with(this).load(BuildConfig.CDN_BASE_URL + imageUrl)
                 .into(b.kycFullScreenPreviewActivityIV)
-            //Set filename
-            b.kycFullScreenPreviewActivityFileNameTV.text = getFileNameFromUrl(imageUrl)
         } else {
             val imageUri = intent.parcelable<Uri>(Constants.KYC_CAPTURED_IMAGE_URI)
+            Log.d("KycFullScreenPreview", "Image URI received: $imageUri") // Debug log
+            Glide.with(this).load(imageUri).into(b.kycFullScreenPreviewActivityIV)
+        }
+    }
+
+
+    private fun loadImage() {
+
+        val isUploaded = intent.getBooleanExtra(Constants.KYC_MEDIA_IS_UPLOADED, false)
+        if (isUploaded) {
+            val imageUrl: String = intent.getStringExtra(Constants.KYC_CAPTURED_IMAGE_URI) ?: ""
+            if (imageUrl.isNotEmpty()) {
+                val fullImageUrl = if (imageUrl.startsWith(BuildConfig.CDN_BASE_URL)) {
+                    imageUrl
+                } else {
+                    BuildConfig.CDN_BASE_URL + imageUrl
+                }
+
+                Glide.with(this)
+                    .load(fullImageUrl)
+                    .centerCrop()
+                    .into(b.kycFullScreenPreviewActivityIV)
+
+                b.kycFullScreenPreviewActivityFileNameTV.text = getFileNameFromUrl(fullImageUrl)
+            }
+
+        } else {
+            val imageUri = intent.parcelable<Uri>(Constants.KYC_CAPTURED_IMAGE_URI)
+            Log.d("KycFullScreenPreview", "Image URI: $imageUri")
             Glide.with(this).load(imageUri).into(b.kycFullScreenPreviewActivityIV)
 
             //Set filename
@@ -119,6 +151,10 @@ class KycFullScreenPreviewActivity : BaseActivity() {
                 getFileNameFromUri(this, imageUri)
         }
     }
+
+
+
+
 
     private fun setUpListeners() {
         b.kycFullScreenPreviewActivityCloseButton.setOnClickListener {

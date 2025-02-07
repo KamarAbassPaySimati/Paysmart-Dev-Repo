@@ -1,29 +1,31 @@
 package com.afrimax.paysimati.ui.paymerchant
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.common.presentation.utils.parseTillNumber
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.MerchantProfileResponse
-import com.afrimax.paysimati.data.model.PayMerchantResponse
 import com.afrimax.paysimati.databinding.ActivityMerchantProfileBinding
-import com.afrimax.paysimati.databinding.ActivityPayMerchantBinding
 import com.afrimax.paysimati.ui.BaseActivity
+import com.afrimax.paysimati.ui.kyc.KycFullScreenPreviewActivity
+import com.afrimax.paysimati.ui.utils.adapters.ImageGridAdapter
+import com.afrimax.paysimati.ui.utils.bottomsheets.TillNumberBottomSheet
 import com.afrimax.paysimati.util.Constants
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,9 +47,9 @@ class MerchantProfile : BaseActivity() {
             insets
         }
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.primaryColor)and 0xB3FFFFFF.toInt()
+        window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
-        //showLoader()
+
         setupView()
     }
 
@@ -84,6 +86,13 @@ class MerchantProfile : BaseActivity() {
     }
 
     private fun updateui(data: MerchantProfileResponse) {
+
+        val tradingImages = data.data.tradingImages
+        val imageList = tradingImages.map { imagePath ->
+            BuildConfig.CDN_BASE_URL + imagePath
+        }
+        setupRecyclerView(imageList)
+
         val locationList = listOf(
             data.data.tradingHouseName,
             data.data.tradingstreetName,
@@ -103,8 +112,6 @@ class MerchantProfile : BaseActivity() {
         }else{
             binding.viewMerchantActivityShortNameTV.visibility=View.GONE
             val imageUrl = BuildConfig.CDN_BASE_URL + data.data.tradingImage[0] // First image
-
-            Log.d("kk",imageUrl)
             binding.payMerchantIV.also {
                 it.visibility = View.VISIBLE
                 Glide
@@ -116,27 +123,62 @@ class MerchantProfile : BaseActivity() {
         }
         val tillNumbers = data.data.tillNumber
 
-
+        val PayMaartId =PaymaartIdFormatter.formatId(payMaartId)
         binding.viewMerchantActivityNameTV.text=MerchantName
 
         binding.viewMerchantLocationTv.text = locationList.joinToString(", ")
-        binding.viewMerchantActivityPaymaartIdTV.text= data.data.paymaartId
-        binding.viewMerchantPhoneNumberTV.text =Phonenumber
-        binding.viewMerchantTradingnameTV.text = data.data.tradingName
+        binding.viewMerchantActivityPaymaartIdTV.text=PayMaartId
+        binding.viewMerchantPhoneNumberTV.text = data.data.countryCode + " " + Phonenumber
+
+       if(data.data.tradingName==null){
+           binding.viewMerchantTradingnameTV.text= "-"
+       }else{
+           binding.viewMerchantTradingnameTV.text = data.data.tradingName
+       }
         binding.viewMerchantTradingTypesTV.text = formattedTradingTypes
+        binding.viewMerchantActivityBackButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+        showTillNumbersBottomSheet(tillNumbers)
 
+    }
+    private fun setupRecyclerView(imageList: List<String>) {
+        val recyclerView: RecyclerView = findViewById(R.id.viewMerchantBusinessTypesRV)
+        val layoutManager = GridLayoutManager(this, 3)
+        recyclerView.layoutManager = layoutManager
 
+        val imageAdapter = ImageGridAdapter(imageList)
+        recyclerView.adapter = imageAdapter
+
+        imageAdapter.setOnClickListener(object : ImageGridAdapter.OnClickListener {
+            override fun onClick(imageUrl: String) {
+                val intent = Intent(this@MerchantProfile, KycFullScreenPreviewActivity::class.java)
+                intent.putExtra(Constants.KYC_MEDIA_IS_UPLOADED, true)
+                intent.putExtra(Constants.KYC_MEDIA_TYPE, Constants.KYC_MEDIA_IMAGE_TYPE)
+                intent.putExtra(Constants.KYC_CAPTURED_IMAGE_URI, imageUrl)
+                startActivity(intent)
+            }
+        })
+    }
+
+    private fun showTillNumbersBottomSheet(tillNumbers: List<String>) {
         if (tillNumbers.isNotEmpty()) {
-            // Show only the first 4 till numbers
-            val displayedTills = tillNumbers.take(4).joinToString(", ")
-            binding.viewMerchantTilno.text = displayedTills.parseTillNumber()
-
-            // If more than 4, show the "View All" button
-            if (tillNumbers.size > 4) {
-                binding.viewAllTillNumbers.visibility = View.VISIBLE
+            val formattedTills = tillNumbers.map { it.parseTillNumber() }
+            val displayedTills = if (formattedTills.size > 4) {
+                formattedTills.take(4).joinToString(", ") + ", ${formattedTills[4].take(3)}..."
+            } else {
+                formattedTills.joinToString(", ")
             }
 
+            binding.viewMerchantTilno.text = displayedTills
 
+            if (formattedTills.size > 4) {
+                binding.viewAllTillNumbers.visibility = View.VISIBLE
+                binding.viewAllTillNumbers.setOnClickListener {
+                    val bottomSheetFragment = TillNumberBottomSheet.newInstance(formattedTills)
+                    bottomSheetFragment.show(supportFragmentManager, TillNumberBottomSheet.TAG)
+                }
+            }
         }
     }
 
@@ -144,11 +186,13 @@ class MerchantProfile : BaseActivity() {
 
     private fun showLoader() {
         binding.listMerchantTransactionLoaderLottie.visibility = View.VISIBLE
-      binding.listPersonTransactionNoDataFoundContainer.visibility = View.VISIBLE
+        binding.loaderOverlay.visibility =View.VISIBLE
 
     }
     private fun hideLoader() {
         binding.listMerchantTransactionLoaderLottie.visibility = View.GONE
+        binding.loaderOverlay.visibility =View.GONE
+
     }
 
 

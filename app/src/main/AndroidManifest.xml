@@ -31,6 +31,7 @@
         <activity
             android:name=".ui.chatMerchant.ui.ChatMerchantActivity"
             android:exported="false"
+            android:taskAffinity=".payment"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.paymerchant.ListMerchantByLocationActivity"

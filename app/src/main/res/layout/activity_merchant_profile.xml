@@ -8,10 +8,11 @@
     android:background="@color/white"
     tools:context=".ui.viewkyc.ViewKycDetailsActivity">
 
+
     <ImageView
         android:id="@+id/viewMerchantActivityBgIV"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:contentDescription="@string/view_kyc_background_data"
         android:scaleType="centerCrop"
         android:src="@drawable/rectangle" />
@@ -326,17 +327,35 @@
                         android:textColor="@color/neutralGrey"
                         android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/viewMerchantBusinessTypesTV"
+
+
+<!--                    <com.google.android.material.imageview.ShapeableImageView-->
+<!--                        android:id="@+id/viewMerchantBusinessTypesTV"-->
+<!--                        android:layout_width="100dp"-->
+<!--                        android:layout_height="100dp"-->
+<!--                        android:src="@drawable/ic_arrow_back"-->
+<!--                        android:visibility="gone"-->
+<!--                        app:shapeAppearanceOverlay="@style/profileImagePreviewSmall"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintDimensionRatio="1:1"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        />-->
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/viewMerchantBusinessTypesRV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp"
-                        android:paddingStart="16dp"
-                        android:paddingTop="8dp"
-                        android:fontFamily="@font/inter_regular"
-                        android:text="@string/dash"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentStart="true"
+                        android:visibility="visible" />
+
 
                 </LinearLayout>
 
@@ -391,64 +410,30 @@
 
         </LinearLayout>
     </FrameLayout>
-    <LinearLayout
-        android:id="@+id/listPersonTransactionNoDataFoundContainer"
+
+    <FrameLayout
+        android:id="@+id/loaderOverlay"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:gravity="center"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/viewMerchantActivityTopBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
 
-        <ImageView
-            android:id="@+id/listPersonTransactionNoDataFoundIV"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:contentDescription="@string/search"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ico_search_for_users" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/listMerchantTransactionLoaderLottie"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/lottie_loader"
+            android:visibility="gone"
+            android:layout_gravity="center" />
+    </FrameLayout>
 
-        <TextView
-            android:id="@+id/listPersonTransactionNoDataFoundTitleTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:fontFamily="@font/inter_regular"
-            android:text="@string/no_transactions_yet"
-            android:textAlignment="center"
-            android:textColor="@color/neutralGreyPrimaryText"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/listPersonTransactionNoDataFoundSubtextTV"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:fontFamily="@font/inter_regular"
-            android:text="@string/no_transactions_subtext"
-            android:textAlignment="center"
-            android:textColor="@color/neutralGrey"
-            android:textSize="14sp" />
-
-    </LinearLayout>
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/listMerchantTransactionLoaderLottie"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:visibility="gone"
-        android:layout_centerInParent="true"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/lottie_loader"/>
 
 
 </RelativeLayout>
