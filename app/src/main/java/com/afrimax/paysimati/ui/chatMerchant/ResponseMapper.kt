@@ -83,7 +83,7 @@ private fun mapPaymentRequestMessage(
             receiverId = chat.senderId,
             amount = chat.transactionAmount.parseAmount(),
             transactionId = chat.transactionId,
-            paymentStatusType = PaymentStatusType.DECLINED,
+            paymentStatusType = PaymentStatusType.PENDING,
             chatCreatedTime = date,
             note = chat.content,
             isAuthor = chat.senderId == senderId,
@@ -132,6 +132,35 @@ fun mapToChatMessage(response: ChatMessageResponse): ChatMessage? {
                 null
             }
         }
+
+        CHAT_TYPE_PAYMENT_MESSAGE ->{
+            if (
+                response.requestId != null &&
+                response.receiverId != null &&
+                response.senderId != null &&
+                response.transactionAmount != null &&
+                response.tillnumber != null &&
+                chatCreatedTime != null
+            ){
+                ChatMessage.PaymentMessage(
+                    chatId = UUID.randomUUID().toString(),
+                    receiverId = response.receiverId,
+                    amount = response.transactionAmount?.toDouble()!!,
+                    transactionId = response.requestId,
+                    paymentStatusType = PaymentStatusType.RECEIVED, // Assuming it's received; adjust if necessary
+                    chatCreatedTime = chatCreatedTime,
+                    note = response.note?.ifBlank { null }, // If content is blank, set it to null
+                    isAuthor = false,
+                    tillnumber = response.tillnumber
+              )
+            }
+            else{
+                null
+            }
+        }
+
+
+
 
         else -> null
     }
