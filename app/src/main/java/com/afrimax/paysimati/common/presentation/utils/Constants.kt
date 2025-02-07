@@ -13,7 +13,8 @@ const val ACTION_SEND_MESSAGE = "sendMessage"
 const val TEXT_MESSAGE = "chat"
 const val PAYMENT_REQUEST_MESSAGE = "payment_request"
 const val PAYMENT_COMPLETED_MESSAGE = "payment_completed"
-
+const val PAYMENT_SEND_MESSAGE="pay_merchant"
+const val PAYMENT_CANCELLED_MESSAGE = "payment_cancelled"
 
 const val CHAT_TYPE_TEXT_MESSAGE = "chat"
 const val CHAT_TYPE_PAYMENT_MESSAGE = "payment-request"
