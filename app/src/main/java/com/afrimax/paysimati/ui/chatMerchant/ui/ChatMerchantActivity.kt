@@ -120,7 +120,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                         }
 
                         is ChatSideEffect.ShowSnack -> {
-                            //
+
                         }
                     }
                 }
@@ -755,6 +755,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                     )
 
                 }
+                Spacer(modifier = Modifier.height(10.dp))
 
 
 

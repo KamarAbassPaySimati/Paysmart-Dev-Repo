@@ -156,7 +156,8 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                     password = null,
                     senderId = model.senderId,
                     entryBy = model.entryBy,
-                    note = model.note
+                    note = model.note,
+                    tillnumber = model.tillnumber
                 )
 
                 sendPaymentBottomSheet = SendPaymentBottomSheet(payMerchantModel)

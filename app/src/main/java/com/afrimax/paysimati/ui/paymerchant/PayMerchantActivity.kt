@@ -221,12 +221,6 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
                     getString(R.string.please_enter_amount)
             }
 
-            amount.toDouble() < 100.0 -> {
-                isvalid = false
-                binding.payMerchantActivityPaymentErrorBox.visibility = VISIBLE
-                binding.payMerchantActivityPaymentErrorTV.text =
-                    getString(R.string.minimum_amount_is_100_mwk)
-            }
 
             mainDigits.length > 7 || decimalDigits.length > 2 -> {
                 isvalid = false
@@ -265,7 +259,8 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
                     amount = amount,
                     flag = true,
                     entryBy = this@PayMerchantActivity.retrievePaymaartId(),
-                    password = null
+                    password = null,
+                    tillnumber = tillno
                 )
 
             )
