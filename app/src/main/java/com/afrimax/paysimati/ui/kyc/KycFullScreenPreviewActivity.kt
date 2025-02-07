@@ -106,20 +106,6 @@ class KycFullScreenPreviewActivity : BaseActivity() {
 
         }
     }
-    private fun loadImages() {
-        val isUploaded = intent.getBooleanExtra(Constants.KYC_MEDIA_IS_UPLOADED, false)
-        if (isUploaded) {
-            val imageUrl: String = intent.getStringExtra(Constants.KYC_CAPTURED_IMAGE_URI) ?: ""
-            Log.d("KycFullScreenPreview", "Image URL received: $imageUrl") // Debug log
-            Glide.with(this).load(BuildConfig.CDN_BASE_URL + imageUrl)
-                .into(b.kycFullScreenPreviewActivityIV)
-        } else {
-            val imageUri = intent.parcelable<Uri>(Constants.KYC_CAPTURED_IMAGE_URI)
-            Log.d("KycFullScreenPreview", "Image URI received: $imageUri") // Debug log
-            Glide.with(this).load(imageUri).into(b.kycFullScreenPreviewActivityIV)
-        }
-    }
-
 
     private fun loadImage() {
 
