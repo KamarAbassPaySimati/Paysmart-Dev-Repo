@@ -41,7 +41,7 @@ Feature: Paymaart- Customer Android- Chat with Merchant
     Then I should see the Trading name along with Paymaart ID
 
   Scenario: I try to chat with Merchant
-    When I click on "Suhaas Kumar TEST"
+    When I select the Merchant "Suhaas Kumar TEST"
     Then I should see the merchant's name, ID and recent transaction history
     When I click on Send icon
     Then no message will be sent
