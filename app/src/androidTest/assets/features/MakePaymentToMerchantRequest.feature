@@ -5,7 +5,7 @@ Feature: Paymaart- Customer Android- Make payments to Merchants request
   Condition of satisfaction
 
   1. there should be an option to see, merchant-sent payment request in the chat screen
-  2. users should be given an option either to proceed with the payment or decline the request.
+  2. users should be given an option to proceed with the payment
   3. There should be an option to show Transaction fee,VAT included and Total amount
   4. User can proceed or cancel the payment before entering PIN/Password.
   5. Upon successful PIN/Password entry, the transaction detail is should displayed.
@@ -36,33 +36,23 @@ Feature: Paymaart- Customer Android- Make payments to Merchants request
     Then I should be able to see the payment request made by the merchant in chat screen
 
   Scenario: Making a payment for a requested amount that exceeds the wallet balance
-    When I click on Pay button for 1st Requested Amount "10000" in chat screen
-    Then I should be directed to Send Payment page
-    When I click on Send Payment button
+    When I click on Pay button for 1st Requested Amount "100000" in chat screen
+    Then I should be directed to send payment screen
+    When I click on Send Payment
     And I click on Proceed
-    And I enter Invalid PIN as "102030"
-    Then I should see a message as "Invalid PIN" in PIN field
-    When I enter Valid PIN as "970541"
-    Then I should see a message as "Insufficient Funds"
+    And I enter Invalid PIN "102030"
+    Then I should read a message stating "Invalid PIN" in PIN field
+    When I enter Valid PIN "970541"
+    Then I should read a message stating "Insufficient Funds." in Send Payment Screen
     Then I click on Back button
 
   Scenario: Making a payment for a requested amount less than the wallet balance
-    When I click on Pay button for 2nd Requested Amount "2.80" in chat screen
-    Then I should be directed to Send Payment page
-    When I click on Send Payment button
-    And I click on Proceed
-    And I enter Invalid PIN as "102030"
-    Then I should see a message as "Invalid PIN" in PIN field
-    When I enter Valid PIN as "970541"
-    Then I should read a message stating "Payment Successful" along with details.
-    Then I click on Close button
-
-  Scenario: Declining the Payment request
     Given I am on the Chat Screen
-    When I click on Decline button for 3rd Requested Amount "56026" in chat screen
-    Then I should see a message indicating declined for that Payment request
-
-
-
-
-
+    When I click on Pay button for 2nd Requested Amount "2.80" in chat screen
+    Then I should be directed to send payment screen
+    When I click on Send Payment
+    And I click on Proceed
+    And I enter Invalid PIN "102030"
+    Then I should read a message stating "Invalid PIN" in PIN field
+    When I enter Valid PIN "970541"
+    Then I should see the Payment Successful message along with details
