@@ -146,6 +146,7 @@
     <string name="two_factor_authentication_is_enabled">Two factor authentication is enabled</string>
     <string name="_2fa_successful_subtext">Each time you log in, please enter the 6-digit code generated from Google Authenticator app</string>
     <string name="back">Back</string>
+    <string name="Report_merchant">Report Merchant</string>
     <string name="kyc_registration">KYC Registration</string>
     <string name="submission_successful">Submission Successful!</string>
     <string name="kyc_verification">KYC Verification</string>
@@ -822,4 +823,8 @@
     <string name="business_name">Bussiness Images</string>
     <string name="Report_Merchant">Report Merchant</string>
     <string name="MerchantProfile">Profile</string>
+    <string name="check_security_check_box">• Unauthorized Transactions\n• Phishing Attempts\n• Unsecured Checkout\n• Identity Theft</string>
+    <string name="Report_merchant_Quesion">Why are you reporting this merchant?</string>
+    <string name="report_merchant_q_1">Security and Fraud Concerns</string>
+    <string name="report_merchant_q_2">Merchant Disputes</string>
 </resources>

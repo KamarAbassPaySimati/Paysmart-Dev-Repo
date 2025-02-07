@@ -329,20 +329,6 @@
 
 
 
-<!--                    <com.google.android.material.imageview.ShapeableImageView-->
-<!--                        android:id="@+id/viewMerchantBusinessTypesTV"-->
-<!--                        android:layout_width="100dp"-->
-<!--                        android:layout_height="100dp"-->
-<!--                        android:src="@drawable/ic_arrow_back"-->
-<!--                        android:visibility="gone"-->
-<!--                        app:shapeAppearanceOverlay="@style/profileImagePreviewSmall"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintDimensionRatio="1:1"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        />-->
-
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/viewMerchantBusinessTypesRV"
                         android:layout_width="match_parent"

@@ -139,6 +139,12 @@ class MerchantProfile : BaseActivity() {
         binding.viewMerchantActivityBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        binding.viewSelfKycActivityEditButton.setOnClickListener {
+            val i = Intent(this@MerchantProfile,ReportMerchantActivity::class.java)
+            startActivity(i)
+        }
+
         showTillNumbersBottomSheet(tillNumbers)
 
     }

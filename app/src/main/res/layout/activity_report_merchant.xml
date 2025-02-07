@@ -1,10 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/viewMerchantProfile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.paymerchant.ReportMerchantActivity">
+    android:background="@color/white"
+    tools:context=".ui.viewkyc.ViewKycDetailsActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/viewMerchantActivityTopBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/viewMerchantActivityBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back_button"
+            android:padding="16dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/neutralGrey" />
+
+
+        <TextView
+            android:id="@+id/viewMerchantActivityHeaderTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/viewMerchantActivityBackButton"
+            android:fontFamily="@font/inter_bold"
+            android:includeFontPadding="false"
+            android:text="@string/Report_merchant"
+            android:textColor="@color/neutralGrey"
+            android:textSize="16sp" />
+
+
+    </RelativeLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/viewMerchantActivityBaseCV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/viewMerchantActivityBottomBar"
+        android:layout_below="@+id/viewMerchantActivityTopBar"
+        app:cardBackgroundColor="@color/white"
+        app:cardElevation="0dp">
+
+        <ScrollView
+            android:id="@+id/viewMerchantActivitySV"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="none"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:id="@+id/viewMerchantActivityDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Report_merchant_Quesion"
+                        android:textSize="14sp"
+                        android:paddingBottom="8dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"/>
+
+                    <!-- Security and Fraud Concerns -->
+                    <CheckBox
+                        android:id="@+id/check_security_fraud"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:text="@string/report_merchant_q_1"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"
+                        android:buttonTint="@color/primaryColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/check_security_check_box"
+                        android:textSize="14sp"
+                        android:paddingStart="32dp"
+                        android:paddingBottom="8dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"/>
+
+                    <!-- Merchant Disputes -->
+                    <CheckBox
+                        android:id="@+id/check_merchant_disputes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:text="@string/report_merchant_q_2"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"
+                        android:buttonTint="@color/primaryColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="• Incorrect Item Received\n• Item Not Received\n• Refund Issues\n• Poor Customer Service"
+                        android:textSize="14sp"
+                        android:paddingStart="32dp"
+                        android:paddingBottom="8dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"/>
+
+                    <!-- Privacy Concerns -->
+                    <CheckBox
+                        android:id="@+id/check_privacy_concerns"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:text="Privacy Concerns"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"
+                        android:buttonTint="@color/primaryColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="• Data Breaches\n• Excessive Data Collection\n• Unclear Privacy Policies\n• Sharing Data with Third Parties"
+                        android:textSize="14sp"
+                        android:paddingStart="32dp"
+                        android:paddingBottom="8dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"/>
+
+                    <!-- Regulatory Compliance -->
+                    <CheckBox
+                        android:id="@+id/check_regulatory_compliance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:text="Regulatory Compliance"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"
+                        android:buttonTint="@color/primaryColor" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="• Illegal Products/Services\n• Undisclosed Fees\n• Age Verification Issues\n• Licensing Violations"
+                        android:textSize="14sp"
+                        android:paddingStart="32dp"
+                        android:paddingBottom="8dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"/>
+
+                    <!-- Others -->
+                    <CheckBox
+                        android:id="@+id/check_others"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Others"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"
+                        android:buttonTint="@color/primaryColor" />
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </androidx.cardview.widget.CardView>
+
+    <FrameLayout
+        android:id="@+id/viewMerchantActivityBottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/viewSelfKycActivityCompleteKycButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/primary_rounded_button_background"
+            android:fontFamily="@font/inter_medium"
+            android:text="@string/complete_kyc_registration"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/viewSelfKycActivityEditButton"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/primary_rounded_button_background"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/inter_medium"
+                android:gravity="center"
+                android:text="@string/Report_Merchant"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                />
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+
+
+</RelativeLayout>
