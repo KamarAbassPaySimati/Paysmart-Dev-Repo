@@ -24,6 +24,8 @@ Feature: Paymaart- Customer Android- Chat with Merchant
 
   Scenario: Searching Merchant by trading name
     When I click on the Search tab
+    And I enter trading name as "qwerty"
+    Then I should read a message stating "No Data Found"
     And I enter trading name as "Suhaas"
     Then I should see the Trading name along with Paymaart ID
 
@@ -33,13 +35,18 @@ Feature: Paymaart- Customer Android- Chat with Merchant
 
   Scenario: Searching merchant by Paymaart ID
     When I click on the Search tab
+    And I enter paymart ID as "012345"
+    Then I should read a message stating "No Data Found" in Search Merchant page
     And I enter paymart ID "4263169"
     Then I should see the Trading name along with Paymaart ID
 
   Scenario: I try to chat with Merchant
     When I click on "Suhaas Kumar TEST"
+    Then I should see the merchant's name, ID and recent transaction history
+    When I click on Send icon
+    Then no message will be sent
     And I click on "Enter Message" tab
     And I type "Hello"
-    And I click on Send icon
+    When I click on Send icon
     Then I should see the sent message in the screen
     
