@@ -173,11 +173,7 @@ stages:
             brew install fastlane
             fastlane android develop
           displayName: 'Build'
-        - task: PublishPipelineArtifact@1
-          inputs:
-            targetPath: $(System.DefaultWorkingDirectory)/app-develop-release.apk 
-            artifactName: Android_Build
-          displayName: "Publish APK as Artifact"
+
 
 
 - stage: Test
