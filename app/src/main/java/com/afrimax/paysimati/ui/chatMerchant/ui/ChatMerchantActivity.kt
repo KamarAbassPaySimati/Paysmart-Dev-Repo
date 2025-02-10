@@ -84,7 +84,6 @@ import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.parseTillNumber
 import com.afrimax.paysimati.common.presentation.utils.showToast
 import com.afrimax.paysimati.data.ApiClient
-import com.afrimax.paysimati.data.model.DeclineMerchantRequest
 import com.afrimax.paysimati.data.model.chat.ChatMessage
 import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.data.model.chat.PaymentStatusType

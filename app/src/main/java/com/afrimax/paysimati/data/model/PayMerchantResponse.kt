@@ -22,7 +22,7 @@ data class MerchantList(
     @SerializedName("street_name")
     val streetName: String?=null,
     @SerializedName("till_number")
-    val tillNumber:String?=null,
+    val tillNumber:String,
     @SerializedName("profile_pic")
     val profile_pic: String?=null,
     @SerializedName("user_id")

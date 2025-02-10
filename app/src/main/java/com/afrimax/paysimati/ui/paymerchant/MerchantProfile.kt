@@ -25,6 +25,7 @@ import com.afrimax.paysimati.ui.reportMerchant.ReportMerchantActivity
 import com.afrimax.paysimati.ui.utils.adapters.ImageGridAdapter
 import com.afrimax.paysimati.ui.utils.bottomsheets.TillNumberBottomSheet
 import com.afrimax.paysimati.util.Constants
+import com.afrimax.paysimati.util.Constants.PAYMAART_ID
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
@@ -84,78 +85,65 @@ class MerchantProfile : BaseActivity() {
         }
     }
 
-private fun updateui(data: MerchantProfileResponse) {
-    val merchantData = data.data // Extract once to avoid redundant calls
 
-    if (merchantData == null) {
-        showToast("No merchant data available")
-        return
-    }
 
-    val tradingImages = merchantData.tradingImages ?: emptyList()
+    private fun updateui(data: MerchantProfileResponse) {
 
-    if (tradingImages.isEmpty()) {
-        binding.viewMerchantBusinessTV.text = "-"
-    } else {
-        val imageList = tradingImages.map { imagePath ->
+        val tradingImages = data.data?.tradingImages
+        val imageList = tradingImages?.map { imagePath ->
             BuildConfig.CDN_BASE_URL + imagePath
         }
-        setupRecyclerView(imageList)
-        binding.viewMerchantBusinessTV.text = ""
+        setupRecyclerView(imageList!!)
 
-    }
+        val locationList = listOf(
+            data.data.tradingHouseName,
+            data.data.tradingstreetName,
+            data.data.tradingVillage,
+            data.data.tradingDistrict
+        ).filter { it != null && it.isNotEmpty() }
 
 
-    val locationList = listOfNotNull(
-        merchantData.tradingHouseName,
-        merchantData.tradingstreetName,
-        merchantData.tradingVillage,
-        merchantData.tradingDistrict
-    ).filter { it.isNotEmpty() }
+        val Phonenumber =PhoneNumberFormatter.format( data.data.countryCode,data.data.phoneNumber)
 
-    val phoneNumber = PhoneNumberFormatter.format(merchantData.countryCode, merchantData.phoneNumber)
+        val tradingTypes = data.data.tradingType
+        val formattedTradingTypes = tradingTypes.joinToString(", ") { it.trim() }
 
-    val tradingTypes = merchantData.tradingType ?: emptyList()
-    val formattedTradingTypes = tradingTypes.joinToString(", ") { it.trim() }
+        if(data.data.tradingImage==null){
+            binding.viewMerchantActivityShortNameTV.text= getInitials(MerchantName)
 
-    if (merchantData.tradingImage.isNullOrEmpty()) {
-        binding.viewMerchantActivityShortNameTV.text = getInitials(MerchantName ?: "-")
-    } else {
-        binding.viewMerchantActivityShortNameTV.visibility = View.GONE
-        val imageUrl = BuildConfig.CDN_BASE_URL + merchantData.tradingImage[0] // First image
-        binding.payMerchantIV.also {
-            it.visibility = View.VISIBLE
-            Glide.with(this)
-                .load(imageUrl)
-                .centerCrop()
-                .into(it)
+        }else{
+            binding.viewMerchantActivityShortNameTV.visibility=View.GONE
+            val imageUrl = BuildConfig.CDN_BASE_URL + data.data.tradingImage[0] // First image
+            binding.payMerchantIV.also {
+                it.visibility = View.VISIBLE
+                Glide
+                    .with(this)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .into(it)
+            }
         }
+        val tillNumbers = data.data.tillNumber
+
+        val PayMaartId =PaymaartIdFormatter.formatId(payMaartId)
+        binding.viewMerchantActivityNameTV.text=MerchantName
+
+        binding.viewMerchantLocationTv.text = locationList.joinToString(", ")
+        binding.viewMerchantActivityPaymaartIdTV.text=PayMaartId
+        binding.viewMerchantPhoneNumberTV.text = data.data.countryCode + " " + Phonenumber
+
+        if(data.data.tradingName==null){
+            binding.viewMerchantTradingnameTV.text= "-"
+        }else{
+            binding.viewMerchantTradingnameTV.text = data.data.tradingName
+        }
+        binding.viewMerchantTradingTypesTV.text = formattedTradingTypes
+        binding.viewMerchantActivityBackButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+        showTillNumbersBottomSheet(tillNumbers)
+
     }
-
-    val tillNumbers = merchantData.tillNumber ?: emptyList()
-
-    val payMaartIdFormatted = PaymaartIdFormatter.formatId(merchantData.paymaartId ?: "-")
-        binding.viewMerchantActivityNameTV.text = MerchantName ?: "-"
-
-    binding.viewMerchantLocationTv.text = locationList.joinToString(", ")
-    binding.viewMerchantActivityPaymaartIdTV.text = payMaartIdFormatted
-    binding.viewMerchantPhoneNumberTV.text = "${merchantData.countryCode} $phoneNumber"
-
-    binding.viewMerchantTradingnameTV.text = merchantData.tradingName.takeUnless { it.isNullOrEmpty() } ?: "-"
-
-    binding.viewMerchantTradingTypesTV.text = formattedTradingTypes
-
-    binding.viewMerchantActivityBackButton.setOnClickListener {
-        onBackPressedDispatcher.onBackPressed()
-    }
-
-    binding.viewSelfKycActivityEditButton.setOnClickListener {
-        val i = Intent(this@MerchantProfile, ReportMerchantActivity::class.java)
-        startActivity(i)
-    }
-
-    showTillNumbersBottomSheet(tillNumbers)
-}
 
 
 

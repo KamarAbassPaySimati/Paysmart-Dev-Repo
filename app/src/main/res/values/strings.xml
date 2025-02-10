@@ -487,8 +487,10 @@
     <string name="delete_request_success_subtext">Please ensure you cash-out or make a pay-out before your account is deleted.</string>
     <string name="back_to_homepage">Back to Homepage</string>
     <string name="online_kyc_registration">Online KYC Registration</string>
+    <string name="merchant_reported_sucessfully">Merchant reported successfully</string>
     <string name="complete_this_now_for_full_access_to_paysimati_services">Complete this now for full access to PaySimati services</string>
     <string name="address">Address</string>
+    <string name="report_response">Our team will review the transaction shortly. Thank you for bringing this to our attention.</string>
     <string name="enter_address">Enter address</string>
     <string name="reset_password">Reset Password</string>
     <string name="reset_pin">Reset PIN</string>
