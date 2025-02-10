@@ -28,7 +28,7 @@ Feature: Paymaart- Customer Android- View Merchant profile
     When I click on clear button on search tab
     Then the search tab should be empty
     When I click on the Search tab
-    And I enter trading name as "Suhaas"
+    And I enter trading name as "Suhaas Kumar"
     Then I should see the Trading name along with Paymaart ID
     Then I select the Merchant "Suhaas Kumar TEST"
 
