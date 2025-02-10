@@ -32,7 +32,7 @@ data class PayMerchantPaymentResponse(
     @SerializedName("amount")
     val amount:Double=0.0,
     @SerializedName("till_number")
-    val tillnumber:String?="",
+    val tillnumber:String,
     @SerializedName("gross_transaction_fee")
     val grosstxnfee: String?="",
     @SerializedName("transaction_fee")
@@ -51,7 +51,7 @@ data class PayMerchantPaymentResponse(
         parcel.readString(),
         parcel.readLong(),
         parcel.readDouble(),
-        parcel.readString(),
+        parcel.readString().toString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readDouble(),
