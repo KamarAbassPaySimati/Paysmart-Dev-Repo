@@ -89,7 +89,7 @@ stages:
 
         - task: Cache@2
           inputs:
-            key: 'android-build | "$(Agent.OS)" | **/build.gradle'
+            key: 'android-build | "$(Agent.OS)" | "$(Build.SourceBranch)" | **/build.gradle'
             path: '$(System.DefaultWorkingDirectory)/app/build'
           displayName: 'Cache Android Build Output'
         - task: Gradle@3
@@ -164,7 +164,7 @@ stages:
           displayName: 'Cache Gradle Dependencies'
         - task: Cache@2
           inputs:
-            key: 'android-build | "$(Agent.OS)" | **/build.gradle'
+            key: 'android-build | "$(Agent.OS)" | "$(Build.SourceBranch)" | **/build.gradle'
             path: '$(System.DefaultWorkingDirectory)/app/build'
           displayName: 'Cache Android Build Output'
         - script: |
@@ -264,7 +264,7 @@ stages:
           displayName: 'Cache Gradle Dependencies'
         - task: Cache@2
           inputs:
-            key: 'android-build | "$(Agent.OS)" | **/build.gradle'
+            key: 'android-build | "$(Agent.OS)" | "$(Build.SourceBranch)" | **/build.gradle'
             path: '$(System.DefaultWorkingDirectory)/app/build'
           displayName: 'Cache Android Build Output'
         - script: |
@@ -314,7 +314,7 @@ stages:
               displayName: 'Cache Gradle Dependencies'
             - task: Cache@2
               inputs:
-                key: 'android-build | "$(Agent.OS)" | **/build.gradle'
+                key: 'android-build | "$(Agent.OS)" | "$(Build.SourceBranch)" | **/build.gradle'
                 path: '$(System.DefaultWorkingDirectory)/app/build'
               displayName: 'Cache Android Build Output'
             - script: |
@@ -363,7 +363,7 @@ stages:
                 displayName: 'Cache Gradle Dependencies'
               - task: Cache@2
                 inputs:
-                  key: 'android-build | "$(Agent.OS)" | **/build.gradle'
+                  key: 'android-build | "$(Agent.OS)" | "$(Build.SourceBranch)" | **/build.gradle'
                   path: '$(System.DefaultWorkingDirectory)/app/build'
                 displayName: 'Cache Android Build Output'
               - script: |
