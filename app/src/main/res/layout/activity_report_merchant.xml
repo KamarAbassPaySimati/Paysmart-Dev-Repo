@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/viewMerchantProfile"
+    android:id="@+id/reportMerchantProfile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -84,13 +84,17 @@
 
                     <!-- Security and Fraud Concerns -->
                     <CheckBox
-                        android:id="@+id/check_security_fraud"
+                        android:id="@+id/check_merchant_security"
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
-                        android:text="@string/report_merchant_q_1"
+                        android:checked="false"
+                        android:minWidth="0dp"
                         android:fontFamily="@font/inter_medium"
+                        android:text="@string/report_merchant_q_1"
+                        android:minHeight="0dp"
                         android:textColor="@color/neutralGrey"
-                        android:buttonTint="@color/primaryColor" />
+                        app:buttonIconTint="@color/white"
+                        app:buttonTint="@color/primaryColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -100,22 +104,27 @@
                         android:paddingStart="32dp"
                         android:paddingBottom="8dp"
                         android:fontFamily="@font/inter_medium"
-                        android:textColor="@color/neutralGrey"/>
+                        android:textColor="@color/neutralGrey"
+                        tools:ignore="RtlSymmetry" />
 
                     <!-- Merchant Disputes -->
                     <CheckBox
                         android:id="@+id/check_merchant_disputes"
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
-                        android:text="@string/report_merchant_q_2"
+                        android:checked="false"
+                        android:minWidth="0dp"
                         android:fontFamily="@font/inter_medium"
+                        android:text="@string/report_merchant_q_2"
+                        android:minHeight="0dp"
                         android:textColor="@color/neutralGrey"
-                        android:buttonTint="@color/primaryColor" />
+                        app:buttonIconTint="@color/white"
+                        app:buttonTint="@color/primaryColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="• Incorrect Item Received\n• Item Not Received\n• Refund Issues\n• Poor Customer Service"
+                        android:text="@string/merchant_dispute"
                         android:textSize="14sp"
                         android:paddingStart="32dp"
                         android:paddingBottom="8dp"
@@ -127,15 +136,19 @@
                         android:id="@+id/check_privacy_concerns"
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
-                        android:text="Privacy Concerns"
+                        android:checked="false"
+                        android:minWidth="0dp"
                         android:fontFamily="@font/inter_medium"
+                        android:text="@string/report_merchant_q_3"
+                        android:minHeight="0dp"
                         android:textColor="@color/neutralGrey"
-                        android:buttonTint="@color/primaryColor" />
+                        app:buttonIconTint="@color/white"
+                        app:buttonTint="@color/primaryColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="• Data Breaches\n• Excessive Data Collection\n• Unclear Privacy Policies\n• Sharing Data with Third Parties"
+                        android:text="@string/privacy_concern"
                         android:textSize="14sp"
                         android:paddingStart="32dp"
                         android:paddingBottom="8dp"
@@ -147,15 +160,19 @@
                         android:id="@+id/check_regulatory_compliance"
                         android:layout_width="wrap_content"
                         android:layout_height="24dp"
-                        android:text="Regulatory Compliance"
+                        android:checked="false"
+                        android:minWidth="0dp"
                         android:fontFamily="@font/inter_medium"
+                        android:text="@string/report_merchant_q_4"
+                        android:minHeight="0dp"
                         android:textColor="@color/neutralGrey"
-                        android:buttonTint="@color/primaryColor" />
+                        app:buttonIconTint="@color/white"
+                        app:buttonTint="@color/primaryColor" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="• Illegal Products/Services\n• Undisclosed Fees\n• Age Verification Issues\n• Licensing Violations"
+                        android:text="@string/regulatory_comp"
                         android:textSize="14sp"
                         android:paddingStart="32dp"
                         android:paddingBottom="8dp"
@@ -166,16 +183,157 @@
                     <CheckBox
                         android:id="@+id/check_others"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Others"
+                        android:layout_height="24dp"
+                        android:checked="false"
+                        android:minWidth="0dp"
                         android:fontFamily="@font/inter_medium"
+                        android:text="@string/report_merchant_q_5"
+                        android:minHeight="0dp"
                         android:textColor="@color/neutralGrey"
-                        android:buttonTint="@color/primaryColor" />
+                        app:buttonIconTint="@color/white"
+                        app:buttonTint="@color/primaryColor"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/imagaeUpload"
+                        android:textSize="14sp"
+                        android:paddingBottom="8dp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/neutralGrey"/>
+
+                    <FrameLayout
+                        android:id="@+id/reportMerchantActivityMediaFrontContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/reportMerchantimg1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:background="@drawable/bg_capture_upload_card"
+                            android:gravity="center"
+                            app:layout_constraintDimensionRatio="18:11"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/reportMerchantcaputre1"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/bg_outlined_button_neutral_grey_outline"
+                                android:drawablePadding="8dp"
+                                android:fontFamily="@font/inter_medium"
+                                android:padding="12dp"
+                                android:text="@string/capture"
+                                android:textAllCaps="false"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="16sp"
+                                app:drawableStartCompat="@drawable/ico_camera" />
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/reportMerchantimgupload1"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:background="@drawable/bg_outlined_button_neutral_grey_outline"
+                                android:drawablePadding="8dp"
+                                android:fontFamily="@font/inter_medium"
+                                android:gravity="center_vertical"
+                                android:padding="12dp"
+                                android:text="@string/upload"
+                                android:textAllCaps="false"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="16sp"
+                                app:drawableStartCompat="@drawable/ico_upload" />
+
+
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    </FrameLayout>
+
+
+                    <FrameLayout
+                        android:id="@+id/reportMerchantimg2container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/reportMerchantimgcontainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:background="@drawable/bg_capture_upload_card"
+                                android:gravity="center"
+                                app:layout_constraintDimensionRatio="18:11"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/reportMerchantimg2capture"
+                                    style="?android:attr/borderlessButtonStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_outlined_button_neutral_grey_outline"
+                                    android:drawablePadding="8dp"
+                                    android:fontFamily="@font/inter_medium"
+                                    android:padding="12dp"
+                                    android:text="@string/capture"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/neutralGreyPrimaryText"
+                                    android:textSize="16sp"
+                                    app:drawableStartCompat="@drawable/ico_camera" />
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/reportMerchantimg2upload"
+                                    style="?android:attr/borderlessButtonStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="16dp"
+                                    android:background="@drawable/bg_outlined_button_neutral_grey_outline"
+                                    android:drawablePadding="8dp"
+                                    android:fontFamily="@font/inter_medium"
+                                    android:gravity="center_vertical"
+                                    android:padding="12dp"
+                                    android:text="@string/upload"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/neutralGreyPrimaryText"
+                                    android:textSize="16sp"
+                                    app:drawableStartCompat="@drawable/ico_upload" />
+
+
+                            </LinearLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/reportMerchantCaptureUploadActivitySupportedTypesTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/supported_file_types"
+                        android:textColor="@color/neutralGrey"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
-
-
 
             </LinearLayout>
 

@@ -827,4 +827,12 @@
     <string name="Report_merchant_Quesion">Why are you reporting this merchant?</string>
     <string name="report_merchant_q_1">Security and Fraud Concerns</string>
     <string name="report_merchant_q_2">Merchant Disputes</string>
+    <string name="merchant_dispute">• Incorrect Item Received\n• Item Not Received\n• Refund Issues\n• Poor Customer Service</string>
+    <string name="report_merchant_q_3">Privacy Concerns</string>
+    <string name="privacy_concern">• Data Breaches\n• Excessive Data Collection\n• Unclear Privacy Policies\n• Sharing Data with Third Parties</string>
+    <string name="report_merchant_q_4">Regulatory Compliance</string>
+    <string name="regulatory_comp">• Illegal Products/Services\n• Undisclosed Fees\n• Age Verification Issues\n• Licensing Violations</string>
+    <string name="report_merchant_q_5">Others</string>
+    <string name="imagaeUpload">Image(Optional)</string>
+    <string name="Others">Others</string>
 </resources>
