@@ -99,4 +99,7 @@ open class BaseActivity: AppCompatActivity() {
         }
         imm.showSoftInput(view, 0)
     }
+
+
+
 }

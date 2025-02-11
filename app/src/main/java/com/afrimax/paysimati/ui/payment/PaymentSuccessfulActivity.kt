@@ -29,10 +29,14 @@ import com.afrimax.paysimati.common.presentation.utils.DP
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.model.CashOutResponse
+import com.afrimax.paysimati.data.model.MerchantPayResponse
 import com.afrimax.paysimati.data.model.PayAfrimaxResponse
+import com.afrimax.paysimati.data.model.PayMerchantPaymentResponse
+import com.afrimax.paysimati.data.model.PayMerchantResponse
 import com.afrimax.paysimati.data.model.PayToRegisteredPersonResponse
 import com.afrimax.paysimati.data.model.PayUnRegisteredPersonResponse
 import com.afrimax.paysimati.data.model.SubscriptionPaymentDetails
+
 import com.afrimax.paysimati.databinding.ActivityPaymentSuccessfulBinding
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.util.Constants
@@ -192,7 +196,58 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 }
 
             }
+
+            is PayMerchantPaymentResponse ->{
+                val model = CommonViewModel(
+                    fromName = data.customerName,
+                    fromId = data.customerId,
+                    toName = data.merchantName,
+                    toId = data.merchantId,
+                    transactionAmount = data.amount,
+                    transactionFees = data.transactionfee?.toDouble(),
+                    vat = data.vat,
+                    transactionId = data.transactionID,
+                    dateTime = data.createdAt
+                )
+                setCommonView(model)
+                binding.paymentSuccessfulToPhoneNumberContainer.visibility = View.GONE
+                binding.paymentSuccessfulToPaymaartIdContainer.visibility = View.VISIBLE
+                transactionId = data.transactionID ?: ""
+                if (!data.note.isNullOrEmpty()) {
+                    binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                    binding.paymentSuccessfulMembershipValue.text = data.note
+                }
+            }
+
+            is MerchantPayResponse ->{
+                val model = CommonViewModel(
+                    fromName = data.customerName,
+                    fromId = data.customerId,
+                    toName = data.merchantName,
+                    toId = data.merchantId,
+                    transactionAmount = data.amount,
+                    transactionFees = data.transactionfee?.toDouble(),
+                    vat = data.vat,
+                    transactionId = data.transactionID,
+                    dateTime = data.createdAt
+                )
+                setCommonView(model)
+                binding.paymentSuccessfulToPhoneNumberContainer.visibility = View.GONE
+                binding.paymentSuccessfulToPaymaartIdContainer.visibility = View.VISIBLE
+                transactionId = data.transactionID ?: ""
+                if (!data.note.isNullOrEmpty()) {
+                    binding.paymentSuccessfulMembershipContainer.visibility = View.VISIBLE
+                    binding.paymentSuccessfulMembershipValue.text = data.note
+                }
+            }
+
+
+
+
         }
+
+
+
 
         nextScreenResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -221,6 +276,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 this@PaymentSuccessfulActivity.finishAffinity()
+
             }
         })
     }
