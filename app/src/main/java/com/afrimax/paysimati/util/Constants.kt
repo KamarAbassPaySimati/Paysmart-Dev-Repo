@@ -45,6 +45,7 @@ object Constants {
     const val KYC_MALAWI_SIMPLIFIED = "kyc_malawi_simplified"
     const val KYC_NON_MALAWI = "kyc_non_malawi"
     const val KYC_IDENTITY_ID_NATIONAL_ID = "kyc_identity_id_national_id"
+    const val MERCHANT_REPORT="reportmerchant"
     const val KYC_IDENTITY_ID_PASSPORT = "kyc_identity_id_passport"
     const val KYC_IDENTITY_ID_DRIVER_LICENSE = "kyc_identity_id_driver_license"
     const val KYC_IDENTITY_ID_TRAFFIC_CARD = "kyc_identity_id_traffic_card"
