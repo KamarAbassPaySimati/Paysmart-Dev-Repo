@@ -243,7 +243,7 @@ class ReportMerchantActivity :BaseActivity(),ReportOtherReason {
             reasons = reasons,
             userId =  paymaartId
         )
-        Log.d("kk","$request")
+
         lifecycleScope.launch {
             val id =fetchIdToken()
             val response = ApiClient.apiService.reportMerchant(id,request)
