@@ -55,6 +55,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -139,7 +140,7 @@ class ChatMerchantActivity : AppCompatActivity() {
                 receiverName = state.value.receiverName,
                 receiverId = state.value.receiverId,
                 receiverProfilePicture = state.value.receiverProfilePicture,
-                modifier = Modifier.fillMaxWidth().clickable {
+                modifier = Modifier.fillMaxWidth().testTag("MerchantProfile").clickable {
                     val intent = Intent(this@ChatMerchantActivity,MerchantProfile::class.java)
                     intent.putExtra(PAYMAART_ID,state.value.receiverId)
                     intent.putExtra(MERCHANT_NAME,state.value.receiverName)
