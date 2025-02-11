@@ -63,6 +63,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -82,9 +83,11 @@ import com.afrimax.paysimati.common.core.primaryColor
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.parseTillNumber
 import com.afrimax.paysimati.common.presentation.utils.showToast
+import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.chat.ChatMessage
 import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.data.model.chat.PaymentStatusType
+import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.paymerchant.MerchantProfile
 import com.afrimax.paysimati.ui.paymerchant.PayMerchantActivity
 import com.afrimax.paysimati.util.Constants.MERCHANT_NAME
@@ -98,9 +101,10 @@ import com.afrimax.paysimati.util.Constants.TRANSACTION_ID
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ChatMerchantActivity : AppCompatActivity() {
+class ChatMerchantActivity : BaseActivity() {
     private val vm: ChatViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -787,7 +791,23 @@ class ChatMerchantActivity : AppCompatActivity() {
                         horizontalArrangement = Arrangement.End
                     ) {
                         OutlinedButton(
-                            onClick = {},//onDeclineClick,
+                            onClick = {
+//                                lifecycleScope.launch {
+//                                    val id = fetchIdToken()
+//                                    val resposne = ApiClient.apiService.declineMerchantRequest(id,
+//                                        DeclineMerchantRequest(
+//                                        requestId = txnId,
+//                                            recieverId =receiverId
+//                                    )
+//                                    )
+//                                   if(resposne.isSuccessful) {
+//
+//                                   }else{
+//                                       PaymentStatusType.PENDING
+//                                    }
+//
+//                                }
+                            },//onDeclineClick,
                             border = BorderStroke(
                                 1.dp, primaryColor
                             ), // Use your highlightedLight color
@@ -887,7 +907,7 @@ class ChatMerchantActivity : AppCompatActivity() {
     fun PaymentDeclinedChip(modifier: Modifier = Modifier) {
         Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = painterResource(R.drawable.ic_close),
+                painter = painterResource(R.drawable.ic_payment_failure),
                 contentDescription = null,
             )
 
