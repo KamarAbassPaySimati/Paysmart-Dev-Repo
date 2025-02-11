@@ -72,6 +72,8 @@ import com.afrimax.paysimati.data.model.VerifyOtpRequestBody
 import com.afrimax.paysimati.data.model.VerifyOtpResponse
 import com.afrimax.paysimati.data.model.ViewWalletResponse
 import com.afrimax.paysimati.data.model.MerchantProfileResponse
+import com.afrimax.paysimati.data.model.ReportMerchantRequest
+import com.afrimax.paysimati.data.model.ReportMerchantResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -397,6 +399,12 @@ interface ApiService {
         @Header("Authorization") header: String, @Body body: MerchantRequestPay
     ):Response<MerchantRequestResponse>
 
+
+
+    @POST("$CUSTOMER_USER//report-merchant")
+    suspend fun reportMerchant(
+        @Header("Authorization") header: String, @Body body: ReportMerchantRequest
+    ): Response<ReportMerchantResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")

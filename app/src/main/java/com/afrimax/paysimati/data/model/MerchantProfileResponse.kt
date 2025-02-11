@@ -4,12 +4,14 @@ import com.google.gson.annotations.SerializedName
 
 data class MerchantProfileResponse(
     @SerializedName("data")
-    val data: MerchantProfile,
+    val data: MerchantProfile? = null,
     @SerializedName("message")
-    val message: String?=null,
+    val message: String = "",
     @SerializedName("success_status")
-    val successStatus: Boolean
+    val success_status: Boolean = false
 )
+
+
 
 
 

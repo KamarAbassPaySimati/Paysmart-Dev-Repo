@@ -326,22 +326,19 @@
                         android:text="@string/business_name"
                         android:textColor="@color/neutralGrey"
                         android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/viewMerchantBusinessTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="@font/inter_regular"
+                        android:text="@string/dash"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
 
 
-
-<!--                    <com.google.android.material.imageview.ShapeableImageView-->
-<!--                        android:id="@+id/viewMerchantBusinessTypesTV"-->
-<!--                        android:layout_width="100dp"-->
-<!--                        android:layout_height="100dp"-->
-<!--                        android:src="@drawable/ic_arrow_back"-->
-<!--                        android:visibility="gone"-->
-<!--                        app:shapeAppearanceOverlay="@style/profileImagePreviewSmall"-->
-<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                        app:layout_constraintDimensionRatio="1:1"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent"-->
-<!--                        />-->
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/viewMerchantBusinessTypesRV"

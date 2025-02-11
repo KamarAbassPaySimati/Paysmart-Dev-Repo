@@ -1,10 +1,10 @@
 package com.afrimax.paysimati.ui.paymerchant
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 
 import android.view.View
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,9 +21,11 @@ import com.afrimax.paysimati.data.model.MerchantProfileResponse
 import com.afrimax.paysimati.databinding.ActivityMerchantProfileBinding
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.kyc.KycFullScreenPreviewActivity
+import com.afrimax.paysimati.ui.reportMerchant.ReportMerchantActivity
 import com.afrimax.paysimati.ui.utils.adapters.ImageGridAdapter
 import com.afrimax.paysimati.ui.utils.bottomsheets.TillNumberBottomSheet
 import com.afrimax.paysimati.util.Constants
+import com.afrimax.paysimati.util.Constants.PAYMAART_ID
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
@@ -60,21 +62,19 @@ class MerchantProfile : BaseActivity() {
             val merchantTransactionCall = ApiClient.apiService.getMerchantProfile(idToken,payMaartId)
 
             merchantTransactionCall.enqueue(object : Callback<MerchantProfileResponse> {
+                @SuppressLint("SuspiciousIndentation")
                 override fun onResponse(
                     call: Call<MerchantProfileResponse>,
                     response: Response<MerchantProfileResponse>
                 ) {
                     if (response.isSuccessful) {
-                        val data = response.body()
-
-                        if (data != null) {
-                         updateui(data)
-                        }
-
+                        val data = response.body() ?: MerchantProfileResponse()
+                                updateui(data)
                     } else {
                         showToast(getString(R.string.default_error_toast))
                     }
-                 hideLoader()
+
+                    hideLoader()
                 }
 
                 override fun onFailure(call: Call<MerchantProfileResponse>, throwable: Throwable) {
@@ -85,13 +85,15 @@ class MerchantProfile : BaseActivity() {
         }
     }
 
+
+
     private fun updateui(data: MerchantProfileResponse) {
 
-        val tradingImages = data.data.tradingImages
-        val imageList = tradingImages.map { imagePath ->
+        val tradingImages = data.data?.tradingImages
+        val imageList = tradingImages?.map { imagePath ->
             BuildConfig.CDN_BASE_URL + imagePath
         }
-        setupRecyclerView(imageList)
+        setupRecyclerView(imageList!!)
 
         val locationList = listOf(
             data.data.tradingHouseName,
@@ -130,11 +132,11 @@ class MerchantProfile : BaseActivity() {
         binding.viewMerchantActivityPaymaartIdTV.text=PayMaartId
         binding.viewMerchantPhoneNumberTV.text = data.data.countryCode + " " + Phonenumber
 
-       if(data.data.tradingName==null){
-           binding.viewMerchantTradingnameTV.text= "-"
-       }else{
-           binding.viewMerchantTradingnameTV.text = data.data.tradingName
-       }
+        if(data.data.tradingName==null){
+            binding.viewMerchantTradingnameTV.text= "-"
+        }else{
+            binding.viewMerchantTradingnameTV.text = data.data.tradingName
+        }
         binding.viewMerchantTradingTypesTV.text = formattedTradingTypes
         binding.viewMerchantActivityBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -142,6 +144,10 @@ class MerchantProfile : BaseActivity() {
         showTillNumbersBottomSheet(tillNumbers)
 
     }
+
+
+
+
     private fun setupRecyclerView(imageList: List<String>) {
         val recyclerView: RecyclerView = findViewById(R.id.viewMerchantBusinessTypesRV)
         val layoutManager = GridLayoutManager(this, 3)

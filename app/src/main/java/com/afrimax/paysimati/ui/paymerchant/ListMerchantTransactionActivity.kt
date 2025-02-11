@@ -196,7 +196,7 @@ class ListMerchantTransactionActivity : BaseActivity() {
                             }
                             else{
                                 val data= response.body()
-                                if(data!=null){
+                                if(data!=null ){
                                     mMerchantList.clear()
                                     mMerchantList.addAll(data.payMerchantList)
                                     paginationEnd = mMerchantList.size >= data.totalCount
