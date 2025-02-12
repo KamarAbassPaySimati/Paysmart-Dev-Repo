@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.os.Build
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -20,8 +21,12 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.core.log
+import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
+import com.afrimax.paysimati.data.model.chat.ChatState
+import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity
 import com.afrimax.paysimati.ui.home.HomeActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlansActivity
+import com.afrimax.paysimati.ui.paymerchant.ListMerchantTransactionActivity
 import com.afrimax.paysimati.ui.splash.SplashScreenActivity
 import com.afrimax.paysimati.ui.viewtransactions.ViewSpecificTransactionActivity
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -101,24 +106,43 @@ class MessagingService(
         //Create the channel first | This only happens once when the app is first booting
         "Response".showLogE(Gson().toJson(data))
         createNotificationChannel()
+        var userinfo :String?=null
         var transactionId: String? = null
         val action =  data.getStringExtra(ACTION).toString()
         if (action == NotificationNavigation.TRANSACTIONS.screenName) transactionId =
             data.getStringExtra(TXN_ID).toString()
+        if(action == NotificationNavigation.CHAT.screenName) userinfo =
+            data.getStringExtra("user_info")
+
         val targetActivity: Class<out AppCompatActivity> = when (action) {
             NotificationNavigation.MEMBERSHIP_PLANS.screenName -> MembershipPlansActivity::class.java
             NotificationNavigation.TRANSACTIONS.screenName -> ViewSpecificTransactionActivity::class.java
+            NotificationNavigation.PAYREQUEST.screenName -> ChatMerchantActivity::class.java
+            NotificationNavigation.CHAT.screenName -> ChatMerchantActivity ::class.java
+
+//add new action
             else -> SplashScreenActivity::class.java
         }
+        val receiver = Gson().fromJson(userinfo, ChatState::class.java)
         val intent = if (isAppInForeground()) {
             Intent(this, targetActivity).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                if (targetActivity == ViewSpecificTransactionActivity::class.java) putExtra(Constants.TRANSACTION_ID, transactionId) //Pass the transactionId to the activity
+                if (targetActivity == ViewSpecificTransactionActivity::class.java)
+                    putExtra(Constants.TRANSACTION_ID, transactionId)
+                if (targetActivity == ChatMerchantActivity::class.java)putExtra(VIEW_MODEL_STATE, ChatState(
+                    receiverName = receiver.receiverName ,
+                    receiverId = receiver.receiverId,
+                    receiverProfilePicture = receiver.receiverProfilePicture,
+                ))
+                putExtra(Constants.MERCHANT_NAME,userinfo)
+
+
             }
         }else{
             Intent(this, SplashScreenActivity::class.java).apply {
                 putExtra(Constants.ACTION, action)
                 putExtra(Constants.TRANSACTION_ID, transactionId)
+                putExtra(Constants.USER_INFO, userinfo)
             }
         }
         val pendingIntent = PendingIntent.getActivity(
@@ -219,4 +243,6 @@ class MessagingService(
 enum class NotificationNavigation(val screenName: String){
     MEMBERSHIP_PLANS("membership"),
     TRANSACTIONS("transactions"),
+    PAYREQUEST("request"),
+    CHAT("new_chat")
 }

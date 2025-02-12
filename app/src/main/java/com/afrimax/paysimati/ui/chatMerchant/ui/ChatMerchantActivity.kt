@@ -95,6 +95,7 @@ import com.afrimax.paysimati.data.model.chat.PaymentStatusType
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.paymerchant.MerchantProfile
 import com.afrimax.paysimati.ui.paymerchant.PayMerchantActivity
+import com.afrimax.paysimati.util.Constants
 import com.afrimax.paysimati.util.Constants.MERCHANT_NAME
 import com.afrimax.paysimati.util.Constants.PAYMAART_ID
 import com.afrimax.paysimati.util.Constants.PAYMENT_AMOUNT
@@ -104,13 +105,8 @@ import com.afrimax.paysimati.util.Constants.STREET_NAME
 import com.afrimax.paysimati.util.Constants.TILL_NUMBER
 import com.afrimax.paysimati.util.Constants.TRANSACTION_ID
 import com.afrimax.paysimati.util.getInitials
-import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -120,6 +116,10 @@ class ChatMerchantActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+//        val userInfoJson = intent.getStringExtra(Constants.USER_INFO)
+//        val userInfo: ChatState= Gson().fromJson(userInfoJson, ChatState::class.java)
+//        vm(ChatIntent.EstablishConnection)
 
         WindowInsetsControllerCompat(window, window.decorView).apply {
             isAppearanceLightStatusBars = false
@@ -332,9 +332,9 @@ class ChatMerchantActivity : BaseActivity() {
         modifier: Modifier = Modifier,
         reciverId:String,
         reciverName:String,
-        reciverLoc:String,
+        reciverLoc:String?=null,
         receiverProfilePicture: String? = null,
-        tillnumber:String,
+        tillnumber:String?=null,
         statusCode:Int
 
     ) {
@@ -422,7 +422,7 @@ class ChatMerchantActivity : BaseActivity() {
         modifier: Modifier = Modifier,
         previousChats: LazyPagingItems<ChatMessage>,
         realTimeMessages: ArrayList<ChatMessage>,
-        reciverLoc: String,
+        reciverLoc: String?=null,
         receiverProfilePicture: String?,
         receiverId: String,
         reciverName: String,
@@ -494,7 +494,7 @@ class ChatMerchantActivity : BaseActivity() {
      */
     private fun LazyListScope.realtimeChats(
         realTimeMessages: ArrayList<ChatMessage>, previousChats: LazyPagingItems<ChatMessage>
-        ,reciverLoc: String,
+        ,reciverLoc: String?=null,
         receiverId: String,
         reciverName: String,
         receiverProfilePicture: String?,
@@ -556,7 +556,7 @@ class ChatMerchantActivity : BaseActivity() {
 
     }
     private fun LazyListScope.previousChats(previousChats: LazyPagingItems<ChatMessage>,
-                                            reciverLoc: String,
+                                            reciverLoc: String?=null,
                                             receiverId: String,
                                             reciverName: String,
                                             receiverProfilePicture: String?,statusCode: Int) {
@@ -670,7 +670,7 @@ class ChatMerchantActivity : BaseActivity() {
         note: String? = null,
         isSender: Boolean,
         tillnumber:String,
-        reciverLoc: String,
+        reciverLoc: String?=null,
         reciverName:String,
         receiverProfilePicture:String?,
         receiverId:String,
