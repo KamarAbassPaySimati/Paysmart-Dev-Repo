@@ -74,6 +74,7 @@ class MerchantProfile : BaseActivity() {
 
                     hideLoader()
                 }
+
                 override fun onFailure(call: Call<MerchantProfileResponse>, throwable: Throwable) {
                     hideLoader()
                     showToast(getString(R.string.default_error_toast))
