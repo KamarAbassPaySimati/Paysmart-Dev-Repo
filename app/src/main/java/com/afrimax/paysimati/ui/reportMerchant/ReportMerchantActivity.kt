@@ -44,6 +44,8 @@ import com.amplifyframework.storage.StorageException
 import com.amplifyframework.storage.options.StorageUploadInputStreamOptions
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.UUID
@@ -551,6 +553,7 @@ class ReportMerchantActivity :BaseActivity(),ReportOtherReason {
 
     }
 
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     private suspend fun amplifyUpload(uri: Uri): String {
         val stream = contentResolver.openInputStream(uri)
 
