@@ -50,6 +50,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -84,6 +88,7 @@ import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.common.presentation.utils.parseTillNumber
 import com.afrimax.paysimati.common.presentation.utils.showToast
 import com.afrimax.paysimati.data.ApiClient
+import com.afrimax.paysimati.data.model.DeclineMerchantRequest
 import com.afrimax.paysimati.data.model.chat.ChatMessage
 import com.afrimax.paysimati.data.model.chat.ChatState
 import com.afrimax.paysimati.data.model.chat.PaymentStatusType
@@ -99,6 +104,12 @@ import com.afrimax.paysimati.util.Constants.STREET_NAME
 import com.afrimax.paysimati.util.Constants.TILL_NUMBER
 import com.afrimax.paysimati.util.Constants.TRANSACTION_ID
 import com.afrimax.paysimati.util.getInitials
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -666,6 +677,14 @@ class ChatMerchantActivity : BaseActivity() {
         statusCode: Int
 
     ) {
+        var isLoading by remember { mutableStateOf(false) }
+        var declineButtonText by remember { mutableStateOf("") }
+            declineButtonText = stringResource(R.string.decline)
+        var isRowVisible by remember { mutableStateOf(true) }
+        var isdeclined by remember {mutableStateOf(false)}
+
+
+
         BoxWithConstraints(
             modifier = modifier,
             contentAlignment = if (isSender) Alignment.CenterEnd else Alignment.CenterStart
@@ -733,6 +752,10 @@ class ChatMerchantActivity : BaseActivity() {
 
                 Row(modifier = Modifier.fillMaxWidth()) {
 
+                    if(isdeclined){
+                        PaymentDeclinedChip(modifier = Modifier.weight(1f))
+                    }
+
                     //Payment status
                     when (paymentStatus) {
 
@@ -748,6 +771,7 @@ class ChatMerchantActivity : BaseActivity() {
 
                         }
                     }
+
 
                     //Date
                     androidx.compose.material.Text(
@@ -783,7 +807,7 @@ class ChatMerchantActivity : BaseActivity() {
 
                 }
 
-                if(paymentStatus!=PaymentStatusType.RECEIVED) {
+                if(isRowVisible && paymentStatus!=PaymentStatusType.RECEIVED && paymentStatus!=PaymentStatusType.DECLINED) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -792,37 +816,56 @@ class ChatMerchantActivity : BaseActivity() {
                     ) {
                         OutlinedButton(
                             onClick = {
-//                                lifecycleScope.launch {
-//                                    val id = fetchIdToken()
-//                                    val resposne = ApiClient.apiService.declineMerchantRequest(id,
-//                                        DeclineMerchantRequest(
-//                                        requestId = txnId,
-//                                            recieverId =receiverId
-//                                    )
-//                                    )
-//                                   if(resposne.isSuccessful) {
-//
-//                                   }else{
-//                                       PaymentStatusType.PENDING
-//                                    }
-//
-//                                }
+
+                                if(!isLoading){
+                                    isLoading=true
+                                    lifecycleScope.launch {
+                                        val response = ApiClient.apiService.declineMerchantRequest(fetchIdToken(),
+                                            DeclineMerchantRequest(
+                                                requestId = txnId,
+                                                recieverId =receiverId
+                                            )
+                                        )
+                                        isLoading = false
+                                        if(response.isSuccessful) {
+                                            isRowVisible = false
+                                            isdeclined = true
+
+
+                                        }else{
+                                            PaymentStatusType.PENDING
+                                        }
+                                    }
+
+                                }
                             },//onDeclineClick,
                             border = BorderStroke(
                                 1.dp, primaryColor
                             ), // Use your highlightedLight color
                             shape = RoundedCornerShape(8.dp)
                         ) {
-                            Text(
-                                text = stringResource(R.string.decline),
-                                color = primaryColor, // Or a suitable color
-                                fontFamily = InterFontFamily(),
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 14.sp
-                            )
+                            if(isLoading){
+                           CircularProgressIndicator(
+                               modifier = Modifier
+                                   .size(24.dp)
+                                   .padding(0.dp),
+                               color = primaryColor,
+                               strokeWidth = 2.dp
+                           )
+                            }
+                            else{
+                                Text(
+                                    text = declineButtonText,
+                                    color = primaryColor, // Or a suitable color
+                                    fontFamily = InterFontFamily(),
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 14.sp
+                                )
+                            }
+
                         }
 
-                        Spacer(modifier = Modifier.width(8.dp)) // Add spacing between buttons
+                        Spacer(modifier = Modifier.width(8.dp))
 
                         Button(
                             onClick = {
@@ -882,26 +925,6 @@ class ChatMerchantActivity : BaseActivity() {
         }
     }
 
-    @Composable
-    fun PaymentPendingChip(modifier: Modifier = Modifier) {
-        Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(R.drawable.ic_payment_failure),
-                contentDescription = null,
-            )
-
-            Spacer(modifier = Modifier.width(6.dp))
-
-            Text(
-                text = stringResource(R.string.pending),
-                fontFamily = InterFontFamily(),
-                fontWeight = FontWeight.Normal,
-                fontSize = 14.sp,
-                color = neutralGreyPrimaryText
-            )
-
-        }
-    }
 
     @Composable
     fun PaymentDeclinedChip(modifier: Modifier = Modifier) {

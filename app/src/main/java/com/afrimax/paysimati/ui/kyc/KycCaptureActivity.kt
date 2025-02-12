@@ -76,6 +76,17 @@ class KycCaptureActivity : BaseActivity() {
                 b.kycCaptureActivityHeaderTV.text = getString(R.string.national_id)
                 b.kycCaptureActivitySubTextTV.text = getString(R.string.national_id_subtext)
             }
+            Constants.MERCHANT_REPORT->{
+                b.kycback.visibility=View.GONE
+                b.viewMerchantActivityHeaderTV.visibility = View.VISIBLE
+                b.viewMerchantActivityBackButton.visibility =View.VISIBLE
+                b.kycCaptureActivityBackButtonIV.visibility = View.GONE
+                b.kycCaptureActivitySupportedTypesTV.visibility=View.GONE
+                b.kycCaptureActivityInfoButtonIV.visibility=View.GONE
+                b.kycCaptureUploadActivityMaxFileSizeTV.visibility=View.GONE
+                b.kycCaptureActivityHeaderTV.text = getString(R.string.capture)
+                b.kycCaptureActivitySubTextTV.text = getString(R.string.smb_text10)
+            }
 
             Constants.KYC_IDENTITY_ID_PASSPORT -> {
                 b.kycCaptureActivityHeaderTV.text = getString(R.string.passport)

@@ -3,18 +3,10 @@ package com.afrimax.paysimati.data.model
 import com.google.gson.annotations.SerializedName
 
 data class MerchantProfileResponse(
-    @SerializedName("data")
-    val data: MerchantProfile? = null,
-    @SerializedName("message")
-    val message: String = "",
-    @SerializedName("success_status")
-    val success_status: Boolean = false
+    @SerializedName("data") val data: MerchantProfile? = null,
+    @SerializedName("message") val message: String = "",
+    @SerializedName("success_status") val success_status: Boolean = false
 )
-
-
-
-
-
 
 
 data class MerchantProfile(

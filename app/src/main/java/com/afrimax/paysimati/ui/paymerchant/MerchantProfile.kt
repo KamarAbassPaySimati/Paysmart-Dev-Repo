@@ -34,12 +34,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MerchantProfile : BaseActivity() {
-    private var payMaartId:String=""
-    private var MerchantName:String=""
-    private lateinit var binding:ActivityMerchantProfileBinding
+    private var payMaartId: String = ""
+    private var MerchantName: String = "-"
+    private lateinit var binding: ActivityMerchantProfileBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        payMaartId = intent.getStringExtra(Constants.PAYMAART_ID)?:""
-        MerchantName = intent.getStringExtra(Constants.MERCHANT_NAME)?:""
+        payMaartId = intent.getStringExtra(Constants.PAYMAART_ID) ?: ""
+        MerchantName = intent.getStringExtra(Constants.MERCHANT_NAME) ?: ""
         super.onCreate(savedInstanceState)
         binding = ActivityMerchantProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -49,7 +49,9 @@ class MerchantProfile : BaseActivity() {
             insets
         }
 
+        @Suppress("DEPRECATION")
         window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar)
+        @Suppress("DEPRECATION")
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
         setupView()
@@ -58,23 +60,22 @@ class MerchantProfile : BaseActivity() {
     private fun setupView() {
         lifecycleScope.launch {
             showLoader()
-            val merchantTransactionCall = ApiClient.apiService.getMerchantProfile(fetchIdToken(),payMaartId)
-
+            val merchantTransactionCall =
+                ApiClient.apiService.getMerchantProfile(fetchIdToken(), payMaartId)
             merchantTransactionCall.enqueue(object : Callback<MerchantProfileResponse> {
-                @SuppressLint("SuspiciousIndentation")
                 override fun onResponse(
-                    call: Call<MerchantProfileResponse>,
-                    response: Response<MerchantProfileResponse>
+                    call: Call<MerchantProfileResponse>, response: Response<MerchantProfileResponse>
                 ) {
                     if (response.isSuccessful) {
                         val data = response.body() ?: MerchantProfileResponse()
-                                updateui(data)
+                        updateui(data)
                     } else {
                         showToast(getString(R.string.default_error_toast))
                     }
 
                     hideLoader()
                 }
+
                 override fun onFailure(call: Call<MerchantProfileResponse>, throwable: Throwable) {
                     hideLoader()
                     showToast(getString(R.string.default_error_toast))
@@ -85,8 +86,9 @@ class MerchantProfile : BaseActivity() {
 
 
 
-    private fun updateui(data: MerchantProfileResponse) {
 
+
+    private fun updateui(data: MerchantProfileResponse) {
         val merchantData = data.data // Extract once to avoid redundant calls
 
         if (merchantData == null) {
@@ -141,7 +143,8 @@ class MerchantProfile : BaseActivity() {
 
         binding.viewMerchantLocationTv.text = locationList.joinToString(", ")
         binding.viewMerchantActivityPaymaartIdTV.text = payMaartIdFormatted
-        binding.viewMerchantPhoneNumberTV.text = "${merchantData.countryCode} $phoneNumber"
+        val phonenum ="${merchantData.countryCode} $phoneNumber"
+        binding.viewMerchantPhoneNumberTV.text = phonenum
 
         binding.viewMerchantTradingnameTV.text = merchantData.tradingName.takeUnless { it.isNullOrEmpty() } ?: "-"
 
@@ -160,8 +163,6 @@ class MerchantProfile : BaseActivity() {
 
         showTillNumbersBottomSheet(tillNumbers)
     }
-
-
 
 
 
@@ -206,15 +207,15 @@ class MerchantProfile : BaseActivity() {
     }
 
 
-
     private fun showLoader() {
         binding.listMerchantTransactionLoaderLottie.visibility = View.VISIBLE
-        binding.loaderOverlay.visibility =View.VISIBLE
+        binding.loaderOverlay.visibility = View.VISIBLE
 
     }
+
     private fun hideLoader() {
         binding.listMerchantTransactionLoaderLottie.visibility = View.GONE
-        binding.loaderOverlay.visibility =View.GONE
+        binding.loaderOverlay.visibility = View.GONE
 
     }
 

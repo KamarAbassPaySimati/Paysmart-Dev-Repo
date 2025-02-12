@@ -5,6 +5,8 @@ import com.afrimax.paysimati.data.model.CashOutApiResponse
 import com.afrimax.paysimati.data.model.CashOutRequestBody
 import com.afrimax.paysimati.data.model.CreateUserRequestBody
 import com.afrimax.paysimati.data.model.CreateUserResponse
+import com.afrimax.paysimati.data.model.DeclineMerchantRequest
+import com.afrimax.paysimati.data.model.DeclineMerchantResponse
 import com.afrimax.paysimati.data.model.DefaultResponse
 import com.afrimax.paysimati.data.model.DeleteAccountReqRequest
 import com.afrimax.paysimati.data.model.FcmTokenRequest
@@ -398,6 +400,11 @@ interface ApiService {
     suspend fun payMerchantRequest(
         @Header("Authorization") header: String, @Body body: MerchantRequestPay
     ):Response<MerchantRequestResponse>
+
+    @POST("chats/decline")
+    suspend fun declineMerchantRequest(
+        @Header("Authorization") header: String, @Body body: DeclineMerchantRequest
+    ):Response<DeclineMerchantResponse>
 
 
 
