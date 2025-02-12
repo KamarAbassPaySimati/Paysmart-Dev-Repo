@@ -212,6 +212,7 @@ dependencies {
 
     //lottie
     implementation libs.lottie
+    implementation libs.lottie.compose
 
     //Retrofit & GSON
     implementation libs.retrofit
