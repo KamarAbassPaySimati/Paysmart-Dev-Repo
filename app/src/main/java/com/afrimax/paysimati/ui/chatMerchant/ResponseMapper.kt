@@ -4,6 +4,7 @@ import com.afrimax.paysimati.common.core.parseAmount
 import com.afrimax.paysimati.common.core.parseDate
 import com.afrimax.paysimati.common.presentation.utils.CHAT_TYPE_PAYMENT_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.CHAT_TYPE_TEXT_MESSAGE
+import com.afrimax.paysimati.common.presentation.utils.PAYMENT_CANCELLED_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.PAYMENT_COMPLETED_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.PAYMENT_REQUEST_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.PAYMENT_SEND_MESSAGE
@@ -56,6 +57,9 @@ private fun mapChatMessage(
             PAYMENT_SEND_MESSAGE ->mapPaymentCompletedMessage(
                 it, senderId = senderId, date = date
             )
+            PAYMENT_CANCELLED_MESSAGE ->mapDelinedRequestMessage(
+                it, senderId = senderId, date = date
+            )
 
 
 
@@ -80,6 +84,25 @@ private fun mapTextMessage(
 }
 
 
+private fun mapDelinedRequestMessage(
+    chat: PreviousChatResponse.ChatMessage, senderId: String, date: Date?
+): ChatMessage.PaymentMessage? {
+    return if ( chat.receiverId != null && chat.senderId != null && date != null && chat.transactionId != null) {
+        ChatMessage.PaymentMessage(
+            chatId = UUID.randomUUID().toString(),
+            receiverId = chat.senderId,
+            amount = chat.transactionAmount.parseAmount(),
+            transactionId = chat.transactionId,
+            paymentStatusType = PaymentStatusType.DECLINED,
+            chatCreatedTime = date,
+            note = chat.content,
+            isAuthor = chat.senderId == senderId,
+            tillnumber = chat.tillnumber
+        )
+    } else null
+}
+
+
 private fun mapPaymentRequestMessage(
     chat: PreviousChatResponse.ChatMessage, senderId: String, date: Date?
 ): ChatMessage.PaymentMessage? {
@@ -99,6 +122,7 @@ private fun mapPaymentRequestMessage(
     } else null
 }
 
+
 private fun mapPaymentCompletedMessage(
     chat: PreviousChatResponse.ChatMessage, senderId: String, date: Date?
 ): ChatMessage.PaymentMessage? {
@@ -116,27 +140,6 @@ private fun mapPaymentCompletedMessage(
         )
     } else null
 }
-
-
-private fun mapmerchantPaymentCompletedMessage(
-    chat: PreviousChatResponse.ChatMessage, senderId: String, date: Date?
-): ChatMessage.PaymentMessage? {
-    return if (chat.tillnumber!=null &&chat.receiverId != null && chat.senderId != null && date != null && chat.transactionId != null) {
-        ChatMessage.PaymentMessage(
-            chatId = UUID.randomUUID().toString(),
-            receiverId = chat.receiverId,
-            amount = chat.transactionAmount.parseAmount(),
-            transactionId = chat.transactionId,
-            paymentStatusType = PaymentStatusType.RECEIVED,
-            chatCreatedTime = date,
-            note = chat.content,
-            isAuthor = chat.senderId == senderId,
-            tillnumber = chat.tillnumber,
-        )
-    } else null
-}
-
-
 
 fun mapToChatMessage(response: ChatMessageResponse): ChatMessage? {
 
@@ -156,33 +159,6 @@ fun mapToChatMessage(response: ChatMessageResponse): ChatMessage? {
                 null
             }
         }
-
-        CHAT_TYPE_PAYMENT_MESSAGE ->{
-            if (
-                response.requestId != null &&
-                response.receiverId != null &&
-                response.senderId != null &&
-                response.transactionAmount != null &&
-                response.tillnumber != null &&
-                chatCreatedTime != null
-            ){
-                ChatMessage.PaymentMessage(
-                    chatId = UUID.randomUUID().toString(),
-                    receiverId = response.receiverId,
-                    amount = response.transactionAmount?.toDouble()!!,
-                    transactionId = response.requestId,
-                    paymentStatusType = PaymentStatusType.RECEIVED, // Assuming it's received; adjust if necessary
-                    chatCreatedTime = chatCreatedTime,
-                    note = response.note?.ifBlank { null }, // If content is blank, set it to null
-                    isAuthor = false,
-                    tillnumber = response.tillnumber
-              )
-            }
-            else{
-                null
-            }
-        }
-
 
 
 

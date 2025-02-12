@@ -5,6 +5,8 @@ import com.afrimax.paysimati.data.model.CashOutApiResponse
 import com.afrimax.paysimati.data.model.CashOutRequestBody
 import com.afrimax.paysimati.data.model.CreateUserRequestBody
 import com.afrimax.paysimati.data.model.CreateUserResponse
+import com.afrimax.paysimati.data.model.DeclineMerchantRequest
+import com.afrimax.paysimati.data.model.DeclineMerchantResponse
 import com.afrimax.paysimati.data.model.DefaultResponse
 import com.afrimax.paysimati.data.model.DeleteAccountReqRequest
 import com.afrimax.paysimati.data.model.FcmTokenRequest
@@ -72,6 +74,8 @@ import com.afrimax.paysimati.data.model.VerifyOtpRequestBody
 import com.afrimax.paysimati.data.model.VerifyOtpResponse
 import com.afrimax.paysimati.data.model.ViewWalletResponse
 import com.afrimax.paysimati.data.model.MerchantProfileResponse
+import com.afrimax.paysimati.data.model.ReportMerchantRequest
+import com.afrimax.paysimati.data.model.ReportMerchantResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -397,6 +401,17 @@ interface ApiService {
         @Header("Authorization") header: String, @Body body: MerchantRequestPay
     ):Response<MerchantRequestResponse>
 
+    @POST("chats/decline")
+    suspend fun declineMerchantRequest(
+        @Header("Authorization") header: String, @Body body: DeclineMerchantRequest
+    ):Response<DeclineMerchantResponse>
+
+
+
+    @POST("$CUSTOMER_USER//report-merchant")
+    suspend fun reportMerchant(
+        @Header("Authorization") header: String, @Body body: ReportMerchantRequest
+    ): Response<ReportMerchantResponse>
 
     //For BDD purpose
     @POST("$BDD/customer-fetch-mfa")
