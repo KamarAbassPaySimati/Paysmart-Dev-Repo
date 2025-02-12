@@ -90,7 +90,7 @@ private fun mapDelinedRequestMessage(
     return if ( chat.receiverId != null && chat.senderId != null && date != null && chat.transactionId != null) {
         ChatMessage.PaymentMessage(
             chatId = UUID.randomUUID().toString(),
-            receiverId = chat.receiverId,
+            receiverId = chat.senderId,
             amount = chat.transactionAmount.parseAmount(),
             transactionId = chat.transactionId,
             paymentStatusType = PaymentStatusType.DECLINED,
@@ -98,10 +98,10 @@ private fun mapDelinedRequestMessage(
             note = chat.content,
             isAuthor = chat.senderId == senderId,
             tillnumber = chat.tillnumber
-
         )
     } else null
 }
+
 
 private fun mapPaymentRequestMessage(
     chat: PreviousChatResponse.ChatMessage, senderId: String, date: Date?
@@ -141,27 +141,6 @@ private fun mapPaymentCompletedMessage(
     } else null
 }
 
-
-private fun mapmerchantPaymentCompletedMessage(
-    chat: PreviousChatResponse.ChatMessage, senderId: String, date: Date?
-): ChatMessage.PaymentMessage? {
-    return if (chat.tillnumber!=null &&chat.receiverId != null && chat.senderId != null && date != null && chat.transactionId != null) {
-        ChatMessage.PaymentMessage(
-            chatId = UUID.randomUUID().toString(),
-            receiverId = chat.receiverId,
-            amount = chat.transactionAmount.parseAmount(),
-            transactionId = chat.transactionId,
-            paymentStatusType = PaymentStatusType.RECEIVED,
-            chatCreatedTime = date,
-            note = chat.content,
-            isAuthor = chat.senderId == senderId,
-            tillnumber = chat.tillnumber,
-        )
-    } else null
-}
-
-
-
 fun mapToChatMessage(response: ChatMessageResponse): ChatMessage? {
 
     val chatCreatedTime = response.createdAt.parseDate()
@@ -180,33 +159,6 @@ fun mapToChatMessage(response: ChatMessageResponse): ChatMessage? {
                 null
             }
         }
-
-        CHAT_TYPE_PAYMENT_MESSAGE ->{
-            if (
-                response.requestId != null &&
-                response.receiverId != null &&
-                response.senderId != null &&
-                response.transactionAmount != null &&
-                response.tillnumber != null &&
-                chatCreatedTime != null
-            ){
-                ChatMessage.PaymentMessage(
-                    chatId = UUID.randomUUID().toString(),
-                    receiverId = response.receiverId,
-                    amount = response.transactionAmount?.toDouble()!!,
-                    transactionId = response.requestId,
-                    paymentStatusType = PaymentStatusType.RECEIVED, // Assuming it's received; adjust if necessary
-                    chatCreatedTime = chatCreatedTime,
-                    note = response.note?.ifBlank { null }, // If content is blank, set it to null
-                    isAuthor = false,
-                    tillnumber = response.tillnumber
-              )
-            }
-            else{
-                null
-            }
-        }
-
 
 
 
