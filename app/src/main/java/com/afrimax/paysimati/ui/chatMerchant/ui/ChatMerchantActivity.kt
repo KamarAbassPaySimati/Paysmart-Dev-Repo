@@ -865,7 +865,7 @@ class ChatMerchantActivity : BaseActivity() {
 
                         }
 
-                        Spacer(modifier = Modifier.width(8.dp)) // Add spacing between buttons
+                        Spacer(modifier = Modifier.width(8.dp))
 
                         Button(
                             onClick = {
