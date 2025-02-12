@@ -274,6 +274,8 @@
     <string name="pending">Pending</string>
     <string name="select_any_one_and_upload">Select any one and upload</string>
     <string name="national_id">National ID</string>
+    <string name="caputure_image">Capture Image</string>
+
     <string name="passport">Passport</string>
     <string name="please_upload_permit_to_complete">Please Upload Permit to complete</string>
     <string name="type_of_visa_permit">Type of Visa/Permit</string>
@@ -304,6 +306,7 @@
     <string name="your_digital_selfie_must_be">Your digital selfie must be</string>
     <string name="in_your_selfie_you_must">In your selfie, you must</string>
     <string name="capture">Capture</string>
+    <string name="smb_text10">Make sure you capture a clear image for accurate review</string>
     <string name="smb_text1">Clear and in focus</string>
     <string name="smb_text2">In colour</string>
     <string name="smb_text3">Unaltered by computer software</string>

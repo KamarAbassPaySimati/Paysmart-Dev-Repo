@@ -260,6 +260,128 @@
                         </LinearLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <LinearLayout
+                            android:id="@+id/reportmerchantActivityImagePreview1FrontContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.imageview.ShapeableImageView
+                                    android:id="@+id/reportmerchantUploadActivityFrontImage1IV"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:background="@color/neutralGreyRipple"
+                                    android:contentDescription="@string/image_description"
+                                    android:scaleType="centerCrop"
+                                    app:layout_constraintDimensionRatio="18:11"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:shapeAppearanceOverlay="@style/kycImagePreview"
+                                    app:strokeColor="@color/neutralGrey"
+                                    app:strokeWidth="1.5dp"
+                                    tools:src="@drawable/ico_malawi_flag" />
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <LinearLayout
+                                android:id="@+id/reportmerchantUploadActivityPreviewAction1FrontContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:orientation="horizontal">
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/reportmerchantUploadActivity1FrontRemoveButton"
+                                    style="?android:attr/borderlessButtonStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_outlined_button_primary_small"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:minWidth="0dp"
+                                    android:minHeight="0dp"
+                                    android:paddingStart="12dp"
+                                    android:paddingTop="6dp"
+                                    android:paddingEnd="12dp"
+                                    android:paddingBottom="6dp"
+                                    android:text="@string/remove"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/primaryColor"
+                                    android:textSize="14sp" />
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/reportmerchantUploadActivity1FrontReUploadButton"
+                                    style="?android:attr/borderlessButtonStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:background="@drawable/bg_outlined_button_primary_small"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:minWidth="0dp"
+                                    android:minHeight="0dp"
+                                    android:paddingStart="12dp"
+                                    android:paddingTop="6dp"
+                                    android:paddingEnd="12dp"
+                                    android:paddingBottom="6dp"
+                                    android:text="@string/re_upload"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/primaryColor"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/reportmerchantUploadActivityFilePreview1FrontContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_file"
+                            android:padding="12dp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/reportmerchantUploadActivity1FrontFileNameTV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="16dp"
+                                android:layout_toStartOf="@+id/reportmerchantUploadActivityFileFrontDeleteButton"
+                                android:ellipsize="middle"
+                                android:fontFamily="@font/inter_medium"
+                                android:maxLines="1"
+                                android:text="@string/filename_pdf"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <ImageView
+                                android:id="@+id/reportmerchantUploadActivityFileFrontDeleteButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="16dp"
+                                android:layout_toStartOf="@+id/reportmerchantActivityFileFrontReUploadButton"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ico_delete" />
+
+                            <ImageView
+                                android:id="@+id/reportmerchantActivityFileFrontReUploadButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ico_re_upload" />
+
+                        </RelativeLayout>
                     </FrameLayout>
 
 
@@ -270,7 +392,7 @@
                         android:layout_marginTop="8dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
-                            android:id="@+id/reportMerchantimgcontainer"
+                            android:id="@+id/reportMerchantimg2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:visibility="visible">
@@ -286,7 +408,7 @@
                                 app:layout_constraintTop_toTopOf="parent">
 
                                 <androidx.appcompat.widget.AppCompatButton
-                                    android:id="@+id/reportMerchantimg2capture"
+                                    android:id="@+id/reportMerchantcaputre2"
                                     style="?android:attr/borderlessButtonStyle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -301,7 +423,7 @@
                                     app:drawableStartCompat="@drawable/ico_camera" />
 
                                 <androidx.appcompat.widget.AppCompatButton
-                                    android:id="@+id/reportMerchantimg2upload"
+                                    android:id="@+id/reportMerchantimgupload2"
                                     style="?android:attr/borderlessButtonStyle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -321,6 +443,127 @@
                             </LinearLayout>
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
+                        <LinearLayout
+                            android:id="@+id/reportmerchantActivityImagePreview2FrontContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.imageview.ShapeableImageView
+                                    android:id="@+id/reportmerchantUploadActivityFrontImage2IV"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:background="@color/neutralGreyRipple"
+                                    android:contentDescription="@string/image_description"
+                                    android:scaleType="centerCrop"
+                                    app:layout_constraintDimensionRatio="18:11"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:shapeAppearanceOverlay="@style/kycImagePreview"
+                                    app:strokeColor="@color/neutralGrey"
+                                    app:strokeWidth="1.5dp"
+                                    tools:src="@drawable/ico_malawi_flag" />
+
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <LinearLayout
+                                android:id="@+id/reportmerchantUploadActivityPreviewAction2FrontContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="end"
+                                android:orientation="horizontal">
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/reportmerchantUploadActivity2FrontRemoveButton"
+                                    style="?android:attr/borderlessButtonStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/bg_outlined_button_primary_small"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:minWidth="0dp"
+                                    android:minHeight="0dp"
+                                    android:paddingStart="12dp"
+                                    android:paddingTop="6dp"
+                                    android:paddingEnd="12dp"
+                                    android:paddingBottom="6dp"
+                                    android:text="@string/remove"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/primaryColor"
+                                    android:textSize="14sp" />
+
+                                <androidx.appcompat.widget.AppCompatButton
+                                    android:id="@+id/reportmerchantUploadActivity2FrontReUploadButton"
+                                    style="?android:attr/borderlessButtonStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:background="@drawable/bg_outlined_button_primary_small"
+                                    android:fontFamily="@font/inter_regular"
+                                    android:minWidth="0dp"
+                                    android:minHeight="0dp"
+                                    android:paddingStart="12dp"
+                                    android:paddingTop="6dp"
+                                    android:paddingEnd="12dp"
+                                    android:paddingBottom="6dp"
+                                    android:text="@string/re_upload"
+                                    android:textAllCaps="false"
+                                    android:textColor="@color/primaryColor"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/reportmerchantUploadActivityFilePreview2FrontContainer"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_file"
+                            android:padding="12dp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/reportmerchantUploadActivity2FrontFileNameTV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="16dp"
+                                android:layout_toStartOf="@+id/reportmerchantUploadActivityFileFrontDeleteButton2"
+                                android:ellipsize="middle"
+                                android:fontFamily="@font/inter_medium"
+                                android:maxLines="1"
+                                android:text="@string/filename_pdf"
+                                android:textColor="@color/neutralGreyPrimaryText"
+                                android:textSize="14sp" />
+
+                            <ImageView
+                                android:id="@+id/reportmerchantUploadActivityFileFrontDeleteButton2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="16dp"
+                                android:layout_toStartOf="@+id/reportmerchantActivityFileFrontReUploadButton2"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ico_delete" />
+
+                            <ImageView
+                                android:id="@+id/reportmerchantActivityFileFrontReUploadButton2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:contentDescription="@string/image_description"
+                                android:src="@drawable/ico_re_upload" />
+
+                        </RelativeLayout>
                     </FrameLayout>
 
                     <TextView

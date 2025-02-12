@@ -34,12 +34,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MerchantProfile : BaseActivity() {
-    private var payMaartId:String=""
-    private var MerchantName:String=""
-    private lateinit var binding:ActivityMerchantProfileBinding
+    private var payMaartId: String = ""
+    private var MerchantName: String = "-"
+    private lateinit var binding: ActivityMerchantProfileBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        payMaartId = intent.getStringExtra(Constants.PAYMAART_ID)?:""
-        MerchantName = intent.getStringExtra(Constants.MERCHANT_NAME)?:""
+        payMaartId = intent.getStringExtra(Constants.PAYMAART_ID) ?: ""
+        MerchantName = intent.getStringExtra(Constants.MERCHANT_NAME) ?: ""
         super.onCreate(savedInstanceState)
         binding = ActivityMerchantProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -49,7 +49,9 @@ class MerchantProfile : BaseActivity() {
             insets
         }
 
+        @Suppress("DEPRECATION")
         window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar)
+        @Suppress("DEPRECATION")
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
         setupView()
@@ -58,23 +60,22 @@ class MerchantProfile : BaseActivity() {
     private fun setupView() {
         lifecycleScope.launch {
             showLoader()
-            val merchantTransactionCall = ApiClient.apiService.getMerchantProfile(fetchIdToken(),payMaartId)
-
+            val merchantTransactionCall =
+                ApiClient.apiService.getMerchantProfile(fetchIdToken(), payMaartId)
             merchantTransactionCall.enqueue(object : Callback<MerchantProfileResponse> {
-                @SuppressLint("SuspiciousIndentation")
                 override fun onResponse(
-                    call: Call<MerchantProfileResponse>,
-                    response: Response<MerchantProfileResponse>
+                    call: Call<MerchantProfileResponse>, response: Response<MerchantProfileResponse>
                 ) {
                     if (response.isSuccessful) {
                         val data = response.body() ?: MerchantProfileResponse()
-                                updateui(data)
+                        updateui(data)
                     } else {
                         showToast(getString(R.string.default_error_toast))
                     }
 
                     hideLoader()
                 }
+
                 override fun onFailure(call: Call<MerchantProfileResponse>, throwable: Throwable) {
                     hideLoader()
                     showToast(getString(R.string.default_error_toast))
@@ -82,7 +83,6 @@ class MerchantProfile : BaseActivity() {
             })
         }
     }
-
 
 
     private fun updateui(data: MerchantProfileResponse) {
@@ -94,7 +94,7 @@ class MerchantProfile : BaseActivity() {
             return
         }
 
-        val tradingImages = merchantData.tradingImages ?: emptyList()
+        val tradingImages = merchantData.tradingImages
 
         if (tradingImages.isEmpty()) {
             binding.viewMerchantBusinessTV.text = "-"
@@ -115,35 +115,35 @@ class MerchantProfile : BaseActivity() {
             merchantData.tradingDistrict
         ).filter { it.isNotEmpty() }
 
-        val phoneNumber = PhoneNumberFormatter.format(merchantData.countryCode, merchantData.phoneNumber)
+        val phoneNumber =
+            PhoneNumberFormatter.format(merchantData.countryCode, merchantData.phoneNumber)
 
-        val tradingTypes = merchantData.tradingType ?: emptyList()
+        val tradingTypes = merchantData.tradingType
         val formattedTradingTypes = tradingTypes.joinToString(", ") { it.trim() }
 
-        if (merchantData.tradingImage.isNullOrEmpty()) {
-            binding.viewMerchantActivityShortNameTV.text = getInitials(MerchantName ?: "-")
+        if (merchantData.tradingImage.isEmpty()) {
+            binding.viewMerchantActivityShortNameTV.text = getInitials(MerchantName)
         } else {
             binding.viewMerchantActivityShortNameTV.visibility = View.GONE
             val imageUrl = BuildConfig.CDN_BASE_URL + merchantData.tradingImage[0] // First image
             binding.payMerchantIV.also {
                 it.visibility = View.VISIBLE
-                Glide.with(this)
-                    .load(imageUrl)
-                    .centerCrop()
-                    .into(it)
+                Glide.with(this).load(imageUrl).centerCrop().into(it)
             }
         }
 
-        val tillNumbers = merchantData.tillNumber ?: emptyList()
+        val tillNumbers = merchantData.tillNumber
 
         val payMaartIdFormatted = PaymaartIdFormatter.formatId(merchantData.paymaartId ?: "-")
-        binding.viewMerchantActivityNameTV.text = MerchantName ?: "-"
+        binding.viewMerchantActivityNameTV.text = MerchantName
 
         binding.viewMerchantLocationTv.text = locationList.joinToString(", ")
         binding.viewMerchantActivityPaymaartIdTV.text = payMaartIdFormatted
-        binding.viewMerchantPhoneNumberTV.text = "${merchantData.countryCode} $phoneNumber"
+        val phoneNum = "${merchantData.countryCode} $phoneNumber"
+        binding.viewMerchantPhoneNumberTV.text = phoneNum
 
-        binding.viewMerchantTradingnameTV.text = merchantData.tradingName.takeUnless { it.isNullOrEmpty() } ?: "-"
+        binding.viewMerchantTradingnameTV.text =
+            merchantData.tradingName.takeUnless { it.isNullOrEmpty() } ?: "-"
 
         binding.viewMerchantTradingTypesTV.text = formattedTradingTypes
 
@@ -153,16 +153,14 @@ class MerchantProfile : BaseActivity() {
 
         binding.viewSelfKycActivityEditButton.setOnClickListener {
             val i = Intent(this@MerchantProfile, ReportMerchantActivity::class.java)
-            i.putExtra(PAYMAART_ID,payMaartId
+            i.putExtra(
+                PAYMAART_ID, payMaartId
             )
             startActivity(i)
         }
 
         showTillNumbersBottomSheet(tillNumbers)
     }
-
-
-
 
 
     private fun setupRecyclerView(imageList: List<String>) {
@@ -206,15 +204,15 @@ class MerchantProfile : BaseActivity() {
     }
 
 
-
     private fun showLoader() {
         binding.listMerchantTransactionLoaderLottie.visibility = View.VISIBLE
-        binding.loaderOverlay.visibility =View.VISIBLE
+        binding.loaderOverlay.visibility = View.VISIBLE
 
     }
+
     private fun hideLoader() {
         binding.listMerchantTransactionLoaderLottie.visibility = View.GONE
-        binding.loaderOverlay.visibility =View.GONE
+        binding.loaderOverlay.visibility = View.GONE
 
     }
 
