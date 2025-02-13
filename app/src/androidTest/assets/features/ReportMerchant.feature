@@ -43,15 +43,15 @@ Feature: Paymaart- Customer Android- Report Merchant
 
   Scenario: Reporting a Merchant
     When I click on Report Merchant button in Merchant Profile screen
-    And I click on Report Merchant button
-    Then I should read a popup message stating "Please select at least one reason"
+    And I click on Report Merchant in Report Merchant screen
+    Then I should read a popup message stating Please select at least one reason
     When I select Merchant Disputes
     When I select Privacy Concerns
     When I select Others
     Then I should get a popup stating Please Specify
     When I click on Submit button
     Then I should not be able to Submit
-    When I enter Non Puntual
+    When I enter "Non Punctual"
     When I click on Submit button
     And I click on Report Merchant in Report Merchant screen
-    Then I should see a popup stating "Merchant reported successfully"
+    Then I should see a popup stating Merchant reported successfully
