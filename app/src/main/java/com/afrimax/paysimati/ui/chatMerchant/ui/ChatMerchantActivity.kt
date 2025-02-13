@@ -57,6 +57,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.testTag
@@ -857,6 +858,7 @@ class ChatMerchantActivity : BaseActivity() {
                             else{
                                 Text(
                                     text = declineButtonText,
+                                    modifier = modifier.testTag("declineButton"),
                                     color = primaryColor, // Or a suitable color
                                     fontFamily = InterFontFamily(),
                                     fontWeight = FontWeight.Medium,
@@ -939,6 +941,7 @@ class ChatMerchantActivity : BaseActivity() {
 
             Text(
                 text = stringResource(R.string.declined),
+                modifier = modifier.testTag("declinedStatus"),
                 fontFamily = InterFontFamily(),
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
