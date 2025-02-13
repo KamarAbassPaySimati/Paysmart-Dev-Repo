@@ -45,7 +45,7 @@ class ChatViewModel @Inject constructor  (
     val sideEffect: SharedFlow<ChatSideEffect> = _sideEffect
 
     private val initialstate = savedStateHandle[VIEW_MODEL_STATE] ?: ChatState(
-        receiverName = "", receiverId = "", receiverProfilePicture = "", receiverAddress = "", tillnumber = "")
+        receiverName = "", receiverId = "", receiverProfilePicture = "", receiverAddress = "")
     //override val container = container<ChatState, ChatSideEffect>(initialState, savedStateHandle)
 
     val state = savedStateHandle.getStateFlow("state", initialstate)
