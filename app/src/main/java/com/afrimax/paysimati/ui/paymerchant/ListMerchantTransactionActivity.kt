@@ -83,8 +83,8 @@ class ListMerchantTransactionActivity : BaseActivity() {
                     receiverName = transaction.MerchantName!!,
                     receiverId = transaction.paymaartId!!,
                     receiverProfilePicture = transaction.profile_pic,
-                    receiverAddress = transaction.streetName!!,
-                    tillnumber = transaction.tillNumber!!
+                    receiverAddress = transaction.streetName,
+                    tillnumber = transaction.tillNumber
                 )
                 )
                 startActivity(intent)
