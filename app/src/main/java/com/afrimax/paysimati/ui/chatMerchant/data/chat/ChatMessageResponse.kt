@@ -1,4 +1,4 @@
-package com.afrimax.paysimati.data.model.chat
+package com.afrimax.paysimati.ui.chatMerchant.data.chat
 
 import com.google.gson.annotations.SerializedName
 

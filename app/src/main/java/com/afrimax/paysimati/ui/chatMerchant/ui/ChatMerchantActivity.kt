@@ -88,9 +88,9 @@ import com.afrimax.paysimati.common.presentation.utils.parseTillNumber
 import com.afrimax.paysimati.common.presentation.utils.showToast
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.DeclineMerchantRequest
-import com.afrimax.paysimati.data.model.chat.ChatMessage
-import com.afrimax.paysimati.data.model.chat.ChatState
-import com.afrimax.paysimati.data.model.chat.PaymentStatusType
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatMessage
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatState
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.PaymentStatusType
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.paymerchant.MerchantProfile
 import com.afrimax.paysimati.ui.paymerchant.PayMerchantActivity
@@ -489,7 +489,7 @@ class ChatMerchantActivity : BaseActivity() {
      */
     private fun LazyListScope.realtimeChats(
         realTimeMessages: ArrayList<ChatMessage>, previousChats: LazyPagingItems<ChatMessage>
-        ,reciverLoc: String?=null,
+        , reciverLoc: String?=null,
         receiverId: String,
         reciverName: String,
         receiverProfilePicture: String?,
@@ -554,7 +554,7 @@ class ChatMerchantActivity : BaseActivity() {
                                             reciverLoc: String?=null,
                                             receiverId: String,
                                             reciverName: String,
-                                            receiverProfilePicture: String?,statusCode: Int) {
+                                            receiverProfilePicture: String?, statusCode: Int) {
         items(
             count = previousChats.itemCount
         ) { index ->
@@ -802,7 +802,7 @@ class ChatMerchantActivity : BaseActivity() {
 
                 }
 
-                if(isRowVisible && paymentStatus!=PaymentStatusType.RECEIVED && paymentStatus!=PaymentStatusType.DECLINED) {
+                if(isRowVisible && paymentStatus!= PaymentStatusType.RECEIVED && paymentStatus!= PaymentStatusType.DECLINED) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()

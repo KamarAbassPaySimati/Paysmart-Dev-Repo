@@ -1,4 +1,4 @@
-package com.afrimax.paysimati.data.model.chat
+package com.afrimax.paysimati.ui.chatMerchant.data.chat
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

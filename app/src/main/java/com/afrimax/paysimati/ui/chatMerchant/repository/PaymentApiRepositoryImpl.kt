@@ -6,7 +6,7 @@ import com.afrimax.paysimati.common.data.utils.safeApiCall
 import com.afrimax.paysimati.common.domain.utils.Errors
 import com.afrimax.paysimati.common.domain.utils.GenericResult
 import com.afrimax.paysimati.data.ApiService
-import com.afrimax.paysimati.data.model.chat.PreviousChatsResult
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.PreviousChatsResult
 import com.afrimax.paysimati.ui.chatMerchant.domain.repo.PaymentApiRepository
 import com.afrimax.paysimati.ui.chatMerchant.mapToPreviousChatResult
 

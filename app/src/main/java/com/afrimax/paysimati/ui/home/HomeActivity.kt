@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
@@ -30,12 +31,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.data.utils.safeApiCall2
+import com.afrimax.paysimati.common.domain.utils.Result
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.HomeScreenData
 import com.afrimax.paysimati.data.model.HomeScreenResponse
 import com.afrimax.paysimati.data.model.IndividualTransactionHistory
 import com.afrimax.paysimati.data.model.PayPersonTransactions
+import com.afrimax.paysimati.data.model.ScanQrRequest
 import com.afrimax.paysimati.data.model.WalletData
 import com.afrimax.paysimati.databinding.ActivityHomeBinding
 import com.afrimax.paysimati.main.ui.wallet_statement.wallet_statement.WalletStatementActivity
@@ -45,6 +49,7 @@ import com.afrimax.paysimati.ui.delete.DeleteAccountActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlansActivity
 import com.afrimax.paysimati.ui.password.UpdatePasswordPinActivity
 import com.afrimax.paysimati.ui.paymerchant.ListMerchantTransactionActivity
+import com.afrimax.paysimati.ui.paymerchant.PayMerchantActivity
 import com.afrimax.paysimati.ui.payperson.ListPersonTransactionActivity
 import com.afrimax.paysimati.ui.payperson.PersonTransactionActivity
 import com.afrimax.paysimati.ui.paytoaffrimax.ValidateAfrimaxIdActivity
@@ -65,6 +70,12 @@ import com.afrimax.paysimati.ui.webview.HelpCenterActivity
 import com.afrimax.paysimati.ui.webview.ToolBarType
 import com.afrimax.paysimati.ui.webview.WebViewActivity
 import com.afrimax.paysimati.util.Constants
+import com.afrimax.paysimati.util.Constants.MERCHANT_NAME
+import com.afrimax.paysimati.util.Constants.PAYMAART_ID
+import com.afrimax.paysimati.util.Constants.PROFILE_PICTURE
+import com.afrimax.paysimati.util.Constants.STATUS_CODE
+import com.afrimax.paysimati.util.Constants.STREET_NAME
+import com.afrimax.paysimati.util.Constants.TILL_NUMBER
 import com.afrimax.paysimati.util.getFormattedAmount
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -174,11 +185,36 @@ class HomeActivity : BaseActivity(), HomeInterface {
             ScanContract()
         ) { result ->
             if (result.contents != null) {
+                val qrCodeContent = result.contents.removePrefix("paysimati://")
+                lifecycleScope.launch {
+                    val response = safeApiCall2 { ApiClient.apiService.scanqrPayment(
+                        fetchIdToken(),
+                        ScanQrRequest(
+                            encryptedtill = qrCodeContent
+                        )
+                    )
+                }
 
-                Toast.makeText(this,"${result.contents}",Toast.LENGTH_SHORT).show()
+                    when(response){
+                        is Result.Success -> {
+
+                            val i = Intent(this@HomeActivity,PayMerchantActivity::class.java)
+                            i.putExtra(PAYMAART_ID,response.data.paymerchant.paymaartId)
+                            i.putExtra(MERCHANT_NAME,response.data.paymerchant.tradingName)
+                            i.putExtra(STREET_NAME,response.data.paymerchant.tradingAddress)
+                            i.putExtra(PROFILE_PICTURE,response.data.paymerchant.profilePic)
+                            i.putExtra(TILL_NUMBER,response.data.paymerchant.tillNumber)
+                            i.putExtra(STATUS_CODE,0)
+                            startActivity(i)
+                        }
+
+                        is Result.Error -> handleError(response.error.errorMessage)
+                    }
+                }
+
+
             } else {
-
-                Toast.makeText(this, "canclled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -273,6 +309,11 @@ class HomeActivity : BaseActivity(), HomeInterface {
             }
         })
     }
+
+    fun handleError(errorMessage: String) {
+        Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show()
+    }
+
 
     private fun onClickEyeButton() {
         val loginMode = retrieveLoginMode() ?: ""
