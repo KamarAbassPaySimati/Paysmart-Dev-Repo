@@ -7,7 +7,6 @@ import android.widget.ImageView
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -95,7 +94,6 @@ import com.afrimax.paysimati.data.model.chat.PaymentStatusType
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.paymerchant.MerchantProfile
 import com.afrimax.paysimati.ui.paymerchant.PayMerchantActivity
-import com.afrimax.paysimati.util.Constants
 import com.afrimax.paysimati.util.Constants.MERCHANT_NAME
 import com.afrimax.paysimati.util.Constants.PAYMAART_ID
 import com.afrimax.paysimati.util.Constants.PAYMENT_AMOUNT
@@ -106,7 +104,6 @@ import com.afrimax.paysimati.util.Constants.TILL_NUMBER
 import com.afrimax.paysimati.util.Constants.TRANSACTION_ID
 import com.afrimax.paysimati.util.getInitials
 import com.bumptech.glide.Glide
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -117,9 +114,7 @@ class ChatMerchantActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-//        val userInfoJson = intent.getStringExtra(Constants.USER_INFO)
-//        val userInfo: ChatState= Gson().fromJson(userInfoJson, ChatState::class.java)
-//        vm(ChatIntent.EstablishConnection)
+
 
         WindowInsetsControllerCompat(window, window.decorView).apply {
             isAppearanceLightStatusBars = false

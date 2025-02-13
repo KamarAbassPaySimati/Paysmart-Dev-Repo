@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.animation.DecelerateInterpolator
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -24,7 +23,6 @@ import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity
 import com.afrimax.paysimati.ui.home.HomeActivity
 import com.afrimax.paysimati.ui.intro.IntroActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlansActivity
-import com.afrimax.paysimati.ui.paymerchant.ListMerchantTransactionActivity
 import com.afrimax.paysimati.ui.viewtransactions.ViewSpecificTransactionActivity
 import com.afrimax.paysimati.util.AuthCalls
 import com.afrimax.paysimati.util.Constants
@@ -46,8 +44,8 @@ class SplashScreenActivity : BaseActivity() {
     private lateinit var authCalls: AuthCalls
     private var transactionId: String = ""
     private var  userinfo:String=""
-    private var receiverId :String=""
-    private var  receiverProfilePicture :String=""
+
+
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +55,7 @@ class SplashScreenActivity : BaseActivity() {
         setContentView(binding.root)
         action = intent.getStringExtra("action") ?: ""
         transactionId = intent.getStringExtra(Constants.TRANSACTION_ID) ?: ""
+        userinfo = intent.getStringExtra(Constants.USER_INFO)?:""
         authCalls = AuthCalls()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.splashScreenActivity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -148,12 +147,22 @@ class SplashScreenActivity : BaseActivity() {
     }
 
     private fun handleNavigation() {
+        val receiver = Gson().fromJson(userinfo, ChatState::class.java)
         val targetIntent = when (action) {
             NotificationNavigation.MEMBERSHIP_PLANS.screenName -> Intent(
                 this@SplashScreenActivity, MembershipPlansActivity::class.java
             )
             NotificationNavigation.PAYREQUEST.screenName -> {
-                Intent(this@SplashScreenActivity, ChatMerchantActivity::class.java)
+
+                Intent(this@SplashScreenActivity, ChatMerchantActivity::class.java).apply {
+                    putExtra(
+                        VIEW_MODEL_STATE, ChatState(
+                            receiverName = receiver.receiverName,
+                            receiverId = receiver.receiverId,
+                            receiverProfilePicture = receiver.receiverProfilePicture,
+                        )
+                    )
+                }
             }
 
             NotificationNavigation.TRANSACTIONS.screenName -> {
@@ -167,16 +176,12 @@ class SplashScreenActivity : BaseActivity() {
             NotificationNavigation.CHAT.screenName -> {
 
                 Intent(this@SplashScreenActivity,ChatMerchantActivity::class.java).apply {
-                  putExtra(Constants.MERCHANT_NAME,userinfo)
-                    val receiver = Gson().fromJson(userinfo, ChatState::class.java)
-//                    putExtra(VIEW_MODEL_STATE, ChatState(
-//                        receiverName = receiver.receiverId ,
-//                        receiverId = receiver.receiverName,
-//                        receiverProfilePicture = receiver.receiverProfilePicture,
-//
-//                    ))
-//
-                  Log.d("kk","$userinfo")
+                    putExtra(VIEW_MODEL_STATE, ChatState(
+                        receiverName = receiver.receiverName ,
+                        receiverId = receiver.receiverId,
+                        receiverProfilePicture = receiver.receiverProfilePicture,
+                    ))
+
                 }
             }
 
