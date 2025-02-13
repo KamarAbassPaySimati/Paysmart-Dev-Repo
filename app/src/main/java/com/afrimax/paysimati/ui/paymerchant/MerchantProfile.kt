@@ -154,7 +154,7 @@ class MerchantProfile : BaseActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.viewSelfKycActivityEditButton.setOnClickListener {
+        binding.reportMerchantButton.setOnClickListener {
             val i = Intent(this@MerchantProfile, ReportMerchantActivity::class.java)
             i.putExtra(PAYMAART_ID,payMaartId
             )
