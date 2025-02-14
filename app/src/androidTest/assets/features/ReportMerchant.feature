@@ -51,6 +51,9 @@ Feature: Paymaart- Customer Android- Report Merchant
     Then I should get a popup stating Please Specify
     When I click on Submit button
     Then I should not be able to Submit
+    When I enter " "
+    When I click on Submit button
+    Then I should not be able to Submit
     When I enter "Non Punctual"
     When I click on Submit button
     And I click on Report Merchant in Report Merchant screen
