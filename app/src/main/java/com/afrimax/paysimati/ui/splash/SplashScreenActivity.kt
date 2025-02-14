@@ -16,7 +16,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
-import com.afrimax.paysimati.data.model.chat.ChatState
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatState
 import com.afrimax.paysimati.databinding.ActivitySplashScreenBinding
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity
@@ -180,7 +180,8 @@ class SplashScreenActivity : BaseActivity() {
                         receiverName = receiver.receiverName ,
                         receiverId = receiver.receiverId,
                         receiverProfilePicture = receiver.receiverProfilePicture,
-                    ))
+                    )
+                    )
 
                 }
             }

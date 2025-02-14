@@ -9,11 +9,11 @@ import com.afrimax.paysimati.common.presentation.utils.PAYMENT_COMPLETED_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.PAYMENT_REQUEST_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.PAYMENT_SEND_MESSAGE
 import com.afrimax.paysimati.common.presentation.utils.TEXT_MESSAGE
-import com.afrimax.paysimati.data.model.chat.ChatMessage
-import com.afrimax.paysimati.data.model.chat.ChatMessageResponse
-import com.afrimax.paysimati.data.model.chat.PaymentStatusType
-import com.afrimax.paysimati.data.model.chat.PreviousChatResponse
-import com.afrimax.paysimati.data.model.chat.PreviousChatsResult
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatMessage
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatMessageResponse
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.PaymentStatusType
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.PreviousChatResponse
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.PreviousChatsResult
 import java.util.Date
 import java.util.UUID
 
