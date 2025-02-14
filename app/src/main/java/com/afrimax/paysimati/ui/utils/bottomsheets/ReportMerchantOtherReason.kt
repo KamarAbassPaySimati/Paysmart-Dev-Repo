@@ -10,9 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.afrimax.paysimati.R
-import com.afrimax.paysimati.databinding.DeleteAccountOthersSheetBinding
 import com.afrimax.paysimati.databinding.ReportMerchantOtherBinding
-import com.afrimax.paysimati.ui.utils.interfaces.DeleteAccountInterface
 import com.afrimax.paysimati.ui.utils.interfaces.ReportOtherReason
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -102,10 +100,12 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
         sheetcallback = context as ReportOtherReason
     }
 
-//    override fun onDismiss(dialog: DialogInterface) {
-//        super.onDismiss(dialog)
-//        sheetcallback.onReportReasonTyped("")
-//    }
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        if (binding.reportMerchantOthersSheetET.text.isEmpty()) {
+            sheetcallback.onReportReasonTyped("")
+        }
+    }
 
 
 
