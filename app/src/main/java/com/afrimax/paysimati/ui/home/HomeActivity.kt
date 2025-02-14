@@ -1,6 +1,7 @@
 package com.afrimax.paysimati.ui.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -34,10 +35,12 @@ import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.data.utils.safeApiCall2
 import com.afrimax.paysimati.common.domain.utils.Result
 import com.afrimax.paysimati.common.presentation.utils.PaymaartIdFormatter
+import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.HomeScreenData
 import com.afrimax.paysimati.data.model.HomeScreenResponse
 import com.afrimax.paysimati.data.model.IndividualTransactionHistory
+import com.afrimax.paysimati.data.model.MerchantTransaction
 import com.afrimax.paysimati.data.model.PayPersonTransactions
 import com.afrimax.paysimati.data.model.ScanQrRequest
 import com.afrimax.paysimati.data.model.WalletData
@@ -45,6 +48,8 @@ import com.afrimax.paysimati.databinding.ActivityHomeBinding
 import com.afrimax.paysimati.main.ui.wallet_statement.wallet_statement.WalletStatementActivity
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.cashout.CashOutSearchActivity
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatState
+import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity
 import com.afrimax.paysimati.ui.delete.DeleteAccountActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlansActivity
 import com.afrimax.paysimati.ui.password.UpdatePasswordPinActivity
@@ -57,6 +62,7 @@ import com.afrimax.paysimati.ui.refundrequest.RefundRequestActivity
 import com.afrimax.paysimati.ui.scanQr.CustomCaptureActivity
 import com.afrimax.paysimati.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paysimati.ui.utils.adapters.HomeScreenPayPersonAdapter
+import com.afrimax.paysimati.ui.utils.adapters.MerchantTransactionViewAdapter
 import com.afrimax.paysimati.ui.utils.bottomsheets.CompleteKycSheet
 import com.afrimax.paysimati.ui.utils.bottomsheets.LogoutConfirmationSheet
 import com.afrimax.paysimati.ui.utils.bottomsheets.ViewKycPinSheet
@@ -104,6 +110,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
     private var customerName: String = ""
     private var allRecentTransactions: ArrayList<IndividualTransactionHistory> = ArrayList()
     private var allRecentPayPersonTransactions: ArrayList<PayPersonTransactions> = ArrayList()
+    private var allRecentMerchants: ArrayList<MerchantTransaction> = ArrayList()
     private lateinit var notificationPermissionCheckLauncher: ActivityResultLauncher<String>
     private lateinit var checkUpdateLauncher: ActivityResultLauncher<IntentSenderRequest>
     private lateinit var appUpdateManager: AppUpdateManager
@@ -272,19 +279,25 @@ class HomeActivity : BaseActivity(), HomeInterface {
         b.homeActivityPersonsSeeAllTV.setOnClickListener {
             startActivity(Intent(this, ListPersonTransactionActivity::class.java))
         }
+        b.homeActivityMerchantsSeeAllTV.setOnClickListener {
+            startActivity(Intent(this,ListMerchantTransactionActivity::class.java))
+        }
 
         val userPaymaartId = retrievePaymaartId()
         val transactionHistoryListAdapter =
             HomeScreenIconAdapter(allRecentTransactions, userPaymaartId)
         val payPersonTransactionsAdapter =
             HomeScreenPayPersonAdapter(allRecentPayPersonTransactions)
+        val merchantListAdapter =
+            MerchantTransactionViewAdapter(allRecentMerchants)
+
         b.homeActivityPersonsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityTransactionsRecyclerView.layoutManager = GridLayoutManager(this, 4)
         b.homeActivityMerchantsRecyclerView.layoutManager = GridLayoutManager(this, 4)
+
         b.homeActivityPersonsRecyclerView.adapter = payPersonTransactionsAdapter
         b.homeActivityTransactionsRecyclerView.adapter = transactionHistoryListAdapter
-        b.homeActivityMerchantsRecyclerView.adapter =
-            HomeScreenIconAdapter(emptyList(), userPaymaartId)
+        b.homeActivityMerchantsRecyclerView.adapter =merchantListAdapter
 
         transactionHistoryListAdapter.setOnClickListener(object :
             HomeScreenIconAdapter.OnClickListener {
@@ -300,11 +313,22 @@ class HomeActivity : BaseActivity(), HomeInterface {
             override fun onClick(transaction: PayPersonTransactions) {
                 println("mylog, ${transaction.paymaartId}")
                 val intent = Intent(this@HomeActivity, PersonTransactionActivity::class.java)
-                intent.putExtra(Constants.PAYMAART_ID, transaction.paymaartId)
+                intent.putExtra(PAYMAART_ID, transaction.paymaartId)
                 intent.putExtra(Constants.PHONE_NUMBER, transaction.phoneNumber)
                 intent.putExtra(Constants.COUNTRY_CODE, transaction.countryCode)
                 intent.putExtra(Constants.CUSTOMER_NAME, transaction.name)
-                intent.putExtra(Constants.PROFILE_PICTURE, transaction.profilePic)
+                intent.putExtra(PROFILE_PICTURE, transaction.profilePic)
+                startActivity(intent)
+            }
+        })
+        merchantListAdapter.setOnClickListener(object : MerchantTransactionViewAdapter.OnClickListener {
+            override fun onClick(merchantTransaction: MerchantTransaction) {
+                val intent = Intent(this@HomeActivity, ChatMerchantActivity::class.java)
+                intent.putExtra(VIEW_MODEL_STATE, ChatState(
+                    receiverName = merchantTransaction.tradingName!!,
+                    receiverId = merchantTransaction.userId!!,
+                    receiverProfilePicture = merchantTransaction.profilePic
+                ))
                 startActivity(intent)
             }
         })
@@ -455,7 +479,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
                             b.homeActivityNavView.homeDrawerKycStatusTV.text.toString()
                         )
                         i.putExtra(Constants.PUBLIC_PROFILE, publicProfile)
-                        i.putExtra(Constants.PROFILE_PICTURE, profilePicUrl)
+                        i.putExtra(PROFILE_PICTURE, profilePicUrl)
                         if (b.homeActivityNavView.homeDrawerKycStatusTV.text.toString() == getString(
                                 R.string.further_information_required
                             )
@@ -607,6 +631,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
                             populateHomeScreenData(body.homeScreenData)
                             populateRecyclerViews(body.transactionData)
                             populatePayPersonRecyclerView(body.payPersonData)
+                            populatePayMerchantRecyclerViews(body.payMerchantData)
                         }
                     } else {
                         runOnUiThread {
@@ -625,6 +650,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
         }
     }
 
+    @SuppressLint("StringFormatInvalid")
     private fun populateHomeScreenData(homeScreenData: HomeScreenData) {
         b.homeActivityProfileNameTV.text = homeScreenData.fullName
         b.homeActivityProfilePaymaartIdTV.text = getString(
@@ -769,6 +795,21 @@ class HomeActivity : BaseActivity(), HomeInterface {
             allRecentTransactions.clear()
             allRecentTransactions.addAll(transactionHistory)
             b.homeActivityTransactionsRecyclerView.adapter?.notifyDataSetChanged()
+        }
+    }
+    private fun populatePayMerchantRecyclerViews(transactionHistory: List<MerchantTransaction>) {
+        if (transactionHistory.isEmpty()) {
+            b.homeActivityMerchantNoTransactionsTV.visibility = View.VISIBLE
+            b.homeActivityMerchantNoTransactionsTV.visibility = View.GONE
+            b.homeActivityMerchantsSeeAllTV.visibility = View.GONE
+        } else {
+            b.homeActivityMerchantNoTransactionsTV.visibility= View.GONE
+            b.homeActivityMerchantNoTransactionsTV.visibility = View.GONE
+            if (transactionHistory.size > 4)   b.homeActivityMerchantsSeeAllTV.visibility =
+                View.VISIBLE
+            allRecentMerchants.clear()
+            allRecentMerchants.addAll(transactionHistory)
+            b.homeActivityMerchantsRecyclerView.adapter?.notifyDataSetChanged()
         }
     }
 

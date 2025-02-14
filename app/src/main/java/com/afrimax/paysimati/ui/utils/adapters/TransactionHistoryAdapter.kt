@@ -86,6 +86,7 @@ class TransactionHistoryAdapter(
                     )
                 }
 
+
                 PAY_UNREGISTERED -> {
                     //Using this because
                     setPaymaartTransactionType(
@@ -211,6 +212,7 @@ class TransactionHistoryAdapter(
         const val AFRIMAX = "afrimax"
         const val PAY_IN = "pay_in"
         const val PAY_PERSON = "pay_person"
+        const val PAY_MERCHANT ="pay_merchant"
         const val REFUND = "refund"
         const val PAYMAART = "paymaart"
         const val INTEREST = "interest"

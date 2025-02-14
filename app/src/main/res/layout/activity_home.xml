@@ -362,7 +362,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:layout_marginBottom="80dp"
                         android:background="@drawable/bg_white_cornered"
                         android:orientation="vertical">
 
@@ -448,10 +447,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:layout_marginBottom="150dp"
+                        android:layout_marginBottom="80dp"
                         android:background="@drawable/bg_white_cornered"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:orientation="vertical">
 
                         <RelativeLayout
                             android:id="@+id/homeActivityMerchantsBox"
@@ -494,6 +492,16 @@
                             android:paddingBottom="16dp"
                             android:visibility="gone"
                             tools:visibility="visible">
+                            <TextView
+                                android:id="@+id/homeActivityMerchantNoTransactionsTV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/no_transactions_yet"
+                                android:fontFamily="@font/inter_semibold"
+                                android:textSize="14sp"
+                                android:textAlignment="center"
+                                android:layout_marginBottom="12dp"
+                                android:visibility="gone"/>
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/homeActivityMerchantsRecyclerView"
