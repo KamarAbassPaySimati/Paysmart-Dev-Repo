@@ -108,6 +108,7 @@ class TransactionHistorySheet: BottomSheetDialogFragment(){
             when (type) {
                 CASH_IN -> b.transactionHistorySheetCashInCB.isChecked = true
                 CASH_OUT -> b.transactionHistorySheetCashOutCB.isChecked = true
+                G2P_PAYMENT -> b.transactionHistorySheetG2PPayment.isChecked =true
                 AFRIMAX -> b.transactionHistorySheetPayAfrimaxCB.isChecked = true
                 PAYMAART -> b.transactionHistorySheetPayPaymaartCB.isChecked = true
                 INTEREST -> b.transactionHistorySheetInterestCB.isChecked = true
@@ -129,6 +130,7 @@ class TransactionHistorySheet: BottomSheetDialogFragment(){
         if (b.transactionHistorySheetRefundCB.isChecked) typeList.add(REFUND)
         if (b.transactionHistorySheetInterestCB.isChecked) typeList.add(INTEREST)
         if (b.transactionHistorySheetPayPersonCB.isChecked) typeList.add(PERSON)
+        if(b.transactionHistorySheetG2PPayment.isChecked)typeList.add(G2P_PAYMENT)
 
         return typeList.joinToString(",")
     }
@@ -148,5 +150,6 @@ class TransactionHistorySheet: BottomSheetDialogFragment(){
         const val PAYMAART = "paymaart"
         const val INTEREST = "interest"
         const val PERSON = "person"
+        const val G2P_PAYMENT ="g2p_pay_in"
     }
 }
