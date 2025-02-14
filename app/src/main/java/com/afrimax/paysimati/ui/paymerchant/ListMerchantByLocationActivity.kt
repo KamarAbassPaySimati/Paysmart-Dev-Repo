@@ -19,7 +19,7 @@ import com.afrimax.paysimati.common.presentation.utils.itemDecoration
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.MerchantListLocation
 import com.afrimax.paysimati.data.model.SearchMerchantByLocation
-import com.afrimax.paysimati.data.model.chat.ChatState
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatState
 import com.afrimax.paysimati.databinding.ActivityListMerchantByLocationBinding
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity

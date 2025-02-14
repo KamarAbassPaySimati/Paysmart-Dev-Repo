@@ -18,7 +18,7 @@ import com.afrimax.paysimati.common.presentation.utils.itemDecoration
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.MerchantList
 import com.afrimax.paysimati.data.model.PayMerchantResponse
-import com.afrimax.paysimati.data.model.chat.ChatState
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatState
 import com.afrimax.paysimati.databinding.ActivityListMerchantTransactionBinding
 import com.afrimax.paysimati.ui.BaseActivity
 import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity

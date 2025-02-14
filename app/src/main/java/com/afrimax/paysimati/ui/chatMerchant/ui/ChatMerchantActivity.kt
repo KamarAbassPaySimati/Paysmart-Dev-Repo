@@ -90,10 +90,10 @@ import com.afrimax.paysimati.common.presentation.utils.parseTillNumber
 import com.afrimax.paysimati.common.presentation.utils.showToast
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.DeclineMerchantRequest
-import com.afrimax.paysimati.data.model.chat.ChatMessage
-import com.afrimax.paysimati.data.model.chat.ChatState
-import com.afrimax.paysimati.data.model.chat.PaymentStatusType
 import com.afrimax.paysimati.ui.BaseActivity
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatMessage
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatState
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.PaymentStatusType
 import com.afrimax.paysimati.ui.paymerchant.MerchantProfile
 import com.afrimax.paysimati.ui.paymerchant.PayMerchantActivity
 import com.afrimax.paysimati.util.Constants.MERCHANT_NAME
@@ -115,8 +115,6 @@ class ChatMerchantActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-
 
         WindowInsetsControllerCompat(window, window.decorView).apply {
             isAppearanceLightStatusBars = false
@@ -676,7 +674,7 @@ class ChatMerchantActivity : BaseActivity() {
     ) {
         var isLoading by remember { mutableStateOf(false) }
         var declineButtonText by remember { mutableStateOf("") }
-            declineButtonText = stringResource(R.string.decline)
+        declineButtonText = stringResource(R.string.decline)
         var isRowVisible by remember { mutableStateOf(true) }
         var isdeclined by remember {mutableStateOf(false)}
 
@@ -842,13 +840,13 @@ class ChatMerchantActivity : BaseActivity() {
                             shape = RoundedCornerShape(8.dp)
                         ) {
                             if(isLoading){
-                           CircularProgressIndicator(
-                               modifier = Modifier
-                                   .size(24.dp)
-                                   .padding(0.dp),
-                               color = primaryColor,
-                               strokeWidth = 2.dp
-                           )
+                                CircularProgressIndicator(
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .padding(0.dp),
+                                    color = primaryColor,
+                                    strokeWidth = 2.dp
+                                )
                             }
                             else{
                                 Text(

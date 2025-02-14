@@ -1,4 +1,4 @@
-package com.afrimax.paysimati.data.model.chat
+package com.afrimax.paysimati.ui.chatMerchant.data.chat
 
 enum class PaymentStatusType {
    RECEIVED, DECLINED,PENDING
