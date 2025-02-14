@@ -442,6 +442,7 @@
     <string name="see_all">See All</string>
     <string name="scan_qr">Scan QR</string>
     <string name="cash_out">Cash-out</string>
+    <string name="g2p_payment">G2P Payment</string>
     <string name="member_since_formatted">Member since %1$s</string>
     <string name="prime_member">Prime Member</string>
     <string name="persons">Persons</string>
