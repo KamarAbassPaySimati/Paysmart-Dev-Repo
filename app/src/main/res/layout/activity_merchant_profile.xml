@@ -388,7 +388,7 @@
             android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/viewSelfKycActivityEditButton"
+            android:id="@+id/reportMerchantButton"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="56dp"
