@@ -146,6 +146,7 @@
     <string name="two_factor_authentication_is_enabled">Two factor authentication is enabled</string>
     <string name="_2fa_successful_subtext">Each time you log in, please enter the 6-digit code generated from Google Authenticator app</string>
     <string name="back">Back</string>
+    <string name="Report_merchant">Report Merchant</string>
     <string name="kyc_registration">KYC Registration</string>
     <string name="submission_successful">Submission Successful!</string>
     <string name="kyc_verification">KYC Verification</string>
@@ -273,6 +274,8 @@
     <string name="pending">Pending</string>
     <string name="select_any_one_and_upload">Select any one and upload</string>
     <string name="national_id">National ID</string>
+    <string name="caputure_image">Capture Image</string>
+
     <string name="passport">Passport</string>
     <string name="please_upload_permit_to_complete">Please Upload Permit to complete</string>
     <string name="type_of_visa_permit">Type of Visa/Permit</string>
@@ -303,6 +306,7 @@
     <string name="your_digital_selfie_must_be">Your digital selfie must be</string>
     <string name="in_your_selfie_you_must">In your selfie, you must</string>
     <string name="capture">Capture</string>
+    <string name="smb_text10">Make sure you capture a clear image for accurate review</string>
     <string name="smb_text1">Clear and in focus</string>
     <string name="smb_text2">In colour</string>
     <string name="smb_text3">Unaltered by computer software</string>
@@ -486,8 +490,10 @@
     <string name="delete_request_success_subtext">Please ensure you cash-out or make a pay-out before your account is deleted.</string>
     <string name="back_to_homepage">Back to Homepage</string>
     <string name="online_kyc_registration">Online KYC Registration</string>
+    <string name="merchant_reported_sucessfully">Merchant reported successfully</string>
     <string name="complete_this_now_for_full_access_to_paysimati_services">Complete this now for full access to PaySimati services</string>
     <string name="address">Address</string>
+    <string name="report_response">Our team will review the transaction shortly. Thank you for bringing this to our attention.</string>
     <string name="enter_address">Enter address</string>
     <string name="reset_password">Reset Password</string>
     <string name="reset_pin">Reset PIN</string>
@@ -822,4 +828,16 @@
     <string name="business_name">Bussiness Images</string>
     <string name="Report_Merchant">Report Merchant</string>
     <string name="MerchantProfile">Profile</string>
+    <string name="check_security_check_box">• Unauthorized Transactions\n• Phishing Attempts\n• Unsecured Checkout\n• Identity Theft</string>
+    <string name="Report_merchant_Quesion">Why are you reporting this merchant?</string>
+    <string name="report_merchant_q_1">Security and Fraud Concerns</string>
+    <string name="report_merchant_q_2">Merchant Disputes</string>
+    <string name="merchant_dispute">• Incorrect Item Received\n• Item Not Received\n• Refund Issues\n• Poor Customer Service</string>
+    <string name="report_merchant_q_3">Privacy Concerns</string>
+    <string name="privacy_concern">• Data Breaches\n• Excessive Data Collection\n• Unclear Privacy Policies\n• Sharing Data with Third Parties</string>
+    <string name="report_merchant_q_4">Regulatory Compliance</string>
+    <string name="regulatory_comp">• Illegal Products/Services\n• Undisclosed Fees\n• Age Verification Issues\n• Licensing Violations</string>
+    <string name="report_merchant_q_5">Others</string>
+    <string name="imagaeUpload">Image(Optional)</string>
+    <string name="Others">Others</string>
 </resources>

@@ -13,6 +13,7 @@
     <color name="primaryColor">#3B2A6F</color>
     <color name="status_bar">#766A9A</color>
     <color name="primaryColorRipple">#5A40AB</color>
+    <color name="edittextbg">#DDDDDD</color>
     <color name="outlinedButtonRipple">#FCFCFC</color>
     <color name="splashProgressBarForeGround">#FCFCFC</color>
     <color name="primaryLight">#40A79EAA</color>
