@@ -11,10 +11,10 @@ import com.afrimax.paysimati.common.presentation.utils.PROTOCOL_HTTPS
 import com.afrimax.paysimati.common.presentation.utils.PROTOCOL_WSS
 import com.afrimax.paysimati.common.presentation.utils.RECEIVER_ID
 import com.afrimax.paysimati.common.presentation.utils.SENDER_ID
-import com.afrimax.paysimati.data.model.chat.ChatMessage
-import com.afrimax.paysimati.data.model.chat.ChatMessageRequest
-import com.afrimax.paysimati.data.model.chat.ChatMessageResponse
-import com.afrimax.paysimati.data.model.chat.PaymentStatusType
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatMessage
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatMessageRequest
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatMessageResponse
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.PaymentStatusType
 import com.afrimax.paysimati.ui.chatMerchant.domain.repo.ChatSocketRepository
 import com.afrimax.paysimati.ui.chatMerchant.mapToChatMessage
 import com.google.gson.Gson

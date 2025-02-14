@@ -23,7 +23,7 @@ import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.common.core.log
 import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
-import com.afrimax.paysimati.data.model.chat.ChatState
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatState
 import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity
 import com.afrimax.paysimati.ui.home.HomeActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlansActivity
@@ -139,7 +139,8 @@ class MessagingService(
                             receiverName = receiver.receiverName ,
                             receiverId = receiver.receiverId,
                             receiverProfilePicture = receiver.receiverProfilePicture,
-                        ))
+                        )
+                        )
 
                     }
                 else{
@@ -147,7 +148,8 @@ class MessagingService(
                             receiverName = receiver.receiverName ,
                             receiverId = receiver.receiverId,
                             receiverProfilePicture = receiver.receiverProfilePicture,
-                        ))
+                        )
+                        )
                     }
 
             }
