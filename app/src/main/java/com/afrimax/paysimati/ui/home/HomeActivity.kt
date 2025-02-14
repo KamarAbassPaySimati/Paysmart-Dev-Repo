@@ -313,28 +313,24 @@ class HomeActivity : BaseActivity(), HomeInterface {
             override fun onClick(transaction: PayPersonTransactions) {
                 println("mylog, ${transaction.paymaartId}")
                 val intent = Intent(this@HomeActivity, PersonTransactionActivity::class.java)
-                intent.putExtra(Constants.PAYMAART_ID, transaction.paymaartId)
+                intent.putExtra(PAYMAART_ID, transaction.paymaartId)
                 intent.putExtra(Constants.PHONE_NUMBER, transaction.phoneNumber)
                 intent.putExtra(Constants.COUNTRY_CODE, transaction.countryCode)
                 intent.putExtra(Constants.CUSTOMER_NAME, transaction.name)
-                intent.putExtra(Constants.PROFILE_PICTURE, transaction.profilePic)
+                intent.putExtra(PROFILE_PICTURE, transaction.profilePic)
                 startActivity(intent)
             }
         })
-        merchantListAdapter.setOnClickListener(object :
-        MerchantTransactionViewAdapter.OnClickListener{
+        merchantListAdapter.setOnClickListener(object : MerchantTransactionViewAdapter.OnClickListener {
             override fun onClick(merchantTransaction: MerchantTransaction) {
-              val intent = Intent(this@HomeActivity,ChatMerchantActivity::class.java)
-                intent.putExtra(
-                    VIEW_MODEL_STATE, ChatState(
-                    receiverName =merchantTransaction.tradingName!!,
-                    receiverId =merchantTransaction.userId!!,
-                    receiverProfilePicture = merchantTransaction.profilePic,
-                )
-                )
+                val intent = Intent(this@HomeActivity, ChatMerchantActivity::class.java)
+                intent.putExtra(VIEW_MODEL_STATE, ChatState(
+                    receiverName = merchantTransaction.tradingName!!,
+                    receiverId = merchantTransaction.userId!!,
+                    receiverProfilePicture = merchantTransaction.profilePic
+                ))
                 startActivity(intent)
             }
-
         })
     }
 
@@ -483,7 +479,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
                             b.homeActivityNavView.homeDrawerKycStatusTV.text.toString()
                         )
                         i.putExtra(Constants.PUBLIC_PROFILE, publicProfile)
-                        i.putExtra(Constants.PROFILE_PICTURE, profilePicUrl)
+                        i.putExtra(PROFILE_PICTURE, profilePicUrl)
                         if (b.homeActivityNavView.homeDrawerKycStatusTV.text.toString() == getString(
                                 R.string.further_information_required
                             )
