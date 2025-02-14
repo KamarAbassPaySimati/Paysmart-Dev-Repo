@@ -8,8 +8,8 @@ data class ChatState(
     val receiverName: String,
     val receiverId: String,
     val receiverProfilePicture: String? = null,
-    val receiverAddress:String,
-    val tillnumber:String,
+    val receiverAddress:String?=null,
+    val tillnumber:String?=null,
     val messageText: String = "",
     val realTimeMessages: ArrayList<ChatMessage> = ArrayList()
 ) : Parcelable

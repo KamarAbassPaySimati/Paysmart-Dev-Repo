@@ -83,8 +83,8 @@ class ListMerchantTransactionActivity : BaseActivity() {
                     receiverName = transaction.MerchantName!!,
                     receiverId = transaction.paymaartId!!,
                     receiverProfilePicture = transaction.profile_pic,
-                    receiverAddress = transaction.streetName!!,
-                    tillnumber = transaction.tillNumber!!
+                    receiverAddress = transaction.streetName,
+                    tillnumber = transaction.tillNumber
                 )
                 )
                 startActivity(intent)
@@ -196,7 +196,7 @@ class ListMerchantTransactionActivity : BaseActivity() {
                             }
                             else{
                                 val data= response.body()
-                                if(data!=null){
+                                if(data!=null ){
                                     mMerchantList.clear()
                                     mMerchantList.addAll(data.payMerchantList)
                                     paginationEnd = mMerchantList.size >= data.totalCount
