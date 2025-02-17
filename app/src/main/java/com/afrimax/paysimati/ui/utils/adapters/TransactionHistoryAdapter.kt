@@ -85,6 +85,17 @@ class TransactionHistoryAdapter(
                         transaction.senderName, transaction.senderId, transaction.senderProfilePic
                     )
                 }
+                PAY_MERCHANT->{
+                    if (userPaymaartId == transaction.senderId) setPaymaartTransactionType(
+                        transaction.receiverName,
+                        transaction.receiverId,
+                        transaction.receiverProfilePic
+                    )
+                    else setPaymaartTransactionType(
+                        transaction.senderName, transaction.senderId, transaction.senderProfilePic
+                    )
+
+                }
 
 
                 PAY_UNREGISTERED -> {
