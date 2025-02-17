@@ -56,8 +56,14 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
 
     private fun validateFieldForSubmit() {
         var valid = true
-        if(binding.reportMerchantOthersSheetET.text.isEmpty()){
+        val inputtext = binding.reportMerchantOthersSheetET.text.toString().trim()
+        if(inputtext.isEmpty()){
             valid = false
+            binding.reportMerchantOthersSheetET.background=
+                ContextCompat.getDrawable(requireContext(), R.drawable.bg_edit_text_error)
+        }
+        else if(!inputtext[0].isLetter()){
+            valid=false
             binding.reportMerchantOthersSheetET.background=
                 ContextCompat.getDrawable(requireContext(), R.drawable.bg_edit_text_error)
         }
@@ -78,12 +84,20 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-            if(binding.reportMerchantOthersSheetET.text.isEmpty()){
+                val inputText = s?.toString()?.trim() ?: ""
+
+                if(inputText.isEmpty()){
                 binding.reportMerchantOthersSheetET.background =
                     ContextCompat.getDrawable(
                         requireContext(), R.drawable.bg_edit_text_error
                     )
             }
+                else if(!inputText[0].isLetter()){
+                    binding.reportMerchantOthersSheetET.background =
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.bg_edit_text_error
+                        )
+                }
                 else{
                 binding.reportMerchantOthersSheetET.background =
                     ContextCompat.getDrawable(
@@ -102,8 +116,9 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        if (binding.reportMerchantOthersSheetET.text.isEmpty()) {
-            sheetcallback.onReportReasonTyped("")
+        val inputText = binding.reportMerchantOthersSheetET.text.toString().trim() // Trim the input
+        if (inputText.isEmpty() ||inputText.firstOrNull()?.isDigit() == true) { // Check if the trimmed input is empty
+            sheetcallback.onReportReasonTyped("") // Pass an empty string
         }
     }
 

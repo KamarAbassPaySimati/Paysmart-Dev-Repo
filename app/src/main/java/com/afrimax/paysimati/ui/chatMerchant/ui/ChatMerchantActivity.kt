@@ -56,10 +56,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -149,7 +148,7 @@ class ChatMerchantActivity : BaseActivity() {
                 receiverName = state.value.receiverName,
                 receiverId = state.value.receiverId,
                 receiverProfilePicture = state.value.receiverProfilePicture,
-                modifier = Modifier.fillMaxWidth().testTag("MerchantProfile").clickable {
+                modifier = Modifier.fillMaxWidth().clickable {
                     val intent = Intent(this@ChatMerchantActivity,MerchantProfile::class.java)
                     intent.putExtra(PAYMAART_ID,state.value.receiverId)
                     intent.putExtra(MERCHANT_NAME,state.value.receiverName)
@@ -636,7 +635,7 @@ class ChatMerchantActivity : BaseActivity() {
                 modifier = Modifier
                     .widthIn(max = maxWidth)
                     .background(
-                        if (isAuthor) neutralGreyDisabled else Color.White,
+                        if (isAuthor) neutralGreyDisabled else neutralGreyDisabled,
                         shape = RoundedCornerShape(8.dp)
                     )
                     .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -851,7 +850,6 @@ class ChatMerchantActivity : BaseActivity() {
                             else{
                                 Text(
                                     text = declineButtonText,
-                                    modifier = modifier.testTag("declineButton"),
                                     color = primaryColor, // Or a suitable color
                                     fontFamily = InterFontFamily(),
                                     fontWeight = FontWeight.Medium,
@@ -934,7 +932,6 @@ class ChatMerchantActivity : BaseActivity() {
 
             Text(
                 text = stringResource(R.string.declined),
-                modifier = modifier.testTag("declinedStatus"),
                 fontFamily = InterFontFamily(),
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,

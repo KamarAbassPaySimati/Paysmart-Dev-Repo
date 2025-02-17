@@ -11,6 +11,7 @@
     android:backgroundTint="@color/transparent"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -91,7 +92,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:weightSum="2">
+        android:weightSum="2"
+      >
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/merchantFilterClearAllButton"

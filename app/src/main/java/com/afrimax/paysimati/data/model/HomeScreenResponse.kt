@@ -10,7 +10,26 @@ data class HomeScreenResponse(
     @SerializedName("transaction_data")
     val transactionData: List<IndividualTransactionHistory>,
     @SerializedName("user_transaction")
-    val payPersonData: List<PayPersonTransactions>
+    val payPersonData: List<PayPersonTransactions>,
+    @SerializedName("merchant_transaction")
+    val payMerchantData:List<MerchantTransaction>
+)
+
+data class MerchantTransaction(
+    @SerializedName("paymaart_id")
+    val paymaatId:String?=null,
+    @SerializedName("full_name")
+    val tradingName:String?=null,
+    @SerializedName("street_name")
+    val address:String?=null,
+    @SerializedName("till_number")
+    val tillNumber:String?=null,
+    @SerializedName("profile_pic")
+    val profilePic:String?=null,
+    @SerializedName("user_id")
+    val userId:String?=null,
+    @SerializedName("created_at")
+    val createdAt:String?=null
 )
 
 data class HomeScreenData(
