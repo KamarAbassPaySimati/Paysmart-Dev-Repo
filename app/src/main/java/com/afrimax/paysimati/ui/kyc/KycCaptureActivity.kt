@@ -160,6 +160,11 @@ class KycCaptureActivity : BaseActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+        b.viewMerchantActivityBackButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+
         b.kycCaptureActivityInfoButtonIV.setOnClickListener {
             val i = Intent(this, KycRegistrationGuideActivity::class.java)
             val options = ActivityOptions.makeSceneTransitionAnimation(this).toBundle()
