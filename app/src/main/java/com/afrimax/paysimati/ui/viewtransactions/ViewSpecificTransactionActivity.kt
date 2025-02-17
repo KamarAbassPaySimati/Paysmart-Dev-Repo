@@ -220,6 +220,15 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                     if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
                 b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value_two)
             }
+            PAY_MERCHANT->{
+                setupCommonView(commonView)
+                b.paymentReceiptActivityToPaymaartIdContainer.visibility = VISIBLE
+                b.paymentReceiptActivityToPhoneNumberContainer.visibility = GONE
+                b.paymentReceiptActivityNoteContainer.visibility = VISIBLE
+                b.paymentReceiptActivityNoteTV.text =
+                    if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value_two)
+            }
 
             PAY_UNREGISTERED -> {
                 setupCommonView(commonView)
@@ -444,6 +453,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         const val AFRIMAX = "afrimax"
         const val PAY_IN = "pay_in"
         const val PAY_PERSON = "pay_person"
+        const val PAY_MERCHANT="pay_merchant"
         const val PAY_UNREGISTERED = "pay_unregister"
         const val REFUND = "refund"
         const val PAY_UNREGISTERED_REFUND = "pay_unregister_refund"

@@ -798,14 +798,15 @@ class HomeActivity : BaseActivity(), HomeInterface {
         }
     }
     private fun populatePayMerchantRecyclerViews(transactionHistory: List<MerchantTransaction>) {
+        Log.d("kk","${transactionHistory.size}")
         if (transactionHistory.isEmpty()) {
             b.homeActivityMerchantNoTransactionsTV.visibility = View.VISIBLE
-            b.homeActivityMerchantNoTransactionsTV.visibility = View.GONE
+            b.homeActivityMerchantsRecyclerView.visibility = View.GONE
             b.homeActivityMerchantsSeeAllTV.visibility = View.GONE
         } else {
             b.homeActivityMerchantNoTransactionsTV.visibility= View.GONE
-            b.homeActivityMerchantNoTransactionsTV.visibility = View.GONE
-            if (transactionHistory.size > 4)   b.homeActivityMerchantsSeeAllTV.visibility =
+            b.homeActivityMerchantsRecyclerView.visibility = View.VISIBLE
+            if (transactionHistory.size > 4) b.homeActivityMerchantsSeeAllTV.visibility =
                 View.VISIBLE
             allRecentMerchants.clear()
             allRecentMerchants.addAll(transactionHistory)
