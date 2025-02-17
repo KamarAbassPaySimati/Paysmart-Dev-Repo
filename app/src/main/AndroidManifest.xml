@@ -39,10 +39,12 @@
         <activity
             android:name=".ui.paymerchant.ListMerchantByLocationActivity"
             android:exported="false"
+            android:taskAffinity=".payment"
         />
         <activity
             android:name=".ui.paymerchant.ListMerchantTransactionActivity"
             android:exported="false"
+            android:taskAffinity=".payment"
        />
         <activity
             android:name=".ui.scanQr.CustomCaptureActivity"
