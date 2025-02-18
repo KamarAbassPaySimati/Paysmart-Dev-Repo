@@ -218,6 +218,20 @@
                             android:textSize="16sp"
                             app:buttonIconTint="@color/white"
                             app:buttonTint="@color/bg_toggles_selector" />
+                        <CheckBox
+                            android:id="@+id/transactionHistorySheetG2PPayment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/bg_transaction_radio_button"
+                            android:fontFamily="@font/inter_regular"
+                            android:layoutDirection="rtl"
+                            android:padding="16dp"
+                            android:text="@string/g2p_payment"
+                            android:textColor="@color/primaryFontColor"
+                            android:textSize="16sp"
+                            app:buttonIconTint="@color/white"
+                            app:buttonTint="@color/bg_toggles_selector" />
 
                         <CheckBox
                             android:id="@+id/transactionHistorySheetInterestCB"

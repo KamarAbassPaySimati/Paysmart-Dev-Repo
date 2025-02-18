@@ -31,6 +31,7 @@ import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Compani
 import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.INTEREST
 import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAYMAART
 import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_IN
+import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_MERCHANT
 import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_PERSON
 import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_UNREGISTERED
 import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_UNREGISTERED_REFUND
@@ -384,6 +385,7 @@ class TransactionHistoryListActivity : BaseActivity(), TransactionHistoryInterfa
         PAYMAART,
         AFRIMAX,
         PAY_PERSON,
+        PAY_MERCHANT,
         PAY_UNREGISTERED
     )
 

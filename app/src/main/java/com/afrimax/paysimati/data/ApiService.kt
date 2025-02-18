@@ -39,7 +39,7 @@ import com.afrimax.paysimati.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paysimati.data.model.PayToUnRegisteredPersonRequest
 import com.afrimax.paysimati.data.model.PayToUnRegisteredPersonResponse
 import com.afrimax.paysimati.data.model.PersonTransactions
-import com.afrimax.paysimati.data.model.chat.PreviousChatResponse
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.PreviousChatResponse
 import com.afrimax.paysimati.data.model.RefundRequestResponse
 import com.afrimax.paysimati.data.model.ResendCredentialsRequest
 import com.afrimax.paysimati.data.model.SaveBasicDetailsSelfKycRequest
@@ -76,6 +76,8 @@ import com.afrimax.paysimati.data.model.ViewWalletResponse
 import com.afrimax.paysimati.data.model.MerchantProfileResponse
 import com.afrimax.paysimati.data.model.ReportMerchantRequest
 import com.afrimax.paysimati.data.model.ReportMerchantResponse
+import com.afrimax.paysimati.data.model.ScanQrRequest
+import com.afrimax.paysimati.data.model.ScanQrResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -405,6 +407,12 @@ interface ApiService {
     suspend fun declineMerchantRequest(
         @Header("Authorization") header: String, @Body body: DeclineMerchantRequest
     ):Response<DeclineMerchantResponse>
+
+
+    @POST("$CUSTOMER_USER/scan-qr")
+    suspend fun scanqrPayment(
+        @Header("Authorization") header: String,@Body body: ScanQrRequest
+    ):Response<ScanQrResponse>
 
 
 
