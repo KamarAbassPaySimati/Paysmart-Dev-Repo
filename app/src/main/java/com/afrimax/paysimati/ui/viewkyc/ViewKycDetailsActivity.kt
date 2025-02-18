@@ -53,6 +53,7 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
     private var verFrontKey = ""
     private var verBackKey = ""
     private var selfieKey = ""
+    private  var countryCode =""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -339,6 +340,7 @@ class ViewKycDetailsActivity : BaseActivity(), ViewSelfKycInterface {
                         i.putExtra(Constants.VIEW_SCOPE, Constants.VIEW_SCOPE_UPDATE)
                         i.putExtra(Constants.PROFILE_PICTURE, profilePicture)
                         i.putExtra(Constants.PUBLIC_PROFILE, publicProfile)
+
                         startActivity(i)
                         finish()
                     } else {

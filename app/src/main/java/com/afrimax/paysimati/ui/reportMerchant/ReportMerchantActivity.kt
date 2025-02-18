@@ -90,7 +90,7 @@ class ReportMerchantActivity :BaseActivity(),ReportOtherReason {
         cameraPermissionCheckLauncher=
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){multiplepermission->
                 if(!multiplepermission.containsValue(false)){
-                    val intent = Intent(this, KycCaptureActivity::class.java)
+                    val intent = Intent(this, ReportMerchantCaptureActivity::class.java)
                     intent.putExtra(Constants.KYC_CAPTURED_IMAGE_SIDE, currentCaptureSide)
                     intent.putExtra(Constants.KYC_IDENTITY_TYPE, identityType)
                     capturedImageResultLauncher.launch(intent)
