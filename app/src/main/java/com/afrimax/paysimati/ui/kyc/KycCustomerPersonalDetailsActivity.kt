@@ -64,6 +64,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.UUID
 
+//
 @AndroidEntryPoint
 class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetailsInterface {
     private lateinit var b: ActivityKycCustomerPersonalDetailsBinding
@@ -104,7 +105,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         initViews()
         setUpLayout()
         setUpListeners()
-        b.onboardRegistrationActivityPhoneTF.setCountryCodes(ArrayList(items))
+
 
     }
 
@@ -119,12 +120,14 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                 val data = result.data
                 if ((result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) && data != null) {
                     kycScope = data.getStringExtra(Constants.KYC_SCOPE) ?: ""
-                    viewScope = data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
+                    viewScope =
+                        data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
                     sendEmail = data.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
                 }
             }
 
-        fileResultLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        fileResultLauncher =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                 lifecycleScope.launch {
                     if (uri != null) {
                         isPicUploaded = true
@@ -133,9 +136,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                     }
                 }
             }
-
-
-
+        b.onboardRegistrationActivityPhoneTF.setCountryCodes(ArrayList(items))
 
     }
 
@@ -163,7 +164,8 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
             }
 
             Constants.KYC_NON_MALAWI -> {
-                b.kycYourPersonalDetailsActivityTitleTV.text = getString(R.string.non_malawi_full_kyc)
+                b.kycYourPersonalDetailsActivityTitleTV.text =
+                    getString(R.string.non_malawi_full_kyc)
             }
         }
 
@@ -186,15 +188,18 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                 .load(picUrl)
                 .placeholder(R.drawable.ic_no_image)
                 .into(b.kycYourPersonalDetailsActivityProfileIV)
-            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_delete))
+            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_delete
+                )
+            )
         }
         if (publicProfile)
             b.kycYourPersonalDetailsActivityMakeVisibleCB.isChecked = true
     }
 
     private fun setUpListeners() {
-
-
 
         b.kycYourPersonalDetailsActivityBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -241,18 +246,18 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
             }
         }
         b.kycYourPersonalDetailsActivityProfileIV.setOnClickListener {
-            if (!isPicUploaded){
+            if (!isPicUploaded) {
                 launchFilePicker()
             }
         }
         b.kycYourPersonalDetailsActivityCameraIV.setOnClickListener {
-            if (isPicUploaded){
+            if (isPicUploaded) {
                 populateProfilePicture()
-            }else{
+            } else {
                 launchFilePicker()
             }
         }
-        b.kycYourPersonalDetailsActivityMakeVisibleCB.setOnClickListener{
+        b.kycYourPersonalDetailsActivityMakeVisibleCB.setOnClickListener {
             isPublicProfileUpdate = true
         }
         setupEditTextFocusListeners()
@@ -265,10 +270,23 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         isPicUploaded = false
         profilePicUri = null
         isProfilePicUpdated = true //ProfilePic is update even when they are removed.
-        b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+        b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.ic_camera
+            )
+        )
         b.kycYourPersonalDetailsActivityProfileIV.apply {
-            setImageDrawable(ContextCompat.getDrawable(this@KycCustomerPersonalDetailsActivity, R.drawable.ic_no_image))
-            background = ContextCompat.getDrawable(this@KycCustomerPersonalDetailsActivity, R.drawable.dashed_outline_background)
+            setImageDrawable(
+                ContextCompat.getDrawable(
+                    this@KycCustomerPersonalDetailsActivity,
+                    R.drawable.ic_no_image
+                )
+            )
+            background = ContextCompat.getDrawable(
+                this@KycCustomerPersonalDetailsActivity,
+                R.drawable.dashed_outline_background
+            )
         }
     }
 
@@ -460,12 +478,8 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         return isValid
     }
 
-    private fun showPhoneWarning(warning: String) {
-        b.kycYourPersonalDetailsActivityPhoneWarningTV.visibility = View.VISIBLE
 
-    }
-
-    private fun sentOtpForEditSelfKycApi(type: String) : Job {
+    private fun sentOtpForEditSelfKycApi(type: String): Job {
         val firstName =
             b.kycYourPersonalDetailsActivityFirstNameET.text.toString().ifEmpty { "" }
         val middleName =
@@ -481,12 +495,12 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
             }
 
             Constants.OTP_SMS_TYPE -> {
-                value =b.onboardRegistrationActivityPhoneTF.text.replace(" ", "")
+                value = b.onboardRegistrationActivityPhoneTF.text.replace(" ", "")
                 countryCode = b.onboardRegistrationActivityPhoneTF.countryCode
             }
         }
 
-      return  lifecycleScope.launch {
+        return lifecycleScope.launch {
             val idToken = fetchIdToken()
             val otpCall = ApiClient.apiService.sendOtpForEditSelfKyc(
                 idToken, SendOtpForEditSelfKycRequest(
@@ -656,6 +670,13 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
                         populatePersonalFields(body.data)
+                        val con = body.data.country_code.toString()
+                        b.onboardRegistrationActivityPhoneTF.setCountryCodes(arrayListOf(con))
+                        b.onboardRegistrationActivityPhoneTF.setOnClickListener {
+                            val countryCodes =  countries.map { it.dialCode }// Fetch available country codes dynamically
+                            b.onboardRegistrationActivityPhoneTF.setCountryCodes(ArrayList(countryCodes))
+                        }
+
                     } else {
                         runOnUiThread { showToast(getString(R.string.default_error_toast)) }
                     }
@@ -741,10 +762,20 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     }
 
     private suspend fun populateSelectedFile(uri: Uri?) {
-        if (isPicUploaded){
-            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_delete))
-        }else{
-            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+        if (isPicUploaded) {
+            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_delete
+                )
+            )
+        } else {
+            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_camera
+                )
+            )
         }
         if (uri != null) {
             profilePicUri = uri
@@ -818,5 +849,8 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         isPhoneVerified = true
         phoneRecordId = recordId
         isPhoneUpdated = true
+        b.onboardRegistrationActivityPhoneTF.isPhoneVerified = true
     }
 }
+
+

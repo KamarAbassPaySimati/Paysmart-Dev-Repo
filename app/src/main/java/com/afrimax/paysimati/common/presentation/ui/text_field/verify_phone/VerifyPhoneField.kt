@@ -41,7 +41,7 @@ class VerifyPhoneField @JvmOverloads constructor(
     private var isOptionalField = false
 
     //Other variables
-    private var countryCodes: ArrayList<String> = ArrayList<String>().apply { add("+265") }
+    private var countryCodes: ArrayList<String> = ArrayList<String>().apply { add("") }
     private var isTextWatcherEnabled = false
     private var isFocusListenerEnabled = false
     private var arrayAdapter: ArrayAdapter<String> =
@@ -254,6 +254,7 @@ class VerifyPhoneField @JvmOverloads constructor(
             }, onTextChanged = { txt, start, before, count ->
                 if (isTextWatcherEnabled) {
                     isTextWatcherEnabled = false
+                    isTextWatcherEnabled = false
                     onTextChanged(txt, start, before, count)
                     isTextWatcherEnabled = true
                 }
@@ -266,6 +267,7 @@ class VerifyPhoneField @JvmOverloads constructor(
         arrayAdapter.addAll(countryCodes)
         arrayAdapter.notifyDataSetChanged()
     }
+
 
     fun setVerifyButtonClickListener(listener: () -> Job?) {
         b.verifyPhoneFieldPhoneVerifyButton.apply {
