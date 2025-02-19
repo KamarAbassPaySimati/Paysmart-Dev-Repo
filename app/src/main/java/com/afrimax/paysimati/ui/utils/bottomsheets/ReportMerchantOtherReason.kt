@@ -1,5 +1,6 @@
 package com.afrimax.paysimati.ui.utils.bottomsheets
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
@@ -77,6 +78,7 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
         }
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun configureEditTextFocusListener() {
       binding.reportMerchantOthersSheetET.filters = arrayOf(InputFilter.LengthFilter(200))
         binding.reportMerchantOthersSheetET.addTextChangedListener(object :TextWatcher{
