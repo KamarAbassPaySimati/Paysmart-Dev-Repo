@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
     private lateinit var binding: ReportMerchantOtherBinding
     private lateinit var  sheetcallback : ReportOtherReason
+    private var isSubmitted = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -68,12 +71,14 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
                 ContextCompat.getDrawable(requireContext(), R.drawable.bg_edit_text_error)
         }
         if(valid){
+            isSubmitted=true
             sheetcallback.onReportReasonTyped(binding.reportMerchantOthersSheetET.text.toString())
             dismiss()
         }
     }
 
     private fun configureEditTextFocusListener() {
+      binding.reportMerchantOthersSheetET.filters = arrayOf(InputFilter.LengthFilter(200))
         binding.reportMerchantOthersSheetET.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
@@ -116,8 +121,12 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
+        if(!isSubmitted){
+            sheetcallback.onReportReasonTyped("")
+        }
+        isSubmitted=false
         val inputText = binding.reportMerchantOthersSheetET.text.toString().trim() // Trim the input
-        if (inputText.isEmpty() ||inputText.firstOrNull()?.isDigit() == true) { // Check if the trimmed input is empty
+        if (inputText.isEmpty() ||inputText.firstOrNull()?.isDigit() == true  ) { // Check if the trimmed input is empty
             sheetcallback.onReportReasonTyped("") // Pass an empty string
         }
     }
