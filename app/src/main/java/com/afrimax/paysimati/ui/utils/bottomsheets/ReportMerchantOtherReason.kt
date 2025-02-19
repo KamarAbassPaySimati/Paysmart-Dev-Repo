@@ -41,8 +41,8 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
         }
 
         configureEditTextFocusListener()
-       configureEditTextChangeListener()
-        }
+        configureEditTextChangeListener()
+    }
 
     private fun configureEditTextChangeListener() {
         val foucs =
