@@ -3,7 +3,7 @@ package com.afrimax.paysimati.ui.chatMerchant.domain.usecase
 import com.afrimax.paysimati.common.data.repository.SharedPrefsRepository
 import com.afrimax.paysimati.common.domain.utils.Errors
 import com.afrimax.paysimati.common.domain.utils.GenericResult
-import com.afrimax.paysimati.data.model.chat.ChatMessage
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatMessage
 import com.afrimax.paysimati.ui.chatMerchant.domain.repo.ChatSocketRepository
 import javax.inject.Inject
 

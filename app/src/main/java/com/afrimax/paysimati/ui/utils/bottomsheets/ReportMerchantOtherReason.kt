@@ -10,9 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.afrimax.paysimati.R
-import com.afrimax.paysimati.databinding.DeleteAccountOthersSheetBinding
 import com.afrimax.paysimati.databinding.ReportMerchantOtherBinding
-import com.afrimax.paysimati.ui.utils.interfaces.DeleteAccountInterface
 import com.afrimax.paysimati.ui.utils.interfaces.ReportOtherReason
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -58,8 +56,14 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
 
     private fun validateFieldForSubmit() {
         var valid = true
-        if(binding.reportMerchantOthersSheetET.text.isEmpty()){
+        val inputtext = binding.reportMerchantOthersSheetET.text.toString().trim()
+        if(inputtext.isEmpty()){
             valid = false
+            binding.reportMerchantOthersSheetET.background=
+                ContextCompat.getDrawable(requireContext(), R.drawable.bg_edit_text_error)
+        }
+        else if(!inputtext[0].isLetter()){
+            valid=false
             binding.reportMerchantOthersSheetET.background=
                 ContextCompat.getDrawable(requireContext(), R.drawable.bg_edit_text_error)
         }
@@ -80,12 +84,20 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-            if(binding.reportMerchantOthersSheetET.text.isEmpty()){
+                val inputText = s?.toString()?.trim() ?: ""
+
+                if(inputText.isEmpty()){
                 binding.reportMerchantOthersSheetET.background =
                     ContextCompat.getDrawable(
                         requireContext(), R.drawable.bg_edit_text_error
                     )
             }
+                else if(!inputText[0].isLetter()){
+                    binding.reportMerchantOthersSheetET.background =
+                        ContextCompat.getDrawable(
+                            requireContext(), R.drawable.bg_edit_text_error
+                        )
+                }
                 else{
                 binding.reportMerchantOthersSheetET.background =
                     ContextCompat.getDrawable(
@@ -102,10 +114,13 @@ class ReportMerchantOtherReasons: BottomSheetDialogFragment() {
         sheetcallback = context as ReportOtherReason
     }
 
-//    override fun onDismiss(dialog: DialogInterface) {
-//        super.onDismiss(dialog)
-//        sheetcallback.onReportReasonTyped("")
-//    }
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        val inputText = binding.reportMerchantOthersSheetET.text.toString().trim() // Trim the input
+        if (inputText.isEmpty() ||inputText.firstOrNull()?.isDigit() == true) { // Check if the trimmed input is empty
+            sheetcallback.onReportReasonTyped("") // Pass an empty string
+        }
+    }
 
 
 

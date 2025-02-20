@@ -1,4 +1,4 @@
-package com.afrimax.paysimati.ui.kyc
+package com.afrimax.paysimati.ui.reportMerchant
 
 import android.app.ActivityOptions
 import android.content.Intent
@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.databinding.ActivityKycCaptureBinding
 import com.afrimax.paysimati.ui.BaseActivity
+import com.afrimax.paysimati.ui.kyc.KycRegistrationGuideActivity
 import com.afrimax.paysimati.util.Constants
 import com.bumptech.glide.Glide
 import com.google.common.util.concurrent.ListenableFuture
@@ -31,7 +32,7 @@ import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class KycCaptureActivity : BaseActivity() {
+class ReportMerchantCaptureActivity:BaseActivity() {
     private lateinit var b: ActivityKycCaptureBinding
     private lateinit var kycScope: String
 
@@ -43,7 +44,6 @@ class KycCaptureActivity : BaseActivity() {
     private var imageUri: Uri? = null
 
     private var identityType = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         b = ActivityKycCaptureBinding.inflate(layoutInflater)
@@ -54,9 +54,11 @@ class KycCaptureActivity : BaseActivity() {
             insets
         }
 
-        val wic = WindowInsetsControllerCompat(window, window.decorView)
-        wic.isAppearanceLightStatusBars = true
-        wic.isAppearanceLightNavigationBars = true
+        @Suppress("DEPRECATION")
+        window.statusBarColor = ContextCompat.getColor(this, R.color.white)
+        @Suppress("DEPRECATION")
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
+
 
         imageSide = intent.getStringExtra(Constants.KYC_CAPTURED_IMAGE_SIDE) ?: ""
         val docHeader = intent.getStringExtra(Constants.KYC_DOC_HEADER) ?: ""
@@ -72,83 +74,19 @@ class KycCaptureActivity : BaseActivity() {
 
     private fun setUpLayout(identityType: String) {
         when (identityType) {
-            Constants.KYC_IDENTITY_ID_NATIONAL_ID, Constants.KYC_IDENTITY_VER_NATIONAL_ID -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.national_id)
-                b.kycCaptureActivitySubTextTV.text = getString(R.string.national_id_subtext)
-            }
             Constants.MERCHANT_REPORT->{
-                b.kycback.visibility=View.GONE
+                b.kycback.visibility= View.GONE
                 b.viewMerchantActivityHeaderTV.visibility = View.VISIBLE
-                b.viewMerchantActivityBackButton.visibility =View.VISIBLE
+                b.viewMerchantActivityBackButton.visibility = View.VISIBLE
                 b.kycCaptureActivityBackButtonIV.visibility = View.GONE
-                b.kycCaptureActivitySupportedTypesTV.visibility=View.GONE
-                b.kycCaptureActivityInfoButtonIV.visibility=View.GONE
-                b.kycCaptureUploadActivityMaxFileSizeTV.visibility=View.GONE
+                b.kycCaptureActivitySupportedTypesTV.visibility= View.GONE
+                b.kycCaptureActivityInfoButtonIV.visibility= View.GONE
+                b.kycCaptureUploadActivityMaxFileSizeTV.visibility= View.GONE
                 b.kycCaptureActivityHeaderTV.text = getString(R.string.capture)
                 b.kycCaptureActivitySubTextTV.text = getString(R.string.smb_text10)
             }
-
-            Constants.KYC_IDENTITY_ID_PASSPORT -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.passport)
-                if (kycScope == Constants.KYC_NON_MALAWI) b.kycCaptureActivitySubTextTV.text =
-                    getString(R.string.passport_subtext_non_malawi)
-                else b.kycCaptureActivitySubTextTV.text = getString(R.string.passport_subtext)
-            }
-
-            Constants.KYC_IDENTITY_ID_REFUGEE_ID -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.refugee_id)
-                b.kycCaptureActivitySubTextTV.text = getString(R.string.refugee_id_subtext)
-            }
-
-            Constants.KYC_IDENTITY_ID_ASYLUM_ID -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.asylum_id)
-                b.kycCaptureActivitySubTextTV.text = getString(R.string.asylum_id_subtext)
-            }
-
-            Constants.KYC_IDENTITY_ID_EMPLOYEE_ID -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.employee_id)
-                b.kycCaptureActivitySubTextTV.text = getString(R.string.employee_id_subtext)
-            }
-
-            Constants.KYC_IDENTITY_ID_STUDENT_ID -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.student_id)
-                b.kycCaptureActivitySubTextTV.text = getString(R.string.student_id_subtext)
-            }
-
-            Constants.KYC_IDENTITY_ID_DRIVER_LICENSE, Constants.KYC_IDENTITY_VER_DRIVER_LICENSE -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.driver_s_licence)
-                b.kycCaptureActivitySubTextTV.text = getString(R.string.driver_license_subtext)
-            }
-
-            Constants.KYC_IDENTITY_ID_TRAFFIC_CARD, Constants.KYC_IDENTITY_VER_TRAFFIC_CARD -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.traffic_register)
-                b.kycCaptureActivitySubTextTV.text = getString(R.string.traffic_register_subtext)
-            }
-
-            Constants.KYC_IDENTITY_ID_BIRTH_CERTIFICATE, Constants.KYC_IDENTITY_VER_BIRTH_CERTIFICATE -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.birth_certificate)
-                b.kycCaptureActivitySubTextTV.text = getString(R.string.birth_certificate_subtext)
-            }
-
-            Constants.KYC_IDENTITY_VER_EMPLOYER_LETTER -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.employer_letter)
-                b.kycCaptureActivitySubTextTV.text = getString(R.string.employer_letter_subtext)
-            }
-
-            Constants.KYC_IDENTITY_VER_INSTITUTION_LETTER -> {
-                b.kycCaptureActivityHeaderTV.text = getString(R.string.institution_letter)
-                b.kycCaptureActivitySubTextTV.text = getString(R.string.institution_letter_subtext)
-            }
-
-            Constants.KYC_IDENTITY_VER_RELIGIOUS_INSTITUTION_LETTER -> {
-                b.kycCaptureActivityHeaderTV.text =
-                    getString(R.string.religious_institution_district_commissioner_letter)
-                b.kycCaptureActivitySubTextTV.text =
-                    getString(R.string.religious_institution_letter_subtext)
-            }
         }
     }
-
     private fun initViews() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         imgCaptureExecutor = Executors.newSingleThreadExecutor()
@@ -156,14 +94,12 @@ class KycCaptureActivity : BaseActivity() {
 
     private fun setUpListeners() {
 
-        b.kycCaptureActivityBackButtonIV.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
         b.viewMerchantActivityBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
+        b.kycCaptureActivityBackButtonIV.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         b.kycCaptureActivityInfoButtonIV.setOnClickListener {
             val i = Intent(this, KycRegistrationGuideActivity::class.java)
@@ -223,7 +159,6 @@ class KycCaptureActivity : BaseActivity() {
             }
         }, ContextCompat.getMainExecutor(this))
     }
-
     private fun takePhoto() {
         imageCapture?.let {
             val fileName = "PMCMR_${System.currentTimeMillis()}.jpg"
@@ -280,4 +215,6 @@ class KycCaptureActivity : BaseActivity() {
         }
         finish()
     }
+
+
 }

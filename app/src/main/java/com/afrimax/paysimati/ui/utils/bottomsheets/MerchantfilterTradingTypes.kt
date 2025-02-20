@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat.getFont
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.databinding.MerchantTypesFilterBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -59,11 +61,14 @@ class MerchantFilterTradingTypesSheet : BottomSheetDialogFragment() {
     }
     private fun populateTradingTypes() {
   binding.tradingTypes.removeAllViews()
+        val interRegularTypeface = getFont(requireContext(), R.font.inter_regular)
+
         tradingTypes.forEachIndexed { index, type ->
             val radioButton = RadioButton(requireContext()).apply {
                 id = index
                 text = type.name
                 textSize = 16f
+                typeface=interRegularTypeface
                 setPadding(16, 16, 16, 16) // Same as your XML padding
                 setTextColor(
                     ContextCompat.getColor(
@@ -83,8 +88,8 @@ class MerchantFilterTradingTypesSheet : BottomSheetDialogFragment() {
                 gravity = android.view.Gravity.START or android.view.Gravity.CENTER_VERTICAL
 
                 val params = ViewGroup.MarginLayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    resources.getDimensionPixelSize(R.dimen.radio_button_width),
+                    resources.getDimensionPixelSize(R.dimen.radio_button_height)
                 ).apply {
                     setMargins(16, 0, 0, 0) // 16dp start margin
                 }

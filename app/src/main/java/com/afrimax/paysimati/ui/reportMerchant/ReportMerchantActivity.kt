@@ -8,7 +8,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -91,7 +90,7 @@ class ReportMerchantActivity :BaseActivity(),ReportOtherReason {
         cameraPermissionCheckLauncher=
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){multiplepermission->
                 if(!multiplepermission.containsValue(false)){
-                    val intent = Intent(this, KycCaptureActivity::class.java)
+                    val intent = Intent(this, ReportMerchantCaptureActivity::class.java)
                     intent.putExtra(Constants.KYC_CAPTURED_IMAGE_SIDE, currentCaptureSide)
                     intent.putExtra(Constants.KYC_IDENTITY_TYPE, identityType)
                     capturedImageResultLauncher.launch(intent)
@@ -169,7 +168,6 @@ class ReportMerchantActivity :BaseActivity(),ReportOtherReason {
             else{
                 submitReport(selectedreason)
             }
-
 
 
         }
