@@ -41,7 +41,7 @@ class VerifyPhoneField @JvmOverloads constructor(
     private var isOptionalField = false
 
     //Other variables
-    private var countryCodes: ArrayList<String> = ArrayList<String>().apply { add("") }
+    private var countryCodes: ArrayList<String> = ArrayList<String>().apply { add("+256") }
     private var isTextWatcherEnabled = false
     private var isFocusListenerEnabled = false
     private var arrayAdapter: ArrayAdapter<String> =
@@ -185,7 +185,7 @@ class VerifyPhoneField @JvmOverloads constructor(
 
 
     private fun getPhoneNumberLength(countryCode: String): Array<InputFilter.LengthFilter> {
-        val maxLength = countryCodeMap.getOrDefault(countryCode, 9)
+        val maxLength = countryCodeMap.getOrDefault(countryCode, 20)
         return arrayOf(InputFilter.LengthFilter(maxLength))
     }
 

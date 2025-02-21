@@ -86,7 +86,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     private lateinit var profilePicUrl: String
     private var publicProfile: Boolean = false
     private var isPublicProfileUpdate: Boolean = false
-    private val items = countries.map { it.dialCode }
+    val allowedCountryCodes = arrayListOf("+91", "+44", "+1", "+234", "+39", "+265", "+27", "+46")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         b = ActivityKycCustomerPersonalDetailsBinding.inflate(layoutInflater)
@@ -110,6 +110,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     }
 
     private fun initViews() {
+
         kycScope = intent.getStringExtra(Constants.KYC_SCOPE) ?: ""
         viewScope = intent.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
         profilePicUrl = intent.getStringExtra(Constants.PROFILE_PICTURE) ?: ""
@@ -136,7 +137,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                     }
                 }
             }
-        b.onboardRegistrationActivityPhoneTF.setCountryCodes(ArrayList(items))
+        b.onboardRegistrationActivityPhoneTF.setCountryCodes(allowedCountryCodes)
 
     }
 
@@ -216,9 +217,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         }
 
         b.onboardRegistrationActivityPhoneTF.apply {
-            setVerifyButtonClickListener {
-                sentOtpForEditSelfKycApi(Constants.OTP_SMS_TYPE)
-            }
+            setVerifyButtonClickListener { sentOtpForEditSelfKycApi(Constants.OTP_SMS_TYPE) }
         }
 
 
@@ -670,12 +669,17 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
                         populatePersonalFields(body.data)
+
                         val con = body.data.country_code.toString()
-                        b.onboardRegistrationActivityPhoneTF.setCountryCodes(arrayListOf(con))
-                        b.onboardRegistrationActivityPhoneTF.setOnClickListener {
-                            val countryCodes =  countries.map { it.dialCode }// Fetch available country codes dynamically
-                            b.onboardRegistrationActivityPhoneTF.setCountryCodes(ArrayList(countryCodes))
+
+                        val updatedCountryCodes = ArrayList(allowedCountryCodes)
+
+                        if (updatedCountryCodes.contains(con)) {
+                            updatedCountryCodes.remove(con) // Remove from current position
+                            updatedCountryCodes.add(0, con) // Move it to index 0
                         }
+                      b.onboardRegistrationActivityPhoneTF.setCountryCodes(updatedCountryCodes)
+
 
                     } else {
                         runOnUiThread { showToast(getString(R.string.default_error_toast)) }
