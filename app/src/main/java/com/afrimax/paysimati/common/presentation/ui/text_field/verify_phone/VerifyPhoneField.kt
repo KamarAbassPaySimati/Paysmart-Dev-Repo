@@ -185,7 +185,7 @@ class VerifyPhoneField @JvmOverloads constructor(
 
 
     private fun getPhoneNumberLength(countryCode: String): Array<InputFilter.LengthFilter> {
-        val maxLength = countryCodeMap.getOrDefault(countryCode, 20)
+        val maxLength = countryCodeMap.getOrDefault(countryCode, 10)
         return arrayOf(InputFilter.LengthFilter(maxLength))
     }
 

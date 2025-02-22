@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.ListPopupWindow
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -217,7 +218,9 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         }
 
         b.onboardRegistrationActivityPhoneTF.apply {
-            setVerifyButtonClickListener { sentOtpForEditSelfKycApi(Constants.OTP_SMS_TYPE) }
+            setVerifyButtonClickListener {
+
+                sentOtpForEditSelfKycApi(Constants.OTP_SMS_TYPE) }
         }
 
 
