@@ -606,6 +606,7 @@
     <string name="send_payment">Send Payment</string>
     <string name="total">Total</string>
     <string name="total_amount">Total Amount</string>
+    <string name="total_amount_star">Total Amount*</string>
     <string name="txn_fee">"Txn Fee* "</string>
     <string name="vat_included">*VAT Included</string>
     <string name="amount_formatted">%1$s MWK</string>
@@ -617,6 +618,7 @@
     <string name="to">To</string>
     <string name="txn_value">Txn Value*</string>
     <string name="txn_value_two">Txn Value</string>
+    <string name="txn_value_two_star">Txn Value*</string>
     <string name="txn_id">Txn ID</string>
     <string name="date_time">Date, time (CAT)</string>
     <string name="note">Note</string>
@@ -726,14 +728,20 @@
     <string name="pay_in_successful">Pay-in Successful</string>
     <string name="cash_in_failed">Cash-in Failed</string>
     <string name="cash_in_value">Cash-in Value</string>
+    <string name="cash_in_value_star">Cash-in Value*</string>
     <string name="pay_in_value">Pay-in Value</string>
+    <string name="pay_in_value_star">Pay-in Value*</string>
     <string name="acct_name">Acct. Name</string>
     <string name="acct_no">Acct. No</string>
     <string name="bank">Bank</string>
     <string name="cash_out_value">Cash-out Value</string>
+    <string name="cash_out_value_star">Cash-out Value*</string>
     <string name="interest_value">Interest Value</string>
+    <string name="interest_value_star">Interest Value*</string>
     <string name="refund_value">Refund Value</string>
+    <string name="refund_value_star">Refund Value*</string>
     <string name="g2p_pay_in_value">Pay-in G2P Value</string>
+    <string name="g2p_pay_in_value_star">Pay-in G2P Value*</string>
     <string name="trust_acc_int">Trust Acct. Interest</string>
     <string name="interest_period">Interest Period</string>
     <string name="interest_period_formatted">Average balances\n %1$s</string>
