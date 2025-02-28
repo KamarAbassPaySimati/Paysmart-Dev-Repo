@@ -2,7 +2,7 @@ trigger:
   branches:
     include:
       - qa
-      - pre-production
+      - pre-prod
       - master
 pr:
   branches:
@@ -13,7 +13,7 @@ variables:
     - group: production_customer
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/qa') }}:
     - group: qa_customer
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-production') }}:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-prod') }}:
     - group: pre-production_customer
   - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     - group: develop_customer
