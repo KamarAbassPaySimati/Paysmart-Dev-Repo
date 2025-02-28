@@ -327,7 +327,8 @@ class HomeActivity : BaseActivity(), HomeInterface {
                 intent.putExtra(VIEW_MODEL_STATE, ChatState(
                     receiverName = merchantTransaction.tradingName!!,
                     receiverId = merchantTransaction.userId!!,
-                    receiverProfilePicture = merchantTransaction.profilePic
+                    receiverProfilePicture = merchantTransaction.profilePic,
+                     tillnumber = merchantTransaction.tillNumber
                 ))
                 startActivity(intent)
             }

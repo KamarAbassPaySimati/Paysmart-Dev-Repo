@@ -115,7 +115,6 @@ class MessagingService(
             data.getStringExtra(TXN_ID).toString()
         if(action == NotificationNavigation.CHAT.screenName || action==NotificationNavigation.PAYREQUEST.screenName) userinfo =
             data.getStringExtra("user_info")
-        Log.d("kk","$userinfo")
         val targetActivity: Class<out AppCompatActivity> = when (action) {
             NotificationNavigation.MEMBERSHIP_PLANS.screenName -> MembershipPlansActivity::class.java
             NotificationNavigation.TRANSACTIONS.screenName -> ViewSpecificTransactionActivity::class.java
