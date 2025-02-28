@@ -122,8 +122,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                 val data = result.data
                 if ((result.resultCode == RESULT_OK || result.resultCode == RESULT_CANCELED) && data != null) {
                     kycScope = data.getStringExtra(Constants.KYC_SCOPE) ?: ""
-                    viewScope =
-                        data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
+                    viewScope = data.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
                     sendEmail = data.getBooleanExtra(Constants.KYC_SEND_EMAIL, true)
                 }
             }
@@ -678,7 +677,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                         val updatedCountryCodes = ArrayList(allowedCountryCodes)
 
                         if (updatedCountryCodes.contains(con)) {
-                            updatedCountryCodes.remove(con) // Remove from current position
+                            updatedCountryCodes.remove(con)
                             updatedCountryCodes.add(0, con) // Move it to index 0
                         }
                       b.onboardRegistrationActivityPhoneTF.setCountryCodes(updatedCountryCodes)
