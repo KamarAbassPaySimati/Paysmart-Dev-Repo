@@ -2,6 +2,7 @@ trigger:
   branches:
     include:
       - qa
+      - pre-production
       - pre-prod
       - master
 pr:
