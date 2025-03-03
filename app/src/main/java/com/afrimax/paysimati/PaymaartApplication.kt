@@ -6,8 +6,6 @@ import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.util.AmplifyConfigCreator
 import com.afrimax.paysimati.util.AuthCalls
 import com.afrimax.paysimati.util.PrefsManager
-import com.afrimax.paysimati.util.RecaptchaManager
-import com.afrimax.paysimati.util.showLogE
 import com.amplifyframework.AmplifyException
 import com.amplifyframework.auth.AuthChannelEventName
 import com.amplifyframework.auth.cognito.AWSCognitoAuthPlugin
@@ -26,7 +24,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 @HiltAndroidApp
-class PaymaartApplication: Application() {
+class PaymaartApplication : Application() {
     private var subscriptionToken: SubscriptionToken? = null
     private lateinit var authCalls: AuthCalls
     private lateinit var prefsManager: PrefsManager
@@ -50,7 +48,6 @@ class PaymaartApplication: Application() {
         } catch (e: AmplifyException) {
             //
         }
-        RecaptchaManager.initialise(this)
 
         subscriptionToken = Amplify.Hub.subscribe(HubChannel.AUTH) { hubEvent: HubEvent<*> ->
             // Handle the event

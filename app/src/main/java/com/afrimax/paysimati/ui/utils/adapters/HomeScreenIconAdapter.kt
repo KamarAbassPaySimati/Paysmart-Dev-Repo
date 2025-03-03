@@ -10,6 +10,7 @@ import com.afrimax.paysimati.data.model.IndividualTransactionHistory
 import com.afrimax.paysimati.databinding.HomeRecyclerviewAdapterViewBinding
 import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASHIN
 import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.CASHOUT
+import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_MERCHANT
 import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Companion.PAY_PERSON
 import com.afrimax.paysimati.util.getDrawableExt
 import com.afrimax.paysimati.util.getInitials
@@ -125,6 +126,12 @@ class HomeScreenIconAdapter(
                     }
                 }
                 PAY_PERSON -> {
+                    if (userPaymaartId == transactionList[position].senderId)
+                        setPersonImageDrawable(holder, transactionList[position].receiverProfilePic, transactionList[position].receiverName)
+                    else
+                        setPersonImageDrawable(holder, transactionList[position].senderProfilePic, transactionList[position].senderName)
+                }
+                PAY_MERCHANT -> {
                     if (userPaymaartId == transactionList[position].senderId)
                         setPersonImageDrawable(holder, transactionList[position].receiverProfilePic, transactionList[position].receiverName)
                     else

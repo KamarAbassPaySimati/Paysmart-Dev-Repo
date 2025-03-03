@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.afrimax.paysimati.ui.payperson
 
 import android.Manifest
@@ -37,6 +39,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 private const val REQUEST_READ_CONTACTS = 111
+
 
 class ListPersonTransactionActivity : BaseActivity() {
     private lateinit var binding: ActivityListPersonTransactionBinding

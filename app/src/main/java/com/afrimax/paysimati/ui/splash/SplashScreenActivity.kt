@@ -15,8 +15,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatState
 import com.afrimax.paysimati.databinding.ActivitySplashScreenBinding
 import com.afrimax.paysimati.ui.BaseActivity
+import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity
 import com.afrimax.paysimati.ui.home.HomeActivity
 import com.afrimax.paysimati.ui.intro.IntroActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlansActivity
@@ -25,6 +28,7 @@ import com.afrimax.paysimati.util.AuthCalls
 import com.afrimax.paysimati.util.Constants
 import com.afrimax.paysimati.util.NotificationNavigation
 import com.amplifyframework.core.Amplify
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -39,6 +43,9 @@ class SplashScreenActivity : BaseActivity() {
     private lateinit var action: String
     private lateinit var authCalls: AuthCalls
     private var transactionId: String = ""
+    private var  userinfo:String=""
+
+
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +55,7 @@ class SplashScreenActivity : BaseActivity() {
         setContentView(binding.root)
         action = intent.getStringExtra("action") ?: ""
         transactionId = intent.getStringExtra(Constants.TRANSACTION_ID) ?: ""
+        userinfo = intent.getStringExtra(Constants.USER_INFO)?:""
         authCalls = AuthCalls()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.splashScreenActivity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -139,16 +147,42 @@ class SplashScreenActivity : BaseActivity() {
     }
 
     private fun handleNavigation() {
+        val receiver = Gson().fromJson(userinfo, ChatState::class.java)
         val targetIntent = when (action) {
             NotificationNavigation.MEMBERSHIP_PLANS.screenName -> Intent(
                 this@SplashScreenActivity, MembershipPlansActivity::class.java
             )
+            NotificationNavigation.PAYREQUEST.screenName -> {
+
+                Intent(this@SplashScreenActivity, ChatMerchantActivity::class.java).apply {
+                    putExtra(
+                        VIEW_MODEL_STATE, ChatState(
+                            receiverName = receiver.receiverName,
+                            receiverId = receiver.receiverId,
+                            receiverProfilePicture = receiver.receiverProfilePicture,
+                        )
+                    )
+                }
+            }
 
             NotificationNavigation.TRANSACTIONS.screenName -> {
                 Intent(
                     this@SplashScreenActivity, ViewSpecificTransactionActivity::class.java
                 ).apply {
                     putExtra(Constants.TRANSACTION_ID, transactionId)
+                }
+
+            }
+            NotificationNavigation.CHAT.screenName -> {
+
+                Intent(this@SplashScreenActivity,ChatMerchantActivity::class.java).apply {
+                    putExtra(VIEW_MODEL_STATE, ChatState(
+                        receiverName = receiver.receiverName ,
+                        receiverId = receiver.receiverId,
+                        receiverProfilePicture = receiver.receiverProfilePicture,
+                    )
+                    )
+
                 }
             }
 

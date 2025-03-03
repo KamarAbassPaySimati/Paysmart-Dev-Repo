@@ -6,6 +6,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-parcelize'
+    alias(libs.plugins.compose.compiler)
 }
 
 tasks.register('jacocoTestReport', JacocoReport) {
@@ -28,11 +29,11 @@ tasks.register('jacocoTestReport', JacocoReport) {
 
 android {
     namespace 'com.afrimax.paysimati'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId 'com.afrimax.paysimati'
-        minSdk 24
+        minSdk 26
         targetSdk 34
         versionCode 20
         versionName "1.0"
@@ -69,6 +70,10 @@ android {
         buildConfig = true
         viewBinding = true
     }
+    buildFeatures {
+        compose true
+    }
+
 
 
     flavorDimensions = ['env']
@@ -91,6 +96,7 @@ android {
             buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
             buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
             buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
+            buildConfigField("String", "MERCHANT_CHAT_WEBSOCKET", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
         }
 
         qa{
@@ -111,6 +117,7 @@ android {
             buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
             buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
             buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
+            buildConfigField("String", "MERCHANT_CHAT_WEBSOCKET", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
         }
 
         preprod{
@@ -131,6 +138,7 @@ android {
             buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
             buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
             buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
+            buildConfigField("String", "MERCHANT_CHAT_WEBSOCKET", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
         }
 
         production{
@@ -150,15 +158,16 @@ android {
             buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
             buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
             buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
+            buildConfigField("String", "MERCHANT_CHAT_WEBSOCKET", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
 }
 
@@ -173,9 +182,15 @@ dependencies {
     implementation libs.androidx.fragment.ktx
     implementation libs.firebase.messaging
     implementation libs.androidx.lifecycle.process
+    implementation libs.qr.scanner
+    implementation libs.androidx.material3.android
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+    implementation libs.androidx.media3.common.ktx
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
+
 
     //Cucumber for BDD
     androidTestImplementation(libs.cucumber.android)
@@ -198,6 +213,7 @@ dependencies {
 
     //lottie
     implementation libs.lottie
+    implementation libs.lottie.compose
 
     //Retrofit & GSON
     implementation libs.retrofit
@@ -270,7 +286,14 @@ dependencies {
 
     //Dagger Hilt for dependency injection
     implementation libs.hilt.android
+    debugImplementation libs.androidx.ui.tooling
     kapt libs.hilt.compiler
+    //compose
+    implementation libs.androidx.activity.compose
+    implementation libs.androidx.ui
+    implementation libs.androidx.ui.tooling.preview
+    implementation libs.androidx.material
+    implementation(libs.androidx.paging.compose)
 }
 
 // Allow references to generated code

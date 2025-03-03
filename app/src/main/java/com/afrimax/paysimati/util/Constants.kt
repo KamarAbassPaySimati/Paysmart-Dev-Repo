@@ -45,6 +45,7 @@ object Constants {
     const val KYC_MALAWI_SIMPLIFIED = "kyc_malawi_simplified"
     const val KYC_NON_MALAWI = "kyc_non_malawi"
     const val KYC_IDENTITY_ID_NATIONAL_ID = "kyc_identity_id_national_id"
+    const val MERCHANT_REPORT="reportmerchant"
     const val KYC_IDENTITY_ID_PASSPORT = "kyc_identity_id_passport"
     const val KYC_IDENTITY_ID_DRIVER_LICENSE = "kyc_identity_id_driver_license"
     const val KYC_IDENTITY_ID_TRAFFIC_CARD = "kyc_identity_id_traffic_card"
@@ -57,6 +58,7 @@ object Constants {
     const val KYC_IDENTITY_VER_INSTITUTION_LETTER = "kyc_identity_ver_institution_letter"
     const val KYC_IDENTITY_LIVE_SELFIE = "kyc_identity_live_selfie"
     const val KYC_IDENTITY_TYPE = "kyc_identity_type"
+    const val REPORTMERCHANT = "reportmerchant"
     const val KYC_DOCUMENT_FRONT_URL = "kyc_document_front_url"
     const val KYC_DOCUMENT_BACK_URL = "kyc_document_back_url"
     const val KYC_SELFIE_URL = "kyc_selfie_url"
@@ -116,6 +118,7 @@ object Constants {
     const val VIEW_SCOPE_UPDATE = "view_scope_update" // used for upgrading simplified to full kyc
     const val PUBLIC_PROFILE = "public_profile"
     const val PROFILE_PICTURE = "profile_picture"
+    const val PROFILE_PICTURES = "profile_picture"
     const val PHONE_NUMBER = "phone_number"
     const val COUNTRY_CODE = "country_code"
     const val KYC_SEND_EMAIL = "kyc_send_email"
@@ -146,6 +149,10 @@ object Constants {
     const val AFRIMAX_ID = "afrimax_id"
     const val AFRIMAX_NAME = "afrimax_name"
     const val CUSTOMER_NAME = "customer_name"
+    const val MERCHANT_NAME = "merchant_name"
+    const val STREET_NAME ="street_name"
+    const val TILL_NUMBER = "till_number"
+    const val USER_ID = "user_iD"
     const val PAYMENT_AMOUNT = "payment_amount"
     const val CUSTOMER_ID = "payment_id"
     const val PAYMENT_TXN_FEE = "payment_txn_fee"
@@ -154,6 +161,8 @@ object Constants {
     const val FLAGGED_STATUS = "flagged_status"
     const val PREF_KEY_FCM_TOKEN = "pref_key_fcm_token"
     const val USER_DATA = "user_data"
+    const val USER_INFO = "user_info"
+    const val REQUEST_USER_INFO = "user_info"
     const val ACTION = "action"
     const val ANIMATE = "animation"
     const val ABOUT_US_URL = "https://www.paymaart.net/mobile-about"
@@ -167,9 +176,15 @@ object Constants {
     const val FAQS_TYPE = "faqs_type"
     const val FAQs_URL = "https://www.paymaart.net/mobile-faqs"
     const val PAYMAART_ID = "paymaart_id"
+    const val STATUS_CODE = "status_code"
 
     //Shared Preferences
     const val USER_DATA_PREFS = "user_data_prefs"
     const val PREF_KEY_PAYMAART_ID = "pref_key_paymaart_id"
     const val PREF_KEY_LOGIN_MODE = "pref_key_login_mode"
+
+
+
+
+
 }
