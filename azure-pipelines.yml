@@ -9,6 +9,7 @@ pr:
   branches:
     include:
       - qa
+      - pre-prod
 variables:
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     - group: production_customer
