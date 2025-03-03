@@ -59,6 +59,7 @@ import com.afrimax.paysimati.ui.payperson.ListPersonTransactionActivity
 import com.afrimax.paysimati.ui.payperson.PersonTransactionActivity
 import com.afrimax.paysimati.ui.paytoaffrimax.ValidateAfrimaxIdActivity
 import com.afrimax.paysimati.ui.refundrequest.RefundRequestActivity
+import com.afrimax.paysimati.ui.scanQr.CustomCaptureActivity
 import com.afrimax.paysimati.ui.utils.adapters.HomeScreenIconAdapter
 import com.afrimax.paysimati.ui.utils.adapters.HomeScreenPayPersonAdapter
 import com.afrimax.paysimati.ui.utils.adapters.MerchantTransactionViewAdapter
@@ -87,6 +88,9 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -134,12 +138,13 @@ class HomeActivity : BaseActivity(), HomeInterface {
         askNotificationPermission()
         checkForUpdate()
     }
-
+//doubt
     private fun initViews() {
         appUpdateManager = AppUpdateManagerFactory.create(this)
 
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+           //1
                 if (b.homeActivity.isDrawerVisible(GravityCompat.END)) b.homeActivity.closeDrawer(
                     GravityCompat.END
                 )
@@ -243,11 +248,7 @@ class HomeActivity : BaseActivity(), HomeInterface {
             }
         }
 
-        b.homeActivityScanQrButton.setOnClickListener {
-            if (checkKycStatus()) {
-                //
-            }
-        }
+
 
         b.homeActivityCashOutButton.setOnClickListener {
             if (checkKycStatus()) {

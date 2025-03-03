@@ -48,6 +48,7 @@ import com.afrimax.paysimati.data.model.SaveInfoSimplifiedToFullRequest
 import com.afrimax.paysimati.data.model.SaveNewAddressDetailsSelfKycRequest
 import com.afrimax.paysimati.data.model.SaveNewIdentityDetailsSelfKycRequest
 import com.afrimax.paysimati.data.model.SaveNewInfoDetailsSelfKycRequest
+import com.afrimax.paysimati.data.model.SearchMerchantByLocation
 import com.afrimax.paysimati.data.model.SearchUsersDataResponse
 import com.afrimax.paysimati.data.model.SecurityQuestionsResponse
 import com.afrimax.paysimati.data.model.SelfKycDetailsResponse

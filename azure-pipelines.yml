@@ -117,6 +117,11 @@ stages:
             # pip install --upgrade mobsfscan
             # mobsfscan -w app/src --config scripts/.mobsf
           displayName: 'Dynamic Application Security Testing (DAST)'
+        # - task: Cache@2
+        #   inputs:
+        #     key: '.gradle/**' # Swap build.gradle.kts for build.gradle when using Groovy
+        #     path: $(System.DefaultWorkingDirectory)
+        #   displayName: Configure gradle caching
 - stage: Build
   jobs:
     - job: android_build
@@ -171,10 +176,12 @@ stages:
   jobs:
     - job: BDD
       displayName: "Integration Testing"
+      # dependsOn: Download_Environment
       condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
       pool:
         vmImage: "macos-latest"
       steps:
+
         - task: JavaToolInstaller@0
           inputs:
             versionSpec: '17'
@@ -267,6 +274,7 @@ stages:
 
 
     - deployment: production
+      # dependsOn: Download_Environment
       condition: and(succeeded(), contains(variables['build.SourceBranch'], 'master'))
       pool:
         vmImage: "macos-latest"
@@ -394,4 +402,4 @@ stages:
                 export BUILD_NUMBER=$(Build.BuildId)
                 brew install fastlane
                 fastlane android preprod
-              displayName: 'Deployment' 
+              displayName: 'Deployment'
