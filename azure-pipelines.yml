@@ -28,6 +28,7 @@ stages:
         vmImage: "ubuntu-latest"
       steps:
         - script: |
+            aws sts get-caller-identity
             sudo pip3 install --upgrade pip
             pip3 install awscli --upgrade --user
             export PATH="/home/vsts/.local/bin:$PATH"
@@ -341,6 +342,4 @@ stages:
                 export BUILD_NUMBER=$(Build.BuildId)
                 brew install fastlane
                 fastlane android preprod
-              displayName: 'Deployment'
-
-              
+              displayName: 'Deployment' 
