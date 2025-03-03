@@ -309,7 +309,7 @@ stages:
                   fastlane android production
                 displayName: 'Deployment'
 
-    - deployment: pre-production
+    - deployment: preproduction
       # dependsOn: Download_Environment
       condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-prod'))
       pool:
