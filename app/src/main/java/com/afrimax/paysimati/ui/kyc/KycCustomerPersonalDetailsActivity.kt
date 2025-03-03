@@ -22,6 +22,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.ListPopupWindow
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -30,6 +31,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.ui.text_field.verify_phone.VerifyPhoneField
+import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.DefaultResponse
 import com.afrimax.paysimati.data.model.SaveBasicDetailsSelfKycRequest
@@ -50,9 +53,11 @@ import com.amplifyframework.storage.StorageException
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -60,7 +65,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.UUID
 
-
+//
+@AndroidEntryPoint
 class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetailsInterface {
     private lateinit var b: ActivityKycCustomerPersonalDetailsBinding
     private lateinit var kycScope: String
@@ -81,7 +87,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     private lateinit var profilePicUrl: String
     private var publicProfile: Boolean = false
     private var isPublicProfileUpdate: Boolean = false
-    private val items = countries.map { it.dialCode }
+    val allowedCountryCodes = arrayListOf("+91", "+44", "+1", "+234", "+39", "+265", "+27", "+46")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         b = ActivityKycCustomerPersonalDetailsBinding.inflate(layoutInflater)
@@ -100,16 +106,16 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         initViews()
         setUpLayout()
         setUpListeners()
+
+
     }
 
     private fun initViews() {
+
         kycScope = intent.getStringExtra(Constants.KYC_SCOPE) ?: ""
         viewScope = intent.getStringExtra(Constants.VIEW_SCOPE) ?: Constants.VIEW_SCOPE_EDIT
         profilePicUrl = intent.getStringExtra(Constants.PROFILE_PICTURE) ?: ""
         publicProfile = intent.getBooleanExtra(Constants.PUBLIC_PROFILE, false)
-        val adapter = ArrayAdapter(this, R.layout.spinner_country_code, items)
-        setSpinnerDropdownHeight(b.kycYourPersonalDetailsActivityCountryCodeSpinner, 800, 150)
-        b.kycYourPersonalDetailsActivityCountryCodeSpinner.adapter = adapter
 
         nextScreenResultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -121,7 +127,8 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                 }
             }
 
-        fileResultLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        fileResultLauncher =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                 lifecycleScope.launch {
                     if (uri != null) {
                         isPicUploaded = true
@@ -130,19 +137,10 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                     }
                 }
             }
+        b.onboardRegistrationActivityPhoneTF.setCountryCodes(allowedCountryCodes)
+
     }
 
-    private fun setSpinnerDropdownHeight(spinner: AppCompatSpinner, height: Int, verticalOffset: Int) {
-        try {
-            val popup = AppCompatSpinner::class.java.getDeclaredField("mPopup")
-            popup.isAccessible = true
-            val popupWindow = popup.get(spinner) as ListPopupWindow
-            popupWindow.height = height
-            popupWindow.verticalOffset = verticalOffset
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     private fun setUpLayout() {
         b.kycYourPersonalDetailsActivityFirstNameET.background =
@@ -167,7 +165,8 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
             }
 
             Constants.KYC_NON_MALAWI -> {
-                b.kycYourPersonalDetailsActivityTitleTV.text = getString(R.string.non_malawi_full_kyc)
+                b.kycYourPersonalDetailsActivityTitleTV.text =
+                    getString(R.string.non_malawi_full_kyc)
             }
         }
 
@@ -190,40 +189,18 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                 .load(picUrl)
                 .placeholder(R.drawable.ic_no_image)
                 .into(b.kycYourPersonalDetailsActivityProfileIV)
-            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_delete))
+            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_delete
+                )
+            )
         }
         if (publicProfile)
             b.kycYourPersonalDetailsActivityMakeVisibleCB.isChecked = true
     }
 
     private fun setUpListeners() {
-
-        b.kycYourPersonalDetailsActivityCountryCodeTV.setOnClickListener {
-            b.kycYourPersonalDetailsActivityCountryCodeSpinner.performClick()
-        }
-
-        b.kycYourPersonalDetailsActivityCountryCodeSpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    p0: AdapterView<*>?, p1: View?, position: Int, p3: Long
-                ) {
-                    if (b.kycYourPersonalDetailsActivityPhoneET.text.toString()
-                            .isNotEmpty() && !shouldKeepPhoneNumber
-                    ) {
-                        b.kycYourPersonalDetailsActivityPhoneET.text!!.clear()
-
-                        isPhoneVerified = false
-                        b.kycYourPersonalDetailsActivityPhoneVerifyButton.visibility =
-                            View.VISIBLE
-                        b.kycYourPersonalDetailsActivityPhoneVerifiedTV.visibility = View.GONE
-                    }
-                    shouldKeepPhoneNumber = false
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-                    //
-                }
-            }
 
         b.kycYourPersonalDetailsActivityBackButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -239,19 +216,12 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
             }
         }
 
-        b.kycYourPersonalDetailsActivityPhoneVerifyButton.setOnClickListener {
-            if (validatePhone(
-                    b.kycYourPersonalDetailsActivityPhoneET,
-                    b.kycYourPersonalDetailsActivityPhoneWarningTV
-                )
-            ) {
-                sentOtpForEditSelfKycApi(Constants.OTP_SMS_TYPE)
-            }
+        b.onboardRegistrationActivityPhoneTF.apply {
+            setVerifyButtonClickListener {
+
+                sentOtpForEditSelfKycApi(Constants.OTP_SMS_TYPE) }
         }
 
-        b.kycYourPersonalDetailsActivityPhoneET.setOnClickListener { _ ->
-            b.kycYourPersonalDetailsActivityPhoneET.setSelection(b.kycYourPersonalDetailsActivityPhoneET.text!!.length)
-        }
 
         b.kycYourPersonalDetailsActivitySkipButton.setOnClickListener {
             val i = Intent(this, KycAddressActivity::class.java)
@@ -277,18 +247,18 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
             }
         }
         b.kycYourPersonalDetailsActivityProfileIV.setOnClickListener {
-            if (!isPicUploaded){
+            if (!isPicUploaded) {
                 launchFilePicker()
             }
         }
         b.kycYourPersonalDetailsActivityCameraIV.setOnClickListener {
-            if (isPicUploaded){
+            if (isPicUploaded) {
                 populateProfilePicture()
-            }else{
+            } else {
                 launchFilePicker()
             }
         }
-        b.kycYourPersonalDetailsActivityMakeVisibleCB.setOnClickListener{
+        b.kycYourPersonalDetailsActivityMakeVisibleCB.setOnClickListener {
             isPublicProfileUpdate = true
         }
         setupEditTextFocusListeners()
@@ -301,10 +271,23 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         isPicUploaded = false
         profilePicUri = null
         isProfilePicUpdated = true //ProfilePic is update even when they are removed.
-        b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+        b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(
+            ContextCompat.getDrawable(
+                this,
+                R.drawable.ic_camera
+            )
+        )
         b.kycYourPersonalDetailsActivityProfileIV.apply {
-            setImageDrawable(ContextCompat.getDrawable(this@KycCustomerPersonalDetailsActivity, R.drawable.ic_no_image))
-            background = ContextCompat.getDrawable(this@KycCustomerPersonalDetailsActivity, R.drawable.dashed_outline_background)
+            setImageDrawable(
+                ContextCompat.getDrawable(
+                    this@KycCustomerPersonalDetailsActivity,
+                    R.drawable.ic_no_image
+                )
+            )
+            background = ContextCompat.getDrawable(
+                this@KycCustomerPersonalDetailsActivity,
+                R.drawable.dashed_outline_background
+            )
         }
     }
 
@@ -327,9 +310,6 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         configureEmailEditTextFocusListener(
             b.kycYourPersonalDetailsActivityEmailET, b.kycYourPersonalDetailsActivityEmailWarningTV
         )
-        configurePhoneEditTextFocusListener(
-            b.kycYourPersonalDetailsActivityPhoneET, b.kycYourPersonalDetailsActivityPhoneWarningTV
-        )
     }
 
     private fun configureEmailEditTextFocusListener(
@@ -349,7 +329,6 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
 
     private fun setUpEditTextChangeListeners() {
         configureEditTextEmailChangeListener()
-        configureEditTextPhoneChangeListener()
     }
 
     private fun configureEditTextEmailChangeListener() {
@@ -387,57 +366,6 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         })
     }
 
-    private fun configureEditTextPhoneChangeListener() {
-        b.kycYourPersonalDetailsActivityPhoneET.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                //
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-                //If they change phone they have to verify it again
-                isPhoneVerified = false
-
-                if (b.kycYourPersonalDetailsActivityPhoneVerifiedTV.visibility == View.VISIBLE) {
-                    b.kycYourPersonalDetailsActivityPhoneVerifyButton.visibility = View.VISIBLE
-                    b.kycYourPersonalDetailsActivityPhoneVerifiedTV.visibility = View.GONE
-                }
-
-                //Remove any warning text
-                if (b.kycYourPersonalDetailsActivityPhoneET.text.toString().isEmpty()) {
-                    b.kycYourPersonalDetailsActivityPhoneWarningTV.visibility = View.VISIBLE
-                    b.kycYourPersonalDetailsActivityPhoneWarningTV.text =
-                        getString(R.string.required_field)
-                    b.kycYourPersonalDetailsActivityPhoneBox.background = ContextCompat.getDrawable(
-                        this@KycCustomerPersonalDetailsActivity, R.drawable.bg_edit_text_error
-                    )
-                } else {
-                    b.kycYourPersonalDetailsActivityPhoneWarningTV.visibility = View.GONE
-                    b.kycYourPersonalDetailsActivityPhoneBox.background = ContextCompat.getDrawable(
-                        this@KycCustomerPersonalDetailsActivity, R.drawable.bg_edit_text_focused
-                    )
-                }
-            }
-        })
-    }
-
-    private fun configurePhoneEditTextFocusListener(
-        et: EditText, warningTV: TextView
-    ) {
-        val focusDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_focused)
-        val errorDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_error)
-        val notInFocusDrawable = ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-
-        et.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) b.kycYourPersonalDetailsActivityPhoneBox.background = focusDrawable
-            else if (warningTV.isVisible) b.kycYourPersonalDetailsActivityPhoneBox.background =
-                errorDrawable
-            else b.kycYourPersonalDetailsActivityPhoneBox.background = notInFocusDrawable
-        }
-    }
 
     private fun validateFieldsForSubmit() {
         var isValid = true
@@ -467,21 +395,16 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         }
 
         if (!validatePhone(
-                b.kycYourPersonalDetailsActivityPhoneET,
-                b.kycYourPersonalDetailsActivityPhoneWarningTV
+                b.onboardRegistrationActivityPhoneTF
             )
         ) {
             isValid = false
-            if (focusView == null) focusView = b.kycYourPersonalDetailsActivityPhoneET
+            if (focusView == null) focusView = b.onboardRegistrationActivityPhoneTF
         } else {
-            if (!isPhoneVerified) {
+            if (!b.onboardRegistrationActivityPhoneTF.isPhoneVerified) {
                 isValid = false
-                if (focusView == null) focusView = b.kycYourPersonalDetailsActivityPhoneET
-                b.kycYourPersonalDetailsActivityPhoneWarningTV.visibility = View.VISIBLE
-                b.kycYourPersonalDetailsActivityPhoneWarningTV.text =
-                    ContextCompat.getString(this, R.string.please_verify_phone)
-            } else {
-                b.kycYourPersonalDetailsActivityPhoneWarningTV.visibility = View.GONE
+                if (focusView == null) focusView = b.onboardRegistrationActivityPhoneTF
+                b.onboardRegistrationActivityPhoneTF.showWarning(getString(R.string.please_verify_phone))
             }
         }
 
@@ -538,40 +461,26 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     private fun CharSequence?.isValidEmail() =
         !isNullOrEmpty() && Patterns.EMAIL_ADDRESS.matcher(this).matches()
 
-    private fun validatePhone(phoneEditText: EditText, warningText: TextView): Boolean {
+    private fun validatePhone(phoneEditText: VerifyPhoneField): Boolean {
         var isValid = true
         when {
             phoneEditText.text!!.isEmpty() -> {
-                showPhoneWarning(getString(R.string.required_field))
+                b.onboardRegistrationActivityPhoneTF.showWarning(getString(R.string.required_field))
                 isValid = false
             }
 
-            phoneEditText.text.toString().replace(" ", "").length < 8 -> {
-                showPhoneWarning(getString(R.string.invalid_phone))
+            !PhoneNumberFormatter.isValidPhoneNumber(
+                phoneEditText.countryCode, phoneEditText.text
+            ) -> {
+                b.onboardRegistrationActivityPhoneTF.showWarning(getString(R.string.invalid_phone))
                 isValid = false
-            }
-
-            else -> {
-                warningText.visibility = View.GONE
-                b.kycYourPersonalDetailsActivityPhoneBox.background =
-                    ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
             }
         }
         return isValid
     }
 
-    private fun showPhoneWarning(warning: String) {
-        b.kycYourPersonalDetailsActivityPhoneWarningTV.visibility = View.VISIBLE
-        b.kycYourPersonalDetailsActivityPhoneWarningTV.text = warning
-        b.kycYourPersonalDetailsActivityPhoneBox.background =
-            ContextCompat.getDrawable(this, R.drawable.bg_edit_text_error)
-    }
 
-    private fun getCountryCode(): String {
-        return b.kycYourPersonalDetailsActivityCountryCodeSpinner.selectedItem.toString()
-    }
-
-    private fun sentOtpForEditSelfKycApi(type: String) {
+    private fun sentOtpForEditSelfKycApi(type: String): Job {
         val firstName =
             b.kycYourPersonalDetailsActivityFirstNameET.text.toString().ifEmpty { "" }
         val middleName =
@@ -587,14 +496,12 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
             }
 
             Constants.OTP_SMS_TYPE -> {
-                value = b.kycYourPersonalDetailsActivityPhoneET.text.toString()
-                b.kycYourPersonalDetailsActivityPhoneVerifyPB.visibility = View.VISIBLE
-                b.kycYourPersonalDetailsActivityPhoneVerifyButton.visibility = View.GONE
-                countryCode = getCountryCode()
+                value = b.onboardRegistrationActivityPhoneTF.text.replace(" ", "")
+                countryCode = b.onboardRegistrationActivityPhoneTF.countryCode
             }
         }
 
-        lifecycleScope.launch {
+        return lifecycleScope.launch {
             val idToken = fetchIdToken()
             val otpCall = ApiClient.apiService.sendOtpForEditSelfKyc(
                 idToken, SendOtpForEditSelfKycRequest(
@@ -631,9 +538,6 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                                 bundle.putString(Constants.TYPE, Constants.OTP_SMS_TYPE)
                                 bundle.putString(Constants.OTP_VALUE, value)
                                 bundle.putString(Constants.OTP_COUNTRY_CODE, countryCode)
-                                b.kycYourPersonalDetailsActivityPhoneVerifyPB.visibility = View.GONE
-                                b.kycYourPersonalDetailsActivityPhoneVerifyButton.visibility =
-                                    View.VISIBLE
                             }
                         }
                         bundle.putString(Constants.OTP_FIRST_NAME, firstName)
@@ -660,12 +564,7 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                                     View.VISIBLE
                             }
 
-                            Constants.OTP_SMS_TYPE -> {
-                                showPhoneWarning(errorResponse.message)
-                                b.kycYourPersonalDetailsActivityPhoneVerifyPB.visibility = View.GONE
-                                b.kycYourPersonalDetailsActivityPhoneVerifyButton.visibility =
-                                    View.VISIBLE
-                            }
+
                         }
                     }
                 }
@@ -679,11 +578,6 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                                 View.VISIBLE
                         }
 
-                        Constants.OTP_SMS_TYPE -> {
-                            b.kycYourPersonalDetailsActivityPhoneVerifyPB.visibility = View.GONE
-                            b.kycYourPersonalDetailsActivityPhoneVerifyButton.visibility =
-                                View.VISIBLE
-                        }
                     }
                 }
             })
@@ -698,8 +592,8 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         )
 
         val email = b.kycYourPersonalDetailsActivityEmailET.text.toString()
-        val phone = b.kycYourPersonalDetailsActivityPhoneET.text.toString().replace(" ", "")
-        val countryCode = getCountryCode()
+        val phone = b.onboardRegistrationActivityPhoneTF.text.replace(" ", "")
+        val countryCode = b.onboardRegistrationActivityPhoneTF.countryCode
 
         lifecycleScope.launch {
             val picUrl = if (profilePicUri != null) amplifyUpload(profilePicUri!!) else ""
@@ -777,9 +671,23 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
                         populatePersonalFields(body.data)
+
+                        val con = body.data.country_code.toString()
+
+                        val updatedCountryCodes = ArrayList(allowedCountryCodes)
+
+                        if (updatedCountryCodes.contains(con)) {
+                            updatedCountryCodes.remove(con)
+                            updatedCountryCodes.add(0, con) // Move it to index 0
+                        }
+                      b.onboardRegistrationActivityPhoneTF.setCountryCodes(updatedCountryCodes)
+
+
                     } else {
                         runOnUiThread { showToast(getString(R.string.default_error_toast)) }
                     }
+                    b.kycYourPersonalDetailsActivityLoaderLottie.visibility = View.INVISIBLE
+                    b.kycYourPersonalDetailsActivityContentBox.visibility = View.VISIBLE
                 }
 
                 override fun onFailure(call: Call<SelfKycDetailsResponse>, t: Throwable) {
@@ -795,8 +703,9 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
         b.kycYourPersonalDetailsActivityFirstNameET.setText(data.first_name)
         b.kycYourPersonalDetailsActivityMiddleNameET.setText(data.middle_name)
         b.kycYourPersonalDetailsActivityLastNameET.setText(data.last_name)
-
+        b.onboardRegistrationActivityPhoneTF.text = data.phone_number.toString()
         b.kycYourPersonalDetailsActivityEmailET.setText(data.email)
+        b.onboardRegistrationActivityPhoneTF.isPhoneVerified = true
         b.kycYourPersonalDetailsActivityEmailVerifyButton.visibility = View.GONE
         b.kycYourPersonalDetailsActivityEmailVerifiedTV.visibility = View.VISIBLE
         isEmailVerified = true
@@ -806,45 +715,29 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
             //We don't want to clear the phone number while changing country code from spinner, so make it true
             shouldKeepPhoneNumber = true
 
-            b.kycYourPersonalDetailsActivityCountryCodeSpinner.setSelection(1)
-            b.kycYourPersonalDetailsActivityPhoneET.filters =
-                arrayOf(InputFilter.LengthFilter(12))
+            //Hide all warnings
+            b.kycYourPersonalDetailsActivityEmailWarningTV.visibility = View.GONE
+            b.kycYourPersonalDetailsActivityPhoneWarningTV.visibility = View.GONE
+
+            //Change backgrounds
+            if (viewScope == Constants.VIEW_SCOPE_UPDATE) {
+                b.kycYourPersonalDetailsActivityEmailBox.background =
+                    ContextCompat.getDrawable(this, R.color.defaultSelected)
+                b.kycYourPersonalDetailsActivityEmailET.isEnabled = false
+
+
+            } else {
+                b.kycYourPersonalDetailsActivityEmailBox.background =
+                    ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
+
+            }
+
+
+            //Show main UI
+            b.kycYourPersonalDetailsActivityLoaderLottie.visibility = View.GONE
+            b.kycYourPersonalDetailsActivityContentBox.visibility = View.VISIBLE
+
         }
-
-        b.kycYourPersonalDetailsActivityPhoneET.setText(data.phone_number)
-        b.kycYourPersonalDetailsActivityPhoneVerifyButton.visibility = View.GONE
-        b.kycYourPersonalDetailsActivityPhoneVerifiedTV.visibility = View.VISIBLE
-        isPhoneVerified = true
-
-        //Hide all warnings
-        b.kycYourPersonalDetailsActivityEmailWarningTV.visibility = View.GONE
-        b.kycYourPersonalDetailsActivityPhoneWarningTV.visibility = View.GONE
-
-        //Change backgrounds
-        if (viewScope == Constants.VIEW_SCOPE_UPDATE) {
-            b.kycYourPersonalDetailsActivityEmailBox.background =
-                ContextCompat.getDrawable(this, R.color.defaultSelected)
-            b.kycYourPersonalDetailsActivityEmailET.isEnabled = false
-
-            b.kycYourPersonalDetailsActivityPhoneBox.background =
-                ContextCompat.getDrawable(this, R.color.defaultSelected)
-            b.kycYourPersonalDetailsActivityPhoneET.isEnabled = false
-
-            b.kycYourPersonalDetailsActivityCountryCodeSpinner.isEnabled = false
-            b.kycYourPersonalDetailsActivityCountryCodeSpinner.background =
-                ContextCompat.getDrawable(this, R.color.defaultSelected)
-        } else {
-            b.kycYourPersonalDetailsActivityEmailBox.background =
-                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-            b.kycYourPersonalDetailsActivityPhoneBox.background =
-                ContextCompat.getDrawable(this, R.drawable.bg_edit_text_unfocused)
-        }
-
-
-        //Show main UI
-        b.kycYourPersonalDetailsActivityLoaderLottie.visibility = View.GONE
-        b.kycYourPersonalDetailsActivityContentBox.visibility = View.VISIBLE
-
     }
 
     private fun showButtonLoader(
@@ -875,10 +768,20 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     }
 
     private suspend fun populateSelectedFile(uri: Uri?) {
-        if (isPicUploaded){
-            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_delete))
-        }else{
-            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_camera))
+        if (isPicUploaded) {
+            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_delete
+                )
+            )
+        } else {
+            b.kycYourPersonalDetailsActivityCameraIV.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this,
+                    R.drawable.ic_camera
+                )
+            )
         }
         if (uri != null) {
             profilePicUri = uri
@@ -951,8 +854,9 @@ class KycCustomerPersonalDetailsActivity : BaseActivity(), KycYourPersonalDetail
     override fun onPhoneVerified(recordId: String) {
         isPhoneVerified = true
         phoneRecordId = recordId
-        b.kycYourPersonalDetailsActivityPhoneVerifyButton.visibility = View.GONE
-        b.kycYourPersonalDetailsActivityPhoneVerifiedTV.visibility = View.VISIBLE
         isPhoneUpdated = true
+        b.onboardRegistrationActivityPhoneTF.isPhoneVerified = true
     }
 }
+
+
