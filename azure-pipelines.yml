@@ -3,6 +3,7 @@ trigger:
     include:
       - qa
       - pre-production
+      - pre-prod
       - master
 pr:
   branches:
@@ -13,7 +14,7 @@ variables:
     - group: production_customer
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/qa') }}:
     - group: qa_customer
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-production') }}:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-prod') }}:
     - group: pre-production_customer
   - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     - group: develop_customer
@@ -307,3 +308,36 @@ stages:
                   brew install fastlane
                   fastlane android production
                 displayName: 'Deployment'
+
+    - deployment: pre-production
+      # dependsOn: Download_Environment
+      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-prod'))
+      pool:
+        vmImage: "macos-latest"
+      environment: Pre-Production
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - checkout: self
+            - task: JavaToolInstaller@0
+              inputs:
+                versionSpec: '17'
+                jdkArchitectureOption: 'x64'
+                jdkSourceOption: 'PreInstalled'
+            - task: DownloadPipelineArtifact@2
+              name: environment
+              inputs:
+                artifact: Environment
+                targetPath: '$(System.DefaultWorkingDirectory)'
+            - task: DownloadPipelineArtifact@2
+              name: SecretFiles
+              inputs:
+                artifact: SecretFiles
+                targetPath: '$(System.DefaultWorkingDirectory)'
+            - script: |
+                cp $(System.DefaultWorkingDirectory)/paysimati_customer.jks $(System.DefaultWorkingDirectory)/app/paysimati_customer.jks
+                export BUILD_NUMBER=$(Build.BuildId)
+                brew install fastlane
+                fastlane android preprod
+              displayName: 'Deployment'
