@@ -20,6 +20,39 @@
         android:theme="@style/Theme.Paymaart"
         tools:ignore="DiscouragedApi,LockedOrientationActivity"
         tools:targetApi="31">
+
+        <activity
+            android:name=".ui.reportMerchant.ReportMerchantActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.reportMerchant.ReportMerchantCaptureActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:taskAffinity=".kyc" />
+        <activity
+            android:name=".ui.paymerchant.MerchantProfile"
+            android:exported="false" />
+        <activity
+            android:name=".ui.paymerchant.PayMerchantActivity"
+            android:exported="false"
+            android:taskAffinity=".payment"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.chatMerchant.ui.ChatMerchantActivity"
+            android:exported="false"
+            android:taskAffinity=".payment"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.paymerchant.ListMerchantByLocationActivity"
+            android:exported="false"
+            android:taskAffinity=".payment" />
+        <activity
+            android:name=".ui.paymerchant.ListMerchantTransactionActivity"
+            android:exported="false"
+            android:taskAffinity=".payment" />
+        <activity
+            android:name=".ui.scanQr.CustomCaptureActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".main.ui.wallet_statement.wallet_statement.WalletStatementActivity"
             android:exported="false" />

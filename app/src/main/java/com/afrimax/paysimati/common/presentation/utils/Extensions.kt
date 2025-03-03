@@ -48,12 +48,16 @@ fun GenericError.asUiText(): UiText {
         Network.CONFLICT_FOUND -> UiText.Resource(R.string.conflict_found)
         Network.UNAUTHORIZED -> UiText.Resource(R.string.error_un_authorized)
         Network.BAD_REQUEST -> UiText.Resource(R.string.error_bad_request)
+        Network.UNABLE_TO_CONNECT -> UiText.Resource(R.string.error_unable_to_connect)
+        Network.MAPPING_FAILED-> UiText.Resource(R.string.error_mapping_failed)
+
 
         //Errors that can occur while performing operations on SharedPreferences
         Prefs.NO_SUCH_DATA -> UiText.Resource(R.string.error_not_data_found)
         Prefs.UNKNOWN -> UiText.Resource(R.string.error_unknown)
 
         //Errors that can occur while accessing local storage files
+
         Storage.UNABLE_TO_ACCESS_FILE -> UiText.Resource(R.string.unable_to_access_file)
         Storage.FILE_NOT_FOUND -> UiText.Resource(R.string.file_not_found)
         Storage.PERMISSION_DENIED -> UiText.Resource(R.string.permission_denied)
@@ -71,7 +75,9 @@ fun GenericError.asUiText(): UiText {
         Validation.INVALID -> UiText.Resource(R.string.error_invalid)
         Validation.UNSUPPORTED_FILE -> UiText.Resource(R.string.error_unsupported_file)
         Validation.NOT_VERIFIED -> UiText.Resource(R.string.error_not_verified)
-
+        Network.ACCOUNT_LOCKED -> TODO()
+        Network.UNPROCESSABLE_ENTITY -> TODO()
+        Prefs.NO_SUCH_DATA -> TODO()
     }
 }
 
@@ -220,3 +226,30 @@ inline fun <reified T> TypedArray.getAttr(
         else -> throw IllegalArgumentException("Unsupported attribute type")
     }
 }
+
+
+/**This extension simplifies the implementation of custom RecyclerView item decorations,
+ * eliminating boilerplate code for a cleaner and more efficient setup*/
+inline fun RecyclerView.itemDecoration(
+    margin: Int, crossinline configureOffsets: (outRect: Rect, position: Int, margin: Int) -> Unit
+) {
+    val decoration = object : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
+        ) {
+            val position = parent.getChildAdapterPosition(view)
+            configureOffsets(outRect, position, margin)
+        }
+    }
+    addItemDecoration(decoration)
+}
+
+fun String.parseTillNumber(): String {
+    return if (this.length == 7) {
+        "${this.substring(0, 3)} ${this.substring(3, 7)}"
+    } else {
+        this
+    }
+}
+
+
