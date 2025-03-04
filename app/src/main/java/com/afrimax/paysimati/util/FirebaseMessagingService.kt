@@ -12,7 +12,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.os.Build
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -86,14 +85,11 @@ class MessagingService(
                 when (action) {
                     ACTION_LOGOUT -> {
                         authCalls.initiateLogout(this@MessagingService)
-                        val i = applicationContext
-                            .packageManager
-                            .getLaunchIntentForPackage(applicationContext.packageName)
-                        applicationContext.startActivity(
-                            Intent
-                                .makeRestartActivityTask(i!!.component)
-                                .apply { setPackage(applicationContext.packageName) }
-                        )
+                        val i = applicationContext.packageManager.getLaunchIntentForPackage(
+                                applicationContext.packageName
+                            )
+                        applicationContext.startActivity(Intent.makeRestartActivityTask(i!!.component)
+                            .apply { setPackage(applicationContext.packageName) })
                     }
                 }
             }
@@ -107,19 +103,19 @@ class MessagingService(
         //Create the channel first | This only happens once when the app is first booting
         "Response".showLogE(Gson().toJson(data))
         createNotificationChannel()
-        var userinfo :String?=null
-        var requestuserinfo :String?=null
+        var userinfo: String? = null
+        var requestuserinfo: String? = null
         var transactionId: String? = null
-        val action =  data.getStringExtra(ACTION).toString()
+        val action = data.getStringExtra(ACTION).toString()
         if (action == NotificationNavigation.TRANSACTIONS.screenName) transactionId =
             data.getStringExtra(TXN_ID).toString()
-        if(action == NotificationNavigation.CHAT.screenName || action==NotificationNavigation.PAYREQUEST.screenName) userinfo =
+        if (action == NotificationNavigation.CHAT.screenName || action == NotificationNavigation.PAYREQUEST.screenName) userinfo =
             data.getStringExtra("user_info")
         val targetActivity: Class<out AppCompatActivity> = when (action) {
             NotificationNavigation.MEMBERSHIP_PLANS.screenName -> MembershipPlansActivity::class.java
             NotificationNavigation.TRANSACTIONS.screenName -> ViewSpecificTransactionActivity::class.java
             NotificationNavigation.PAYREQUEST.screenName -> ChatMerchantActivity::class.java
-            NotificationNavigation.CHAT.screenName -> ChatMerchantActivity ::class.java
+            NotificationNavigation.CHAT.screenName -> ChatMerchantActivity::class.java
 
 
             else -> SplashScreenActivity::class.java
@@ -129,30 +125,32 @@ class MessagingService(
         val intent = if (isAppInForeground()) {
             Intent(this, targetActivity).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                if (targetActivity == ViewSpecificTransactionActivity::class.java)
-                    putExtra(Constants.TRANSACTION_ID, transactionId)
-                if (targetActivity == ChatMerchantActivity::class.java)
-                    if(action == NotificationNavigation.PAYREQUEST.screenName){
-                        val receiver = Gson().fromJson(requestuserinfo, ChatState::class.java)
-                        putExtra(VIEW_MODEL_STATE, ChatState(
-                            receiverName = receiver.receiverName ,
+                if (targetActivity == ViewSpecificTransactionActivity::class.java) putExtra(
+                    Constants.TRANSACTION_ID,
+                    transactionId
+                )
+                if (targetActivity == ChatMerchantActivity::class.java) if (action == NotificationNavigation.PAYREQUEST.screenName) {
+                    val receiver = Gson().fromJson(requestuserinfo, ChatState::class.java)
+                    putExtra(
+                        VIEW_MODEL_STATE, ChatState(
+                            receiverName = receiver.receiverName,
                             receiverId = receiver.receiverId,
                             receiverProfilePicture = receiver.receiverProfilePicture,
                         )
-                        )
+                    )
 
-                    }
-                else{
-                        putExtra(VIEW_MODEL_STATE, ChatState(
-                            receiverName = receiver.receiverName ,
+                } else {
+                    putExtra(
+                        VIEW_MODEL_STATE, ChatState(
+                            receiverName = receiver.receiverName,
                             receiverId = receiver.receiverId,
                             receiverProfilePicture = receiver.receiverProfilePicture,
                         )
-                        )
-                    }
+                    )
+                }
 
             }
-        }else{
+        } else {
             Intent(this, SplashScreenActivity::class.java).apply {
                 putExtra(Constants.ACTION, action)
                 putExtra(Constants.TRANSACTION_ID, transactionId)
@@ -163,18 +161,12 @@ class MessagingService(
 
         // Create a PendingIntent to cancel the notification when clicked
         val cancelIntent = PendingIntent.getBroadcast(
-            this,
-            notificationId,
-            Intent(this, NotificationDismissReceiver::class.java).apply {
+            this, notificationId, Intent(this, NotificationDismissReceiver::class.java).apply {
                 putExtra("notificationId", notificationId)
-            },
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            }, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
         val pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            this, 0, intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
         val title = data.getStringExtra(TITLE)
         val body = data.getStringExtra(BODY)
@@ -240,8 +232,7 @@ class MessagingService(
         if (appProcesses != null) {
             val packageName = packageName
             for (appProcess in appProcesses) {
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-                    && appProcess.processName == packageName) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName == packageName) {
                     return true
                 }
             }
@@ -265,6 +256,7 @@ class MessagingService(
         const val ACTION_LOGOUT = "logout"
     }
 }
+
 class NotificationDismissReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra("notificationId", 0)
@@ -274,10 +266,6 @@ class NotificationDismissReceiver : BroadcastReceiver() {
 }
 
 
-
-enum class NotificationNavigation(val screenName: String){
-    MEMBERSHIP_PLANS("membership"),
-    TRANSACTIONS("transactions"),
-    PAYREQUEST("request"),
-    CHAT("new_chat")
+enum class NotificationNavigation(val screenName: String) {
+    MEMBERSHIP_PLANS("membership"), TRANSACTIONS("transactions"), PAYREQUEST("request"), CHAT("new_chat")
 }

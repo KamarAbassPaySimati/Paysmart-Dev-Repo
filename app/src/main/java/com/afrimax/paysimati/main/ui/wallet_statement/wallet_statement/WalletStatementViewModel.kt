@@ -3,6 +3,8 @@ package com.afrimax.paysimati.main.ui.wallet_statement.wallet_statement
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.domain.utils.Errors
 import com.afrimax.paysimati.common.domain.utils.GenericResult
 import com.afrimax.paysimati.common.presentation.utils.UiText
 import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
@@ -103,7 +105,15 @@ class WalletStatementViewModel @Inject constructor(
 
         when (fetchUrlCall) {
             is GenericResult.Success -> return fetchUrlCall.data
-            is GenericResult.Error -> postSideEffect { WalletStatementSideEffect.ShowToast((fetchUrlCall.error.asUiText())) }
+            is GenericResult.Error -> when (fetchUrlCall.error) {
+                Errors.Network.FILE_NOT_FOUND -> postSideEffect {
+                    WalletStatementSideEffect.ShowToast(
+                        UiText.Resource(R.string.no_data_available_to_export)
+                    )
+                }
+
+                else -> postSideEffect { WalletStatementSideEffect.ShowToast((fetchUrlCall.error.asUiText())) }
+            }
         }
 
         return null
@@ -114,7 +124,15 @@ class WalletStatementViewModel @Inject constructor(
 
         when (fetchUrlCall) {
             is GenericResult.Success -> return fetchUrlCall.data
-            is GenericResult.Error -> postSideEffect { WalletStatementSideEffect.ShowToast((fetchUrlCall.error.asUiText())) }
+            is GenericResult.Error -> when (fetchUrlCall.error) {
+                Errors.Network.FILE_NOT_FOUND -> postSideEffect {
+                    WalletStatementSideEffect.ShowToast(
+                        UiText.Resource(R.string.no_data_available_to_export)
+                    )
+                }
+
+                else -> postSideEffect { WalletStatementSideEffect.ShowToast((fetchUrlCall.error.asUiText())) }
+            }
         }
 
         return null

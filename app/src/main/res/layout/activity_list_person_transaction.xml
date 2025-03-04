@@ -129,7 +129,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter_regular"
             android:padding="16dp"
-            android:text="@string/recent_transactions_of_last_60_days"
+            android:text="@string/recent_transactions_of_last_90_days"
             android:textColor="@color/neutralGrey"
             android:textSize="14sp" />
 
