@@ -849,4 +849,5 @@
     <string name="report_merchant_q_5">Others</string>
     <string name="imagaeUpload">Image(Optional)</string>
     <string name="Others">Others</string>
+    <string name="no_data_available_to_export">No data available to export.</string>
 </resources>
