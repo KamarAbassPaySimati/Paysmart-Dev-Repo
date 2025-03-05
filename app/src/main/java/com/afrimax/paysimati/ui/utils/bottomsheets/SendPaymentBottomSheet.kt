@@ -173,6 +173,7 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
     }
 
     private suspend fun validatePasswordField() {
+
         var isValid = true
         binding.sendPaymentPasswordETWarning.visibility = View.GONE
         binding.sendPaymentPasswordBox.background =

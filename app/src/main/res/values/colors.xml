@@ -4,11 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#FFFFFFFF</color>
 
-    #000000B2
-
-
     <!-- CUSTOM COLORS -->
-
     <color name="transparent">#00000000</color>
     <color name="primaryColor">#3B2A6F</color>
     <color name="status_bar">#766A9A</color>

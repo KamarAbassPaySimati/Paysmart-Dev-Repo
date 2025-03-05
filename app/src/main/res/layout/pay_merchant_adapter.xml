@@ -81,7 +81,7 @@
                 android:text="@string/Location"
                 android:textColor="@color/neutralGrey"
                 android:textSize="14sp"
-                app:drawableStartCompat="@drawable/ico_location" />
+                app:drawableStartCompat="@drawable/ic_location" />
 
         </LinearLayout>
 

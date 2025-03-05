@@ -266,6 +266,10 @@ class NotificationDismissReceiver : BroadcastReceiver() {
 }
 
 
-enum class NotificationNavigation(val screenName: String) {
-    MEMBERSHIP_PLANS("membership"), TRANSACTIONS("transactions"), PAYREQUEST("request"), CHAT("new_chat")
+
+enum class NotificationNavigation(val screenName: String){
+    MEMBERSHIP_PLANS("membership"),
+    TRANSACTIONS("transactions"),
+    PAYREQUEST("request"),
+    CHAT("new_chat")
 }
