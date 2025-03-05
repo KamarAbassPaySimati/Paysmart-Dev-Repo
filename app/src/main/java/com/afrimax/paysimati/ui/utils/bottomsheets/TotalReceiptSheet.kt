@@ -24,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
     private lateinit var b: TotalAmountReceiptBottomSheetBinding
     private var totalAmount: String = "0.0"
-    private  var enteredAmount:String ="0.0"
+    private var enteredAmount: String = "0.0"
     private var txnFee: String = "0.0"
     private var vat: String = "0.0"
 
@@ -60,13 +60,15 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                 txnFee = model.txnFee
                 totalAmount = model.amount
             }
-            is PayMerchantModel->{
+
+            is PayMerchantModel -> {
                 vat = model.vat
                 enteredAmount = model.amount
                 txnFee = model.txnFee
                 totalAmount = model.amount
             }
-            is  PayMerchantRequestModel->{
+
+            is PayMerchantRequestModel -> {
                 vat = model.vat
                 enteredAmount = model.amount
                 txnFee = model.txnFee
@@ -148,11 +150,12 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                 )
                 sendPaymentBottomSheet = SendPaymentBottomSheet(payPersonRegisteredModel)
             }
-            is PayMerchantModel->{
+
+            is PayMerchantModel -> {
                 val payMerchantModel = PayMerchantRequest(
                     amount = model.amount.toDouble(),
                     receiverId = model.recieiverid,
-                    flag=false,
+                    flag = false,
                     password = null,
                     senderId = model.senderId,
                     entryBy = model.entryBy,
@@ -163,12 +166,13 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                 sendPaymentBottomSheet = SendPaymentBottomSheet(payMerchantModel)
 
             }
-            is PayMerchantRequestModel ->{
+
+            is PayMerchantRequestModel -> {
                 val payMerchantRequestModel = MerchantRequestPay(
                     amount = model.amount.toDouble(),
                     requestId = model.requestid,
                     receiverId = model.recieiverid,
-                    flag=false,
+                    flag = false,
                     password = null,
                     senderId = model.senderId,
                     entryBy = model.entryBy,

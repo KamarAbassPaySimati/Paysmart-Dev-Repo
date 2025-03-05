@@ -136,7 +136,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 )
                 setCommonView(model)
                 binding.paymentSuccessfulStatusText.text = getString(R.string.cash_out_requested)
-                binding.paymentSuccessfulTxn.text = getString(R.string.cash_out_value)
+                binding.paymentSuccessfulTxn.text = getString(R.string.cash_out_value_star)
                 binding.paymentSuccessfulStatusContainer.setBackgroundColor(
                     ContextCompat.getColor(
                         this, R.color.paymentScreenOrange
