@@ -44,6 +44,7 @@ inline fun <T> safeApiCall(
             HTTP_UNAUTHORIZED -> GenericResult.Error(Errors.Network.UNAUTHORIZED)
             HTTP_BAD_REQUEST -> GenericResult.Error(Errors.Network.BAD_REQUEST)
             HTTP_CONFLICT -> GenericResult.Error(Errors.Network.CONFLICT_FOUND)
+            404 -> GenericResult.Error(Errors.Network.FILE_NOT_FOUND)
             else -> GenericResult.Error(Errors.Network.UNKNOWN)
         }
 
