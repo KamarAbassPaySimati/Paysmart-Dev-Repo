@@ -177,7 +177,6 @@ class ListMerchantTransactionActivity : BaseActivity() {
             }
         })
     }
-
     private fun searchForMerchantTransactions() {
         coroutineScope.launch {
             showLoader()
@@ -426,12 +425,4 @@ class ListMerchantTransactionActivity : BaseActivity() {
         }
     }
 
-
 }
-
-
-
-
-
-
-

@@ -159,7 +159,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         b.onboardRegistrationActivityProfileContainer.visibility = View.VISIBLE
         val ss = SpannableString(getString(R.string.terms_and_conditions))
         ss.setSpan(clickableSpanTnC, 36, 55, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        ss.setSpan(clickableSpanPrivacyPolicy, 59, 73, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ss.setSpan(clickableSpanPrivacyPolicy, 59, 74, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         b.onboardRegistrationActivityTnCPrivacyPolicyTV.text = ss
     }
 
@@ -758,6 +758,9 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         if (isValid) {
+            b.onboardRegistrationActivityEmailVerifyPB.visibility = View.VISIBLE
+            b.onboardRegistrationActivityEmailVerifyButton.visibility = View.GONE
+
             lifecycleScope.launch {
                 val recaptchaClient = recaptchaManager.getClient()
                 if (recaptchaClient != null) {
@@ -852,8 +855,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         when (type) {
             Constants.OTP_EMAIL_TYPE -> {
                 value = b.onboardRegistrationActivityEmailET.text.toString()
-                b.onboardRegistrationActivityEmailVerifyPB.visibility = View.VISIBLE
-                b.onboardRegistrationActivityEmailVerifyButton.visibility = View.GONE
             }
 
             Constants.OTP_SMS_TYPE -> {

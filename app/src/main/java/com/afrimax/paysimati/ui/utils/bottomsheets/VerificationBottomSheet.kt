@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.presentation.utils.PhoneNumberFormatter
 import com.afrimax.paysimati.data.ApiClient
 import com.afrimax.paysimati.data.model.SendOtpRequestBody
 import com.afrimax.paysimati.data.model.SendOtpResponse
@@ -81,7 +82,8 @@ class VerificationBottomSheet() : BottomSheetDialogFragment() {
                 binding.registrationVerificationSheetSubTV.text =
                     requireContext().getStringExt(R.string.phone_verify_sub_text)
 
-                binding.registrationVerificationSheetContentTV.text = "$countryCode $value"
+                binding.registrationVerificationSheetContentTV.text =
+                    "$countryCode ${PhoneNumberFormatter.format(countryCode, value)}"
             }
         }
 
@@ -94,26 +96,28 @@ class VerificationBottomSheet() : BottomSheetDialogFragment() {
         }
 
         binding.registrationVerificationSheetVerifyButton.setOnClickListener {
-            showButtonLoader(
-                binding.registrationVerificationSheetVerifyButton,
-                binding.registrationVerificationSheetVerifyButtonLoaderLottie
-            )
-            lifecycleScope.launch {
-                val recaptchaClient = recaptchaManager.getClient()
-                if (recaptchaClient != null) {
-                    recaptchaClient.execute(RecaptchaAction.custom(Constants.VERIFY_OTP))
-                        .onSuccess { _ ->
-                            verifyOtpApi(type, token)
-                        }.onFailure { exception ->
-                            "Response".showLogE(exception.message ?: "")
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.default_error_toast),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                } else {
-                    verifyOtpApi(type, token)
+            if (validateOtp()) {
+                showButtonLoader(
+                    binding.registrationVerificationSheetVerifyButton,
+                    binding.registrationVerificationSheetVerifyButtonLoaderLottie
+                )
+                lifecycleScope.launch {
+                    val recaptchaClient = recaptchaManager.getClient()
+                    if (recaptchaClient != null) {
+                        recaptchaClient.execute(RecaptchaAction.custom(Constants.VERIFY_OTP))
+                            .onSuccess { _ ->
+                                verifyOtpApi(type, token)
+                            }.onFailure { exception ->
+                                "Response".showLogE(exception.message ?: "")
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.default_error_toast),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                    } else {
+                        verifyOtpApi(type, token)
+                    }
                 }
             }
         }
@@ -147,42 +151,31 @@ class VerificationBottomSheet() : BottomSheetDialogFragment() {
     }
 
     private fun verifyOtpApi(type: String, token: String) {
-        if (validateOtp()) {
-            val otp = binding.registrationVerificationSheetCodeET.text.toString()
-            val verifyOtpCall = ApiClient.apiService.verifyOtp(VerifyOtpRequestBody(otp, token))
-            verifyOtpCall.enqueue(object : Callback<VerifyOtpResponse> {
-                override fun onResponse(
-                    call: Call<VerifyOtpResponse>, response: Response<VerifyOtpResponse>
-                ) {
-                    val body = response.body()
-                    if (body != null && response.isSuccessful) {
-                        hideButtonLoader(
-                            binding.registrationVerificationSheetVerifyButton,
-                            binding.registrationVerificationSheetVerifyButtonLoaderLottie,
-                            getString(R.string.verify)
-                        )
-                        when (type) {
-                            Constants.OTP_EMAIL_TYPE -> {
-                                sheetCallback.onEmailVerified(body.recordId)
-                                dismiss()
-                            }
-
-                            Constants.OTP_SMS_TYPE -> {
-                                sheetCallback.onPhoneVerified(body.recordId)
-                                dismiss()
-                            }
+        val otp = binding.registrationVerificationSheetCodeET.text.toString()
+        val verifyOtpCall = ApiClient.apiService.verifyOtp(VerifyOtpRequestBody(otp, token))
+        verifyOtpCall.enqueue(object : Callback<VerifyOtpResponse> {
+            override fun onResponse(
+                call: Call<VerifyOtpResponse>, response: Response<VerifyOtpResponse>
+            ) {
+                val body = response.body()
+                if (body != null && response.isSuccessful) {
+                    hideButtonLoader(
+                        binding.registrationVerificationSheetVerifyButton,
+                        binding.registrationVerificationSheetVerifyButtonLoaderLottie,
+                        getString(R.string.verify)
+                    )
+                    when (type) {
+                        Constants.OTP_EMAIL_TYPE -> {
+                            sheetCallback.onEmailVerified(body.recordId)
+                            dismiss()
                         }
-                    } else {
-                        hideButtonLoader(
-                            binding.registrationVerificationSheetVerifyButton,
-                            binding.registrationVerificationSheetVerifyButtonLoaderLottie,
-                            getString(R.string.verify)
-                        )
-                        showOtpWarning(R.string.invalid_otp)
-                    }
-                }
 
-                override fun onFailure(call: Call<VerifyOtpResponse>, t: Throwable) {
+                        Constants.OTP_SMS_TYPE -> {
+                            sheetCallback.onPhoneVerified(body.recordId)
+                            dismiss()
+                        }
+                    }
+                } else {
                     hideButtonLoader(
                         binding.registrationVerificationSheetVerifyButton,
                         binding.registrationVerificationSheetVerifyButtonLoaderLottie,
@@ -190,8 +183,17 @@ class VerificationBottomSheet() : BottomSheetDialogFragment() {
                     )
                     showOtpWarning(R.string.invalid_otp)
                 }
-            })
-        }
+            }
+
+            override fun onFailure(call: Call<VerifyOtpResponse>, t: Throwable) {
+                hideButtonLoader(
+                    binding.registrationVerificationSheetVerifyButton,
+                    binding.registrationVerificationSheetVerifyButtonLoaderLottie,
+                    getString(R.string.verify)
+                )
+                showOtpWarning(R.string.invalid_otp)
+            }
+        })
     }
 
     private fun resendOtpApi(

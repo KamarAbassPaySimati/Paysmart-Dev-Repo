@@ -147,7 +147,7 @@ class ReportMerchantActivity :BaseActivity(),ReportOtherReason {
 
             val img1 = binding.reportmerchantUploadActivityFrontImage1IV.getTag(R.string.key_image_path)
 
-            val img2 = binding.reportmerchantUploadActivityFrontImage2IV.getTag(R.string.key_file_path)
+            val img2 = binding.reportmerchantUploadActivityFrontImage2IV.getTag(R.string.key_image_path)
 
             val img1tag = binding.reportmerchantUploadActivity1FrontFileNameTV.getTag(R.string.key_file_path)
 
@@ -174,7 +174,6 @@ class ReportMerchantActivity :BaseActivity(),ReportOtherReason {
     }
 
 
-
     private fun setimage() {
         binding.reportMerchantimgupload1.setOnClickListener {
             currentDocSide = getString(R.string.front)
@@ -194,7 +193,7 @@ class ReportMerchantActivity :BaseActivity(),ReportOtherReason {
         binding.reportMerchantcaputre2.setOnClickListener{
             currentCaptureSide = getString(R.string.back)
             checkPermissionsAndProceed()
-            Upload1 = UploadType.PHOTO
+            Upload2 = UploadType.PHOTO
         }
         binding.reportmerchantUploadActivityFileFrontDeleteButton.setOnClickListener {
             removeFrontFile()
@@ -226,8 +225,8 @@ class ReportMerchantActivity :BaseActivity(),ReportOtherReason {
         }
         binding.reportmerchantUploadActivity2FrontReUploadButton.setOnClickListener {
             removeBackImage()
-            currentCaptureSide = getString(R.string.front)
-            if (Upload1 == UploadType.PHOTO) checkPermissionsAndProceed()
+            currentCaptureSide = getString(R.string.back)
+            if (Upload2 == UploadType.PHOTO) checkPermissionsAndProceed()
             else launchFilePicker()
         }
     }

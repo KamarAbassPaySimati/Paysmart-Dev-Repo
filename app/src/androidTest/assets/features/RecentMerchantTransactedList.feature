@@ -38,4 +38,4 @@ Feature: Paymaart- Customer Android- Recent merchant transacted list
     When I search for "Suhaas Kumar"
     Then I should see the list of Merchants
         #When I click on the first profile of Merchant
-        #Then I should be redirected to Merchant transaction screen
+        #Then I should be redirected to Merchant transaction screen 

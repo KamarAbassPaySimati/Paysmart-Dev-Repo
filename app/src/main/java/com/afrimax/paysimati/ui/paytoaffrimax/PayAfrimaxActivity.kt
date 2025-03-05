@@ -410,7 +410,6 @@ class PayAfrimaxActivity : BaseActivity(), SendPaymentInterface {
 
         }
     }
-
     private fun paginatePlansApi() {
         val currentPage = pageValue
         if (currentPage != null) {
