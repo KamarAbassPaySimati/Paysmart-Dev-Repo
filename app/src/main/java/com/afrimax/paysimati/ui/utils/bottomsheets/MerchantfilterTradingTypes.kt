@@ -69,7 +69,7 @@ class MerchantFilterTradingTypesSheet : BottomSheetDialogFragment() {
                 text = type.name
                 textSize = 16f
                 typeface=interRegularTypeface
-                setPadding(16, 16, 16, 16) // Same as your XML padding
+                setPadding(16, 16, 16, 16)
                 setTextColor(
                     ContextCompat.getColor(
                         context,
@@ -88,11 +88,9 @@ class MerchantFilterTradingTypesSheet : BottomSheetDialogFragment() {
                 gravity = android.view.Gravity.START or android.view.Gravity.CENTER_VERTICAL
 
                 val params = ViewGroup.MarginLayoutParams(
-                    resources.getDimensionPixelSize(R.dimen.radio_button_width),
+                    ViewGroup.LayoutParams.MATCH_PARENT,
                     resources.getDimensionPixelSize(R.dimen.radio_button_height)
-                ).apply {
-                    setMargins(16, 0, 0, 0) // 16dp start margin
-                }
+                )
                 layoutParams = params
 
             }
