@@ -99,7 +99,7 @@ class MerchantProfile : BaseActivity() {
         val tradingImages = merchantData.tradingImages ?: emptyList()
 
         if (tradingImages.isEmpty()) {
-            binding.viewMerchantBusinessTV.text = "-"
+            binding.viewMerchantBusinessTV.visibility = View.VISIBLE
         } else {
             val imageList = tradingImages.map { imagePath ->
                 BuildConfig.CDN_BASE_URL + imagePath
