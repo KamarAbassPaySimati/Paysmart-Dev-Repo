@@ -86,12 +86,12 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/viewMerchantActivityProfileContainer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:layout_alignParentTop="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="72dp">
-
+                        android:layout_marginTop="72dp"
+                      >
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/payMerchantIV"
                             android:layout_width="100dp"
@@ -104,12 +104,11 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                           />
-
+                            />
                         <TextView
                             android:id="@+id/viewMerchantActivityShortNameTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:fontFamily="@font/inter_bold"
                             android:gravity="center"
                             android:padding="16dp"
@@ -121,11 +120,14 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            android:background="@drawable/primary_outlined_button_background"
-                            android:visibility="visible"/>
-
+                            android:background="@drawable/primary_outlined_button_background"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
 
                     <TextView
                         android:id="@+id/viewMerchantActivityNameTV"
@@ -189,7 +191,7 @@
                         android:paddingStart="16dp"
                         android:paddingTop="8dp"
                         android:fontFamily="@font/inter_regular"
-                        android:text="@string/till_no"
+                        android:text="@string/till_num"
                         android:textColor="@color/neutralGrey"
                         android:textSize="14sp"
                         tools:ignore="RtlSymmetry" />
@@ -299,7 +301,7 @@
                         android:paddingStart="16dp"
                         android:paddingTop="8dp"
                         android:fontFamily="@font/inter_regular"
-                        android:text="@string/trading_types"
+                        android:text="@string/trading_type"
                         android:textColor="@color/neutralGrey"
                         android:textSize="14sp" />
 
@@ -325,7 +327,8 @@
                         android:fontFamily="@font/inter_regular"
                         android:text="@string/business_name"
                         android:textColor="@color/neutralGrey"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        />
                     <TextView
                         android:id="@+id/viewMerchantBusinessTV"
                         android:layout_width="match_parent"
@@ -336,7 +339,8 @@
                         android:fontFamily="@font/inter_regular"
                         android:text="@string/dash"
                         android:textColor="@color/black"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:visibility="gone"/>
 
 
 
@@ -348,9 +352,6 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentStart="true"
                         android:visibility="visible" />
 
 

@@ -782,6 +782,7 @@
     <string name="frame_for_scanner">frame for scanner</string>
     <string name="filter_by_trading_name">filter by trading name</string>
     <string name="till_no">Till No : </string>
+    <string name="till_num">Till No</string>
     <string name="till_number">Till Nos.</string>
     <string name="trading_types">Trading Types: </string>
     <string name="trading_type">Trading Type</string>
@@ -834,7 +835,7 @@
     </string>
     <string name="verification_otp_sent_successfully">Verification OTP sent successfully.</string>
     <string name="profile">Profile\n</string>
-    <string name="business_name">Bussiness Images</string>
+    <string name="business_name">Business Images</string>
     <string name="Report_Merchant">Report Merchant</string>
     <string name="MerchantProfile">Profile</string>
     <string name="check_security_check_box">• Unauthorized Transactions\n• Phishing Attempts\n• Unsecured Checkout\n• Identity Theft</string>

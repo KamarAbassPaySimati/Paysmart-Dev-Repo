@@ -52,15 +52,15 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/payMerchantActivityProfileContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_kyc_profile">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/payMerchantActivityProfileIV"
-                    android:layout_width="96dp"
-                    android:layout_height="0dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:contentDescription="@string/image_description"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_no_image"
@@ -73,8 +73,8 @@
 
                 <TextView
                     android:id="@+id/payMerchantActivityShortNameTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:fontFamily="@font/inter_bold"
                     android:gravity="center"
                     android:padding="16dp"
