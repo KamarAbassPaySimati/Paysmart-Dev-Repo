@@ -57,5 +57,4 @@ class ScanQRcode {
             .perform(ViewActions.click())
         Thread.sleep(5000)
     }
-
 }
