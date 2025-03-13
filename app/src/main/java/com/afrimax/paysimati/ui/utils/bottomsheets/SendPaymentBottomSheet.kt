@@ -72,7 +72,7 @@ class SendPaymentBottomSheet(private val data: Any? = null) : BottomSheetDialogF
         }
 
         binding.sendPaymentSubText.text = when (data) {
-            is SubscriptionDetailsRequestBody, is PayToUnRegisteredPersonRequest, is PayToRegisteredPersonRequest, is PayMerchantRequest -> getString(
+            is SubscriptionDetailsRequestBody, is PayToUnRegisteredPersonRequest, is PayToRegisteredPersonRequest, is PayMerchantRequest , is MerchantRequestPay-> getString(
                 R.string.send_payment_subtext
             )
 
