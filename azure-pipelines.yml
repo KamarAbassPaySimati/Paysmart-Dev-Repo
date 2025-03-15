@@ -3,17 +3,19 @@ trigger:
     include:
       - qa
       - pre-production
+      - pre-prod
       - master
 pr:
   branches:
     include:
       - qa
+      - pre-prod
 variables:
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     - group: production_customer
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/qa') }}:
     - group: qa_customer
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-production') }}:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-prod') }}:
     - group: pre-production_customer
   - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     - group: develop_customer
@@ -26,6 +28,7 @@ stages:
         vmImage: "ubuntu-latest"
       steps:
         - script: |
+            aws sts get-caller-identity
             sudo pip3 install --upgrade pip
             pip3 install awscli --upgrade --user
             export PATH="/home/vsts/.local/bin:$PATH"
@@ -64,20 +67,22 @@ stages:
             targetPath: '$(System.DefaultWorkingDirectory)'
         - task: Cache@2
           inputs:
-            key: 'gradle | **/build.gradle' # Swap build.gradle.kts for build.gradle when using Groovy
-            restoreKeys: |
-              gradle | "$(Agent.OS)"
-              gradle
-            path: '$(System.DefaultWorkingDirectory)/.gradle'
-          displayName: Configure gradle caching 
+            key: 'gradle-wrapper | "$(Agent.OS)" | **/gradle-wrapper.properties'
+            path: '$(HOME)/.gradle/wrapper'
+          displayName: 'Cache Gradle Wrapper'
         - task: Cache@2
           inputs:
-            key: 'build | "$(Agent.OS)" | **/build.gradle' # Swap build.gradle.kts for build.gradle when using Groovy
+            key: 'gradle-dependencies | "$(Agent.OS)" | **/build.gradle'
+            path: '$(HOME)/.gradle/caches'
             restoreKeys: |
-              gradle | "$(Agent.OS)"
-              gradle
+              gradle-dependencies | "$(Agent.OS)"
+          displayName: 'Cache Gradle Dependencies'
+
+        - task: Cache@2
+          inputs:
+            key: 'android-build | "$(Agent.OS)" | "$(Build.SourceBranch)" | **/build.gradle'
             path: '$(System.DefaultWorkingDirectory)/app/build'
-          displayName: Download Build Cache
+          displayName: 'Cache Android Build Output'
         - task: Gradle@3
           inputs:
             gradleWrapperFile: 'gradlew'
@@ -143,20 +148,29 @@ stages:
             targetPath: '$(System.DefaultWorkingDirectory)'
         - task: Cache@2
           inputs:
-            key: 'gradle | "$(Agent.OS)" | **/build.gradle' # Swap build.gradle.kts for build.gradle when using Groovy
-            path: '$(System.DefaultWorkingDirectory)/.gradle'
-          displayName: Download Caching
+            key: 'gradle-wrapper | "$(Agent.OS)" | **/gradle-wrapper.properties'
+            path: '$(HOME)/.gradle/wrapper'
+          displayName: 'Cache Gradle Wrapper'
         - task: Cache@2
           inputs:
-            key: 'build | "$(Agent.OS)" | **/build.gradle' # Swap build.gradle.kts for build.gradle when using Groovy
+            key: 'gradle-dependencies | "$(Agent.OS)" | **/build.gradle'
+            path: '$(HOME)/.gradle/caches'
+            restoreKeys: |
+              gradle-dependencies | "$(Agent.OS)"
+          displayName: 'Cache Gradle Dependencies'
+        - task: Cache@2
+          inputs:
+            key: 'android-build | "$(Agent.OS)" | "$(Build.SourceBranch)" | **/build.gradle'
             path: '$(System.DefaultWorkingDirectory)/app/build'
-          displayName: Download Build Cache
+          displayName: 'Cache Android Build Output'
         - script: |
             cp $(System.DefaultWorkingDirectory)/paysimati_customer.jks $(System.DefaultWorkingDirectory)/app/paysimati_customer.jks
             export BUILD_NUMBER=$(Build.BuildId)
             brew install fastlane
             fastlane android develop
           displayName: 'Build'
+
+
 
 - stage: Test
   jobs:
@@ -167,7 +181,7 @@ stages:
       pool:
         vmImage: "macos-latest"
       steps:
-        
+
         - task: JavaToolInstaller@0
           inputs:
             versionSpec: '17'
@@ -205,12 +219,10 @@ stages:
   jobs:
     - job: Android_Lambda_Test
       displayName: "Deploy"
-      # dependsOn: BDD
       condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
       pool:
         vmImage: "macos-latest"
       steps:
-        # - checkout: self
         - task: JavaToolInstaller@0
           inputs:
             versionSpec: '17'
@@ -236,12 +248,30 @@ stages:
           displayName: 'Download Environment'
           inputs:
             secureFile: "paysimati_customer.jks"
+        - task: Cache@2
+          inputs:
+            key: 'gradle-wrapper | "$(Agent.OS)" | **/gradle-wrapper.properties'
+            path: '$(HOME)/.gradle/wrapper'
+          displayName: 'Cache Gradle Wrapper'
+        - task: Cache@2
+          inputs:
+            key: 'gradle-dependencies | "$(Agent.OS)" | **/build.gradle'
+            path: '$(HOME)/.gradle/caches'
+            restoreKeys: |
+              gradle-dependencies | "$(Agent.OS)"
+          displayName: 'Cache Gradle Dependencies'
+        - task: Cache@2
+          inputs:
+            key: 'android-build | "$(Agent.OS)" | "$(Build.SourceBranch)" | **/build.gradle'
+            path: '$(System.DefaultWorkingDirectory)/app/build'
+          displayName: 'Cache Android Build Output'
         - script: |
             cp $(System.DefaultWorkingDirectory)/paysimati_customer.jks $(System.DefaultWorkingDirectory)/app/paysimati_customer.jks
             brew install fastlane
             export BUILD_NUMBER=$(Build.BuildId)
             fastlane android qa
           displayName: 'Deployment'
+
 
     - deployment: production
       # dependsOn: Download_Environment
@@ -269,6 +299,23 @@ stages:
               inputs:
                 artifact: SecretFiles
                 targetPath: '$(System.DefaultWorkingDirectory)'
+            - task: Cache@2
+              inputs:
+                key: 'gradle-wrapper | "$(Agent.OS)" | **/gradle-wrapper.properties'
+                path: '$(HOME)/.gradle/wrapper'
+              displayName: 'Cache Gradle Wrapper'
+            - task: Cache@2
+              inputs:
+                key: 'gradle-dependencies | "$(Agent.OS)" | **/build.gradle'
+                path: '$(HOME)/.gradle/caches'
+                restoreKeys: |
+                  gradle-dependencies | "$(Agent.OS)"
+              displayName: 'Cache Gradle Dependencies'
+            - task: Cache@2
+              inputs:
+                key: 'android-build | "$(Agent.OS)" | "$(Build.SourceBranch)" | **/build.gradle'
+                path: '$(System.DefaultWorkingDirectory)/app/build'
+              displayName: 'Cache Android Build Output'
             - script: |
                 cp $(System.DefaultWorkingDirectory)/paysimati_customer.jks $(System.DefaultWorkingDirectory)/app/paysimati_customer.jks
                 export BUILD_NUMBER=$(Build.BuildId)
@@ -277,7 +324,6 @@ stages:
               displayName: 'Deployment'
     
     - deployment: staging
-      # dependsOn: Download_Environment
       condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-production'))
       pool:
         vmImage: "macos-latest"
@@ -302,8 +348,58 @@ stages:
                 inputs:
                   artifact: SecretFiles
                   targetPath: '$(System.DefaultWorkingDirectory)'
+              - task: Cache@2
+                inputs:
+                  key: 'gradle-wrapper | "$(Agent.OS)" | **/gradle-wrapper.properties'
+                  path: '$(HOME)/.gradle/wrapper'
+                  displayName: 'Cache Gradle Wrapper'
+              - task: Cache@2
+                inputs:
+                  key: 'gradle-dependencies | "$(Agent.OS)" | **/build.gradle'
+                  path: '$(HOME)/.gradle/caches'
+                  restoreKeys: |
+                    gradle-dependencies | "$(Agent.OS)"
+                displayName: 'Cache Gradle Dependencies'
+              - task: Cache@2
+                inputs:
+                  key: 'android-build | "$(Agent.OS)" | "$(Build.SourceBranch)" | **/build.gradle'
+                  path: '$(System.DefaultWorkingDirectory)/app/build'
+                displayName: 'Cache Android Build Output'
               - script: |
                   cp $(System.DefaultWorkingDirectory)/paysimati_customer.jks $(System.DefaultWorkingDirectory)/app/paysimati_customer.jks
                   brew install fastlane
                   fastlane android production
                 displayName: 'Deployment'
+
+    - deployment: preproduction
+      # dependsOn: Download_Environment
+      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-prod'))
+      pool:
+        vmImage: "macos-latest"
+      environment: Pre-Production
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - checkout: self
+            - task: JavaToolInstaller@0
+              inputs:
+                versionSpec: '17'
+                jdkArchitectureOption: 'x64'
+                jdkSourceOption: 'PreInstalled'
+            - task: DownloadPipelineArtifact@2
+              name: environment
+              inputs:
+                artifact: Environment
+                targetPath: '$(System.DefaultWorkingDirectory)'
+            - task: DownloadPipelineArtifact@2
+              name: SecretFiles
+              inputs:
+                artifact: SecretFiles
+                targetPath: '$(System.DefaultWorkingDirectory)'
+            - script: |
+                cp $(System.DefaultWorkingDirectory)/paysimati_customer.jks $(System.DefaultWorkingDirectory)/app/paysimati_customer.jks
+                export BUILD_NUMBER=$(Build.BuildId)
+                brew install fastlane
+                fastlane android preprod
+              displayName: 'Deployment'

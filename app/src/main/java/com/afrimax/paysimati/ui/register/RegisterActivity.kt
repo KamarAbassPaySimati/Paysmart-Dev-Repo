@@ -62,7 +62,6 @@ import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.recaptcha.RecaptchaAction
-import com.google.android.recaptcha.RecaptchaClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,6 +74,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.IOException
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
@@ -89,6 +89,11 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
     private var isPicUploaded: Boolean = false
     private var profilePicBaseString: String = ""
     private val items = countries.map { it.dialCode }
+
+
+    @Inject
+    lateinit var recaptchaManager: RecaptchaManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
@@ -109,9 +114,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         setUpPhoneField()
         retrieveSecurityQuestionsApi()
     }
-
-    val recaptchaClient: RecaptchaClient
-        get() = RecaptchaManager.getClient()!!
 
     private fun setUpLayout() {
 
@@ -157,7 +159,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         b.onboardRegistrationActivityProfileContainer.visibility = View.VISIBLE
         val ss = SpannableString(getString(R.string.terms_and_conditions))
         ss.setSpan(clickableSpanTnC, 36, 55, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        ss.setSpan(clickableSpanPrivacyPolicy, 59, 73, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ss.setSpan(clickableSpanPrivacyPolicy, 59, 74, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         b.onboardRegistrationActivityTnCPrivacyPolicyTV.text = ss
     }
 
@@ -181,7 +183,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         try {
             val popup = AppCompatSpinner::class.java.getDeclaredField("mPopup")
             popup.isAccessible = true
-            val popupWindow = popup.get(spinner) as ListPopupWindow
+            val popupWindow = popup[spinner] as ListPopupWindow
             popupWindow.height = height
             popupWindow.verticalOffset = verticalOffset
         } catch (e: Exception) {
@@ -548,11 +550,16 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                 b.onboardRegistrationActivitySubmitButtonLoaderLottie
             )
             lifecycleScope.launch {
-                recaptchaClient.execute(RecaptchaAction.SIGNUP).onSuccess { _ ->
+                val recaptchaClient = recaptchaManager.getClient()
+                if (recaptchaClient != null) {
+                    recaptchaClient.execute(RecaptchaAction.SIGNUP).onSuccess { _ ->
+                        registerCustomer()
+                    }.onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                        showToast(getString(R.string.default_error_toast))
+                    }
+                } else {
                     registerCustomer()
-                }.onFailure { exception ->
-                    "Response".showLogE(exception.message ?: "")
-                    showToast(getString(R.string.default_error_toast))
                 }
             }
         } else {
@@ -751,12 +758,20 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         }
 
         if (isValid) {
+            b.onboardRegistrationActivityEmailVerifyPB.visibility = View.VISIBLE
+            b.onboardRegistrationActivityEmailVerifyButton.visibility = View.GONE
+
             lifecycleScope.launch {
-                recaptchaClient.execute(RecaptchaAction.SIGNUP).onSuccess { token ->
+                val recaptchaClient = recaptchaManager.getClient()
+                if (recaptchaClient != null) {
+                    recaptchaClient.execute(RecaptchaAction.SIGNUP).onSuccess { _ ->
+                        sendOtp(Constants.OTP_EMAIL_TYPE)
+                    }.onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                        showToast(getString(R.string.default_error_toast))
+                    }
+                } else {
                     sendOtp(Constants.OTP_EMAIL_TYPE)
-                }.onFailure { exception ->
-                    "Response".showLogE(exception.message ?: "")
-                    showToast(getString(R.string.default_error_toast))
                 }
             }
         } else {
@@ -812,11 +827,16 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
 
         if (isValid) {
             return lifecycleScope.launch {
-                recaptchaClient.execute(RecaptchaAction.SIGNUP).onSuccess { token ->
+                val recaptchaClient = recaptchaManager.getClient()
+                if (recaptchaClient != null) {
+                    recaptchaClient.execute(RecaptchaAction.SIGNUP).onSuccess { _ ->
+                        sendOtp(Constants.OTP_SMS_TYPE)
+                    }.onFailure { exception ->
+                        "Response".showLogE(exception.message ?: "")
+                        showToast(getString(R.string.default_error_toast))
+                    }
+                } else {
                     sendOtp(Constants.OTP_SMS_TYPE)
-                }.onFailure { exception ->
-                    "Response".showLogE(exception.message ?: "")
-                    showToast(getString(R.string.default_error_toast))
                 }
             }
         } else {
@@ -835,8 +855,6 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
         when (type) {
             Constants.OTP_EMAIL_TYPE -> {
                 value = b.onboardRegistrationActivityEmailET.text.toString()
-                b.onboardRegistrationActivityEmailVerifyPB.visibility = View.VISIBLE
-                b.onboardRegistrationActivityEmailVerifyButton.visibility = View.GONE
             }
 
             Constants.OTP_SMS_TYPE -> {
@@ -863,7 +881,7 @@ class RegisterActivity : BaseActivity(), VerificationBottomSheetInterface {
                     val body = response.body()
                     if (body != null && response.isSuccessful) {
                         runOnUiThread {
-                            verificationBottomSheet = VerificationBottomSheet(recaptchaClient)
+                            verificationBottomSheet = VerificationBottomSheet()
                             verificationBottomSheet.isCancelable = false
                             val bundle = Bundle()
                             when (type) {

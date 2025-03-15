@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.afrimax.paysimati.R
 import com.afrimax.paysimati.data.model.CashOutRequestBody
+import com.afrimax.paysimati.data.model.MerchantRequestPay
+import com.afrimax.paysimati.data.model.PayMerchantModel
+import com.afrimax.paysimati.data.model.PayMerchantRequest
+import com.afrimax.paysimati.data.model.PayMerchantRequestModel
 import com.afrimax.paysimati.data.model.PayToAfrimaxRequestBody
 import com.afrimax.paysimati.data.model.PayToRegisteredPersonRequest
 import com.afrimax.paysimati.data.model.PayToUnRegisteredPersonRequest
@@ -20,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
     private lateinit var b: TotalAmountReceiptBottomSheetBinding
     private var totalAmount: String = "0.0"
-    private  var enteredAmount:String ="0.0"
+    private var enteredAmount: String = "0.0"
     private var txnFee: String = "0.0"
     private var vat: String = "0.0"
 
@@ -56,6 +60,21 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                 txnFee = model.txnFee
                 totalAmount = model.amount
             }
+
+            is PayMerchantModel -> {
+                vat = model.vat
+                enteredAmount = model.amount
+                txnFee = model.txnFee
+                totalAmount = model.amount
+            }
+
+            is PayMerchantRequestModel -> {
+                vat = model.vat
+                enteredAmount = model.amount
+                txnFee = model.txnFee
+                totalAmount = model.amount
+            }
+
         }
         b.totalAmountReceiptTotalAmount.text =
             getString(R.string.amount_formatted, getFormattedAmount(totalAmount))
@@ -130,6 +149,38 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
                     credential = null
                 )
                 sendPaymentBottomSheet = SendPaymentBottomSheet(payPersonRegisteredModel)
+            }
+
+            is PayMerchantModel -> {
+                val payMerchantModel = PayMerchantRequest(
+                    amount = model.amount.toDouble(),
+                    receiverId = model.recieiverid,
+                    flag = false,
+                    password = null,
+                    senderId = model.senderId,
+                    entryBy = model.entryBy,
+                    note = model.note,
+                    tillnumber = model.tillnumber
+                )
+
+                sendPaymentBottomSheet = SendPaymentBottomSheet(payMerchantModel)
+
+            }
+
+            is PayMerchantRequestModel -> {
+                val payMerchantRequestModel = MerchantRequestPay(
+                    amount = model.amount.toDouble(),
+                    requestId = model.requestid,
+                    receiverId = model.recieiverid,
+                    flag = false,
+                    password = null,
+                    senderId = model.senderId,
+                    entryBy = model.entryBy,
+                    note = model.note
+                )
+
+                sendPaymentBottomSheet = SendPaymentBottomSheet(payMerchantRequestModel)
+
             }
         }
         dismiss()

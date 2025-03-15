@@ -6,6 +6,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,8 +20,13 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.afrimax.paysimati.BuildConfig
 import com.afrimax.paysimati.R
+import com.afrimax.paysimati.common.core.log
+import com.afrimax.paysimati.common.presentation.utils.VIEW_MODEL_STATE
+import com.afrimax.paysimati.ui.chatMerchant.data.chat.ChatState
+import com.afrimax.paysimati.ui.chatMerchant.ui.ChatMerchantActivity
 import com.afrimax.paysimati.ui.home.HomeActivity
 import com.afrimax.paysimati.ui.membership.MembershipPlansActivity
+import com.afrimax.paysimati.ui.paymerchant.ListMerchantTransactionActivity
 import com.afrimax.paysimati.ui.splash.SplashScreenActivity
 import com.afrimax.paysimati.ui.viewtransactions.ViewSpecificTransactionActivity
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -39,6 +45,7 @@ class MessagingService(
     override fun handleIntent(data: Intent?) {
 
         if (data != null) {
+            data.log()
             val isSilent = data.getStringExtra(IS_SILENT).toBoolean()
             if (isSilent) handleSilentPush(data)
             else showNotification(data)
@@ -78,14 +85,11 @@ class MessagingService(
                 when (action) {
                     ACTION_LOGOUT -> {
                         authCalls.initiateLogout(this@MessagingService)
-                        val i = applicationContext
-                            .packageManager
-                            .getLaunchIntentForPackage(applicationContext.packageName)
-                        applicationContext.startActivity(
-                            Intent
-                                .makeRestartActivityTask(i!!.component)
-                                .apply { setPackage(applicationContext.packageName) }
-                        )
+                        val i = applicationContext.packageManager.getLaunchIntentForPackage(
+                                applicationContext.packageName
+                            )
+                        applicationContext.startActivity(Intent.makeRestartActivityTask(i!!.component)
+                            .apply { setPackage(applicationContext.packageName) })
                     }
                 }
             }
@@ -99,30 +103,70 @@ class MessagingService(
         //Create the channel first | This only happens once when the app is first booting
         "Response".showLogE(Gson().toJson(data))
         createNotificationChannel()
+        var userinfo: String? = null
+        var requestuserinfo: String? = null
         var transactionId: String? = null
-        val action =  data.getStringExtra(ACTION).toString()
-        if (action == NotificationNavigation.TRANSACTIONS.screenName) transactionId = data.getStringExtra(TXN_ID).toString()
+        val action = data.getStringExtra(ACTION).toString()
+        if (action == NotificationNavigation.TRANSACTIONS.screenName) transactionId =
+            data.getStringExtra(TXN_ID).toString()
+        if (action == NotificationNavigation.CHAT.screenName || action == NotificationNavigation.PAYREQUEST.screenName) userinfo =
+            data.getStringExtra("user_info")
         val targetActivity: Class<out AppCompatActivity> = when (action) {
             NotificationNavigation.MEMBERSHIP_PLANS.screenName -> MembershipPlansActivity::class.java
             NotificationNavigation.TRANSACTIONS.screenName -> ViewSpecificTransactionActivity::class.java
+            NotificationNavigation.PAYREQUEST.screenName -> ChatMerchantActivity::class.java
+            NotificationNavigation.CHAT.screenName -> ChatMerchantActivity::class.java
+
+
             else -> SplashScreenActivity::class.java
         }
+
+        val receiver = Gson().fromJson(userinfo, ChatState::class.java)
         val intent = if (isAppInForeground()) {
             Intent(this, targetActivity).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                if (targetActivity == ViewSpecificTransactionActivity::class.java) putExtra(Constants.TRANSACTION_ID, transactionId) //Pass the transactionId to the activity
+                if (targetActivity == ViewSpecificTransactionActivity::class.java) putExtra(
+                    Constants.TRANSACTION_ID,
+                    transactionId
+                )
+                if (targetActivity == ChatMerchantActivity::class.java) if (action == NotificationNavigation.PAYREQUEST.screenName) {
+                    val receiver = Gson().fromJson(requestuserinfo, ChatState::class.java)
+                    putExtra(
+                        VIEW_MODEL_STATE, ChatState(
+                            receiverName = receiver.receiverName,
+                            receiverId = receiver.receiverId,
+                            receiverProfilePicture = receiver.receiverProfilePicture,
+                        )
+                    )
+
+                } else {
+                    putExtra(
+                        VIEW_MODEL_STATE, ChatState(
+                            receiverName = receiver.receiverName,
+                            receiverId = receiver.receiverId,
+                            receiverProfilePicture = receiver.receiverProfilePicture,
+                        )
+                    )
+                }
+
             }
-        }else{
+        } else {
             Intent(this, SplashScreenActivity::class.java).apply {
                 putExtra(Constants.ACTION, action)
                 putExtra(Constants.TRANSACTION_ID, transactionId)
+                putExtra(Constants.USER_INFO, userinfo)
             }
         }
+        val notificationId = getUniqueNotificationId()
+
+        // Create a PendingIntent to cancel the notification when clicked
+        val cancelIntent = PendingIntent.getBroadcast(
+            this, notificationId, Intent(this, NotificationDismissReceiver::class.java).apply {
+                putExtra("notificationId", notificationId)
+            }, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+        )
         val pendingIntent = PendingIntent.getActivity(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            this, 0, intent, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
         val title = data.getStringExtra(TITLE)
         val body = data.getStringExtra(BODY)
@@ -137,6 +181,7 @@ class MessagingService(
             setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
             setGroup(GROUP_KEY)
         }
+
 
         if (ActivityCompat.checkSelfPermission(
                 this@MessagingService, Manifest.permission.POST_NOTIFICATIONS
@@ -187,8 +232,7 @@ class MessagingService(
         if (appProcesses != null) {
             val packageName = packageName
             for (appProcess in appProcesses) {
-                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-                    && appProcess.processName == packageName) {
+                if (appProcess.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && appProcess.processName == packageName) {
                     return true
                 }
             }
@@ -213,7 +257,19 @@ class MessagingService(
     }
 }
 
+class NotificationDismissReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        val notificationId = intent.getIntExtra("notificationId", 0)
+        val notificationManager = NotificationManagerCompat.from(context)
+        notificationManager.cancel(notificationId) // This cancels the notification when clicked
+    }
+}
+
+
+
 enum class NotificationNavigation(val screenName: String){
     MEMBERSHIP_PLANS("membership"),
-    TRANSACTIONS("transactions")
+    TRANSACTIONS("transactions"),
+    PAYREQUEST("request"),
+    CHAT("new_chat")
 }

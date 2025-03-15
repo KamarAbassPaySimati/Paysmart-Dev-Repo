@@ -73,11 +73,14 @@
     </style>
 
     <style name="date_picker_theme" parent="ThemeOverlay.AppCompat.Dialog">
-        <item name="colorAccent">@color/primaryColor</item>                   <!--header background-->
+        <item name="colorAccent">@color/primaryColor
+        </item>                   <!--header background-->
         <item name="android:windowBackground">@color/white</item>     <!--calendar background-->
         <item name="android:colorControlActivated">@color/primaryColor</item> <!--selected day-->
-        <item name="android:textColorPrimary">@color/neutralGreyPrimaryText</item> <!--days of the month-->
-        <item name="android:textColorSecondary">@color/primaryColor</item>    <!--days of the week-->
+        <item name="android:textColorPrimary">@color/neutralGreyPrimaryText
+        </item> <!--days of the month-->
+        <item name="android:textColorSecondary">@color/primaryColor
+        </item>    <!--days of the week-->
     </style>
 
     <style name="switch_theme" parent="Widget.Material3.CompoundButton.MaterialSwitch">
