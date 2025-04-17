@@ -153,7 +153,7 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
 
             is PayMerchantModel -> {
                 val payMerchantModel = PayMerchantRequest(
-                    amount = model.amount.toDouble(),
+                    amount = model.enteredAmount.toDouble(),
                     receiverId = model.recieiverid,
                     flag = false,
                     password = null,
@@ -169,7 +169,7 @@ class TotalReceiptSheet(private val model: Any) : BottomSheetDialogFragment() {
 
             is PayMerchantRequestModel -> {
                 val payMerchantRequestModel = MerchantRequestPay(
-                    amount = model.amount.toDouble(),
+                    amount = model.enteredAmount.toDouble(),
                     requestId = model.requestid,
                     receiverId = model.recieiverid,
                     flag = false,
