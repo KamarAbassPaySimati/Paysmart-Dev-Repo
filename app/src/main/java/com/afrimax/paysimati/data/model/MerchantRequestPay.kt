@@ -12,4 +12,5 @@ data class MerchantRequestPay(
     @SerializedName("note")val note:String?=null,
     @SerializedName("encrypted_password")val password:String?=null,
     @SerializedName("till_number")val tillnumber:String?=null,
+
 )

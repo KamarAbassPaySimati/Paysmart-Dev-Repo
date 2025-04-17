@@ -9,5 +9,6 @@ data class PayMerchantRequestModel(
     val note:String,
     val senderId:String,
     val entryBy: String,
-    val tillnumber: String? = null
+    val tillnumber: String? = null,
+    val enteredAmount :String
 )

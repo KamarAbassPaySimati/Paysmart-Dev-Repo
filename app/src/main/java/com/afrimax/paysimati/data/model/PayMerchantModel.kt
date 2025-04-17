@@ -3,6 +3,7 @@ package com.afrimax.paysimati.data.model
 data class PayMerchantModel(
     val amount: String,
     val txnFee: String,
+    val enteredAmount:String,
     val vat: String,
     val recieiverid:String,
     val note:String,
