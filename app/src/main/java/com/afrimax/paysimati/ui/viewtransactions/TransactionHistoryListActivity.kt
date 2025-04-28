@@ -39,6 +39,7 @@ import com.afrimax.paysimati.ui.utils.adapters.TransactionHistoryAdapter.Compani
 import com.afrimax.paysimati.ui.utils.adapters.decoration.RecyclerViewDecoration
 import com.afrimax.paysimati.ui.utils.bottomsheets.TransactionHistorySheet
 import com.afrimax.paysimati.ui.utils.interfaces.TransactionHistoryInterface
+import com.afrimax.paysimati.ui.viewtransactions.ViewSpecificTransactionActivity.Companion.G2P_REFUND
 import com.afrimax.paysimati.util.Constants
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
@@ -377,6 +378,7 @@ class TransactionHistoryListActivity : BaseActivity(), TransactionHistoryInterfa
         CASHOUT,
         PAY_IN,
         REFUND,
+        G2P_REFUND,
         PAY_UNREGISTERED_REFUND,
         INTEREST,
         G2P_PAY_IN,

@@ -105,6 +105,19 @@ class HomeScreenIconAdapter(
                         text = getInitials(transactionList[position].senderName)
                     }
                 }
+
+
+                G2P_REFUND ->{
+                    binding.iconName.apply {
+                        visibility = View.VISIBLE
+                        text = holder.itemView.context.getString(R.string.g2p_rev_out)
+                    }
+                    binding.iconNameInitials.apply {
+                        visibility = View.VISIBLE
+                        text = getInitials(context.getString(R.string.g2p_rev_out))
+                    }
+
+                }
                 PAYMAART -> {
                     binding.iconName.apply {
                         visibility = View.VISIBLE
@@ -201,6 +214,7 @@ class HomeScreenIconAdapter(
         const val PAYMAART = "paymaart"
         const val INTEREST = "interest"
         const val G2P_PAY_IN = "g2p_pay_in"
+        const val G2P_REFUND = "reversed_g2p_payment"
         const val CASH_OUT_REQUEST = "cashout_request"
         const val CASH_OUT_FAILED = "cashout_failed"
         const val PAY_UNREGISTERED = "pay_unregister"
