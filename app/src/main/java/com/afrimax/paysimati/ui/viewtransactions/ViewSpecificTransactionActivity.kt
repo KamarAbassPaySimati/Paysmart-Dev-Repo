@@ -283,6 +283,17 @@ class ViewSpecificTransactionActivity : BaseActivity() {
 
             }
 
+            G2P_REFUND  -> {
+                setupCommonView(commonView)
+                b.paymentReceiptActivityStatusTV.text = getString(R.string.g2p_rev_out_successful)
+                b.paymentReceiptActivityPaymentTypeTV.text =
+                    getString(R.string.g2p_rev_out_value_star)
+                b.paymentReceiptActivityBalanceTV.text = getString(
+                    R.string.amount_formatted,
+                    getFormattedAmount(transactionDetail.receiverClosingBalance)
+                )
+            }
+
             G2P_PAY_IN -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.g2p_pay_in_successful)
@@ -450,6 +461,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         const val PAYMAART = "paymaart"
         const val INTEREST = "interest"
         const val G2P_PAY_IN = "g2p_pay_in"
+        const val G2P_REFUND = "reversed_g2p_payment"
         const val CASH_OUT_REQUEST = "cashout_request"
         const val CASH_OUT_FAILED = "cashout_failed"
     }
