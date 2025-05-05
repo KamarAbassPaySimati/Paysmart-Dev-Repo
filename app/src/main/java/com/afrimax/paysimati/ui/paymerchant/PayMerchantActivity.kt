@@ -281,7 +281,8 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
                         note = binding.payMerchantActivityAddNoteET.text.toString(),
                         senderId = this@PayMerchantActivity.retrievePaymaartId(),
                         entryBy = this@PayMerchantActivity.retrievePaymaartId(),
-                        tillnumber = tillno
+                        tillnumber = tillno,
+                        enteredAmount = amount.toString()
                     )
 
                 ).show(supportFragmentManager, TotalReceiptSheet.TAG)
@@ -334,7 +335,8 @@ class PayMerchantActivity : BaseActivity(), SendPaymentInterface {
                         senderId = this@PayMerchantActivity.retrievePaymaartId(),
                         entryBy = this@PayMerchantActivity.retrievePaymaartId(),
                         tillnumber = tillno,
-                        requestid = transactionID
+                        requestid = transactionID,
+                        enteredAmount = amount.toString()
                     )
            ).show(supportFragmentManager, TotalReceiptSheet.TAG)
 

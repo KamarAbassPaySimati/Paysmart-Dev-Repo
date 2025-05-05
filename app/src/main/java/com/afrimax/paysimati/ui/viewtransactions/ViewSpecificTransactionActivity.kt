@@ -161,7 +161,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         when (transactionDetail?.transactionType) {
             CASH_IN, CASHIN -> {
                 setupCommonView(commonView)
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_in_value_star)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_in_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.cash_in_successful)
                 b.paymentReceiptActivityBalanceContainer.visibility = VISIBLE
                 b.paymentReceiptActivityBalanceTV.text = getString(
@@ -172,7 +172,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
 
             CASH_OUT, CASHOUT -> {
                 setupCommonView(commonView)
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_out_value_star)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_out_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.cash_out_successful)
                 b.paymentReceiptActivityBalanceContainer.visibility = VISIBLE
                 b.paymentReceiptActivityBalanceTV.text = getString(
@@ -199,7 +199,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
 
             PAY_IN -> {
                 setupCommonView(commonView)
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.pay_in_value_star)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.pay_in_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.pay_in_successful)
                 b.paymentReceiptActivityBalanceContainer.visibility = VISIBLE
                 b.paymentReceiptActivityBalanceTV.text = getString(
@@ -218,7 +218,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityNoteContainer.visibility = VISIBLE
                 b.paymentReceiptActivityNoteTV.text =
                     if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value_two_star)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value_two)
             }
 
             PAY_UNREGISTERED -> {
@@ -228,12 +228,12 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 b.paymentReceiptActivityNoteContainer.visibility = VISIBLE
                 b.paymentReceiptActivityNoteTV.text =
                     if (transactionDetail.note.isNullOrEmpty()) "-" else transactionDetail.note
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value_two_star)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.txn_value_two)
             }
 
             REFUND, PAY_UNREGISTERED_REFUND -> {
                 setupCommonView(commonView)
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.refund_value_star)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.refund_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.refund_successful)
                 b.paymentReceiptActivityNoteContainer.visibility = VISIBLE
                 b.paymentReceiptActivityBalanceContainer.visibility = VISIBLE
@@ -270,7 +270,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityFromPaymaartNameTV.text = getString(R.string.trust_acc_int)
                 b.paymentReceiptActivityFromPaymaartIdContainer.visibility = View.GONE
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.interest_value_star)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.interest_value)
                 b.paymentReceiptActivityBalanceContainer.visibility = VISIBLE
                 b.paymentReceiptActivityBalanceTVKey.text = getString(R.string.interest_period)
                 b.paymentReceiptActivityBalanceTV.text = getString(
@@ -283,11 +283,22 @@ class ViewSpecificTransactionActivity : BaseActivity() {
 
             }
 
+            G2P_REFUND  -> {
+                setupCommonView(commonView)
+                b.paymentReceiptActivityStatusTV.text = getString(R.string.g2p_rev_out_successful)
+                b.paymentReceiptActivityPaymentTypeTV.text =
+                    getString(R.string.g2p_rev_out_value_star)
+                b.paymentReceiptActivityBalanceTV.text = getString(
+                    R.string.amount_formatted,
+                    getFormattedAmount(transactionDetail.receiverClosingBalance)
+                )
+            }
+
             G2P_PAY_IN -> {
                 setupCommonView(commonView)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.g2p_pay_in_successful)
                 b.paymentReceiptActivityPaymentTypeTV.text =
-                    getString(R.string.g2p_pay_in_value_star)
+                    getString(R.string.g2p_pay_in_value)
                 b.paymentReceiptActivityBalanceTV.text = getString(
                     R.string.amount_formatted,
                     getFormattedAmount(transactionDetail.receiverClosingBalance)
@@ -296,7 +307,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
 
             CASH_OUT_REQUEST -> {
                 setupCommonView(commonView)
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_out_value_star)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_out_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.cash_out_requested)
                 b.paymentReceiptActivityStatusContainer.setBackgroundColor(
                     ContextCompat.getColor(
@@ -313,7 +324,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
 
             CASH_OUT_FAILED -> {
                 setupCommonView(commonView)
-                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_out_value_star)
+                b.paymentReceiptActivityPaymentTypeTV.text = getString(R.string.cash_out_value)
                 b.paymentReceiptActivityStatusTV.text = getString(R.string.cash_out_failed)
                 b.paymentReceiptActivityStatusContainer.setBackgroundColor(
                     ContextCompat.getColor(
@@ -450,6 +461,7 @@ class ViewSpecificTransactionActivity : BaseActivity() {
         const val PAYMAART = "paymaart"
         const val INTEREST = "interest"
         const val G2P_PAY_IN = "g2p_pay_in"
+        const val G2P_REFUND = "reversed_g2p_payment"
         const val CASH_OUT_REQUEST = "cashout_request"
         const val CASH_OUT_FAILED = "cashout_failed"
     }

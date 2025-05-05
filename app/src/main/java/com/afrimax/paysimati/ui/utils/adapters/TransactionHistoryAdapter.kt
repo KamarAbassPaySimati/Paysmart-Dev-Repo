@@ -73,6 +73,10 @@ class TransactionHistoryAdapter(
                     transaction.senderId, transaction.senderName, R.string.g2p_pay_in
                 )
 
+                G2P_REVERSE->setTransactionDetails(
+                    transaction.senderId,context.getString(R.string.g2p_rev_out),R.string.g2p_rev_out
+                )
+
                 PAYMAART -> setImageTransaction(R.string.paysimati, R.drawable.ico_paymaart_icon)
                 AFRIMAX -> setImageTransaction(R.string.afrimax, R.drawable.ico_afrimax)
                 PAY_PERSON -> {
@@ -228,6 +232,7 @@ class TransactionHistoryAdapter(
         const val PAYMAART = "paymaart"
         const val INTEREST = "interest"
         const val G2P_PAY_IN = "g2p_pay_in"
+        const val G2P_REVERSE = "reversed_g2p_payment"
         const val CASH_OUT_REQUEST = "cashout_request"
         const val CASH_OUT_FAILED = "cashout_failed"
         const val PAY_UNREGISTERED = "pay_unregister"

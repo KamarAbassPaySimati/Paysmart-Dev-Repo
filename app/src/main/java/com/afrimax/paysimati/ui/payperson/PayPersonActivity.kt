@@ -287,7 +287,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
             )
             val body = payPersonUnregisteredCall.body()
 
-            if (payPersonUnregisteredCall.isSuccessful && body != null) {
+            if (payPersonUnregisteredCall.isSuccessful && body != null){
                 hideButtonLoader(
                     b.payPersonActivitySendPaymentButton,
                     b.payPersonActivitySendPaymentButtonLoaderLottie,
@@ -327,6 +327,7 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
             val body = payPersonUnregisteredCall.body()
 
             if (payPersonUnregisteredCall.isSuccessful && body != null) {
+
                 hideButtonLoader(
                     b.payPersonActivitySendPaymentButton,
                     b.payPersonActivitySendPaymentButtonLoaderLottie,
@@ -342,7 +343,27 @@ class PayPersonActivity : BaseActivity(), SendPaymentInterface {
                         paymaartId = userData.paymaartId
                     )
                 ).show(supportFragmentManager, TotalReceiptSheet.TAG)
-            } else {
+            }
+            else if (
+                payPersonUnregisteredCall.code() ==400 && body!=null
+            ){
+                hideButtonLoader(
+                    b.payPersonActivitySendPaymentButton,
+                    b.payPersonActivitySendPaymentButtonLoaderLottie,
+                    getString(R.string.send_payment)
+                )
+                TotalReceiptSheet(
+                    PayPersonRegisteredModel(
+                        amount = body.totalAmount.toString(),
+                        enteredAmount = amount.toString(),
+                        vat = body.vat.toString(),
+                        txnFee = body.transactionFee.toString(),
+                        note = b.payPersonActivityAddNoteET.text.toString(),
+                        paymaartId = userData.paymaartId
+                    )
+                ).show(supportFragmentManager, TotalReceiptSheet.TAG)
+            }
+            else {
                 showToast(getString(R.string.default_error_toast))
             }
         }

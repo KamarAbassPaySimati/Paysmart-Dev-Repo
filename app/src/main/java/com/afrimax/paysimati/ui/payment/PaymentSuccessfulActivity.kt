@@ -136,7 +136,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
                 )
                 setCommonView(model)
                 binding.paymentSuccessfulStatusText.text = getString(R.string.cash_out_requested)
-                binding.paymentSuccessfulTxn.text = getString(R.string.cash_out_value_star)
+                binding.paymentSuccessfulTxn.text = getString(R.string.cash_out_value)
                 binding.paymentSuccessfulStatusContainer.setBackgroundColor(
                     ContextCompat.getColor(
                         this, R.color.paymentScreenOrange
@@ -203,8 +203,8 @@ class PaymentSuccessfulActivity : BaseActivity() {
                     fromId = data.customerId,
                     toName = data.merchantName,
                     toId = data.merchantId,
-                    transactionAmount = data.amount,
-                    transactionFees = data.transactionfee?.toDouble(),
+                    transactionAmount = data.amount + data.transactionfee!!.toDouble(),
+                    transactionFees = data.transactionfee.toDouble(),
                     vat = data.vat,
                     transactionId = data.transactionID,
                     dateTime = data.createdAt
@@ -225,7 +225,7 @@ class PaymentSuccessfulActivity : BaseActivity() {
                     fromId = data.customerId,
                     toName = data.merchantName,
                     toId = data.merchantId,
-                    transactionAmount = data.amount,
+                    transactionAmount = data.amount ,
                     transactionFees = data.transactionfee?.toDouble(),
                     vat = data.vat,
                     transactionId = data.transactionID,
