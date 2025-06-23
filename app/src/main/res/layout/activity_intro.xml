@@ -8,17 +8,19 @@
     android:background="@color/white"
     tools:context=".ui.intro.IntroActivity">
 
+    <!-- Background Image -->
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_300sdp"
-            android:background="@drawable/image_intro_background"/>
-
+            android:layout_height="395dp"
+            android:background="@drawable/image_intro_background" />
     </LinearLayout>
 
+    <!-- Header Text -->
     <TextView
         android:id="@+id/intro_header"
         android:layout_width="250dp"
@@ -31,54 +33,104 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintVertical_bias="0.1"/>
 
+    <!-- App Logo -->
     <ImageView
         android:id="@+id/paymaart_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/image_paysimati_logo"
+        android:layout_marginBottom="32dp"
         android:contentDescription="@string/image_description"
-        app:layout_constraintStart_toStartOf="@id/register_button"
-        app:layout_constraintEnd_toEndOf="@id/register_button"
-        app:layout_constraintBottom_toTopOf="@id/register_button"
-        android:layout_marginBottom="58dp"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/register_button"
-        style="@style/primary_solid_button"
-        android:text="@string/register"
-        android:textAllCaps="false"
-        app:layout_constraintStart_toStartOf="@id/login_button"
-        app:layout_constraintEnd_toEndOf="@id/login_button"
-        app:layout_constraintBottom_toTopOf="@id/login_button"
-        android:layout_marginBottom="24dp"/>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/login_button"
-        style="@style/primary_outlined_button"
-        android:text="@string/login"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@id/version_info"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/image_paysimati_logo"
+        app:layout_constraintBottom_toTopOf="@id/continue_with_google"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="80dp"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Google Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/continue_with_google"
+        style="@style/primary_outlined_button"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="12dp"
+        android:drawableStart="@drawable/ic_google"
+        android:drawablePadding="12dp"
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="12dp"
+        android:text="Continue with Google"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/continue_with_facebook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Facebook Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/continue_with_facebook"
+        style="@style/primary_outlined_button"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="12dp"
+        android:drawableStart="@drawable/ic_facebook"
+        android:drawablePadding="12dp"
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="12dp"
+        android:text="Continue with Facebook"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/continue_with_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Email Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/continue_with_email"
+        style="@style/primary_outlined_button"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:drawableStart="@drawable/ic_email"
+        android:drawablePadding="12dp"
+        android:gravity="center"
+        android:paddingStart="24dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="12dp"
+        android:text="Continue with Email"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/version_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Version Info Footer -->
     <LinearLayout
         android:id="@+id/version_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/primaryLight">
+        android:background="@color/primaryLight"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:id="@+id/introActivityVersionTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingVertical="9dp"
+            android:paddingVertical="12dp"
             android:text="@string/app_version"
             android:textColor="@color/onPrimaryLight"
             style="@style/body_text_style"/>
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

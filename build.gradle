@@ -11,4 +11,9 @@ plugins {
     alias(libs.plugins.dotenv)
     alias(libs.plugins.firebase.crashlytics) apply false
     id 'com.google.dagger.hilt.android' version '2.51' apply false
+
+}
+
+allprojects {
+    // No repositories here because they're defined in settings.gradle with FAIL_ON_PROJECT_REPOS mode
 }

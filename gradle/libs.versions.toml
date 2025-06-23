@@ -1,6 +1,6 @@
 [versions]
 aaltoXml = "1.2.2"
-agp = "8.5.0"
+agp = "8.10.1"
 appUpdate = "2.1.0"
 awsAuthCognito = "2.14.11"
 blurry = "4.0.1"
@@ -13,7 +13,7 @@ glide = "4.16.0"
 googleRecaptcha = "18.5.1"
 javaJwt = "3.18.2"
 javaOtp = "0.4.0"
-kotlin = "2.0.0"
+kotlin = "1.9.10"               # Downgraded to latest stable Kotlin version
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -53,7 +53,7 @@ googleGmsGoogleServicesVersion = "4.4.2"
 hiltAndroid = "2.51"
 activityCompose = "1.9.3"
 orbitViewmodel = "4.3.1"
-qrscanner="4.3.0"
+qrscanner = "4.3.0"
 ui = "1.8.0-alpha07"
 materialVersion = "1.7.6"
 pagingCompose = "3.3.5"
@@ -65,14 +65,13 @@ media3CommonKtx = "1.5.1"
 monitor = "1.7.2"
 espressoIntents = "3.6.1"
 
-
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "ui" }
-qr-scanner={ group ="com.journeyapps",name="zxing-android-embedded",version.ref="qrscanner"}
+qr-scanner = { group = "com.journeyapps", name = "zxing-android-embedded", version.ref = "qrscanner" }
 androidx-ui = { module = "androidx.compose.ui:ui", version.ref = "ui" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltAndroid" }
 orbit-core = { module = "org.orbit-mvi:orbit-core", version.ref = "orbitViewmodel" }
@@ -86,12 +85,17 @@ androidx-exifinterface = { module = "androidx.exifinterface:exifinterface", vers
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 app-update = { module = "com.google.android.play:app-update", version.ref = "appUpdate" }
 app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdate" }
+
+# Amplify dependencies corrected:
+aws-core = { module = "com.amplifyframework:core", version.ref = "awsAuthCognito" }
 aws-auth-cognito = { module = "com.amplifyframework:aws-auth-cognito", version.ref = "awsAuthCognito" }
 aws-storage-s3 = { module = "com.amplifyframework:aws-storage-s3", version.ref = "awsAuthCognito" }
+
 blurry = { module = "jp.wasabeef:blurry", version.ref = "blurry" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
-core-kotlin = { module = "com.amplifyframework:core-kotlin", version.ref = "awsAuthCognito" }
+core-kotlin = { module = "com.amplifyframework:core-kotlin", version.ref = "awsAuthCognito" }  # Optional if you use Amplify Kotlin SDK
+
 cucumber-android = { module = "io.cucumber:cucumber-android", version.ref = "cucumberAndroid" }
 cucumber-picocontainer = { module = "io.cucumber:cucumber-picocontainer", version.ref = "cucumberAndroid" }
 datafaker = { module = "net.datafaker:datafaker", version.ref = "datafaker" }

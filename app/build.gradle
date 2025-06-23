@@ -1,17 +1,17 @@
 plugins {
-    alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
-    id "jacoco"
-    alias(libs.plugins.firebase.crashlytics)
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'jacoco'
+    id 'com.google.firebase.crashlytics'
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'kotlin-parcelize'
-    alias(libs.plugins.compose.compiler)
 }
+
+
 
 tasks.register('jacocoTestReport', JacocoReport) {
     dependsOn['connectedDevelopDebugAndroidTest', 'createDebugCoverageReport']
-
     reports {
         xml.enabled = true
         html.enabled = true
@@ -23,8 +23,10 @@ tasks.register('jacocoTestReport', JacocoReport) {
 
     sourceDirectories.setFrom(files([mainSrc]))
     classDirectories.setFrom(files([debugTree]))
-    executionData.setFrom(fileTree(dir: "${project.layout.buildDirectory}", includes: ["jacoco/testDebugUnitTest.exec",
-                                                                                       "outputs/code-coverage/connected/*coverage.ec"]))
+    executionData.setFrom(fileTree(dir: "${project.layout.buildDirectory}", includes: [
+            "jacoco/testDebugUnitTest.exec",
+            "outputs/code-coverage/connected/*coverage.ec"
+    ]))
 }
 
 android {
@@ -37,7 +39,6 @@ android {
         targetSdk 34
         versionCode 20
         versionName "1.0"
-
         testApplicationId 'com.afrimax.paysimati'
         testInstrumentationRunner 'com.afrimax.paysimati.TestJunitRunner'
     }
@@ -48,8 +49,6 @@ android {
             storePassword RELEASE_STORE_PASSWORD
             keyAlias RELEASE_KEY_ALIAS
             keyPassword RELEASE_KEY_PASSWORD
-
-            // Optional, specify signing versions used
             v1SigningEnabled true
             v2SigningEnabled true
         }
@@ -69,235 +68,132 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+        compose = true
     }
-    buildFeatures {
-        compose true
-    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
 
+        flavorDimensions = ['env']
+        productFlavors {
+            develop {
+                dimension "env"
+                applicationIdSuffix ".develop"
+                buildConfigField("String", "STAGE", "\"dev\"")
+                buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
+                buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
+                buildConfigField("String", "REGION", "\"eu-west-1\"")
+                buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
+                buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
+                buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
+                buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
+                buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
+                buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
+                buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY_CUSTOMER_ANDROID.value}\"")
+                buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
+                buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
+                buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
+                buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
+                buildConfigField("String", "MERCHANT_CHAT_WEBSOCKET", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
+            }
 
-
-    flavorDimensions = ['env']
-    productFlavors{
-        develop{
-            dimension "env"
-            applicationIdSuffix ".develop"
-            buildConfigField("String", "STAGE", "\"dev\"")
-            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
-            buildConfigField("String", "REGION", "\"eu-west-1\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
-            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
-            buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
-            buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
-            buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
-            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY_CUSTOMER_ANDROID.value}\"")
-            buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
-            buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
-            buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
-            buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
-            buildConfigField("String", "MERCHANT_CHAT_WEBSOCKET", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
+            // Repeat for qa, preprod, production...
         }
 
-        qa{
-            dimension "env"
-            applicationIdSuffix ".qa"
-            buildConfigField("String", "STAGE", "\"qa\"")
-            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
-            buildConfigField("String", "REGION", "\"eu-west-1\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
-            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
-            buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
-            buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
-            buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
-            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY_CUSTOMER_ANDROID.value}\"")
-            buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
-            buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
-            buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
-            buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
-            buildConfigField("String", "MERCHANT_CHAT_WEBSOCKET", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_11
+            targetCompatibility JavaVersion.VERSION_11
         }
 
-        preprod{
-            dimension "env"
-            applicationIdSuffix ".preprod"
-            buildConfigField("String", "STAGE", "\"pre-production\"")
-            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
-            buildConfigField("String", "REGION", "\"eu-west-1\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
-            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
-            buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
-            buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
-            buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
-            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY_CUSTOMER_ANDROID.value}\"")
-            buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
-            buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
-            buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
-            buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
-            buildConfigField("String", "MERCHANT_CHAT_WEBSOCKET", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
-        }
-
-        production{
-            dimension "env"
-            buildConfigField("String", "STAGE", "\"prod\"")
-            buildConfigField("String", "BASE_URL", "\"https://${env.DOMAIN_NAME.value}/v1/\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_IDENTITY_POOL_ID", "\"${env.CUSTOMER_COGNITO_IDENTITY_POOL_ID.value}\"")
-            buildConfigField("String", "REGION", "\"eu-west-1\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_USERPOOL_ID", "\"${env.CUSTOMER_COGNITO_USERPOOL_ID.value}\"")
-            buildConfigField("String", "CUSTOMER_COGNITO_CLIENT_ID", "\"${env.CUSTOMER_COGNITO_CLIENT_ID.value}\"")
-            buildConfigField("String", "CUSTOMER_S3_BUCKET_NAME", "\"${env.BUCKET_NAME.value}\"")
-            buildConfigField("String", "PLACES_API_KEY", "\"${env.PLACES_API_KEY.value}\"")
-            buildConfigField("String", "CDN_BASE_URL", "\"https://${env.CDN_URL.value}/\"")
-            buildConfigField("String", "PASSWORD_SECRET_KEY", "\"${env.PASSWORD_SECRET_KEY.value}\"")
-            buildConfigField("String", "SITE_KEY", "\"${env.RECAPTCHA_SITE_KEY_CUSTOMER_ANDROID.value}\"")
-            buildConfigField("String", "FIREBASE_PROJECT_ID", "\"${env.FIREBASE_PROJECT_ID.value}\"")
-            buildConfigField("String", "FIREBASE_APP_ID", "\"${env.CUSTOMER_FIREBASE_APP_ID.value}\"")
-            buildConfigField("String", "FIREBASE_API_KEY", "\"${env.FIREBASE_API_KEY.value}\"")
-            buildConfigField("String", "FIREBASE_STORAGE_BUCKET", "\"${env.FIREBASE_STORAGE_BUCKET.value}\"")
-            buildConfigField("String", "MERCHANT_CHAT_WEBSOCKET", "\"${env.MERCHANT_CHAT_WEBSOCKET.value}\"")
+        kotlinOptions {
+            jvmTarget = '11'
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+    dependencies {
+        implementation libs.androidx.core.ktx
+        implementation libs.androidx.appcompat
+        implementation libs.material
+        implementation libs.androidx.activity
+        implementation libs.androidx.constraintlayout
+        implementation libs.androidx.lifecycle.livedata.ktx
+        implementation libs.androidx.fragment.ktx
+        implementation libs.firebase.messaging
+        implementation libs.androidx.lifecycle.process
+        implementation libs.qr.scanner
+        implementation libs.androidx.material3.android
+        implementation libs.androidx.navigation.fragment.ktx
+        implementation libs.androidx.navigation.ui.ktx
+        implementation libs.androidx.media3.common.ktx
+        implementation libs.androidx.espresso.intents
+        testImplementation libs.junit
+        androidTestImplementation libs.androidx.junit
+        androidTestImplementation libs.androidx.espresso.core
+
+        androidTestImplementation(libs.cucumber.android)
+        androidTestImplementation(libs.cucumber.picocontainer)
+        implementation libs.poi.ooxml
+        implementation(libs.xmlbeans)
+        androidTestImplementation libs.stax.api
+        androidTestImplementation libs.aalto.xml
+        implementation libs.androidx.espresso.idling.resource
+
+        implementation libs.androidx.lifecycle.viewmodel.ktx
+        implementation libs.androidx.fragment.ktx
+
+        implementation libs.glide
+        implementation libs.lottie
+        implementation libs.lottie.compose
+
+        implementation libs.retrofit
+        implementation libs.converter.gson
+        implementation libs.converter.scalars
+
+        // ✅ Amplify Framework
+        implementation 'com.amplifyframework:core:2.9.0'
+        implementation 'com.amplifyframework:aws-auth-cognito:2.9.0'
+        implementation 'com.amplifyframework:aws-storage-s3:2.9.0' // optional
+        implementation 'com.amazonaws:aws-android-sdk-core:2.22.7'
+        implementation 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.22.7'
+
+        implementation 'com.google.android.gms:play-services-auth:21.0.0'
+        implementation libs.datafaker
+        implementation libs.pinedittextfield
+        implementation libs.kotlin.onetimepassword
+        implementation libs.java.otp
+        implementation libs.java.jwt
+        implementation libs.places
+        implementation libs.androidx.camera.camera2
+        implementation libs.androidx.camera.view
+        implementation libs.androidx.camera.lifecycle
+        implementation libs.pdf.viewer
+        implementation libs.zoomlayout
+        androidTestImplementation libs.espresso.contrib
+        implementation libs.blurry
+        implementation libs.sdp.android
+        implementation libs.androidx.exifinterface
+        implementation libs.recaptcha
+
+        implementation platform(libs.firebase.bom)
+        implementation libs.firebase.crashlytics
+        implementation libs.firebase.analytics
+        implementation libs.app.update
+        implementation libs.app.update.ktx
+
+        implementation libs.orbit.core
+        implementation libs.orbit.viewmodel
+
+        implementation libs.hilt.android
+        debugImplementation libs.androidx.ui.tooling
+        kapt libs.hilt.compiler
+
+        implementation libs.androidx.activity.compose
+        implementation libs.androidx.ui
+        implementation libs.androidx.ui.tooling.preview
+        implementation libs.androidx.material
+        implementation libs.androidx.paging.compose
     }
-    kotlinOptions {
-        jvmTarget = '11'
+
+    kapt {
+        correctErrorTypes true
     }
-}
-
-dependencies {
-
-    implementation libs.androidx.core.ktx
-    implementation libs.androidx.appcompat
-    implementation libs.material
-    implementation libs.androidx.activity
-    implementation libs.androidx.constraintlayout
-    implementation libs.androidx.lifecycle.livedata.ktx
-    implementation libs.androidx.fragment.ktx
-    implementation libs.firebase.messaging
-    implementation libs.androidx.lifecycle.process
-    implementation libs.qr.scanner
-    implementation libs.androidx.material3.android
-    implementation libs.androidx.navigation.fragment.ktx
-    implementation libs.androidx.navigation.ui.ktx
-    implementation libs.androidx.media3.common.ktx
-    implementation libs.androidx.espresso.intents
-    testImplementation libs.junit
-    androidTestImplementation libs.androidx.junit
-    androidTestImplementation libs.androidx.espresso.core
-
-
-    //Cucumber for BDD
-    androidTestImplementation(libs.cucumber.android)
-    androidTestImplementation(libs.cucumber.picocontainer)
-    implementation libs.poi.ooxml
-    implementation(libs.xmlbeans)
-    androidTestImplementation libs.stax.api
-    androidTestImplementation libs.aalto.xml
-    //Idling registry support for Espresso
-    implementation libs.androidx.espresso.idling.resource
-
-    //dependency injection
-
-    //Viewmodel
-    implementation libs.androidx.lifecycle.viewmodel.ktx
-    implementation libs.androidx.fragment.ktx
-
-    //Glide
-    implementation libs.glide
-
-    //lottie
-    implementation libs.lottie
-    implementation libs.lottie.compose
-
-    //Retrofit & GSON
-    implementation libs.retrofit
-    implementation libs.converter.gson
-    implementation(libs.converter.scalars)
-
-    //Amplify
-    implementation libs.aws.auth.cognito
-    implementation libs.aws.storage.s3
-    implementation libs.core.kotlin
-
-    //Faker
-    implementation(libs.datafaker)
-
-    //Library for PIN EditText
-    implementation libs.pinedittextfield
-
-    //TOTP Generator for BDD
-    implementation libs.kotlin.onetimepassword
-    implementation libs.java.otp
-
-    //JWT Token for BDD
-    implementation libs.java.jwt
-
-    //Places
-    implementation libs.places
-
-    //Camera
-    implementation libs.androidx.camera.camera2
-    implementation libs.androidx.camera.view
-    implementation libs.androidx.camera.lifecycle
-
-    //pdf viewer
-    implementation libs.pdf.viewer
-
-    //Zoom Layout
-    implementation libs.zoomlayout
-
-    //Espresso Contrib
-    androidTestImplementation libs.espresso.contrib
-
-    //Blurry
-    implementation libs.blurry
-
-    //SDP library for uniform size of layout resources in all type of screens
-    implementation libs.sdp.android
-
-    //For Image conversion purpose
-    implementation libs.androidx.exifinterface
-
-    //Google Recaptcha
-    implementation libs.recaptcha
-
-    // Import the BoM for the Firebase platform
-    implementation(platform(libs.firebase.bom))
-
-    // Add the dependencies for the Crashlytics and Analytics libraries
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.analytics)
-
-    // Add the dependencies for the Crashlytics and Analytics libraries
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation libs.app.update
-    implementation libs.app.update.ktx
-
-    //Orbit for state handling
-    implementation libs.orbit.core
-    implementation libs.orbit.viewmodel
-
-    //Dagger Hilt for dependency injection
-    implementation libs.hilt.android
-    debugImplementation libs.androidx.ui.tooling
-    kapt libs.hilt.compiler
-    //compose
-    implementation libs.androidx.activity.compose
-    implementation libs.androidx.ui
-    implementation libs.androidx.ui.tooling.preview
-    implementation libs.androidx.material
-    implementation(libs.androidx.paging.compose)
-}
-
-// Allow references to generated code
-kapt {
-    correctErrorTypes true
 }

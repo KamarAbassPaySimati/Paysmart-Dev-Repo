@@ -42,7 +42,7 @@
     <string name="intro_text">Elevate your spending game with fast, secure, free e-payments</string>
     <string name="image_description">Image Description</string>
     <string name="register">Register</string>
-    <string name="login">Login</string>
+    <string name="Continue_with_Google">Continue with Google</string>
     <string name="app_version">Version 0.1</string>
     <string name="registration">Registration</string>
     <string name="next_kyc_registration">Next - KYC Registration</string>
@@ -854,4 +854,9 @@
     <string name="imagaeUpload">Image(Optional)</string>
     <string name="Others">Others</string>
     <string name="no_data_available_to_export">No data available to export.</string>
+    <string name="login">Login</string>
+    <string name="default_web_client_id">136737934498-n9abcj7m7snv8ghm6beo73nh691nf4oc.apps.googleusercontent.com</string>
+
+
+
 </resources>
